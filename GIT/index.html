@@ -25,36 +25,7 @@
         var products;
         var database = firebase.database().ref('productos');
         database.on('value', function(snapshot) {
-            var rawSnapshot = snapshot.val();
-            //rawSnapshot.sort(function(a, b) {
-            //    return a.descripcion > b.descripcion;
-            //});
-
-            var people = [
-                {
-                    "f_name": "john",
-                    "l_name": "doe",
-                    "sequence": "0",
-                    "title" : "president",
-                    "url" : "google.com",
-                    "color" : "333333",
-                }
-                // etc
-            ];
-            console.log(typeof people);
-            console.log(typeof snapshot.val());
-
-            people.sort(function(a, b) {
-                return a.descripcion > b.descripcion;
-            });
-
-            
-            console.log(people);
-            console.log(rawSnapshot);
             products = Defiant.getSnapshot(snapshot.val());
-            products.sort(function(a, b) {
-                return a.descripcion > b.descripcion;
-            });
         });
 
         var validatedOrder = true;
