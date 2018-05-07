@@ -1,0 +1,4202 @@
+{
+  "productos" : {
+    "ACAPAC" : {
+      "costo" : 8.5,
+      "descripcion" : "ATUN CAPITAN MARINO ACEITE DE 140GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACAPACC" : {
+      "costo" : 400,
+      "descripcion" : "ATUN CAPITAN MARINO ACEITE DE 140GRS C/48 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ACAPAG" : {
+      "costo" : 8.5,
+      "descripcion" : "ATUN CAPITAN MARINO AGUA DE 140GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACAPAGC" : {
+      "costo" : 400,
+      "descripcion" : "ATUN CAPITAN MARINO AGUA DE 140GRS C/48 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ACECR5" : {
+      "costo" : 117,
+      "descripcion" : "ACEITE CRISTAL DE 5 LT ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACECR500" : {
+      "costo" : 12.5,
+      "descripcion" : "ACEITE CRISTAL DE 500 ML ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACECR500C" : {
+      "costo" : 288,
+      "descripcion" : "ACEITE CRISTAL DE 500 ML CON 24 PZAS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ACECR5C" : {
+      "costo" : 234,
+      "descripcion" : "ACEITE CRISTAL DE 5 LT CON 2 GALONES ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ACECRB" : {
+      "costo" : 460,
+      "descripcion" : "ACEITE CRISTAL BIDON DE 20 LTS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACECRI1" : {
+      "costo" : 24,
+      "descripcion" : "ACEITE CRISTAL DE 1 LT",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACECRI1C" : {
+      "costo" : 282,
+      "descripcion" : "ACEITE CRISTAL DE 1 LT CON 12 PZAS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ACELB" : {
+      "costo" : 27,
+      "descripcion" : "ACEITE LIBERTADOR BIDON",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACELBC" : {
+      "costo" : 240,
+      "descripcion" : "ACEITE LIBERTADOR BIDON DE 20 LTS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ACELI1" : {
+      "costo" : 16,
+      "descripcion" : "ACEITE LIBERTADOR DE 1 LTO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACELI1C" : {
+      "costo" : 399,
+      "descripcion" : "ACEITE LIBERTADOR DE 1 LTO CON 24 LTS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ACENAS3" : {
+      "costo" : 99,
+      "descripcion" : "ACEITUNA NEGRA REB. DE 3KGS ASTRA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACENAS3C" : {
+      "costo" : 582,
+      "descripcion" : "ACEITUNA NEGRA REB. DE 3KGS ASTRA C/6 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ACEVER135" : {
+      "costo" : 8.5,
+      "descripcion" : "ACEITUNA VERDE SIN HUESO VERMEX 135 GRS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "ACEVER135C" : {
+      "costo" : 193,
+      "descripcion" : "ACEITUNA VERDE SIN HUESO VERMEX 135 GRS CON 60 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "ACEVER3" : {
+      "costo" : 99,
+      "descripcion" : "ACEITUNA NEBRA REB VERMEX DE 3 KGS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACEVER4" : {
+      "costo" : 195,
+      "descripcion" : "ACEITUNA VERDE CON HUESO VERMEX DE 4 KGS CON 4 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "ACH935" : {
+      "costo" : 44,
+      "descripcion" : "ACEITUNA C/HUESO VIDRIO DE 935MLS CORINA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACHI1" : {
+      "costo" : 47,
+      "descripcion" : "ACHIOTE CONDIMENTADO DE 1 KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACHI100" : {
+      "costo" : 7.5,
+      "descripcion" : "ACHIOTE CONDIMENTADO 100 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACHI100C" : {
+      "costo" : 210,
+      "descripcion" : "ACHIOTE CONDIMENTADO DE 100 GRS CON 30 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ACHI1C" : {
+      "costo" : 450,
+      "descripcion" : "ACHIOTE CONDIMENTADO DE 1 KG CON 10 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ACTI" : {
+      "costo" : 7.8,
+      "descripcion" : "ACTIVIA PARA BEBER",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ACTIC" : {
+      "costo" : 209,
+      "descripcion" : "ACTIVIA PARA BEBER",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ADEBA" : {
+      "costo" : 57,
+      "descripcion" : "ADEREZO BACHI DE 3.7 KGS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ADEBAC" : {
+      "costo" : 224,
+      "descripcion" : "ADEREZO BACHI DE 3.7 KGS  CON 4 GALONES",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ADEBLU" : {
+      "costo" : 235,
+      "descripcion" : "ADEREZO HELLMAN'S BLUE CHEESE DE 3.8 KGS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "ADEBLUC" : {
+      "costo" : 920,
+      "descripcion" : "ADEREZO HELLMAN'S BLUE CHEESE DE 3.8 KGS CON 4 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "ADECE" : {
+      "costo" : 227,
+      "descripcion" : "ADEREZO HELLMAN'S CESAR DE 3.8 KGS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "ADECEC" : {
+      "costo" : 900,
+      "descripcion" : "ADEREZO HELLMAN'S CESAR DE 3.8 KGS CON 4 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "ADECLE" : {
+      "costo" : 44,
+      "descripcion" : "ADEREZO CLEMENTE JACQUES DE 710 ML",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ADECLEC" : {
+      "costo" : 258,
+      "descripcion" : "ADEREZO CLEMENTE JACQUES DE 710 ML CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ADEHEL" : {
+      "costo" : 76,
+      "descripcion" : "ADEREZO HELLMAN'S NATURAL DE 3.8 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ADEHELC" : {
+      "costo" : 300,
+      "descripcion" : "ADEREZO HELLMAN'S NATURAL DE 3.8 KGS CON 4 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ADEITA" : {
+      "costo" : 227,
+      "descripcion" : "ADEREZO HELLMAN'S ITALIANO DE 3.8 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ADEITAC" : {
+      "costo" : 900,
+      "descripcion" : "ADEREZO HELLMAN'S ITALIANO DE 3.8 KGS CON 4 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ADEME" : {
+      "costo" : 73,
+      "descripcion" : "ADEREZO MEGA DE 3.65 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ADEMEC" : {
+      "costo" : 432,
+      "descripcion" : "ADEREZO MEGA DE 3.65 KGS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ADEMIL" : {
+      "costo" : 227,
+      "descripcion" : "ADEREZO HELLMAN'S MIL ISLAS DE 3.8 KGS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "ADEMILC" : {
+      "costo" : 900,
+      "descripcion" : "ADEREZO HELLMAN'S MIL ISLAS DE 3.8 KGS CON 4 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "ADERA" : {
+      "costo" : 207,
+      "descripcion" : "ADEREZO HELLMAN'S RANCH DE 3.8 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ADERAC" : {
+      "costo" : 820,
+      "descripcion" : "ADEREZO HELLMAN'S RANCH DE 3.8 KGS CON 4 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ADES" : {
+      "costo" : 149,
+      "descripcion" : "ADES DE 200 ML CON 40 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "ADFIM" : {
+      "costo" : "62",
+      "descripcion" : "ADOBERA DE FUNDIR IMPERIAL",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "ADFSJ" : {
+      "costo" : 64,
+      "descripcion" : "ADOBERA DE FUNDIR SAN JOSE",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "ADM2" : {
+      "costo" : 51,
+      "descripcion" : "ADOBERA DE MESA DE 2KG",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "ADM500" : {
+      "costo" : 51,
+      "descripcion" : "ADOBERA DE MESA DE 500GRS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "ADMIM" : {
+      "costo" : "51",
+      "descripcion" : "ADOBERA DE MESA IMPERIAL",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "ADMMA" : {
+      "costo" : 57,
+      "descripcion" : "ADOBERA DE MESA MAZAMITLA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "AGCAC" : {
+      "costo" : 7,
+      "descripcion" : "AGUA DE CACTUS DE 500 ML",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "AGCACCU" : {
+      "costo" : 86,
+      "descripcion" : "AGUA DE CACTUS DE 500 ML CON 16 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CUBETA"
+    },
+    "AGIM1500" : {
+      "costo" : 6,
+      "descripcion" : "AGUA IMPERIAL DE 1500 MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "AGIM1500C" : {
+      "costo" : 49,
+      "descripcion" : "AGUA IMPERIAL DE 1500 MLS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "AGIM500" : {
+      "costo" : 3.5,
+      "descripcion" : "AGUA IMPERIAL DE 500 MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "AGIM500C" : {
+      "costo" : 49,
+      "descripcion" : "AGUA IMPERIAL DE 500 MLS CON 20 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ALU400" : {
+      "costo" : 195,
+      "descripcion" : "ALUMINIO DE 400 MTS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ALU400C" : {
+      "costo" : 768,
+      "descripcion" : "ALUMINIO DE 400 MTS CON 4 BOBINAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ALU7" : {
+      "costo" : 7,
+      "descripcion" : "ALUMINIO DE 7 MTS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ALU7C" : {
+      "costo" : 156,
+      "descripcion" : "ALUMINIO DE 7 MTS CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ALUA50" : {
+      "costo" : 29.5,
+      "descripcion" : "ALUMINIO AZUL DE 50 MTS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ALUA50C" : {
+      "costo" : 342,
+      "descripcion" : "ALUMINIO AZUL DE 50 MTS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ALUR5O" : {
+      "costo" : 27.5,
+      "descripcion" : "ALUMINIO ROJO DE 50 MTS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ALUR5OC" : {
+      "costo" : 318,
+      "descripcion" : "ALUMINIO ROJO DE 50 MTS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "AMAV" : {
+      "costo" : 16.5,
+      "descripcion" : "QUESO AMARILLO VILLITA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "AOLI256" : {
+      "costo" : 29,
+      "descripcion" : "ACEITE DE OLIVA GRANA DE 256 ML",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "AOLI256C" : {
+      "costo" : 672,
+      "descripcion" : "ACEITE DE OLIVA GRANA DE 256",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "AOLI512" : {
+      "costo" : 49,
+      "descripcion" : "ACEITE DE OLIVA GRANA DE 512 ML",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "AOLI512C" : {
+      "costo" : 576,
+      "descripcion" : "ACEITE DE OLIVA GRANA DE 512 ML",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "AOLI752" : {
+      "costo" : 68,
+      "descripcion" : "ACEITE DE OLIVA GRANA DE 752 ML",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "AOLI752C" : {
+      "costo" : 804,
+      "descripcion" : "ACEITE DE OLIVA GRANA DE 752 ML",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "AOLIV1" : {
+      "costo" : 65,
+      "descripcion" : "ACEITE DE OLIVA SAN VICENTE DE 1 LTS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "AOLIV1C" : {
+      "costo" : 768,
+      "descripcion" : "ACEITE DE OLIVA SAN VICENTE DE 1 LTS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ARRA" : {
+      "costo" : 99,
+      "descripcion" : "ARRACHERA DE RES",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "ARRAP" : {
+      "costo" : 85,
+      "descripcion" : "PUNTAS DE ARRACHERA DE RES",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "ASAD" : {
+      "costo" : 59,
+      "descripcion" : "QUESO ASADERO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "ASH935" : {
+      "costo" : 42,
+      "descripcion" : "ACEITUNA S/HUESO VIDRIO DE 935MLS CORINA C/6 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ATE" : {
+      "costo" : 29,
+      "descripcion" : "ATE DE MEMBRILLO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "ATEL" : {
+      "costo" : 590,
+      "descripcion" : "ATE DE MEMBRILLO EN LATA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "LATA"
+    },
+    "ATUDOAG" : {
+      "costo" : 13.5,
+      "descripcion" : "ATUN DOLORES EN AGUA DE 140 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ATUDOAGC" : {
+      "costo" : 640,
+      "descripcion" : "ATUN DOLORES EN AGUA DE 140 GRS CON 48 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ATUTUAC" : {
+      "costo" : 10,
+      "descripcion" : "ATUN TUNY EN ACEITE DE 140 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ATUTUACC" : {
+      "costo" : 470,
+      "descripcion" : "ATUN TUNY EN ACEITE DE 140 GRS CON 48 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ATUTUAG" : {
+      "costo" : 10,
+      "descripcion" : "ATUN TUNY EN AGUA DE 140 GRS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ATUTUAGC" : {
+      "costo" : 470,
+      "descripcion" : "ATUN TUNY EN AGUA DE 140 GRS CON 48 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "AUDOAC" : {
+      "costo" : 13.5,
+      "descripcion" : "ATUN DOLORES EN ACEITE DE 140 GRS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "AUDOACC" : {
+      "costo" : 640,
+      "descripcion" : "ATUN DOLORES EN ACEITE DE 140 GRS CON 48 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "BOINGCH" : {
+      "costo" : "105",
+      "descripcion" : "BOING DE 250 ML CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "BOINGG" : {
+      "costo" : 169,
+      "descripcion" : "BOING DE 500 ML CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "BPFR" : {
+      "costo" : "66.00",
+      "descripcion" : "PAPA A LA FRANCESA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CAFE" : {
+      "costo" : 16,
+      "descripcion" : "CAFE OLE",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CAJC24" : {
+      "costo" : 27.5,
+      "descripcion" : "CAJETA CON 24 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "CAJC5" : {
+      "costo" : 25.01,
+      "descripcion" : "CAJETA CON 5 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "CAJK" : {
+      "costo" : "27.5",
+      "descripcion" : "CAJETA POR KILO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CAJVA" : {
+      "costo" : 25.01,
+      "descripcion" : "CAJETA VASITO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CATMON" : {
+      "costo" : 9.5,
+      "descripcion" : "CATSUP DEL MONTE DE 320GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CATYOG" : {
+      "costo" : 40,
+      "descripcion" : "CATSUP YOLI GALON ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CATYOGC" : {
+      "costo" : 156,
+      "descripcion" : "CATSUP YOLI GALON CON 4 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CCHA" : {
+      "costo" : 39.5,
+      "descripcion" : "CHANTILLY",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "BOLSA"
+    },
+    "CEVER2" : {
+      "costo" : 576,
+      "descripcion" : "CEREZA ROJA VERMEX DE 2.185 GRS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "CEVER2U" : {
+      "costo" : 99,
+      "descripcion" : "CEREZA ROJA VERMEX DE 2.185 GRS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "pieza"
+    },
+    "CEVER3" : {
+      "costo" : 780,
+      "descripcion" : "CEREZA ROJA VERMEX DE 3.85 GRS CON 4 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "CEVER3U" : {
+      "costo" : 198,
+      "descripcion" : "CEREZA ROJA VERMEX DE 3.85 GRS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "CH380" : {
+      "costo" : 16.5,
+      "descripcion" : "CHAMPIÑON REBANADO CORINA DE 380GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CH380C" : {
+      "costo" : 191,
+      "descripcion" : "CHAMPIÑON REBANADO CORINA DE 380GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHA186" : {
+      "costo" : 10,
+      "descripcion" : "CHAMPIÑON MONTE BLANCO  DE 186 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHA186C" : {
+      "costo" : 114,
+      "descripcion" : "CHAMPIÑON MONTE BLANCO  DE 186 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHA380" : {
+      "costo" : 19,
+      "descripcion" : "CHAMPIÑON MONTE BLANCO  DE 380 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHA380C" : {
+      "costo" : 222,
+      "descripcion" : "CHAMPIÑON MONTE BLANCO  DE 380 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHA800" : {
+      "costo" : 34,
+      "descripcion" : "CHAMPIÑON MONTE BLANCO  DE 800 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHA800C" : {
+      "costo" : 396,
+      "descripcion" : "CHAMPIÑON MONTE BLANCO  DE 800 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHEDA" : {
+      "costo" : 78,
+      "descripcion" : "QUESO CHEDDAR",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "CHEF19" : {
+      "costo" : 230,
+      "descripcion" : "CHEFS CATSUP DE 19 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "CHEF4" : {
+      "costo" : 65,
+      "descripcion" : "CHEFS CATSUP DE 4.5 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "CHELI" : {
+      "costo" : 58,
+      "descripcion" : "QUESO CHELITA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "CHI215" : {
+      "costo" : 6,
+      "descripcion" : "CHICHARO CORINA DE 225GRA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHI215C" : {
+      "costo" : 69,
+      "descripcion" : "CHICHARO CORINA DE 225GRA C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHI3K" : {
+      "costo" : 52.5,
+      "descripcion" : "CHICHARO ASTRA DE 3KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHI3KC" : {
+      "costo" : 304,
+      "descripcion" : "CHICHARO ASTRA DE 3KGS C/6 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHI430" : {
+      "costo" : 10,
+      "descripcion" : "CHICHARO CORINA DE 430GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHI430C" : {
+      "costo" : 117.5,
+      "descripcion" : "CHICHARO CORINA DE 430GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIBO" : {
+      "costo" : 82,
+      "descripcion" : "CHICHARRON BOTANERO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHICA215" : {
+      "costo" : 6,
+      "descripcion" : "CHILES ENTEROS CAREY DE 215 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHICA215C" : {
+      "costo" : 277,
+      "descripcion" : "CHILES ENTEROS CAREY DE 215 GRS CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHICA3" : {
+      "costo" : 41,
+      "descripcion" : "CHILES ENTEROS CAREY DE 3 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHICA380" : {
+      "costo" : 10,
+      "descripcion" : "CHILES ENTEROS CAREY DE 380 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHICA380C" : {
+      "costo" : 237,
+      "descripcion" : "CHILES ENTEROS CAREY DE 380 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHICA3C" : {
+      "costo" : 242,
+      "descripcion" : "CHILES ENTEROS CAREY DE 3 KGS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHICA780" : {
+      "costo" : 18,
+      "descripcion" : "CHILES ENTEROS CAREY DE 780 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHICA780C" : {
+      "costo" : 210,
+      "descripcion" : "CHILES ENTEROS CAREY DE 780 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIENCU" : {
+      "costo" : 150,
+      "descripcion" : "CHILES ENTEROS EN CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "CHIHUA" : {
+      "costo" : 88,
+      "descripcion" : "QUESO CHIHUAHUA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "CHIME3" : {
+      "costo" : 38,
+      "descripcion" : "CHILES ENTEROS EL MEXICANO DE 3 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIME340" : {
+      "costo" : 9.5,
+      "descripcion" : "CHILES ENTEROS EL MEXICANO DE 340 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIME340C" : {
+      "costo" : 106,
+      "descripcion" : "CHILES ENTEROS EL MEXICANO DE 340 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIME3C" : {
+      "costo" : 221,
+      "descripcion" : "CHILES ENTEROS EL MEXICANO DE 3 KGS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIME800" : {
+      "costo" : 16.5,
+      "descripcion" : "CHILES ENTEROS EL MEXICANO DE 800 GRS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIME800C" : {
+      "costo" : 192,
+      "descripcion" : "CHILES ENTEROS EL MEXICANO DE 800 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIPO105" : {
+      "costo" : 7.5,
+      "descripcion" : "CHIPOTLE CAREY DE 105 GRS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "CHIPO105C" : {
+      "costo" : 282,
+      "descripcion" : "CHIPOTLE CAREY DE 105 GRS CON 20 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "CHIPO215" : {
+      "costo" : 13.5,
+      "descripcion" : "CHIPOTLE CAREY DE 215 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIPO215C" : {
+      "costo" : 645,
+      "descripcion" : "CHIPOTLE CAREY DE 215 GRS CON 48 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIPO3" : {
+      "costo" : 99,
+      "descripcion" : "CHIPOTLE CAREY DE 3 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIPO380" : {
+      "costo" : 20,
+      "descripcion" : "CHIPOTLE CAREY DE 380 GRS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIPO380C" : {
+      "costo" : 469,
+      "descripcion" : "CHIPOTLE CAREY DE 380 GRS CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIPO3C" : {
+      "costo" : 582,
+      "descripcion" : "CHIPOTLE CAREY DE 3 KGS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIPO800" : {
+      "costo" : 35,
+      "descripcion" : "CHIPOTLE CAREY DE 800 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIPO800C" : {
+      "costo" : 410,
+      "descripcion" : "CHIPOTLE CAREY DE 800 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIPOME215" : {
+      "costo" : 13,
+      "descripcion" : "CHIPOTLE EL MEXICANO DE 215 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIPOME215C" : {
+      "costo" : 297,
+      "descripcion" : "CHIPOTLE EL MEXICANO DE 215 GRS CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIPOME3" : {
+      "costo" : 94,
+      "descripcion" : "CHIPOTLE EL MEXICANO DE 3 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIPOME380" : {
+      "costo" : 19.5,
+      "descripcion" : "CHIPOTLE EL MEXICANO DE 380 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIPOME380C" : {
+      "costo" : 228,
+      "descripcion" : "CHIPOTLE EL MEXICANO DE 380 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIPOME3C" : {
+      "costo" : 552,
+      "descripcion" : "CHIPOTLE EL MEXICANO DE 3 KGS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIPOME800" : {
+      "costo" : 29,
+      "descripcion" : "CHIPOTLE EL MEXICANO DE 800 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIPOME800C" : {
+      "costo" : 337,
+      "descripcion" : "CHIPOTLE EL MEXICANO DE 800 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIRA215" : {
+      "costo" : 7,
+      "descripcion" : "CHILES EN RAJAS CAREY DE 215 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIRA215C" : {
+      "costo" : 330,
+      "descripcion" : "CHILES EN RAJAS CAREY DE 215 GRS CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIRA3" : {
+      "costo" : 59,
+      "descripcion" : "CHILES EN RAJAS CAREY DE 3 KGS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIRA380" : {
+      "costo" : 12,
+      "descripcion" : "CHILES EN RAJAS CAREY DE 380 ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIRA380C" : {
+      "costo" : 283,
+      "descripcion" : "CHILES EN RAJAS CAREY DE 380 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIRA3C" : {
+      "costo" : 347,
+      "descripcion" : "CHILES EN RAJAS CAREY DE 3 KGS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIRA800" : {
+      "costo" : 23,
+      "descripcion" : "CHILES EN RAJAS CAREY DE 800 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIRA800C" : {
+      "costo" : 272,
+      "descripcion" : "CHILES EN RAJAS CAREY DE 800 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIRACU" : {
+      "costo" : 160,
+      "descripcion" : "CHILES EN RAJAS EN CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "CHIRME220" : {
+      "costo" : 164,
+      "descripcion" : "CHILES EN RAJAS EL MEXICANO DE 220 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIRME220C" : {
+      "costo" : 7,
+      "descripcion" : "CHILES EN RAJAS EL MEXICANO DE 220 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIRME3" : {
+      "costo" : 49,
+      "descripcion" : "CHILES EN RAJAS EL MEXICANO DE 3 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIRME340" : {
+      "costo" : 135,
+      "descripcion" : "CHILES EN RAJAS EL MEXICANO DE 340 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIRME340C" : {
+      "costo" : 11.5,
+      "descripcion" : "CHILES EN RAJAS EL MEXICANO DE 340 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIRME3C" : {
+      "costo" : 287,
+      "descripcion" : "CHILES EN RAJAS EL MEXICANO DE 3 KGS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHIRME800" : {
+      "costo" : 21,
+      "descripcion" : "CHILES EN RAJAS EL MEXICANO DE 880 GRS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIRME800C" : {
+      "costo" : 242,
+      "descripcion" : "CHILES EN RAJAS EL MEXICANO DE 880 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIROCU" : {
+      "costo" : 160,
+      "descripcion" : "CHILES EN RODAJAS EN CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "CHIROM3" : {
+      "costo" : 46,
+      "descripcion" : "CHILES EN RODAJAS EL MEXICANO DE 3 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIROM380" : {
+      "costo" : 10.5,
+      "descripcion" : "CHILES EN RODAJAS EL MEXICANO DE 380 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHIROM800" : {
+      "costo" : 20,
+      "descripcion" : "CHILES EN RODAJAS EL MEXICANO DE 800 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHISE3" : {
+      "costo" : 49,
+      "descripcion" : "CHILES SERRANOS CAREY DE 3 KGS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "CHISE3C" : {
+      "costo" : 282,
+      "descripcion" : "CHILES SERRANOS CAREY DE 3 KGS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "CHOHO" : {
+      "costo" : "31.50",
+      "descripcion" : "CHORIZO DE HOJA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "CHOIM" : {
+      "costo" : "37",
+      "descripcion" : "CHORIZO IMPERIAL",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "CHON" : {
+      "costo" : 52,
+      "descripcion" : "CHONGOS DE 450 GRS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "CHONC" : {
+      "costo" : 612,
+      "descripcion" : "CHONGOS DE 450 GRS CAJA CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "CHOPI" : {
+      "costo" : "44",
+      "descripcion" : "CHORIZO DE PIERNA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "CHORA" : {
+      "costo" : "35",
+      "descripcion" : "CHORIZO RANCHERO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "CHR8" : {
+      "costo" : 33.5,
+      "descripcion" : "CHAMPIÑON REBANADO CORINA DE 800GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CHR8C" : {
+      "costo" : 389,
+      "descripcion" : "CHAMPIÑON REBANADO CORINA DE 800GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CHUL" : {
+      "costo" : 66,
+      "descripcion" : "CHULETA DE CERDO",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "COCA" : {
+      "costo" : 11,
+      "descripcion" : "COCA COLA DE 500 ML ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "COCAC" : {
+      "costo" : 231,
+      "descripcion" : "COCA COLA DE 500 ML CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "COD" : {
+      "costo" : 140,
+      "descripcion" : "CARNE DE CODORNIZ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "CONA1" : {
+      "costo" : "33",
+      "descripcion" : "LECHE CONDENSADA ASTRA DE 1KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CONA1C" : {
+      "costo" : 776,
+      "descripcion" : "LECHE CONDENSADA ASTRA DE 1KG C/24 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "COSTA1500" : {
+      "costo" : 16,
+      "descripcion" : "SALSA COSTA BRAVA DE 1.5L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "COSTA1500C" : {
+      "costo" : 186,
+      "descripcion" : "SALSA COSTA BRAVA DE 1.5L C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "COSTAGA" : {
+      "costo" : 39,
+      "descripcion" : "SALSA COSTA BRAVA GALON DE 4L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "COSTAGAC" : {
+      "costo" : 115,
+      "descripcion" : "SALSA COSTA BRAVA GALON DE 4L C/3 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "COT1" : {
+      "costo" : "66",
+      "descripcion" : "QUESO COTIJA 1",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "COT2" : {
+      "costo" : 52,
+      "descripcion" : "QUESO COTIJA 2",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "COT380" : {
+      "costo" : 39,
+      "descripcion" : "COTTAGE LYNCOTT DE 380GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "COT700" : {
+      "costo" : 79,
+      "descripcion" : "COTTAGE LYNCOTT DE 700GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CRAVCH" : {
+      "costo" : 34,
+      "descripcion" : "CREMA DE AVELLANAS CORINA DE 350GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CRAVCHC" : {
+      "costo" : 396,
+      "descripcion" : "CREMA DE AVELLANAS CORINA DE 350GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CRAVG" : {
+      "costo" : 74.5,
+      "descripcion" : "CREMA DE AVELLANAS CORINA DE 700GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CRAVGC" : {
+      "costo" : 428,
+      "descripcion" : "CREMA DE AVELLANAS CORINA DE 700GRS C/6 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CRBIO" : {
+      "costo" : 15,
+      "descripcion" : "CREMA PARA BIONICOS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "CRBIO5" : {
+      "costo" : 75,
+      "descripcion" : "CREMA PARA BIONICOS CON 5 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CRBIOCU" : {
+      "costo" : 273,
+      "descripcion" : "CREMA PARA BIONICOS CUBETA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CUBETA"
+    },
+    "CRECAF" : {
+      "costo" : 58,
+      "descripcion" : "SUST. CREMA PARA CAFE BOLSA DE 1KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CRECAFC" : {
+      "costo" : 657,
+      "descripcion" : "SUST. CREMA PARA CAFE BOLSA DE 1KG C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "CREX" : {
+      "costo" : 25,
+      "descripcion" : "CREMA EXTRA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CREXCU" : {
+      "costo" : 444,
+      "descripcion" : "CREMA EXTRA CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "CRH" : {
+      "costo" : 35,
+      "descripcion" : "CREMA CHORRO ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CRHCU" : {
+      "costo" : 624,
+      "descripcion" : "CREMA CHORRO CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "CRME" : {
+      "costo" : 16,
+      "descripcion" : "CREMA MEDIA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CRMEC" : {
+      "costo" : 291,
+      "descripcion" : "CREMA MEDIA CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "CRPU" : {
+      "costo" : 17,
+      "descripcion" : "CREMA PURA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "CRPUCU" : {
+      "costo" : 309,
+      "descripcion" : "CREMA PURA CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "CUBECO" : {
+      "costo" : 54.5,
+      "descripcion" : "QUESO CUBICADO ECONOMICO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "CUBIMP" : {
+      "costo" : 72,
+      "descripcion" : "QUESO CUBICADO IMPERIAL",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "DAAG" : {
+      "costo" : 3.7,
+      "descripcion" : "GELATINA DANY DE AGUA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "DAAGC" : {
+      "costo" : 172,
+      "descripcion" : "GELATINA DANY DE AGUA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "DABE" : {
+      "costo" : 6.5,
+      "descripcion" : "DANONE PARA BEBER",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "DABEC" : {
+      "costo" : 177,
+      "descripcion" : "DANONE PARA BEBER",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "DALE" : {
+      "costo" : 4.5,
+      "descripcion" : "GELATINA DANETTE DE LECHE",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "DALEC" : {
+      "costo" : 208,
+      "descripcion" : "GELATINA DANETTE DE LECHE",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "DAMIX" : {
+      "costo" : 6.3,
+      "descripcion" : "DANONE MIX",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "DAMIXC" : {
+      "costo" : 145,
+      "descripcion" : "DANONE MIX",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "DANU" : {
+      "costo" : 6.8,
+      "descripcion" : "DANUP",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "DANUC" : {
+      "costo" : 182,
+      "descripcion" : "DANUP",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "DCVI" : {
+      "costo" : "44",
+      "descripcion" : "DOBLE CREMA VILLITA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "DUA1" : {
+      "costo" : 89,
+      "descripcion" : "DESINFECTANTE DUADYN DE 1 LT",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "DUA500" : {
+      "costo" : 49,
+      "descripcion" : "DESINFECTANTE DUADYN DE 500 ML",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "DUAGO" : {
+      "costo" : 9.5,
+      "descripcion" : "DESINFECTANTE DUADYN GOTERO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "DUAGOEXB" : {
+      "costo" : 112,
+      "descripcion" : "DESINFECTANTE DUADYN GOTERO CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "EXIBIDOR"
+    },
+    "DURA3K" : {
+      "costo" : 102,
+      "descripcion" : "DURAZNO EN CUBOS ASTRA DE 3KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "DURA3KC" : {
+      "costo" : 590,
+      "descripcion" : "DURAZNO EN CUBOS ASTRA DE 3KGS C/6 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ELO220" : {
+      "costo" : 6.5,
+      "descripcion" : "ELOTE CORINA DE 225GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ELO220C" : {
+      "costo" : 73,
+      "descripcion" : "ELOTE CORINA DE 225GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ELO3K" : {
+      "costo" : 59,
+      "descripcion" : "ELOTE ASTRA DE 3KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ELO3KC" : {
+      "costo" : 340,
+      "descripcion" : "ELOTE ASTRA DE 3KGS C/6 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ELO430C" : {
+      "costo" : 119,
+      "descripcion" : "ELOTE CORINA DE 430GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "EMBA" : {
+      "costo" : 16,
+      "descripcion" : "EMBASA DE 1 KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "EMBAC" : {
+      "costo" : 182,
+      "descripcion" : "EMBASA DE 1 KG CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ENS215" : {
+      "costo" : 6,
+      "descripcion" : "ENSALADA DE VERDURAS CORINA DE 215GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ENS215C" : {
+      "costo" : 68,
+      "descripcion" : "ENSALADA DE VERDURAS CORINA DE 215GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "ENS430" : {
+      "costo" : 9.5,
+      "descripcion" : "ENSALADA DE VERUDRAS CORINA DE 430GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ENS430C" : {
+      "costo" : 109,
+      "descripcion" : "ENSALADA DE VERUDRAS CORINA DE 430GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "EVA1K" : {
+      "costo" : 28,
+      "descripcion" : "LECHE EVAPORADA ASTRA DE 1L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "EVA1KC" : {
+      "costo" : 324,
+      "descripcion" : "LECHE EVAPORADA ASTRA DE 1L C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "EXBDAY" : {
+      "costo" : 40,
+      "descripcion" : "EXB QUESO DAYSY KILO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "EXBDAYP" : {
+      "costo" : 65,
+      "descripcion" : "EXB QUESO DAYSY PIEZA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "EXBSA" : {
+      "costo" : 50,
+      "descripcion" : "EXB QUESO SABINO KILO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "EXBSAP" : {
+      "costo" : 85,
+      "descripcion" : "EXB QUESO SABINO PIEZA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "FLADA" : {
+      "costo" : 4.5,
+      "descripcion" : "FLAN DANETTE",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "FLADAC" : {
+      "costo" : 208,
+      "descripcion" : "FLAN DANETTE",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "FRESA" : {
+      "costo" : 7,
+      "descripcion" : "FRESA CONGELADA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "FRESAC" : {
+      "costo" : 156,
+      "descripcion" : "FRESA CONGELADA CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "FRUCU" : {
+      "costo" : 96,
+      "descripcion" : "FRUTA EN VINAGRE CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "FRUKI" : {
+      "costo" : 11,
+      "descripcion" : "FRUTA EN VINAGRE KILO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "FRUTSI" : {
+      "costo" : "66",
+      "descripcion" : "FRUTSI DE 250 ML CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "GACA" : {
+      "costo" : 32,
+      "descripcion" : "GALLETA CAJA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "GAPAQ" : {
+      "costo" : 7,
+      "descripcion" : "GALLETA PAQUETE",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "GATO" : {
+      "costo" : 15,
+      "descripcion" : "GATORADE DE 600 ML",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "GATOC" : {
+      "costo" : 295,
+      "descripcion" : "GATORADE DE 600 ML CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "GEMO" : {
+      "costo" : 8,
+      "descripcion" : "GELATINA MOSAICO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "GOUDA" : {
+      "costo" : 96,
+      "descripcion" : "QUESO GOUDA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "GOUDAP" : {
+      "costo" : 94,
+      "descripcion" : "QUESO GOUDA POR PIEZA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "GOUHO" : {
+      "costo" : 96,
+      "descripcion" : "QUESO GOUDA HOLANDES POR KILO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "GOUHOM" : {
+      "costo" : 94,
+      "descripcion" : "QUESO GOUDA HOLANDES POR KILO AL MAYOREO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "GRA250" : {
+      "costo" : 12,
+      "descripcion" : "GRANOLA DE BOLSA DE 250 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "GRA500" : {
+      "costo" : 23,
+      "descripcion" : "GRANOLA DE BOLSA DE 500 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "HAMB" : {
+      "costo" : "43",
+      "descripcion" : "CARNE PARA HAMBURGUESA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "HER" : {
+      "costo" : 165,
+      "descripcion" : "HERSHEY DE 236 ML CON 27 PZAS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "HOR250" : {
+      "costo" : 10,
+      "descripcion" : "HORCHATA JAIRO DE 250 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "HOR500" : {
+      "costo" : 19.5,
+      "descripcion" : "HORCHATA JAIRO DE 500 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "HUEGO" : {
+      "costo" : 37.0,
+      "descripcion" : "HUEVO DE GODORNIZ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "HUEPA" : {
+      "costo" : 6,
+      "descripcion" : "HUEVO DE PATA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "HUEPAC" : {
+      "costo" : 180,
+      "descripcion" : "HUEVO DE PATA CARTERA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "HUEVO" : {
+      "costo" : "32.00",
+      "descripcion" : "HUEVO DE GALLINA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILOS"
+    },
+    "HUEVOC" : {
+      "costo" : "30.50",
+      "descripcion" : "HUEVO DE GALLINA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "JACOR" : {
+      "costo" : 126,
+      "descripcion" : "JAMON CORONA PIERNA",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JACORP" : {
+      "costo" : 119,
+      "descripcion" : "JAMON CORONA PAVO",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JACORPP" : {
+      "costo" : 116,
+      "descripcion" : "JAMON CORONA PAVO POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JACORPZ" : {
+      "costo" : 118,
+      "descripcion" : "JAMON CORONA PIERNA POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JACOV" : {
+      "costo" : 55,
+      "descripcion" : "JAMON COCIDO VIVA",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JACOVP" : {
+      "costo" : 242,
+      "descripcion" : "JAMON COCIDO VIVA POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JAHOV" : {
+      "costo" : "61",
+      "descripcion" : "JAMON HORNEADO VIVA",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JAHOVP" : {
+      "costo" : 330,
+      "descripcion" : "JAMON HORNEADO VIVA POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JAHUF" : {
+      "costo" : 118,
+      "descripcion" : "JAMON AHUMADO FUD",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JAHUFP" : {
+      "costo" : 423,
+      "descripcion" : "JAMON AHUMADO FUD POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JAIMP" : {
+      "costo" : 39,
+      "descripcion" : "JAMON IMPERIAL",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JAIMPP" : {
+      "costo" : 38,
+      "descripcion" : "JAMON IMPERIAL POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JALON" : {
+      "costo" : 43,
+      "descripcion" : "JAMON LONCHERO",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JALONP" : {
+      "costo" : 222,
+      "descripcion" : "JAMON LONCHERO POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JAMNA" : {
+      "costo" : 52,
+      "descripcion" : "JAMON AMERICANO NAYAR",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JAMNAP" : {
+      "costo" : 50,
+      "descripcion" : "JAMON AMERICANO NAYAR POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "JAND" : {
+      "costo" : 70,
+      "descripcion" : "JAMON ANDALUCIA",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JANDP" : {
+      "costo" : 56,
+      "descripcion" : "JAMON ANDALUCIA PAVO",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JANDPP" : {
+      "costo" : 54,
+      "descripcion" : "JAMON ANDALUCIA PAVO POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JANDPZ" : {
+      "costo" : 68,
+      "descripcion" : "JAMON ANDALUCIA POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JANOR" : {
+      "costo" : "96",
+      "descripcion" : "JAMON NORTEÑO",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JANORP" : {
+      "costo" : 489,
+      "descripcion" : "JAMON NORTEÑO POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JAPIF" : {
+      "costo" : 70,
+      "descripcion" : "JAMON PIERNA FUD",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JAPIFP" : {
+      "costo" : 394,
+      "descripcion" : "JAMON PIERNA FUD POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JARAM" : {
+      "costo" : 55,
+      "descripcion" : "JAMON ROS AMERICANO",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JARAMP" : {
+      "costo" : 53,
+      "descripcion" : "JAMON ROS AMERICANO POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JAROY" : {
+      "costo" : 57,
+      "descripcion" : "JAMON ROS YORK",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JASAN" : {
+      "costo" : "180",
+      "descripcion" : "JAMON SAN RAFAEL",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JASANP" : {
+      "costo" : 480,
+      "descripcion" : "JAMON SAN RAFAEL POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JATP" : {
+      "costo" : 60,
+      "descripcion" : "JAMON TRADICIONAL DE PAVO",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JATPP" : {
+      "costo" : 192,
+      "descripcion" : "JAMON TRADICIONAL DE PAVO POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JATY" : {
+      "costo" : "72",
+      "descripcion" : "JAMON TIPO YORK",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JATYP" : {
+      "costo" : 394,
+      "descripcion" : "JAMON TIPO YORK POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JAVIP" : {
+      "costo" : "102",
+      "descripcion" : "JAMON VIRGINIA DE PAVO",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "JAVIPP" : {
+      "costo" : 362,
+      "descripcion" : "JAMON VIRGINIA DE PAVO POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "JUMEX" : {
+      "costo" : "208",
+      "descripcion" : "JUMEX MINIBRICK DE 250 ML CON 40 PZAS ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "JVIRP" : {
+      "costo" : "108",
+      "descripcion" : "JAMON VIRGINIA DE PIERNA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "LACTI" : {
+      "costo" : 77,
+      "descripcion" : "LACTIGURT DE 4KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "LEANG24" : {
+      "costo" : 640,
+      "descripcion" : "LECHE ANGELITA O IMPERIAL 24 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "LEANG5" : {
+      "costo" : 155,
+      "descripcion" : "LECHE ANGELITA O IMPERIAL 5 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "LECHENE" : {
+      "costo" : 15.5,
+      "descripcion" : "LECHERA NESTLE DE 387 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "LECHENEC" : {
+      "costo" : 720,
+      "descripcion" : "LECHERA NESTLE DE 387 GRS CON 48 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "LEDU24" : {
+      "costo" : 810,
+      "descripcion" : "LECHERA DUPAOLI DE 24 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "LEDU5" : {
+      "costo" : 179,
+      "descripcion" : "LECHERA DUPAOLI DE 5 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "LEEVA1" : {
+      "costo" : 34.5,
+      "descripcion" : "LECHE EVAPORADA CLAVEL DE 1 KG ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "LEEVA1C" : {
+      "costo" : 396,
+      "descripcion" : "LECHE EVAPORADA CLAVEL DE 1 KG CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "LEEVALA" : {
+      "costo" : 10.5,
+      "descripcion" : "LECHE EVAPORADA CLAVEL DE 360 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "LEEVALAC" : {
+      "costo" : 495,
+      "descripcion" : "LECHE EVAPORADA CLAVEL DE 360 GRS CON 48 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "LOMO" : {
+      "costo" : 65,
+      "descripcion" : "LOMO DE CERDO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "M05MC16" : {
+      "costo" : 16.5,
+      "descripcion" : "MOSTAZA MCCORMICK #16 DE 430GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "M05MC4" : {
+      "costo" : 7.5,
+      "descripcion" : "MOSTAZA MCCORMICK #4 DE 115GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "M05MC8" : {
+      "costo" : 9.5,
+      "descripcion" : "MOSTAZA MCCORMICK #8 DE 210GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MADEL1" : {
+      "costo" : 33,
+      "descripcion" : "MANTEQUILLA DELICIA DE 1KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MADEL1C" : {
+      "costo" : 319,
+      "descripcion" : "MARGARINA DELICIA DE 1KG C/10 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MADEL90" : {
+      "costo" : 5,
+      "descripcion" : "MARGARINA DELICIA DE 90GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MADEL90C" : {
+      "costo" : 445,
+      "descripcion" : "MARGARINA DELICIA DE 90GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MADEX90" : {
+      "costo" : 57,
+      "descripcion" : "MARGARINA DELICIA DE 90GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "EXB"
+    },
+    "MAEU90" : {
+      "costo" : 12.5,
+      "descripcion" : "MANTEQUILLA EUGENIA DE 90GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAEU90C" : {
+      "costo" : 1175,
+      "descripcion" : "MANTEQUILLA EUGENIA DE 90GRS C/100 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAEUA1" : {
+      "costo" : 100,
+      "descripcion" : "MANTEQUILLA EUGENIA AZUL DE 1KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAEUA1C" : {
+      "costo" : 960,
+      "descripcion" : "MANTEQUILLA EUGENIA AZUL DE 1KG C/10 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAEUA5" : {
+      "costo" : 480,
+      "descripcion" : "MANTEQUILLA EUGENIA AZUL DE 5KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAEUR1" : {
+      "costo" : 82,
+      "descripcion" : "MANTEQUILLA EUGENIA ROJA DE 1KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAEUR1C" : {
+      "costo" : 802,
+      "descripcion" : "MANTEQUILLA EUGENIA ROJA DE 1KG C/10 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAEUR5" : {
+      "costo" : 397,
+      "descripcion" : "MANTEQUILLA EUGENIA ROJA DE 5KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAG800" : {
+      "costo" : 139,
+      "descripcion" : "MAGGI SAZONADOR LIQUIDO DE 800ML",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAGGA" : {
+      "costo" : 320,
+      "descripcion" : "MAGGI SAZONADOR LIQUIDO DE 1.9L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAHE3" : {
+      "costo" : 155,
+      "descripcion" : "MAYONESA HELLMANNS DE 3.8KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAHE3C" : {
+      "costo" : 612,
+      "descripcion" : "MAYONESA HELLMANNS DE 3.8KGS C/4 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAHEC" : {
+      "costo" : 455,
+      "descripcion" : "MAYONESA HELLMANNS CUBETA DE 13KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "MAIBE3" : {
+      "costo" : 109,
+      "descripcion" : "MAYONESA IBERIA DE 3.8KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAIBE3C" : {
+      "costo" : 432,
+      "descripcion" : "MAYONESA IBERIA DE 3.8KGS C/4 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAICA3" : {
+      "costo" : 37,
+      "descripcion" : "MAIZ POZOLERO CAREY DE 3 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAICA3C" : {
+      "costo" : 217,
+      "descripcion" : "MAIZ POZOLERO CAREY DE 3 KGS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAIM" : {
+      "costo" : 96,
+      "descripcion" : "QUESO MANCHEGO IMPERIAL",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "MAIZB" : {
+      "costo" : 15,
+      "descripcion" : "MAIZ BLANCO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "MAIZM" : {
+      "costo" : 19,
+      "descripcion" : "MAIZ MORADO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "MAMC16" : {
+      "costo" : 23.5,
+      "descripcion" : "MAYONESA MCCORMICK #16 DE 390GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAMC16C" : {
+      "costo" : 312,
+      "descripcion" : "MAYONESA MCCORMICK #16 DE 390GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAMC3" : {
+      "costo" : 162,
+      "descripcion" : "MAYONESA MCCORMICK DE 3.4KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAMC32" : {
+      "costo" : 45,
+      "descripcion" : "MAYONESA MCCORMICK #32 DE 725GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAMC32C" : {
+      "costo" : 534,
+      "descripcion" : "MAYONESA MCCORMICK #8 DE 725GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAMC3C" : {
+      "costo" : 162,
+      "descripcion" : "MAYONESA MCCORMICK DE 3.4KGS C/4 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAMC4" : {
+      "costo" : 9.6,
+      "descripcion" : "MAYONESA MCCORMICK #4 DE 105GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAMC4C" : {
+      "costo" : 225,
+      "descripcion" : "MAYONESA MCCORMICK #4 DE 105GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAMC8" : {
+      "costo" : 14.6,
+      "descripcion" : "MAYONESA MCCORMICK #8 DE 210GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAMC8C" : {
+      "costo" : 343,
+      "descripcion" : "MAYONESA MCCORMICK #8 DE 210GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAME3" : {
+      "costo" : 125,
+      "descripcion" : "MAYONESA MEGA DE 3.65KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAME3C" : {
+      "costo" : 738,
+      "descripcion" : "MAYONESA MEGA DE 3.65KGS C/6 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAN13" : {
+      "costo" : "280",
+      "descripcion" : "MANTECA DE 13KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "MAN3" : {
+      "costo" : "77",
+      "descripcion" : "MANTECA DE 3.5KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "MAN6" : {
+      "costo" : "149",
+      "descripcion" : "MANTECA DE 6.5KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "MANIC" : {
+      "costo" : 320,
+      "descripcion" : "MANITAS CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "MANIK" : {
+      "costo" : 35,
+      "descripcion" : "MANITAS KILO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "MANIM" : {
+      "costo" : 14,
+      "descripcion" : "MANTEQUILLA IMPERIAL DE 250GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MANIMC" : {
+      "costo" : 55,
+      "descripcion" : "MANTEQUILLA IMPERIAL DE 250GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAP190" : {
+      "costo" : 22,
+      "descripcion" : "MARG. PRIMAVERA UNTABLE DE 190GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAP190C" : {
+      "costo" : 258,
+      "descripcion" : "MARG. PRIMAVERA UNTABLE DE 190GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAP90" : {
+      "costo" : 8.5,
+      "descripcion" : "MARG. PRIMAVERA DE 90GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAP90C" : {
+      "costo" : 8.5,
+      "descripcion" : "MARG. PRIMAVERA DE 90GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MARU" : {
+      "costo" : 77,
+      "descripcion" : "MARUCHAN SOPA C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAYU1" : {
+      "costo" : 36,
+      "descripcion" : "MARGARINA YURECUARO DE 1KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAYU1C" : {
+      "costo" : 345,
+      "descripcion" : "MARGARINA YURECUARO DE 1KG C/10 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAYU500" : {
+      "costo" : 21,
+      "descripcion" : "MARGARINA YURECUARO DE 500GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAYU500C" : {
+      "costo" : 410,
+      "descripcion" : "MARGARINA YURECUARO DE 500GRS C/20 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MAYU90" : {
+      "costo" : 5.5,
+      "descripcion" : "MARGARINA YURECUARO DE 90GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MAYU90C" : {
+      "costo" : 509,
+      "descripcion" : "MARGARINA YURECUARO DE 90GRS C/100 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MCHE" : {
+      "costo" : 96,
+      "descripcion" : "QUESO MANCHEGO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "MER" : {
+      "costo" : 24,
+      "descripcion" : "MERMELADA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "MERCU" : {
+      "costo" : 345,
+      "descripcion" : "MERMELADA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CUBETA"
+    },
+    "MERF" : {
+      "costo" : "24"
+    },
+    "MERVIT" : {
+      "costo" : 90,
+      "descripcion" : "MERMELADA VITROLERO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MIEL" : {
+      "costo" : 24,
+      "descripcion" : "MIEL",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MIELK" : {
+      "costo" : "24.5",
+      "descripcion" : "MIEL",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "MIEPU" : {
+      "costo" : 42,
+      "descripcion" : "MIEL PURA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MIEPUK" : {
+      "costo" : "52",
+      "descripcion" : "MIEL PURA KILO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "MIEPUcu" : {
+      "costo" : 49,
+      "descripcion" : "MIEL PURA CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBEA"
+    },
+    "MOLEC" : {
+      "costo" : 18,
+      "descripcion" : "QUESO MOLIDO ECONOMICO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "MOLEC5" : {
+      "costo" : 85,
+      "descripcion" : "QUESO MOLIDO ECONOMICO BOLSA DE 5KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MOLES250" : {
+      "costo" : 17.5,
+      "descripcion" : "MOLE LA ESPECIAL VASO DE 250GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MOLES3" : {
+      "costo" : 132,
+      "descripcion" : "MOLE LA ESPECIAL DE 3KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "MOLESA3" : {
+      "costo" : 199,
+      "descripcion" : "MOLE LA ESPECIAL ALMENDRADO DE 3KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "MOLPV125" : {
+      "costo" : 13.5,
+      "descripcion" : "MOLE PROVINCIANO FRASCO DE 125GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MOLPV3" : {
+      "costo" : 132,
+      "descripcion" : "MOLE PROVINCIANO DE 3KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "MOLPVA4" : {
+      "costo" : 320,
+      "descripcion" : "MOLE PROVINCIANO ALMENDRADO DE 4GS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MOSBA3" : {
+      "costo" : 49,
+      "descripcion" : "MOSTAZA BACHI DE 3.8KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MOSBA3C" : {
+      "costo" : 192,
+      "descripcion" : "MOSTAZA BACHI DE 3.8KGS C/4 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MOSBA9" : {
+      "costo" : 13,
+      "descripcion" : "MOSTAZA BACHI DE 950GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MOSBA9C" : {
+      "costo" : 100,
+      "descripcion" : "MOSTAZA BACHI DE 950GRS C/8 BOLSAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MOSME3" : {
+      "costo" : 65,
+      "descripcion" : "MOSTAZA MEGA DE 3.7KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MOSME3C" : {
+      "costo" : 378,
+      "descripcion" : "MOSTAZA MEGA DE 3.7KGS C/6 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MOSYO3" : {
+      "costo" : 49.5,
+      "descripcion" : "MOSTAZA YOLI DE 3.8KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MOSYO3C" : {
+      "costo" : 192,
+      "descripcion" : "OSTAZA YOLI DE 3.8KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MOZAP" : {
+      "costo" : 17,
+      "descripcion" : "MOSTAZA APRETON CORINA DE 255GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "MOZAPC" : {
+      "costo" : 196,
+      "descripcion" : "MOSTAZA APRETON CORINA DE 255GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "MZLA" : {
+      "costo" : 96,
+      "descripcion" : "QUESO MOZARELLA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "NINO" : {
+      "costo" : 2.8,
+      "descripcion" : "DANONINO PETIT",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "NINOBC" : {
+      "costo" : 3.4,
+      "descripcion" : "DANONINO PARA BEBER CHICO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "NINOBCC" : {
+      "costo" : 79,
+      "descripcion" : "DANONINO PARA BEBER CHICO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "NINOBM" : {
+      "costo" : 5.6,
+      "descripcion" : "DANONINO PARA BEBER MAXI",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "NINOBMC" : {
+      "costo" : 134,
+      "descripcion" : "DANONINO PARA BEBER MAXI",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "NINOC" : {
+      "costo" : 264,
+      "descripcion" : "DANONINO PETIT",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "NPLL" : {
+      "costo" : 45,
+      "descripcion" : "NUGGET DE POLLO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "OAXA500" : {
+      "costo" : 74,
+      "descripcion" : "QUESO OAXACA DE 500GRS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "OAXAK" : {
+      "costo" : 78,
+      "descripcion" : "QUESO OAXACA DE KILO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "ORECU" : {
+      "costo" : 345,
+      "descripcion" : "OREJA CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "OREKI" : {
+      "costo" : 42,
+      "descripcion" : "OREJA KILO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "PADO" : {
+      "costo" : 8.5,
+      "descripcion" : "PAPA DORADA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PALOACT" : {
+      "costo" : 165,
+      "descripcion" : "PALOMITAS ACT II CON 18 PZS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PANE" : {
+      "costo" : "46",
+      "descripcion" : "QUESO PANELA",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "PASTA3" : {
+      "costo" : 67,
+      "descripcion" : "PASTA DE TOMATE PRINSA DE 3 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PASTA3C" : {
+      "costo" : 390,
+      "descripcion" : "PASTA DE TOMATE PRINSA DE 3 KGS CON 6 BOLSAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PAY" : {
+      "costo" : 7,
+      "descripcion" : "PAY",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PEPE" : {
+      "costo" : 58,
+      "descripcion" : "PEPERONI",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "PEPIA" : {
+      "costo" : 65,
+      "descripcion" : "PEPINILLO AGRIO REB. ASTRA DE 3.94KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PEPIAC" : {
+      "costo" : 251,
+      "descripcion" : "PEPINILLO AGRIO REB. ASTRA DE 3.94KGS C/4 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PEPSI" : {
+      "costo" : 6,
+      "descripcion" : "PEPSI LATA DE 355 ML ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PEPSIC" : {
+      "costo" : 208,
+      "descripcion" : "PEPSI LATA DE 355 ML CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PESRA" : {
+      "costo" : 181,
+      "descripcion" : "JAMON PECHUGA SAN RAFAEL",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "PESRAP" : {
+      "costo" : 151,
+      "descripcion" : "JAMON PECHUGA SAN RAFAEL POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "PH19" : {
+      "costo" : 24,
+      "descripcion" : "QUESO PHILADELPHIA DE 190GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PH1K" : {
+      "costo" : "204",
+      "descripcion" : "QUESO PHILADELPHIA DE 1900GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PHIR" : {
+      "costo" : 18,
+      "descripcion" : "QUESO PHILADELPHIA EN REBANADAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PICO" : {
+      "costo" : 11,
+      "descripcion" : "PICOSALSAS DE 250 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PIM220" : {
+      "costo" : 10,
+      "descripcion" : "PIMIENTO EN TIRAS CORINA DE 220GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PIM220C" : {
+      "costo" : 115,
+      "descripcion" : "PIMIENTO EN TIRAS CORINA DE 220GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PIM800" : {
+      "costo" : 32.5,
+      "descripcion" : "PIMIENTO EN TIRAS CORINA DE 800GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PIM800C" : {
+      "costo" : 374,
+      "descripcion" : "PIMIENTO EN TIRAS CORINA DE 800GRS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PIRE" : {
+      "costo" : 11,
+      "descripcion" : "PIZZA REGIA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PIÑ800" : {
+      "costo" : 34,
+      "descripcion" : "PIÑA REBANADA CORINA DE 800GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PIÑ800C" : {
+      "costo" : 792,
+      "descripcion" : "PIÑA REBANADA CORINA DE 800GRS C/24 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PIÑR3K" : {
+      "costo" : 122,
+      "descripcion" : "PIÑA REBANADA ASTRA DE 3KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PIÑR3KC" : {
+      "costo" : 707,
+      "descripcion" : "PIÑA REBANADA ASTRA DE 3KGS C/6 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PIÑT3K" : {
+      "costo" : 106,
+      "descripcion" : "PIÑA EN TROZO ASTRA DE 3KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PIÑT3KC" : {
+      "costo" : 614,
+      "descripcion" : "PIÑA EN TROZO ASTRA DE 3KGS C/6 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PKFC" : {
+      "costo" : 56,
+      "descripcion" : "POLLO KENTUCKY",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "PORCAT" : {
+      "costo" : 34,
+      "descripcion" : "PORCIONES DE CATSUP DE 8 GRS CON 200 SOBRES",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PORJAL" : {
+      "costo" : 34,
+      "descripcion" : "PORCIONES DE JALAPEÑO DE 8 GRS CON 200 SOBRES",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PORMOS" : {
+      "costo" : 34,
+      "descripcion" : "PORCIONES DE MOSTAZA DE 8 GRS CON 200 SOBRES",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PQMA" : {
+      "costo" : "22",
+      "descripcion" : "QUESO FUD MANCHEGO EN REBANADAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "PUPRI13" : {
+      "costo" : 39,
+      "descripcion" : "PURE DE TOMATE PRINSA DE 3 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PUPRI13C" : {
+      "costo" : 222,
+      "descripcion" : "PURE DE TOMATE PRINSA DE 3 KGS ON 6 BOLSAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "PURE1" : {
+      "costo" : 17.5,
+      "descripcion" : "PURE DEL FUERTE DE 1 KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PURE1C" : {
+      "costo" : 198,
+      "descripcion" : "PURE DEL FUERTE DE 1 KG CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PURE210" : {
+      "costo" : 4.4,
+      "descripcion" : "PURE DEL FUERTE DE 210GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "PURE210C" : {
+      "costo" : 101,
+      "descripcion" : "PURE DEL FUERTE DE 210GRS CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "QADEXB" : {
+      "costo" : 65,
+      "descripcion" : "QUESO AMARILLO DAISY",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "EXB"
+    },
+    "QAMEF" : {
+      "costo" : "22",
+      "descripcion" : "QUESO AMERICANO FUD EN REBANADAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "QCRE1" : {
+      "costo" : 43,
+      "descripcion" : "QUESO CREMA LA BARCA DE 1KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "QCRE2" : {
+      "costo" : 72,
+      "descripcion" : "QUESO CREMA CIENEGA DE 2KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "QPARM" : {
+      "costo" : 29,
+      "descripcion" : "QUESO PARMESANO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "QUENA" : {
+      "costo" : 17,
+      "descripcion" : "QUESO PARA NACHOS DE 1KG",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "QUEPU" : {
+      "costo" : 65,
+      "descripcion" : "QUESO DE PUERCO",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "QUEPUP" : {
+      "costo" : 60,
+      "descripcion" : "QUESO DE PUERCO POR PIEZA",
+      "fresco" : true,
+      "porPesar" : true,
+      "unidad" : "PIEZA"
+    },
+    "QUPUC" : {
+      "costo" : 96,
+      "descripcion" : "QUESO PUERCO CORONA",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "QURAN" : {
+      "costo" : 12.5,
+      "descripcion" : "QUESO RANCHERO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "QUTRA" : {
+      "costo" : 70,
+      "descripcion" : "QUESO TRADICIONAL",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "REQUE" : {
+      "costo" : "25.5",
+      "descripcion" : "REQUESON",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "RETA" : {
+      "costo" : 30,
+      "descripcion" : "RETAZO DE JAMON",
+      "fresco" : true,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "RIBO" : {
+      "costo" : 18,
+      "descripcion" : "RICO BOLI",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "RICA19" : {
+      "costo" : 224,
+      "descripcion" : "RICA CATSUP DE 19 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "RICA4" : {
+      "costo" : 59,
+      "descripcion" : "RICA CATSUP DE 4.5 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "RICA9" : {
+      "costo" : 114,
+      "descripcion" : "RICA CATSUP DE 9 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "ROMA375" : {
+      "costo" : 34,
+      "descripcion" : "ROMPOPE ARANDELA DE 375MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ROMA950" : {
+      "costo" : 64,
+      "descripcion" : "ROMPOPE ARANDELA DE 950MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "ROMDMA1" : {
+      "costo" : 33,
+      "descripcion" : "ROMPOPE DOÑA MARI DE 1L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SABI" : {
+      "costo" : 57,
+      "descripcion" : "SABINO DE 4KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "SAIN1" : {
+      "costo" : 170,
+      "descripcion" : "SALSA INGLESA CROSS&BL DE 1.9L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SAIN980" : {
+      "costo" : 98,
+      "descripcion" : "SALSA INGLESA CROSS&BL DE 980ML",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SALA" : {
+      "costo" : 65,
+      "descripcion" : "SALAMI",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "KILO"
+    },
+    "SALBBQ" : {
+      "costo" : 29.5,
+      "descripcion" : "SALSA HUNT'S BBQ DE 620GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SALCA" : {
+      "costo" : 12,
+      "descripcion" : "SALSAS CASERAS CAREY ",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SALCAC" : {
+      "costo" : 135,
+      "descripcion" : "SALSAS CASERAS CAREY CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "CAJA"
+    },
+    "SALPA" : {
+      "costo" : 8.5,
+      "descripcion" : "SALSA EL PATO DE 225GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SALRE3" : {
+      "costo" : 67,
+      "descripcion" : "SALSA PARA PIZZA REGINA DE 3 KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SALRE3C" : {
+      "costo" : 390,
+      "descripcion" : "SALSA PARA PIZZA REGINA DE 3 KGS CON 6 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "SALRE850" : {
+      "costo" : 18,
+      "descripcion" : "SALSA PARA PIZZA REGINA DE 850 GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SALRE850C" : {
+      "costo" : 204,
+      "descripcion" : "SALSA PARA PIZZA REGINA DE 850 GRS CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "SALV" : {
+      "costo" : 83,
+      "descripcion" : "SALCHICHA VIVA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SALVP" : {
+      "costo" : "115",
+      "descripcion" : "SALCHICHA VIVA DE PAVO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SALWIN" : {
+      "costo" : 29.5,
+      "descripcion" : "SALSA HUNT'S WINGS DE 550GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SANTP" : {
+      "costo" : 93,
+      "descripcion" : "SALCHICHA SAN ANTONIO PAVO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SARD" : {
+      "costo" : 22,
+      "descripcion" : "SARDINA OVALADA CORINA DE 425GRS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SARDC" : {
+      "costo" : 510,
+      "descripcion" : "SARDINA OVALADA CORINA DE 425GRS C/24 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "SATA1000" : {
+      "costo" : 29.5,
+      "descripcion" : "SALSA DE SOYA TAMASHI DE 1L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SATA180" : {
+      "costo" : 12,
+      "descripcion" : "SALSA DE SOYA TAMASHI DE 180MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SATA4000" : {
+      "costo" : 99,
+      "descripcion" : "SALSA DE SOYA TAMASHI DE 4L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SATA500" : {
+      "costo" : 21,
+      "descripcion" : "SALSA DE SOYA TAMASHI DE 500MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SCHI" : {
+      "costo" : 60,
+      "descripcion" : "SALCHIRRICA DE PAVO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SFRA" : {
+      "costo" : "77",
+      "descripcion" : "SALCHICHA FRANKFURT",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SHDF" : {
+      "costo" : "132",
+      "descripcion" : "SALCHICHA HOT DOG FUD",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SINEXB" : {
+      "costo" : 181,
+      "descripcion" : "SINGLES EXHIBIDOR",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "EXB"
+    },
+    "SING" : {
+      "costo" : 17.5,
+      "descripcion" : "SINGLES QUESO AMARILLO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SINMEXB" : {
+      "costo" : 91,
+      "descripcion" : "SINGLES MEDIO EXHIBIDOR",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SJPF" : {
+      "costo" : "180",
+      "descripcion" : "SALCHICHA JUMBO FUD",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SOP" : {
+      "costo" : 12,
+      "descripcion" : "SOPER",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SOY190" : {
+      "costo" : 7.5,
+      "descripcion" : "ALSA DE SOYA CORINA DE 190MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SOY190C" : {
+      "costo" : 85,
+      "descripcion" : "ALSA DE SOYA CORINA DE 190MLS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "SOY1L" : {
+      "costo" : 20,
+      "descripcion" : "SALSA DE SOYA CORINA DE 1L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SOY1LC" : {
+      "costo" : 20,
+      "descripcion" : "SALSA DE SOYA CORINA DE 1L C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "SOY6C" : {
+      "costo" : 64,
+      "descripcion" : "SALSA DE SOYA CORINA GALON",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SOY6CC" : {
+      "costo" : 247,
+      "descripcion" : "SALSA DE SOYA CORINA GALON C/4 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "SPF2" : {
+      "costo" : "84",
+      "descripcion" : "SALCHICHA PAVO FUD",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SPF5" : {
+      "costo" : 33,
+      "descripcion" : "SALCHICHA PAVO FUD DE 1/2",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "SSR2" : {
+      "costo" : 40,
+      "descripcion" : "SALCHICHA SAN RAFAEL DE 1/2",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "TAMAPAC" : {
+      "costo" : 12,
+      "descripcion" : "SALSA TAMAZULA PACK 3 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PROMO"
+    },
+    "TITA4" : {
+      "costo" : 52,
+      "descripcion" : "TITA CATSUP DE 4.5KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "TITAB20" : {
+      "costo" : 197,
+      "descripcion" : "TITA CATSUP DE 20KGS BLANCA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "TITAGA" : {
+      "costo" : 40,
+      "descripcion" : "TITA CATSUP GALON DE 4KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "TITAR20" : {
+      "costo" : 182,
+      "descripcion" : "TITA CATSUP DE 20KGS ROJA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "TOCO" : {
+      "costo" : "89",
+      "descripcion" : "TOCINO CORONA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "TONI" : {
+      "costo" : 8,
+      "descripcion" : "TONICOL DE 355 ML",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "TONIC" : {
+      "costo" : 170,
+      "descripcion" : "TONICOL DE 355 ML CON 24 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "TORTA" : {
+      "costo" : 12,
+      "descripcion" : "TORTILLA PARA TACO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "TOSDCAJ" : {
+      "costo" : 195,
+      "descripcion" : "TOSTADA DESHIDRATADA C/28 PAQ.",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "TOSDPAQ" : {
+      "costo" : 8.5,
+      "descripcion" : "TOSTADA DESHIDRATADA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "TOSNCAJ" : {
+      "costo" : 90,
+      "descripcion" : "TOSTADA NORMAL C/15 PAQ.",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "TOSNPAQ" : {
+      "costo" : "7.00",
+      "descripcion" : "TOSTADA NORMAL PAQ.",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "TOTO" : {
+      "costo" : 12,
+      "descripcion" : "TOTOPOS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "TROCU" : {
+      "costo" : 365,
+      "descripcion" : "TROMPA CUBETA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CUBETA"
+    },
+    "TROKI" : {
+      "costo" : 42,
+      "descripcion" : "TROMPA KILO",
+      "fresco" : false,
+      "porPesar" : true,
+      "unidad" : "KILO"
+    },
+    "V8" : {
+      "costo" : 128,
+      "descripcion" : "V8 SPLAS DE 415 ML CON 12 PZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VAAM1" : {
+      "costo" : 14,
+      "descripcion" : "SALSA VALENTINA AMARILLA DE 1L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VAAM1C" : {
+      "costo" : 164,
+      "descripcion" : "SALSA VALENTINA AMARILLA DE 1L C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VAAM370" : {
+      "costo" : 7,
+      "descripcion" : "SALSA VALENTINA AMARILLA DE 370MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VAAM370C" : {
+      "costo" : 164,
+      "descripcion" : "SALSA VALENTINA AMARILLA DE 370MLS C/24 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VAI1000" : {
+      "costo" : 55,
+      "descripcion" : "VAINILLA MOLINA DE 1L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VAI1000C" : {
+      "costo" : 646,
+      "descripcion" : "VAINILLA MOLINA DE 1L C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VAI120" : {
+      "costo" : 225,
+      "descripcion" : "VAINILLA MOLINA DE 120MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VAI120C" : {
+      "costo" : 225,
+      "descripcion" : "VAINILLA MOLINA DE 120MLS C/24 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VAI250" : {
+      "costo" : 17.5,
+      "descripcion" : "VAINILLA MOLINA DE 250MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VAI250C" : {
+      "costo" : 392,
+      "descripcion" : "VAINILLA MOLINA DE 250MLS C/24 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VAI4000" : {
+      "costo" : 157,
+      "descripcion" : "VAINILLA MOLINA DE 4L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VAI4000C" : {
+      "costo" : 656,
+      "descripcion" : "VAINILLA MOLINA DE 4L C/4 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VAI500" : {
+      "costo" : 28.5,
+      "descripcion" : "VAINILLA MOLINA DE 500MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VANE1" : {
+      "costo" : 15,
+      "descripcion" : "SALSA VALENTINA NEGRA DE 1L",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VANE1C" : {
+      "costo" : 175,
+      "descripcion" : "SALSA VALENTINA NEGRA DE 1L C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VANE370" : {
+      "costo" : 7.5,
+      "descripcion" : "SALSA VALENTINA NEGRA DE 370MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VANE370C" : {
+      "costo" : 175,
+      "descripcion" : "SALSA VALENTINA NEGRA DE 370MLS C/24 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VENE" : {
+      "costo" : 7.9,
+      "descripcion" : "VENEGASTRO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VENEC" : {
+      "costo" : 209,
+      "descripcion" : "VENEGASTRO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VIBA3" : {
+      "costo" : 27,
+      "descripcion" : "VINAGRE BLANCO BACHI DE 3.7LTS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VIBA3C" : {
+      "costo" : 106,
+      "descripcion" : "VINAGRE BLANCO BACHI DE 3.7LTS C/4 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VIN1L" : {
+      "costo" : 8.5,
+      "descripcion" : "VINAGRE BLACO CORINA DE 1LTO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VIN1LC" : {
+      "costo" : 96,
+      "descripcion" : "VINAGRE BLACO CORINA DE 1LTO C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VIN500" : {
+      "costo" : 6.5,
+      "descripcion" : "VINAGRE BLANCO CORINA DE 500MLS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VIN500C" : {
+      "costo" : 76,
+      "descripcion" : "VINAGRE BLANCO CORINA DE 500MLS C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VINAG" : {
+      "costo" : 22,
+      "descripcion" : "VINAGRE BLANCO ASTRA GALON",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VINAGC" : {
+      "costo" : 82,
+      "descripcion" : "VINAGRE BLANCO ASTRA GALON C/4 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VINM1" : {
+      "costo" : 13,
+      "descripcion" : "VINAGRE DE MANZANA CORINA DE 1LTO",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VINM1C" : {
+      "costo" : 144,
+      "descripcion" : "VINAGRE DE MANZANA CORINA DE 1LTO C/12 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VINMG" : {
+      "costo" : 24,
+      "descripcion" : "VINAGRE DE MANZANA ASTRA GALON",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VINMGC" : {
+      "costo" : 92,
+      "descripcion" : "VINAGRE DE MANZANA ASTRA GALON C/4 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VITA" : {
+      "costo" : 7.8,
+      "descripcion" : "VITALINEA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VITAC" : {
+      "costo" : 209,
+      "descripcion" : "VITALINEA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VITEN3" : {
+      "costo" : 42,
+      "descripcion" : "VITROLERO DE ENTERO DE 3.8KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VITPE3" : {
+      "costo" : 39,
+      "descripcion" : "VITROLERO DE PEPINILLO DE 3.8KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VITPE3C" : {
+      "costo" : 152,
+      "descripcion" : "VITROLERO DE PEPINILLO DE 3.8KGS C/4 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    },
+    "VITRA3" : {
+      "costo" : 44,
+      "descripcion" : "VITROLERO DE RAJAS DE 3.8KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VITRO3" : {
+      "costo" : 44,
+      "descripcion" : "VITROLERO DE RODAJAS DE 3.8KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "VITZA3" : {
+      "costo" : 29,
+      "descripcion" : "VITROLERO DE ZANAHORIAS DE 3.8KGS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "YAK15" : {
+      "costo" : 70,
+      "descripcion" : "YAKULT MEDIA TIRA C/15 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "YAK30" : {
+      "costo" : "149",
+      "descripcion" : "YAKULT TIRA C/30 PIEZAS",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "YAKP" : {
+      "costo" : 5.3,
+      "descripcion" : "YAKULT PIEZA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "YOGRA" : {
+      "costo" : 9,
+      "descripcion" : "YOGURT C/GRANOLA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "PIEZA"
+    },
+    "YOGRAC" : {
+      "costo" : 108,
+      "descripcion" : "YOGURT C/GRANOLA",
+      "fresco" : false,
+      "porPesar" : false,
+      "unidad" : "CAJA"
+    }
+  },
+  "promociones" : {
+    "PROM1" : {
+      "animacion" : "no",
+      "precio" : "$58 kg",
+      "producto" : "Adob Mazamitla"
+    },
+    "PROM10" : {
+      "animacion" : "si",
+      "precio" : "$43",
+      "producto" : "Carne Ham Imp"
+    },
+    "PROM11" : {
+      "animacion" : "no",
+      "precio" : "$53 kg",
+      "producto" : "Chuleta Taquera"
+    },
+    "PROM12" : {
+      "animacion" : "no",
+      "precio" : "$66exb",
+      "producto" : "Café Nestle"
+    },
+    "PROM13" : {
+      "animacion" : "si",
+      "precio" : "$46 kg",
+      "producto" : "Panela Imp."
+    },
+    "PROM14" : {
+      "animacion" : "no",
+      "precio" : "$204cja",
+      "producto" : "Café Olé"
+    },
+    "PROM2" : {
+      "animacion" : "si",
+      "precio" : "$62 kg",
+      "producto" : "Adob Fundir Im"
+    },
+    "PROM3" : {
+      "animacion" : "no",
+      "precio" : "$66 kg",
+      "producto" : "Ado Fun San J"
+    },
+    "PROM4" : {
+      "animacion" : "no",
+      "precio" : "$105",
+      "producto" : "Boing de I/4"
+    },
+    "PROM5" : {
+      "animacion" : "no",
+      "precio" : "$37 kg",
+      "producto" : "Chorizo Imp"
+    },
+    "PROM6" : {
+      "animacion" : "si",
+      "precio" : "$44 kg",
+      "producto" : "Chori Pierna Im"
+    },
+    "PROM7" : {
+      "animacion" : "no",
+      "precio" : "$35 kg",
+      "producto" : "Chorizo Ranch"
+    },
+    "PROM8" : {
+      "animacion" : "no",
+      "precio" : "$65 kg",
+      "producto" : "Lomo Imperial"
+    },
+    "PROM9" : {
+      "animacion" : "no",
+      "precio" : "$79 kg",
+      "producto" : "Pierna Imperial"
+    }
+  }
+}

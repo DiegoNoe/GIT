@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Search view</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/search.css">  
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    
+    <script language="javascript" type="text/javascript" src="js/jspdf.customfonts.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/default_vfs.js"></script>
+    <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/qrcode.js"></script>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
+            authDomain: "cremeria-imperial.firebaseapp.com",
+            databaseURL: "https://cremeria-imperial.firebaseio.com",
+            projectId: "cremeria-imperial",
+            storageBucket: "cremeria-imperial.appspot.com",
+            messagingSenderId: "445465872507"
+        };
+
+        firebase.initializeApp(config);
+        
+        var products;
+        var database = firebase.database().ref('productos');
+        database.once('value').then(function(snapshot) {
+            products = Defiant.getSnapshot(snapshot.val());
+        });
+    </script>
+      
+</head>
+<body>
+    <div id="qrcode" style="position: absolute; left: -9999px"></div>
+    <div class="container-fluid">
+        <div class="form-group row" style="padding: 15px">
+            <div id="inputNameContainer" class="col-sm-3" style="padding-left: 0">
+                <input type="input" class="form-control" id="inputName" placeholder="NOMBRE"> </input>
+            </div>
+            <h2 style="float: right; margin-top: 0px"><span class="label label-default"></span></h2>
+            <button type="button" class="btn btn-primary" id="printButton" style="float: right" onclick="generatePDF()">IMPRIMIR</button>
+            <input type="input" class="form-control" id="inputSearch" placeholder="ID"></input>
+            <ul class="list-group search-options" id="searchOptions"></ul>
+        </div>
+        <ul class="list-group" id="dynamic-list"> </ul>
+        <div id="output"></div>
+    </div>
+    <script>
+        //inputName enter sequence
+        $("#inputName").on('keyup', function (e) {
+            if (e.keyCode == 13) 
+                $("#inputSearch").focus();
+        });
+
+        //inputSearch search onEnter
+        $("#inputSearch").on('keyup', function (e) {
+            var searchResult = JSON.search(products, '//*[contains(clave, "' + $('#inputSearch').val() + '")]|//*[contains(descripcion, "' + $('#inputSearch').val() + '")]');
+            $("#searchOptions").empty();
+            if($('#inputSearch').val() != "") {
+                searchProduct(searchResult);
+                if (e.keyCode == 13 && searchResult.length > 0)
+                    addProduct(searchResult[0]);
+            }
+        });
+
+        //life search
+        function searchProduct(searchResult) {            
+            var searchItem = "";
+            $("#searchOptions").empty();
+            for(var i = 0; i < searchResult.length && i < 10; i++) {
+                searchItem = 
+                    '<button class="list-group-item row btn-default" onclick="addProductByID(&#39;' + searchResult[i].clave + '&#39;)">' +
+                        '<div class="col-sm-2">' + searchResult[i].clave + '</div>' +
+                        '<div class="col-sm-9">' + searchResult[i].descripcion + '</div>' +
+                        '<div class="col-sm-1">' + searchResult[i].costo + '</div>' +
+
+                    '</button>';
+                $("#searchOptions").append(searchItem);
+            }
+        }
+
+        function addProductByID(ID) {
+            var searchResult = JSON.search(products, '//*[contains(clave, "' + ID + '")]');
+            addProduct(searchResult[0]);
+        }
+
+        //adds the item to the list
+        function addProduct(product) {
+            $("#searchOptions").empty();
+            $("#inputSearch").val("");
+            var productListItem = 
+                '<li class="list-group-item row product-row" data-id="' + product.clave +'">' +
+                    '<div class="col-sm-1 product-quantity">' +
+                        '<input type="number" class="form-control"> </input>' +
+                    '</div>' +
+                    '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
+                    '<div class="col-sm-5 product-info">' + product.descripcion + '</div>' +
+                    '<div class="col-sm-4 product-notes-container">' +
+                        '<input type="input" class="form-control product-notes" placeholder="NOTAS"> </input>' +
+                    '</div>' +
+                    '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button">' +
+                        '<span class="glyphicon glyphicon-remove" style="color:grey; padding-top: 3px"></span>' +
+                    '</button>' +
+                '</li>';
+            
+            //Add list element
+            $('#dynamic-list').prepend(productListItem);
+            
+            //inputSearch sequence
+            $('#dynamic-list').find('input').first().focus();
+
+            //inputQuantity enter sequence
+            $('#dynamic-list').find('input').first().on('keydown', function (e) {
+                if (e.keyCode == 13)
+                    $(this).parent().nextAll().eq(2).children().focus();
+            });
+            
+            //inputNotes enter sequence with S shortcut
+            var inputNotes = $('#dynamic-list').find('input').eq(1);
+            inputNotes.on('keydown', function (e) {
+                if (e.keyCode == 13) {
+                    if(inputNotes.val() == "S")
+                        inputNotes.val("SURTIDO");
+                    $("#inputSearch").focus();
+                }
+            });
+
+            //deleteButton action
+            $("#dynamic-list").on("click", "button", function(e) {
+                e.preventDefault();
+                $(this).parent().remove();
+            });
+        }
+
+        //populates an array with all the product values
+        function generateOrder() {
+            var order = new Array($("#dynamic-list").children().length);
+            for(var i = 0; i < order.length; i++)
+                order[i] = new Array(5);
+            
+            //iterates over list items
+            $("#dynamic-list").children().each(function(index) {
+                //{id:0, quantity:1, unit:2, description:3, notes:4}
+                order[index][0] = $(this).data("id");
+                var productItem = $(this).children();
+                order[index][1] = productItem.eq(0).children().val();
+                order[index][2] = productItem.eq(1).text();
+                order[index][3] = productItem.eq(2).text();
+                order[index][4] = productItem.eq(3).children().val();
+            });
+
+            return order;
+        }
+
+        //generates a PDF with autoprint
+        function generatePDF() {
+            var order = generateOrder();
+            var doc = new jsPDF({
+                orientation: 'p',
+                unit: 'mm',
+                format: [213, 113]
+            });
+
+            doc.addFont('GILC____.TTF', "Imperial", "normal");
+            doc.addFont('GillSansMTCondensedBold.ttf', "Imperial Bold", "normal");
+            doc.setFont("Imperial Bold");
+            doc.setFontSize(12);
+            
+            //date and time
+            var months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+            var date = new Date();
+            doc.text(65, 20.5, date.getDate().toString());
+            doc.text(74, 20.5, months[date.getMonth()]);
+            doc.text(84, 20.5, date.getFullYear().toString());
+            doc.text(96, 20.5, date.getHours() + ":" + date.getMinutes());
+
+            //name
+            var name = $("#inputName").val();
+            doc.text(22, 31.5, name);
+
+            //products
+            var calculable = true;
+            var total = 0;
+            var currentLine = 0;
+            doc.setFont("Imperial");
+            for(var i = 0; i < order.length; i++) {
+                //quantity and unit
+                doc.setFontSize(13);
+                doc.text(11, 43 + (currentLine * 8.75), order[i][1] + " " + order[i][2], "center");                
+                
+                //product price * quantity
+                product = JSON.search(products, '//' + order[i][0]);
+                if(!product[0].porPesar) {
+                    doc.text(100.5, 43 + (currentLine * 8.75) + 2, (product[0].costo * order[i][1]).toString(), "center");
+                    total += product[0].costo * order[i][1];
+                } else
+                    calculable = false;
+                
+                //description
+                doc.text(22, 43 + (currentLine * 8.75), order[i][3]);
+
+                //notes
+                doc.setFontSize(11);
+                if(order[i][4] != "") 
+                    doc.text(22, 43 + (currentLine * 8.75) + 4, order[i][4]);
+                
+                currentLine++;
+            }
+            
+            //if calculable then total
+            doc.setFont("Imperial Bold");
+            if(calculable)
+                doc.text(85, 189, total.toString());
+
+
+            //generates name QR code
+            document.getElementById('qrcode').innerHTML = "";
+            var qrcode = new QRCode("qrcode", {
+                text: name,
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.L
+            });
+            var canvas = document.getElementById('qrcode').querySelector('canvas');
+            var dataURL = canvas.toDataURL();
+            doc.addImage(dataURL, 'JPEG', 2, 196, 15, 15);
+
+            //autoprints PDF in a new tab
+            doc.autoPrint();
+            window.open(doc.output('bloburl'), '_blank');
+        }
+    </script>
+</body>
+ 

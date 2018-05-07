@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        var msg = new SpeechSynthesisUtterance();
+    </script>
+</head>
+
+<body>
+    <ul class="list-group" style="margin-left:20px;" id="dynamic-list"> </ul>
+    <input id="inputName" style="position: absolute; left: -9999px;"></input>
+    <script>
+        $("#inputName").focus();
+        $("#inputName").on('keyup', function (e) {
+            setTimeout(function(){
+                speakName();
+            }, 250);
+
+            if (e.keyCode == 189) {
+                var name = $("#inputName").val().substring(0, $("#inputName").val().length - 1);
+                speakName(name);
+                addToList(name);
+                $("#inputName").val("");
+            }
+        });
+
+        function speakName() {
+            if($("#inputName").val() != "") {
+                var name = $("#inputName").val();
+                $("#inputName").val("");
+                msg.text = name;
+                addToList(name);
+                window.speechSynthesis.speak(msg);
+            }
+        } 
+
+        function removeFromList() {
+            console.log("remove");
+        }
+
+        function addToList(name) {
+            var hourWithMinutes = new Date().toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true });
+            var nameListItem =
+                        '<div class="row">' +
+                            '<h1 class="col-xs-9">' + name + '</h1>' +
+                            '<h1 class="col-xs-3">' + hourWithMinutes + '</h1>' +
+                        '</div>';
+            $('#dynamic-list').append(nameListItem);
+        }
+    </script>
+</body>

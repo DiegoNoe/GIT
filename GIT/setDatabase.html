@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Search view</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">  
+    <link rel="stylesheet" type="text/css" href="css/search.css">  
+
+    <script language="javascript" type="text/javascript" src="js/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/firebase.js"></script>    
+    <script language="javascript" type="text/javascript" src="js/jspdf.customfonts.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/default_vfs.js"></script>
+    <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/qrcode.js"></script>
+    <script language="javascript" type="text/javascript" src="js/index.js"></script>
+
+    <script>
+        //connect to the database
+        firebase.initializeApp(connectFB());
+    
+        //saves a local copy of the products
+        var products;
+        var database = firebase.database().ref('productos');
+        database.on('value', function(snapshot) {
+            products = Defiant.getSnapshot(snapshot.val());
+        });
+        var index = 0;
+
+    </script>
+      
+</head>
+<body>
+    <!-- no connection alert -->
+    <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
+        <strong>No hay conexión.</strong> Productos como cremas y jamones no serán enviados a sus departamentos.
+    </div>
+    <!-- qr code container (invisible) -->
+    <div id="qrcode" style="position: absolute; left: -9999px"></div>
+
+    <div class="container-fluid">
+            <h1 id="descripcionLabel"style="margin-bottom: 20px;">PRODUCTO</h1>
+            <!-- interface buttons -->
+            <div>
+                <button type="button" class="btn btn-success" onclick="setAPP();">&nbsp;&nbsp;&nbsp;Afuera - PorPesar&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-success" onclick="setAYP();">&nbsp;&nbsp;Afuera - YaPesado&nbsp;</button>
+                <button type="button" class="btn btn-warning" onclick="setAYPT();">Afuera - YaPesado - Trino</button>
+            </div>
+            <div style="margin-bottom: 10px; margin-top: 10px;">
+                <button type="button" class="btn btn-primary" onclick="setCPP();">Camara - POR pesar</button>
+                <button type="button" class="btn btn-primary" onclick="setCYP();">Camara - YA pesado</button>
+            </div>
+            <div>
+                <button type="button" class="btn btn-danger" onclick="setAJ();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Area Jamones&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-danger" onclick="setAC();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Area Cremas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </div>
+            
+        </div>
+        
+        <!-- order products list -->
+        <ul class="list-group" id="dynamic-list"> </ul>
+        <div id="output"></div>
+    </div>
+    
+    <script>
+        //connect to the database
+        firebase.initializeApp(connectFB());
+    
+        //saves a local copy of the products
+        var products;
+        var database = firebase.database().ref('productos');
+        database.on('value', function(snapshot) {
+            products = JSON.search(Defiant.getSnapshot(snapshot.val()), '//*');
+        });
+
+        function loadNewProduct(){
+            index++;
+            var keys = Object.keys(products.src);
+            document.getElementById("descripcionLabel").innerHTML = products.src[keys[index]].unidad + " - " + products.src[keys[index]].descripcion;
+        }
+
+        function setAPP(){
+            var keys = Object.keys(products.src);
+            firebase.database().ref('productos/' + keys[index] + '/tipo').set("porPesarAfuera"); 
+            loadNewProduct();                      
+        }
+
+        function setAYP(){
+            var keys = Object.keys(products.src);
+            firebase.database().ref('productos/' + keys[index] + '/tipo').set("yaPesadoAfuera"); 
+            loadNewProduct();          }
+
+        function setAYPT(){
+            var keys = Object.keys(products.src);
+            firebase.database().ref('productos/' + keys[index] + '/tipo').set("yaPesadoAfueraTrino"); 
+            loadNewProduct();          }
+
+        function setCPP(){
+            var keys = Object.keys(products.src);
+            firebase.database().ref('productos/' + keys[index] + '/tipo').set("porPesarCamara"); 
+            loadNewProduct();          }
+
+        function setCYP(){
+            var keys = Object.keys(products.src);
+            firebase.database().ref('productos/' + keys[index] + '/tipo').set("yaPesadoCamara"); 
+            loadNewProduct();          }
+
+        function setAJ(){
+            var keys = Object.keys(products.src);
+            firebase.database().ref('productos/' + keys[index] + '/tipo').set("aJamones"); 
+            loadNewProduct();          }
+
+        function setAC(){
+            var keys = Object.keys(products.src);
+            firebase.database().ref('productos/' + keys[index] + '/tipo').set("aCremas"); 
+            loadNewProduct();          }
+
+    </script>
+</body>
+ 

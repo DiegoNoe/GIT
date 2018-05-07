@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <script src="/js/firebase.js"></script>
+    <script src="/js/handlerUser.js"></script>
+
+    <div class="container">
+                <div class="row">
+                <img src="images/dog_footprint.png" width="35px" height="35px" />
+        <h3><span style="font-weight: 700; color: #385BA6">DogLove</span></h3>
+        </div>
+        </div>
+
+</head>
+
+<body>
+    <div class="myBackground">
+    <div class="container">
+        <form>
+            <h3><b></b>Edit information</b></h3>
+            <div class="row">
+                <!--<div class="col-md-2">
+
+                </div>
+                <div class="col-md-2">
+
+                </div>-->
+                <div class="col-md-12">
+                    <legend>Your information</legend>
+                    <input id="usrSignUp" class="form-control" type="username" placeholder="User Name" required>
+                    </div>
+                    <div class="col-md-12">
+                    <input id="txtEmailSignUp" class="form-control" type="email" placeholder="Email" required>
+                    </div>
+                    <div class="col-md-12">
+                    <input id="txtPasswordSignUp" class="form-control" type="password" placeholder="Password" required>
+                    </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                    <div class="col-md-12">
+                    <legend>Your pet information</legend>
+                    </div>
+                    <div class="col-md-12">
+                    <input id="dogNameSignUp" class="form-control" type="dogname" placeholder="Name" required>
+                    </div>
+                    <div class="col-md-4">
+                    <input id="dogBreedSignUp" class="form-control" type="dogbreed" placeholder="Breed">
+                    </div>
+                    <div class="col-md-4">
+                    <input id="dogAgeSignUp" class="form-control" type="dogbreed" placeholder="Age">
+                    </div>
+                    <div class="col-md-4">
+                    <input id="dogSizeSignUp" class="form-control" type="dogbreed" placeholder="Size">
+                    </div>
+                    <div class="col-md-4">
+                    <input id="dogColorSignUp" class="form-control" type="dogbreed" placeholder="Color">
+                    </div>
+                    <div class="col-md-4">
+                    <input id="dogPedigreeSignUp" class="form-control" type="dogbreed" placeholder="Pedigree">
+                    </div>
+                    <div class="col-md-4">
+                    <input id="dogMedicalSignUp" class="form-control" type="dogbreed" placeholder="Medical Conditions">
+                    </div>
+                    <div class="col-md-12">
+                    <b><label for="photo">Update your dog's picture</label></b>
+                    <br>
+                    <input type="file" name="photo" id="photo" accept="image/*" />
+            <input type="button" class="btn-xs btn-danger" onclick="
+            var cancelar = this.form.elements['photo'];
+            cancelar.value = cancelar.defaultValue;" value="x" />
+            </div>
+            <div class="col-md-12">
+                <a id="btnDeleteAccount" class="btn btn-danger btn-xs">
+                        <b><font color="white">Delete account</font></b>
+                    </a>
+            </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                    <div class="col-md-6">
+                    <a id="btnCancel" type="button" class="btn btn-danger btn-lg btn-block" href="index.html">
+                        Cancel
+                    </a>
+                    </div>
+                    <div class="col-md-6">
+                    <a id="btnSave" type="button" class="btn btn-success btn-lg btn-block" href="index.html">
+                        Save your changes
+                    </a>
+                    </div>
+                </div>
+                <div class="col-md-5">
+
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+</body>
+
+</html>

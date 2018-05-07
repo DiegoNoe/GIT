@@ -1,0 +1,79 @@
+        <!DOCTYPE html>
+        <html>
+        
+        <head>
+            <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+            <!-- Latest compiled and minified CSS -->
+        
+            <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+            <link rel="stylesheet" type="text/css" href="/css/login.css">
+        
+        
+            <!-- jQuery library -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+            <!-- Latest compiled JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+            <script src="/js/firebase.js"></script>
+            <script src="/js/handlerUser.js"></script>
+            
+            <div class="container">
+                <div class="row">
+                <img src="images/dog_footprint.png" width="35px" height="35px" />
+        <h3><span style="font-weight: 700; color: #385BA6">DogLove</span></h3>
+        </div>
+    </div>
+        
+        </head>
+        
+        <body>
+            <div class="myBackground">
+            <div class="container">
+                <div class="header">
+                    <img src="images/dog_footprint.png" width="100px" height="100px" />
+                    <h3>Welcome to <span style="font-weight: 700; color: #385BA6">DogLove</span></h3>
+                    <small> Where your dog can find a partner.</small>
+                </div>
+                <br>
+                <div class="body">
+                    <div class="row">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-6">
+                            <input id="txtEmailLogIn" class="form-control" type="email" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-6">
+                            <input id="txtPasswordLogIn" class="form-control" type="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-6">
+                            <button id="btnLogIn" class="btn btn-primary btn-block" onclick="login();">
+                        Log In
+                    </button>
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                        </div>
+                        <div class="col-md-6">
+                            <a class="btn btn-primary btn-block" type="button" href="signup.html">
+                        Sign Up
+                    </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </body>
+        
+        </html>

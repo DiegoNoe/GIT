@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Search view</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">  
+    <link rel="stylesheet" type="text/css" href="css/search.css">  
+
+    <script language="javascript" type="text/javascript" src="js/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/firebase.js"></script>    
+    <script language="javascript" type="text/javascript" src="js/jspdf.customfonts.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/default_vfs.js"></script>
+    <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/qrcode.js"></script>
+    <script language="javascript" type="text/javascript" src="js/index.js"></script>
+
+    <script>
+        //connect to the database
+        firebase.initializeApp(connectFB());
+    
+        //saves a local copy of the products
+        var products;
+        var database = firebase.database().ref('productos');
+        database.on('value', function(snapshot) {
+            products = Defiant.getSnapshot(snapshot.val());
+        });
+    </script>
+      
+</head>
+<body>
+    <!-- no connection alert -->
+    <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
+        <strong>No hay conexión.</strong> Productos como cremas y jamones no serán enviados a sus departamentos.
+    </div>
+    <!-- qr code container (invisible) -->
+    <div id="qrcode" style="position: absolute; left: -9999px"></div>
+
+    <div class="container-fluid">
+        <div class="form-group row" style="padding: 15px">
+            <!-- name input-->
+            <div id="inputNameContainer" class="col-md-4" style="padding-left: 0">
+                <input type="input" class="form-control" id="inputName" placeholder="NOMBRE"> </input>
+            </div>
+            
+            <!-- interface buttons -->
+            <h2 style="float: right; margin-top: 0px"><span class="label label-default"></span></h2>
+            <button type="button" class="btn btn-primary" id="printButton" style="float: right" onclick="generatePDF()">IMPRIMIR</button>
+            <button type="button" class="btn btn-secondary" onclick="showAddFormat();" style="float: right; margin-right: 10px">AGREGAR</button>
+            
+            <!-- life search box -->
+            <input type="input" class="form-control" id="inputSearch" placeholder="ID"></input>
+            <ul class="list-group search-options" id="searchOptions"></ul>
+        </div>
+        
+        <!-- order products list -->
+        <ul class="list-group" id="dynamic-list"> </ul>
+        <div id="output"></div>
+    </div>
+    <!-- edit / add new product modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <!-- modal title -->
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addProductModalLabel">AGREGAR PRODUCTO</h4>
+                </div>
+                    <div class="modal-body">
+                        <form id="addNewProductDBForm">
+                            <!-- form -->
+                            <div class="form-group">
+
+                                <!-- error message div -->
+                                <label id="verificationMessage" style="color: red;"></label>
+                                <div class="row" style="margin-bottom: 15px;">
+
+                                    <!-- description -->
+                                    <div class="col-sm-8">
+                                        <label for="descriptionInput">DESCRIPCION</label>
+                                        <input class="form-control" type="text" placeholder="ATUN CAPITAN MARINO ACEITE DE 140GRS" required>
+                                    </div>
+                                    <!-- id -->
+                                    <div class="col-sm-4">
+                                        <label for="IDInput">CLAVE</label>
+                                        <input class="form-control" type="text" placeholder="ACAPAC" required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- unit -->
+                                    <div class="col-sm-4">
+                                        <label for="unitInput">UNIDAD</label>
+                                        <input class="form-control" type="text" placeholder="PIEZA, CAJA, EXB..." required>
+                                    </div>
+                                    <!-- cost -->
+                                    <div class="col-sm-4">
+                                        <label for="priceInput">COSTO</label>
+                                        <input class="form-control" type="number" placeholder="8.50" required>
+                                    </div>
+                                    <!-- type -->
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="typeSelect">TIPO</label>
+                                            <select class="form-control" id="typeSelect">
+                                                <option value="yaPesado">YA VIENE PESADO</option>
+                                                <option value="porPesar">SE NECESITA PESAR</option>
+                                                <option value="aJamones">ES PARA JAMONES</option>
+                                                <option value="aCremas">ES PARA CREMAS</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                <!-- modal interface buttons (delete is hidden when in add product view) -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
+                    <button type="button" id="deleteButton" class="btn btn-danger" data-dismiss="modal" onclick="deleteProductDB();" style="display: none">ELIMINAR</button>
+                    <button type="button" class="btn btn-primary" id="saveButton" data-type="newProduct" onclick="verificateNewProduct();">GUARDAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //inputName enter sequence
+        $("#inputName").on('keyup', function (e) {
+            if (e.keyCode == 13) 
+                $("#inputSearch").focus();
+        });
+
+        //inputSearch search onEnter
+        $("#inputSearch").on('keyup', function (e) {
+            var searchResult = JSON.search(products, '//*[contains(clave, "' + $('#inputSearch').val() + '")]|//*[contains(descripcion, "' + $('#inputSearch').val() + '")]');
+            $("#searchOptions").empty();
+            if($('#inputSearch').val() != "") {
+                searchProduct(searchResult);
+                if (e.keyCode == 13 && searchResult.length > 0)
+                    addProduct(searchResult[0]);
+            }
+        });
+
+        //life search
+        function searchProduct(searchResult) {            
+            var searchItem = "";
+            $("#searchOptions").empty();
+            for(var i = 0; i < searchResult.length && i < 10; i++) {
+                searchItem = 
+                    '<button class="list-group-item row btn-default" onclick="addProductByID(&#39;' + searchResult[i].clave + '&#39;)">' +
+                        '<div class="col-sm-2">' + searchResult[i].clave + '</div>' +
+                        '<div class="col-sm-8">' + searchResult[i].descripcion + '</div>' +
+                        '<div class="col-sm-1">' + searchResult[i].costo + '</div>' +
+                        '<div type="button" class="btn btn-sm col-sm-1 edit-button" onclick="editProduct(&#39;' + searchResult[i].clave + '&#39;)">' +
+                            '<span style="color:grey;"> EDITAR </span>' +
+                        '</div>' +
+                    '</button>';
+                $("#searchOptions").append(searchItem);
+            }
+        }
+
+        //edit or delete product modal values
+        function editProduct(id) {
+            //sets modal
+            document.getElementById("addProductModalLabel").innerHTML = "EDITAR PRODUCTO";
+            document.getElementById("deleteButton").style.display = "inline";
+            document.getElementById("verificationMessage").innerHTML = "";
+
+            var productToEdit = JSON.search(products, '//*[contains(clave, "' + id + '")]')[0];
+            var form = document.getElementById("addNewProductDBForm");
+            //{description:0, id:1, unit:2, cost:3, type:4}
+            form.elements[0].value = productToEdit.descripcion;
+            form.elements[1].value = productToEdit.clave;
+            form.elements[2].value = productToEdit.unidad;
+            form.elements[3].value = productToEdit.costo;
+            $("#typeSelect").val(productToEdit.tipo);
+
+            //sets buttons
+            $('#saveButton').data("type", "editProduct");
+            $('#saveButton').data("id", form.elements[1].value);
+
+            $('#addProductModal').modal('show');  
+        }
+
+        //deletes an existing product from the db
+        function deleteProductDB() {
+            $('#dynamic-list li:first-child').remove();
+            var id = document.getElementById("addNewProductDBForm").elements[1].value;
+            database.child(id).remove();
+        }
+
+        //when edit product is clicked, its being added to the order, this fixes that.
+        $("#addProductModal").on("hidden.bs.modal", function () {
+            if($('#saveButton').data("type") == "editProduct") {
+                $('#dynamic-list li:first-child').remove();
+            }
+        });
+
+        //sets modal to add product view
+        function showAddFormat() {
+            document.getElementById("addProductModalLabel").innerHTML = "AGREGAR PRODUCTO";
+            document.getElementById("deleteButton").style.display = "none";
+            document.getElementById("verificationMessage").innerHTML = "";
+            emptyForm(document.getElementById("addNewProductDBForm"), 5);
+            
+            $('#saveButton').data("type", "newProduct");
+            $('#addProductModal').modal('show');  
+        }
+
+        //verificates inputs of modal form
+        function verificateNewProduct() {
+            $('#dynamic-list li:first-child').remove();
+            var messageLabel = document.getElementById("verificationMessage");
+            var form = document.getElementById("addNewProductDBForm");
+            var verificated = true;
+
+            //checks for blanks
+            var inputs = new Array(5);
+            //{description:0, id:1, unit:2, cost:3, type:4}
+            for(var i = 0; i < inputs.length; i++) {
+                inputs[i] = form.elements[i].value;
+                if(inputs[i] == "") {
+                    messageLabel.innerHTML = "LLENA TODOS LOS CAMPOS.";
+                    verificated = false;
+                    break;
+                }
+            }
+
+            //checks for valid units
+            var validUnits = ["KILO", "PIEZA", "CAJA", "CUB", "EXB"];
+            if(form.elements[2].value != "" && !validUnits.includes(form.elements[2].value)) {
+                messageLabel.innerHTML = "LA UNIDAD UNICAMENTE PUEDE SER: ";
+                for(var i = 0; i < validUnits.length - 1; i++)
+                    messageLabel.innerHTML += validUnits[i] + ", ";
+                messageLabel.innerHTML += validUnits[validUnits.length - 1] + ".";
+                verificated = false;
+            }
+
+            //checks for existing ids
+            if(form.elements[1].value != "") {
+                database.child(form.elements[1].value).once('value', function(snapshot) {
+                    //when in add product, the id needs to be always a new one
+                    if($('#saveButton').data("type") == "newProduct") {
+                        if(snapshot.val() !== null) {
+                            messageLabel.innerHTML = "LA CLAVE YA EXISTE, INTENTA UNA DIFERENTE.";
+                            verificated = false;
+                        }
+                    }
+                    //when in edit product, the id can be either the same or a new one, but not an existing one
+                    else if($('#saveButton').data("type") == "editProduct") {
+                        if($('#saveButton').data("id") != form.elements[1].value) {
+                            if(snapshot.val() !== null) {
+                                messageLabel.innerHTML = "LA CLAVE YA EXISTE, INTENTA UNA DIFERENTE.";
+                                verificated = false;
+                            }
+                        }
+                    }
+                });   
+            }
+
+            //if everything is checked, upload form
+            if(verificated) {
+                //saves the current product to the db
+                addNewProductDB(inputs);
+                messageLabel.innerHTML = "";
+
+                //if at edit product the id changes, deletes the old ids instance
+                if($('#saveButton').data("type") == "editProduct") {
+                    if($('#saveButton').data("id") != form.elements[1].value){ 
+                        database.child($('#saveButton').data("id")).remove();
+                    }
+                }
+
+                //cleans the form
+                emptyForm(form, inputs.length);
+            }
+        }
+
+        //clears modal form
+        function emptyForm(form, length) {
+            for(var i = 0; i < length; i++)
+                form.elements[i].value = "";
+        }
+
+        //Adds a new product to firebase
+        function addNewProductDB(inputs) {            
+            firebase.database().ref('productos/' + inputs[1]).set({
+                clave: inputs[1],
+                costo: inputs[3],
+                descripcion : inputs[0],
+                tipo : inputs[4],
+                unidad : inputs[2]
+            }).then(function() {
+                $('#addProductModal').modal('toggle');
+            });
+        }
+
+        //adds the first product of the life search list by id
+        function addProductByID(ID) {
+            var searchResult = JSON.search(products, '//*[contains(clave, "' + ID + '")]');
+            addProduct(searchResult[0]);
+        }
+
+        //adds the item to the list
+        function addProduct(product) {
+            $("#searchOptions").empty();
+            $("#inputSearch").val("");
+            var productListItem = 
+                '<li class="list-group-item row product-row" data-id="' + product.clave + '">' +
+                    '<div class="col-sm-1 product-quantity">' +
+                        '<input type="number" class="form-control"> </input>' +
+                    '</div>' +
+                    '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
+                    '<div class="col-sm-5 product-info">' + product.descripcion + '</div>' +
+                    '<div class="col-sm-4 product-notes-container">' +
+                        '<input type="input" class="form-control product-notes" placeholder="NOTAS"> </input>' +
+                    '</div>' +
+                    '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button">' +
+                        '<span class="glyphicon glyphicon-remove" style="color:grey; padding-top: 3px"></span>' +
+                    '</button>' +
+                '</li>';
+            
+            //Add list element
+            $('#dynamic-list').prepend(productListItem);
+            
+            //inputSearch sequence
+            $('#dynamic-list').find('input').first().focus();
+
+            //inputQuantity enter sequence
+            $('#dynamic-list').find('input').first().on('keydown', function (e) {
+                if (e.keyCode == 13)
+                    $(this).parent().nextAll().eq(2).children().focus();
+            });
+            
+            //inputNotes enter sequence with S shortcut
+            var inputNotes = $('#dynamic-list').find('input').eq(1);
+            inputNotes.on('keydown', function (e) {
+                if (e.keyCode == 13) {
+                    if(inputNotes.val() == "S")
+                        inputNotes.val("SURTIDO");
+                    $("#inputSearch").focus();
+                }
+            });
+
+            //deleteButton action
+            $("#dynamic-list").on("click", "button", function(e) {
+                e.preventDefault();
+                $(this).parent().remove();
+            });
+        }
+
+         //populates an array with all the product values
+         function getOrderProducts() {
+            var order = new Array($("#dynamic-list").children().length);
+            for(var i = 0; i < order.length; i++)
+                order[i] = new Array(6);
+            
+            //iterates over list items
+            $("#dynamic-list").children().each(function(index) {
+                //{id:0, quantity:1, unit:2, description:3, notes:4, tipo:5}
+                order[index][0] = $(this).data("id");
+                var productItem = $(this).children();
+                order[index][1] = productItem.eq(0).children().val();
+                order[index][2] = productItem.eq(1).text();
+                order[index][3] = productItem.eq(2).text();
+                order[index][4] = productItem.eq(3).children().val();
+                order[index][5] = JSON.search(products, '//' + order[index][0])[0].tipo
+            });
+
+            return order;
+        }
+
+        //adds a new page with all the values
+        function addPagePDF(doc) {
+            doc.addPage();
+            addTimePDF(doc);
+            addNamePDF(doc);
+            doc.addImage(generateQR($("#inputName").val()), 'JPEG', 2, 196, 15, 15);
+        }
+
+        //adds date and time to the top right corner
+        function addTimePDF(doc) {
+            var months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+            var date = new Date();
+            doc.setFontSize(13);
+            doc.text(78, 22.5, date.getDate().toString());
+            doc.text(89, 22.5, months[date.getMonth()]);
+            doc.text(100, 22.5, date.getFullYear().toString());
+            doc.text(114, 22.5, date.getHours() + ":" + date.getMinutes());
+        }
+
+        //adds the name the de pff
+        function addNamePDF(doc) {
+            var name = $("#inputName").val();
+            doc.setFontSize(16);
+            doc.text(27, 33.5, name);
+        }
+
+        //generates a PDF with autoprint
+        function generatePDF() {
+            //set PDF defaults
+            var order = getOrderProducts();
+            var doc = new jsPDF({
+                orientation: 'p',
+                unit: 'mm',
+                format: [213, 135]
+            });
+            
+            //add custom fonts
+            doc.addFont('GILC____.TTF', "Gill Sans Std Condensed", "normal");
+            doc.addFont('GillSansMTCondensedBold.ttf', "Gill Sans MT Condensed Negrita", "normal");
+            doc.setFont("Gill Sans MT Condensed Negrita");
+            
+            addTimePDF(doc);
+            addNamePDF(doc);
+            doc.addImage(generateQR($("#inputName").val()), 'JPEG', 4.5, 197.5, 12, 12);
+
+            var shortenedUnits = {
+                KILO: "KG",
+                PIEZA: "PZ",
+                CAJA: "CJ",
+                CUB: "CUB",
+                EXB: "EXB",
+                LATA: "PZ"
+            };
+
+            var calculable = true;
+            var total = 0;
+            var firstLineYPosition = 46.5;
+            var lineHeight = 8.59;
+            var currentLine = 0;
+            for(var i = 0; i < order.length; i++) {
+                //adds new page if necessary
+                if(currentLine == 18 || (currentLine == 17 && order[i][4] != "")) {
+                    addPagePDF(doc);
+                    currentLine = 0;
+                } 
+
+                //quantity and unit
+                doc.setFont("Gill Sans MT Condensed Negrita");
+                doc.text(15, firstLineYPosition + (currentLine * lineHeight), order[i][1] + " " + shortenedUnits[order[i][2]], null, null, "center");                
+                
+                //product price * quantity
+                doc.setFont("Gill Sans MT Condensed Negrita");
+                product = JSON.search(products, '//' + order[i][0]);
+                if(!product[0].porPesar) {
+                    doc.text(120, firstLineYPosition + (currentLine * lineHeight) + .5, (product[0].costo * order[i][1]).toString(), null, null, "center");
+                    total += product[0].costo * order[i][1];
+                } else
+                    calculable = false;
+
+                //if notes
+                doc.setFont("Gill Sans Std Condensed");
+                if(order[i][4] != "") {
+                    //notes
+                    doc.setFontSize(10);
+                    doc.text(26.3, firstLineYPosition + (currentLine * lineHeight) + 1.5, order[i][4]);
+                    //description
+                    doc.setFontSize(16);
+                    doc.text(26, firstLineYPosition + (currentLine * lineHeight) - 1.5, order[i][3]);
+                } else {
+                    //description
+                    doc.setFontSize(16);
+                    doc.text(26, firstLineYPosition + (currentLine * lineHeight), order[i][3]);
+                }
+
+                //send to cremas or jamones with index
+                if(order[i][5] == "aCremas")
+                    aCremasOrder(order[i], i);
+                else if(order[i][5] == "aJamones")
+                    aJamonesOrder(order[i], i);
+
+                currentLine++;
+            }
+            
+            //if calculable then total
+            doc.setFont("Gill Sans MT Condensed Negrita");
+            if(calculable) {
+                doc.setFontSize(25);
+                doc.text(96, 206, total.toString());
+            }
+
+            //autoprints PDF in a new tab
+            doc.autoPrint();
+            window.open(doc.output('bloburl'), '_blank');
+
+            //erase current order
+            eraseOrder();
+        }
+
+        //uploads the aCremas product
+        function aCremasOrder(productOrder, i) {
+            var time = new Date();
+            //{id:0, quantity:1, unit:2, description:3, notes:4, tipo:5}
+            firebase.database().ref('aCremas/pendientes/' + (new Date()).getTime() * 100 + i).set({
+                id: productOrder[0],
+                quantity: productOrder[1],
+                unit : productOrder[2],
+                description : productOrder[3],
+                notes : productOrder[4],
+                hour : time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+            });
+        }
+
+        //uploads the aJamones product
+        function aJamonesOrder(productOrder, i) {
+            var time = new Date();
+            //{id:0, quantity:1, unit:2, description:3, notes:4, tipo:5}
+            firebase.database().ref('aJamones/pendientes/' + (new Date()).getTime() * 100 + i).set({
+                id: productOrder[0],
+                quantity: productOrder[1],
+                unit : productOrder[2],
+                description : productOrder[3],
+                notes : productOrder[4],
+                hour : time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+            });
+        }
+
+        //generates a new QR code at the bottom left of the PDF, return a dataURL
+        function generateQR(name) {
+            document.getElementById('qrcode').innerHTML = "";
+            var qrcode = new QRCode("qrcode", {
+                text: name,
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.L
+            });
+            var canvas = document.getElementById('qrcode').querySelector('canvas');
+            return canvas.toDataURL();
+        }
+
+        //leaves the page ready for a new order
+        function eraseOrder(){
+            $("#inputName").val("");
+            $("#dynamic-list").html("");
+        }
+
+        //checks current connection status
+        function checkConnection() {
+            var printButton = document.getElementById("printButton");
+            var connectedRef = firebase.database().ref(".info/connected");
+            connectedRef.on("value", function(snap) {
+                if (snap.val() === true) {
+                    connectionView();
+                } else {
+                    noConnectionView();
+                }
+            });
+        } 
+
+        //if offline, sets an alert
+        function noConnectionView() {
+            document.getElementById("noConnectionAlert").style.display = "block";;
+            printButton.style.backgroundColor = "#CB444A";
+            printButton.style.borderColor = "#CB444A";
+            printButton.style.color = "#FFFFFF";
+        }
+
+        //if online, removes offline alert
+        function connectionView() {
+            document.getElementById("noConnectionAlert").style.display = "none";;                
+            printButton.style.backgroundColor = "#457AB2";
+            printButton.style.borderColor = "#457AB2";
+            printButton.style.color = "#FFFFFF";
+        }
+
+        //starst listening to connection stauts
+        checkConnection();
+
+    </script>
+</body>
+ 

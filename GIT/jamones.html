@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Jamones view</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+
+    <style>
+        .container-fluid {
+            margin-top: 3%;
+            margin-left: 1%;
+            margin-right: 1%;
+            position: relative;
+        }
+
+        #dynamic-list {
+            height: 750px;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+        .product-row {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+
+        .product-quantity {
+            padding: 0px;
+        }
+
+        .product-notes {
+            border:0;
+            box-shadow: none;
+        }
+
+        .product-notes-container {
+            padding: 0px;
+        }
+
+        .remove-button {
+            width: 32px;
+            padding-left: 9px;
+            margin-top: 1px;
+            float: right;
+        }
+
+        .tabcontent {
+            display: none;
+        }
+
+    </style>
+
+    <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
+            authDomain: "cremeria-imperial.firebaseapp.com",
+            databaseURL: "https://cremeria-imperial.firebaseio.com",
+            projectId: "cremeria-imperial",
+            storageBucket: "cremeria-imperial.appspot.com",
+            messagingSenderId: "445465872507"
+        };
+
+        firebase.initializeApp(config);
+        var database = firebase.database().ref('aJamones');
+        var pendingOrdersOn = true;
+        var currentDay = (new Date()).getDate();
+
+    </script>
+
+    <script type="text/javascript">
+        function playSound() {
+            //Android.playSound();
+        }
+    </script>
+
+</head>
+<body>
+<div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
+    <strong>No hay conexión.</strong> No estás recibiendo ordenes nuevas.
+</div>
+<div class="container-fluid">
+    <button type="button" id="primaryButton" class="btn btn-primary" style="float: right; margin-top: 3px" onclick="showList(event)">PENDIENTES</button>
+    <button type="button" id="secundaryButton" class="btn btn-secondary" style="float: right; margin-right: 10px; ; margin-top: 3px" onclick="showListDone(event)">HECHAS</button>
+    <h2 class="modal-title" id="addProductModalLabel" style="margin-bottom:5%;">JAMONES</h4>
+        <div class='wrapper'>
+            <ul class="list-group tabcontent" id="dynamic-list"> </ul>
+            <ul class="list-group tabcontent" id="dynamic-list-done"> </ul>
+        </div>
+</div>
+
+<script>
+
+        //Loads pending orders and remains listening
+        function populatePendingOrders() {
+            var latestProductID = 0;
+            var shortenedUnits = {
+                KILO: "KG",
+                PIEZA: "PZ",
+                CAJA: "CJ",
+                CUB: "CUB",
+                EXB: "EXB"
+            };
+            database.child("pendientes").on('value', function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    if(childSnapshot.key > latestProductID || latestProductID == 0) {
+                        playSound();
+
+                        var quantityAndUnit = childSnapshot.child("quantity").val() + shortenedUnits[childSnapshot.child("unit").val()];
+                        var description = childSnapshot.child("description").val();
+                        var indexOfJamon = description.indexOf('JAMON');
+                        if(indexOfJamon >= 0)
+                            description = description.replace(description.substring(indexOfJamon, indexOfJamon + 5), "");
+                        var notes = childSnapshot.child("notes").val();
+                        var hour = childSnapshot.child("hour").val().slice(0, -3);
+
+                        if(quantityAndUnit.includes(".500"))
+                            quantityAndUnit = quantityAndUnit.replace(".500", "½");
+                        if(quantityAndUnit.includes(".50"))
+                            quantityAndUnit = quantityAndUnit.replace(".50", "½");
+                        if(quantityAndUnit.includes(".5"))
+                            quantityAndUnit = quantityAndUnit.replace(".5", "½");
+
+                        if(quantityAndUnit.includes(".250"))
+                            quantityAndUnit = quantityAndUnit.replace(".250", "¼");
+                        if(quantityAndUnit.includes(".25"))
+                            quantityAndUnit = quantityAndUnit.replace(".25", "¼");
+
+                        var productListItem =
+                        '<button class="list-group-item row product-row btn-default" style="padding-left: 12px; padding-right: 12px;" data-id="' + childSnapshot.key + '"">' +
+                            '<h3 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h3>' +
+                            '<h3 class="col-xs-6 product-info" style="padding: 0px; margin: 0px;"> &ensp;&ensp;' + description + '</h3>' +
+                            '<h3 class="col-xs-4 product-info" style="padding: 0px; margin: 0px;">' + notes + '</h3>' +
+                            '<h3 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + hour + '</h3>' +
+                        '</button>';
+
+                        //Add list element
+                        $('#dynamic-list').append(productListItem);
+
+                        //deleteButton action
+                        $("#dynamic-list").on("click", "button", function(e) {
+                            var currentID = $(this).data("id");
+                            var time = new Date();
+                            //add to done orders
+                            database.child("pendientes").child(currentID).once('value', function(snapshot) {
+                                database.child("hechas/" + (currentID * 10)).set(snapshot.val()).then(function(){
+                                    firebase.database().ref('aJamones/pendientes/' + currentID).remove().then(function(){
+                                        database.child("hechas/" + (currentID * 10) + "/hourDone").set(
+                                            time.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true})
+                                        )
+                                    });
+                                });
+                            });
+                            e.preventDefault();
+                            $(this).remove();
+                        });
+
+                        latestProductID = childSnapshot.key;
+                    }
+                });
+
+            });
+        }
+
+        //Loads done orders once
+        function populateDoneOrders() {
+            checkDayChange();
+            document.getElementById('dynamic-list-done').innerHTML = "";
+            var shortenedUnits = {
+                KILO: "KG",
+                PIEZA: "PZ",
+                CAJA: "CJ",
+                CUB: "CUB",
+                EXB: "EXB"
+            };
+            database.child("hechas").once('value', function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+
+                    var quantityAndUnit = childSnapshot.child("quantity").val() + shortenedUnits[childSnapshot.child("unit").val()];
+                    var description = childSnapshot.child("description").val(); 
+                    var indexOfJamon = description.indexOf('JAMON');
+                    if(indexOfJamon >= 0)
+                        description = description.replace(description.substring(indexOfJamon, indexOfJamon + 5), "");
+                    var notes = childSnapshot.child("notes").val();
+                    var hour = childSnapshot.child("hour").val().slice(0, -3);
+                    var hourDone = childSnapshot.child("hourDone").val().slice(0, -3);          
+                    
+                    if(quantityAndUnit.includes(".500"))
+                        quantityAndUnit = quantityAndUnit.replace(".500", "½");
+                    if(quantityAndUnit.includes(".50"))
+                        quantityAndUnit = quantityAndUnit.replace(".50", "½");
+                    if(quantityAndUnit.includes(".5"))
+                        quantityAndUnit = quantityAndUnit.replace(".5", "½");
+
+                    if(quantityAndUnit.includes(".250"))
+                        quantityAndUnit = quantityAndUnit.replace(".250", "¼");
+                    if(quantityAndUnit.includes(".25"))
+                        quantityAndUnit = quantityAndUnit.replace(".25", "¼");      
+
+                    var productListItem =
+                        '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px;" data-id="' + childSnapshot.key + '"">' +
+                            '<h4 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h4>' +
+                            '<h4 class="col-xs-6 product-info" style="padding: 0px; margin: 0px;"> &ensp;' + description + '</h4>' +
+                            '<h4 class="col-xs-3 product-info" style="padding: 0px; margin: 0px;">' + notes + '</h4>' +
+                            '<h4 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + hour + '</h4>' +
+                            '<h4 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + hourDone + '</h4>' +
+                        '</li>';
+
+                    //Add list element
+                    $('#dynamic-list-done').prepend(productListItem);
+                });
+            });
+        }
+
+        //button logic
+        function showList(evt) {
+            changeList(evt, "dynamic-list");
+
+            document.getElementById("primaryButton").style.backgroundColor = "#457AB2";
+            document.getElementById("primaryButton").style.borderColor = "#457AB2";
+            document.getElementById("primaryButton").style.color = "#FFFFFF";
+
+            document.getElementById("secundaryButton").style.backgroundColor = "#C0C0C0";
+            document.getElementById("secundaryButton").style.borderColor = "#C0C0C0";
+            document.getElementById("secundaryButton").style.color = "#000000";
+        }
+
+        //Loads done orders once, button logic
+        function showListDone(evt) {
+            populateDoneOrders();
+            changeList(evt, "dynamic-list-done");
+
+            document.getElementById("primaryButton").style.backgroundColor = "#C0C0C0";
+            document.getElementById("primaryButton").style.borderColor = "#C0C0C0";
+            document.getElementById("primaryButton").style.color = "#000000";
+
+            document.getElementById("secundaryButton").style.backgroundColor = "#CB444A";
+            document.getElementById("secundaryButton").style.borderColor = "#CB444A";
+            document.getElementById("secundaryButton").style.color = "#FFFFFF";
+        }
+
+        //Tabs engine
+        function changeList(evt, listID) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++)
+                tabcontent[i].style.display = "none";
+            document.getElementById(listID).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        //Erases done orders history from firebase
+        function eraseDoneDB() {
+            database.child("hechas").remove();
+        }
+
+        function checkConnection() {
+            var connectedRef = firebase.database().ref(".info/connected");
+            connectedRef.on("value", function(snap) {
+                if (snap.val() === true) {
+                    document.getElementById("noConnectionAlert").style.display = "none";
+                } else {
+                    document.getElementById("noConnectionAlert").style.display = "block";
+                }
+            });
+        }
+
+        function checkDayChange() {
+            if(currentDay != (new Date).getDate()) {
+                currentDay = (new Date).getDate();
+                eraseDoneDB();
+            }
+        } 
+
+        //MAIN
+        //Populates for the first time pending orders and remains listening
+        populatePendingOrders();
+
+        //Activates pending orders tab
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++)
+            tabcontent[i].style.display = "none";
+        document.getElementById("dynamic-list").style.display = "block";
+        document.getElementById("primaryButton").className += " active";
+
+        //Erases done orders history from firebase
+        checkDayChange();
+        checkConnection();
+
+    </script>
+</body>

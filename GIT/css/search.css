@@ -1,0 +1,122 @@
+@font-face {
+    font-family: GillSansMTCondensedBold;
+    font-style: normal;
+    src: url(GillSansMTCondensedBold.ttf);
+}
+
+@font-face {
+    font-family: GillSansStd-Condensed;
+    font-style: normal;
+    src: url(GillSansStd-Condensed.otf);
+}
+
+.container-fluid {
+    margin-top: 2.5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    position: relative;
+    font-weight: bold;
+    font-size: 15px;
+    
+}
+
+#inputNameContainer {
+    margin-bottom: 2.5%;
+}
+
+.search-options {
+    position: absolute;
+    z-index: 1;
+    margin-top: 10px;
+    left: 15px;
+    right: 0px;
+    overflow-y: scroll;
+    max-height: 550px;
+    padding-left: 15px;
+}
+
+.search-options-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+
+.product-row {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+
+.product-info {
+    padding-top:7px;
+}
+
+.product-quantity {
+    padding: 0px;
+}
+
+.product-notes {
+    border:0; 
+    box-shadow: none;
+}
+
+.product-notes-container {
+    padding: 0px;
+}
+
+.remove-button {
+    width: 32px;
+    padding-left: 9px;
+    margin-top: 1px;
+    float: right;
+}
+
+.edit-button {
+    width: 64px;
+    margin: 0px;
+    padding: 0px;
+    float: right;
+}
+
+.title {
+    font-family: GillSansMTCondBold;
+    font-size: 50px;    
+    color: red;
+    line-height: 80%;
+    padding-bottom: 5px;
+    margin-top: 5px;
+}
+
+.name {
+    font-family: GillSansMTCond;
+    font-size: 45px;   
+    color: black;
+    line-height: 0px;                  
+}
+
+.price {
+    font-family: GillSansMTCond;
+    font-size: 35px;   
+    color: rgb(185, 154, 0);
+    padding-left: 10px;
+    line-height: 0px;                      
+}
+
+#logo {
+    width: 420px;
+    height: auto;
+    display: block;    
+    margin: auto;
+    padding-right: 30px;
+}
+
+#centerColumn .title {
+    text-align: center;
+    padding-right: 20px;
+}
+
+#centerColumn .product {
+    line-height: 315%;          
+}

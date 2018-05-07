@@ -1,0 +1,42 @@
+
+.container-fluid {
+    margin-top: 3%;
+    margin-left: 3%;
+    margin-right: 3%;
+    position: relative;
+}
+
+#dynamic-list {
+    height: 750px; 
+    overflow: hidden; 
+    overflow-y: scroll;
+}
+
+.product-row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.product-quantity {
+    padding: 0px;
+}
+
+.product-notes {
+    border:0; 
+    box-shadow: none;
+}
+
+.product-notes-container {
+    padding: 0px;
+}
+
+.remove-button {
+    width: 32px;
+    padding-left: 9px;
+    margin-top: 1px;
+    float: right;
+}
+
+.tabcontent {
+    display: none;
+}
