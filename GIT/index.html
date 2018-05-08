@@ -23,12 +23,28 @@
     
         //saves a local copy of the products
         var products;
-        var database = firebase.database().ref('productos');
+        var database = firebase.database().ref('productos/');
         database.on('value', function(snapshot) {
-            products = Defiant.getSnapshot(snapshot.val());
+            var byName = snapshotToArray(snapshot);
+            byName.sort(function(a,b) {
+                var x = a.descripcion;
+                var y = b.descripcion;
+                return x < y ? -1 : x > y ? 1 : 0;
+            });
+            products = Defiant.getSnapshot(byName);
         });
 
         var validatedOrder = true;
+
+        function snapshotToArray(snapshot) {
+            var returnArr = [];
+            snapshot.forEach(function(childSnapshot) {
+                var item = childSnapshot.val();
+                item.key = childSnapshot.key;
+                returnArr.push(item);
+            });
+            return returnArr;
+        };
     </script>
       
 </head>
@@ -45,6 +61,10 @@
             <!-- name input-->
             <div id="inputNameContainer" class="col-md-4" style="padding-left: 0">
                 <input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" id="inputName" maxlength="25" placeholder="NOMBRE"> </input>
+            </div>
+            <div class="col-md-2" style="padding-top: 5px; padding-left: 0px;">
+                <input type="checkbox" class="form-check-input" id="tomorrowCheckbox">
+                <label style="color: gray" class="form-check-label" for="tomorrowCheckbox">PARA MAÑANA</label>
             </div>
             
             <!-- interface buttons -->
@@ -177,8 +197,9 @@
                 if($('#inputSearch').val() != "") {
                     $("#dynamic-list").css("opacity", "0.25");
                     searchProduct(searchResult);
-                    if (e.keyCode == 13 && searchResult.length > 0)
+                    if (e.keyCode == 13 && searchResult.length > 0) {
                         addProduct(searchResult[0]);
+                    }
                 } else {
                     $("#dynamic-list").css("opacity", "1");
                 }
@@ -211,7 +232,7 @@
             document.getElementById("deleteButton").style.display = "inline";
             document.getElementById("verificationMessage").innerHTML = "";
 
-            var productToEdit = JSON.search(products, '//' + id)[0];
+            var productToEdit = JSON.search(products, '//*[clave="' + id + '"]')[0];
             var form = document.getElementById("addNewProductDBForm");
             //{description:0, id:1, unit:2, cost:3, type:4}
             form.elements[0].value = productToEdit.descripcion;
@@ -347,7 +368,7 @@
 
         //adds the first product of the life search list by id
         function addProductByID(ID) {
-            var searchResult = JSON.search(products, '//' + ID);
+            var searchResult = JSON.search(products, '//*[clave="' + ID + '"]');
             addProduct(searchResult[0]);
         }
 
@@ -424,14 +445,14 @@
             for(var sequenceIndex = 0; sequenceIndex < typesSequence.length; sequenceIndex++) {
                 //iterates over list items
                 $("#dynamic-list").children().each(function(index) {
-                    if(JSON.search(products, '//' + $(this).data("id"))[0].tipo == typesSequence[sequenceIndex]) {
+                    if(JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo == typesSequence[sequenceIndex]) {
                         var productItem = $(this).children();
                         order[orderIndex][0] = $(this).data("id");
                         order[orderIndex][1] = productItem.eq(0).children().val();
                         order[orderIndex][2] = productItem.eq(1).text();
                         order[orderIndex][3] = productItem.eq(2).text();
                         order[orderIndex][4] = productItem.eq(3).children().val();
-                        order[orderIndex][5] = JSON.search(products, '//' + $(this).data("id"))[0].tipo;
+                        order[orderIndex][5] = JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo;
 
                         //verificating quantity
                         if(order[orderIndex][1] == "" || order[orderIndex][1] == "0") {
@@ -471,7 +492,14 @@
         function addNamePDF(doc) {
             var name = $("#inputName").val();
             doc.setFontSize(22);
-            doc.text(27, 34, replaceAEIOUN(name));
+            if(!$("#tomorrowCheckbox").is(':checked')) {
+                doc.text(27, 34, replaceAEIOUN(name));
+            } else {
+                doc.setTextColor(255, 0, 0);
+                doc.text(27, 34, "MANANA");
+                doc.setTextColor(0, 0, 0);
+                doc.text(57, 34, replaceAEIOUN(name));
+            }
         }
 
         function drawCricle(doc, YCoordinate, validColor) {
@@ -565,9 +593,6 @@
                     else if(quantityAndUnit.includes(".25"))
                         quantityAndUnit = quantityAndUnit.replace(".25", ".250");
 
-                    console.log(quantityAndUnit.slice(0, 4));
-                    console.log("hola!!!!");
-
                     if(quantityAndUnit.slice(0, 4) == ".500")
                         quantityAndUnit = quantityAndUnit.replace(".500", "1/2");
                     else if(quantityAndUnit.slice(0, 4) == ".250")
@@ -582,7 +607,7 @@
                     
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    product = JSON.search(products, '//' + order[i][0]);
+                    product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
                     if(order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
                         doc.setPage(pagesQuantity * 2 - 1);              
                         doc.text(119.5, firstLineYPosition + (currentLine * lineHeight) + .5, (product[0].costo * order[i][1]).toLocaleString('en-US'), null, null, "center");
@@ -672,38 +697,63 @@
 
                 //erase current order
                 eraseOrder();
+                $('#tomorrowCheckbox').prop('checked', false);
 
                 //reload
-                location.reload();
+                //location.reload();
             }
         }
 
         //uploads the aCremas product
         function aCremasOrder(productOrder, i) {
             var time = new Date();
-            //{id:0, quantity:1, unit:2, description:3, notes:4, tipo:5}
-            firebase.database().ref('aCremas/pendientes/' + (new Date()).getTime() * 100 + i).set({
-                id: productOrder[0],
-                quantity: productOrder[1],
-                unit : productOrder[2],
-                description : productOrder[3],
-                notes : productOrder[4],
-                hour : time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-            });
+            if($("#tomorrowCheckbox").is(':checked')) {
+                //{id:0, quantity:1, unit:2, description:3, notes:4, tipo:5}
+                firebase.database().ref('aCremas/pendientes/' + (new Date()).getTime() * 100 + i).set({
+                    id: productOrder[0],
+                    quantity: productOrder[1],
+                    unit : productOrder[2],
+                    description : productOrder[3],
+                    notes : "MAÑANA " + productOrder[4],
+                    hour : time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+                });
+            } else {
+                //{id:0, quantity:1, unit:2, description:3, notes:4, tipo:5}
+                firebase.database().ref('aCremas/pendientes/' + (new Date()).getTime() * 100 + i).set({
+                    id: productOrder[0],
+                    quantity: productOrder[1],
+                    unit : productOrder[2],
+                    description : productOrder[3],
+                    notes : productOrder[4],
+                    hour : time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+                });
+            }
         }
 
         //uploads the aJamones product
         function aJamonesOrder(productOrder, i) {
             var time = new Date();
-            //{id:0, quantity:1, unit:2, description:3, notes:4, tipo:5}
-            firebase.database().ref('aJamones/pendientes/' + (new Date()).getTime() * 100 + i).set({
-                id: productOrder[0],
-                quantity: productOrder[1],
-                unit : productOrder[2],
-                description : productOrder[3],
-                notes : productOrder[4],
-                hour : time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-            });
+            if($("#tomorrowCheckbox").is(':checked')) {
+                //{id:0, quantity:1, unit:2, description:3, notes:4, tipo:5}
+                firebase.database().ref('aJamones/pendientes/' + (new Date()).getTime() * 100 + i).set({
+                    id: productOrder[0],
+                    quantity: productOrder[1],
+                    unit : productOrder[2],
+                    description : productOrder[3],
+                    notes : "MAÑANA" + productOrder[4],
+                    hour : time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+                });
+            } else {
+                //{id:0, quantity:1, unit:2, description:3, notes:4, tipo:5}
+                firebase.database().ref('aJamones/pendientes/' + (new Date()).getTime() * 100 + i).set({
+                    id: productOrder[0],
+                    quantity: productOrder[1],
+                    unit : productOrder[2],
+                    description : productOrder[3],
+                    notes : productOrder[4],
+                    hour : time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+                });
+            }
         }
 
         //generates a new QR code at the bottom left of the PDF, return a dataURL
