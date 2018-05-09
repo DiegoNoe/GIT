@@ -27,7 +27,6 @@
 .search-options {
     position: absolute;
     z-index: 1;
-    margin-top: 10px;
     left: 15px;
     right: 0px;
     overflow-y: scroll;
@@ -55,6 +54,7 @@
 
 .product-quantity {
     padding: 0px;
+    padding-right: 10px;
 }
 
 .product-notes {

@@ -62,20 +62,27 @@
             <div id="inputNameContainer" class="col-md-4" style="padding-left: 0">
                 <input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" id="inputName" maxlength="25" placeholder="NOMBRE"> </input>
             </div>
-            <div class="col-md-2" style="padding-top: 5px; padding-left: 0px;">
+            <div class="col-md-3" style="padding-top: 5px; padding-left: 0px;">
                 <input type="checkbox" class="form-check-input" id="tomorrowCheckbox">
-                <label style="color: gray" class="form-check-label" for="tomorrowCheckbox">PARA MAÑANA</label>
+                <label style="color: gray;" class="form-check-label" for="tomorrowCheckbox">PEDIDO PARA MAÑANA</label>
             </div>
             
             <!-- interface buttons -->
             <h2 style="float: right; margin-top: 0px"><span class="label label-default"></span></h2>
             <button type="button" class="btn btn-primary" id="printButton" style="float: right" onclick="generatePDF()">IMPRIMIR</button>
             <button type="button" class="btn btn-secondary" onclick="showAddFormat();" style="float: right; margin-right: 10px">AGREGAR</button>
-            
-            <!-- life search box -->
-            <input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" id="inputSearch" placeholder="CLAVE"></input>
-            <ul class="list-group search-options" id="searchOptions"></ul>
         </div>
+
+        <!-- life search box -->
+        <div class="row" style="margin-bottom: 15px">
+            <div class="col-md-1" style="padding-right: 0px">
+                <input type="number" id="quantityInput" class="form-control"></input>
+            </div>
+            <div class="col-md-11">
+                <input type="input" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"></input>
+            </div>
+        </div>
+        <ul class="list-group search-options" id="searchOptions"></ul>
         
         <!-- order products list -->
         <ul class="list-group" id="dynamic-list"> </ul>
@@ -115,7 +122,7 @@
                                     <!-- unit -->
                                     <div class="col-sm-4">
                                         <label for="unitInput">UNIDAD</label>
-                                        <input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="PIEZA, CAJA, EXB..." required>
+                                        <input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="PIEZA, CAJA, KILO..." required>
                                     </div>
                                     <!-- cost -->
                                     <div class="col-sm-4">
@@ -155,6 +162,12 @@
         //inputName enter sequence
         $("#inputName").on('keyup', function (e) {
             if (e.keyCode == 13) 
+                $("#quantityInput").focus();
+        });
+
+        //inputQuantity enter sequence
+        $("#quantityInput").on('keyup', function (e) {
+            if (e.keyCode == 13) 
                 $("#inputSearch").focus();
         });
 
@@ -192,7 +205,7 @@
                                                         '|//*[contains(descripcion, "' + $('#inputSearch').val() + '")]' + 
                                                         '|//*[contains(unidad, "' + $('#inputSearch').val() + '")]');
                 }
-
+                
                 $("#searchOptions").empty();
                 if($('#inputSearch').val() != "") {
                     $("#dynamic-list").css("opacity", "0.25");
@@ -210,7 +223,7 @@
         function searchProduct(searchResult) {            
             var searchItem = "";
             $("#searchOptions").empty();
-            for(var i = 0; i < searchResult.length && i < 100; i++) {
+            for(var i = 0; i < searchResult.length && i < 51; i++) {
                 searchItem = 
                     '<button class="list-group-item row btn-default search-options-item" onclick="addProductByID(&#39;' + searchResult[i].clave + '&#39;)">' +
                         '<div class="col-sm-2">' + searchResult[i].clave + '</div>' +
@@ -292,7 +305,7 @@
             }
 
             //checks for valid units
-            var validUnits = ["KILO", "PIEZA", "CAJA", "CUB", "EXB", "PROMO"];
+            var validUnits = ["KILO", "PIEZA", "CAJA", "CUB", "PROMO"];
             if(form.elements[2].value != "" && !validUnits.includes(form.elements[2].value)) {
                 messageLabel.innerHTML = "LA UNIDAD UNICAMENTE PUEDE SER: ";
                 for(var i = 0; i < validUnits.length - 1; i++)
@@ -381,7 +394,7 @@
             var productListItem = 
                 '<li class="list-group-item row product-row" data-id="' + product.clave + '">' +
                     '<div class="col-sm-1 product-quantity">' +
-                        '<input type="number" class="form-control"> </input>' +
+                        '<input type="number" class="form-control"></input>' +
                     '</div>' +
                     '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
                     '<div class="col-sm-5 product-info">' + product.descripcion + '</div>' +
@@ -395,12 +408,17 @@
             
             //Add list element
             $('#dynamic-list').prepend(productListItem);
-            
+
+            //Populate quantity and clean original input
+            $('#dynamic-list').find('input').first().val($("#quantityInput").val());
+            $("#quantityInput").val("");
+
             //inputSearch sequence
-            $('#dynamic-list').find('input').first().focus();
+            $('#dynamic-list').find('input').eq(1).focus();
+
 
             //inputQuantity enter sequence
-            $('#dynamic-list').find('input').first().on('keydown', function (e) {
+            $('#dynamic-list').find('input').first().on('keyup', function (e) {
                 if (e.keyCode == 13) {
                     //to searchbar
                     //$("#inputSearch").focus();
@@ -412,7 +430,7 @@
             
             //inputNotes enter sequence with S shortcut
             var inputNotes = $('#dynamic-list').find('input').eq(1);
-            inputNotes.on('keydown', function (e) {
+            inputNotes.on('keyup', function (e) {
                 if (e.keyCode == 13) {
                     if(inputNotes.val() == "S")
                         inputNotes.val("SURTIDO");
@@ -422,7 +440,7 @@
                         inputNotes.val("EN MEDIOS");
                     else if(inputNotes.val() == "C")
                         inputNotes.val("EN CUARTOS");
-                    $("#inputSearch").focus();
+                    $("#quantityInput").focus();
                 }
             });
 
@@ -492,13 +510,14 @@
         function addNamePDF(doc) {
             var name = $("#inputName").val();
             doc.setFontSize(22);
-            if(!$("#tomorrowCheckbox").is(':checked')) {
-                doc.text(27, 34, replaceAEIOUN(name));
-            } else {
+            doc.text(27, 34, replaceAEIOUN(name));
+
+            if($("#tomorrowCheckbox").is(':checked')) {
+                doc.setFontSize(13);
                 doc.setTextColor(255, 0, 0);
-                doc.text(27, 34, "MANANA");
+                doc.text(4.5, 18, "PEDIDO PARA MANANA");
                 doc.setTextColor(0, 0, 0);
-                doc.text(57, 34, replaceAEIOUN(name));
+                doc.setFontSize(22);
             }
         }
 
