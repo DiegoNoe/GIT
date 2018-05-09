@@ -62,21 +62,21 @@
             <div id="inputNameContainer" class="col-md-4" style="padding-left: 0">
                 <input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" id="inputName" maxlength="25" placeholder="NOMBRE"> </input>
             </div>
-            <div class="col-md-3" style="padding-top: 5px; padding-left: 0px;">
+            <div class="col-md-3" style="padding-top: 5px; padding-left: 5px;">
                 <input type="checkbox" class="form-check-input" id="tomorrowCheckbox">
-                <label style="color: gray;" class="form-check-label" for="tomorrowCheckbox">PEDIDO PARA MAÑANA</label>
+                <label style="color: gray;" class="form-check-label" for="tomorrowCheckbox">&nbsp;PEDIDO PARA MAÑANA</label>
             </div>
             
             <!-- interface buttons -->
             <h2 style="float: right; margin-top: 0px"><span class="label label-default"></span></h2>
-            <button type="button" class="btn btn-primary" id="printButton" style="float: right" onclick="generatePDF()">IMPRIMIR</button>
-            <button type="button" class="btn btn-secondary" onclick="showAddFormat();" style="float: right; margin-right: 10px">AGREGAR</button>
+            <button type="button" class="btn btn-primary" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF()">IMPRIMIR</button>
+            <button type="button" class="btn btn-secondary" onclick="showAddFormat();" style="float: right; margin-right: 10px; font-weight: bold;">AGREGAR</button>
         </div>
 
         <!-- life search box -->
         <div class="row" style="margin-bottom: 15px">
             <div class="col-md-1" style="padding-right: 0px">
-                <input type="number" id="quantityInput" class="form-control"></input>
+                <input type="number" min="0" id="quantityInput" class="form-control"></input>
             </div>
             <div class="col-md-11">
                 <input type="input" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"></input>
@@ -127,7 +127,7 @@
                                     <!-- cost -->
                                     <div class="col-sm-4">
                                         <label for="priceInput">COSTO</label>
-                                        <input class="form-control" type="number" placeholder="8.50" required>
+                                        <input class="form-control" type="number" min="0" placeholder="8.50" required>
                                     </div>
                                     <!-- type -->
                                     <div class="col-sm-4">
@@ -394,7 +394,7 @@
             var productListItem = 
                 '<li class="list-group-item row product-row" data-id="' + product.clave + '">' +
                     '<div class="col-sm-1 product-quantity">' +
-                        '<input type="number" class="form-control"></input>' +
+                        '<input type="number" min="0" class="form-control"></input>' +
                     '</div>' +
                     '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
                     '<div class="col-sm-5 product-info">' + product.descripcion + '</div>' +
