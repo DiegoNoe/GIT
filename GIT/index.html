@@ -25,13 +25,15 @@
         var products;
         var database = firebase.database().ref('productos/');
         database.on('value', function(snapshot) {
+            /*
             var byName = snapshotToArray(snapshot);
             byName.sort(function(a,b) {
                 var x = a.descripcion;
                 var y = b.descripcion;
                 return x < y ? -1 : x > y ? 1 : 0;
             });
-            products = Defiant.getSnapshot(byName);
+            */
+            products = Defiant.getSnapshot(snapshot.val());
         });
 
         var validatedOrder = true;
@@ -201,9 +203,14 @@
                     }
                 }
                 else {
-                    searchResult = JSON.search(products, '//*[contains(clave, "' + $('#inputSearch').val() + '")]' + 
-                                                        '|//*[contains(descripcion, "' + $('#inputSearch').val() + '")]' + 
-                                                        '|//*[contains(unidad, "' + $('#inputSearch').val() + '")]');
+                    if($('#inputSearch').val() != "") {
+                        searchResult = JSON.search(products, '//*[contains(clave, "' + $('#inputSearch').val() + '")]');
+                        searchResultSecond = JSON.search(products, '//*[contains(descripcion, "' + $('#inputSearch').val() + '")]' + 
+                                                                   '|//*[contains(unidad, "' + $('#inputSearch').val() + '")]');
+
+                        Array.prototype.push.apply(searchResult, searchResultSecond); 
+
+                    }
                 }
                 
                 $("#searchOptions").empty();
