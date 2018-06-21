@@ -674,6 +674,10 @@
                         aCremasOrder(order[i], i);
                     else if(order[i][5] == "aJamones")
                         aJamonesOrder(order[i], i);
+                    else if(order[i][0] == "JAAN" || order[i][0] == "JAYI" || order[i][0] == "JAI" || order[i][0] == "JAHV") {
+                        if(order[i][1] % 1 != 0)
+                            aJamonesOrder(order[i], i);
+                    }
 
                     //if product needs to be weight, then line
                     if(order[i][5] == "porPesarCamara" || order[i][5] == "porPesarAfuera") {
