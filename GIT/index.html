@@ -71,6 +71,7 @@
             
             <!-- interface buttons -->
             <h2 style="float: right; margin-top: 0px"><span class="label label-default"></span></h2>
+            <label style="margin-top:5px" id="subtotalLabel">SUBTOTAL</label>
             <button type="button" class="btn btn-primary" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF()">IMPRIMIR</button>
             <button type="button" class="btn btn-secondary" onclick="showAddFormat();" style="float: right; margin-right: 10px; font-weight: bold;">AGREGAR</button>
         </div>
@@ -506,6 +507,7 @@
             var months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
             var date = new Date();
             doc.setFontSize(13);
+            doc.setFont("Gill Sans MT Condensed Negrita");
             doc.text(78, 22.5, date.getDate().toString());
             doc.text(89, 22.5, months[date.getMonth()]);
             doc.text(100, 22.5, date.getFullYear().toString());
@@ -517,6 +519,7 @@
         function addNamePDF(doc) {
             var name = $("#inputName").val();
             doc.setFontSize(22);
+            doc.setFont("Gill Sans MT Condensed Negrita");
             doc.text(27, 34, replaceAEIOUN(name));
 
             if($("#tomorrowCheckbox").is(':checked')) {
@@ -546,6 +549,68 @@
             string = string.replace(/ñ/gi,"N");
             return string;
         } 
+
+        function getSubTotal() {
+            var order = SUBTOTALgetOrderProducts();
+            var total = 0;
+            var missingQuantity = false;
+            var exactTotal = true;
+            for(var i = 0; i < order.length; i++) {
+                product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
+                if(order[i][5] == "porPesarCamara" || order[i][5] == "porPesarAfuera")
+                    exactTotal = false;
+                if(order[i][1] == "" || order[i][1] == 0)
+                    missingQuantity = true;
+                else
+                    total += product[0].costo * order[i][1];
+            }
+            total = Math.round(total * 10) / 10;
+            if((total / 1000) >= 1)
+                total = total.toLocaleString('en-US');           
+            else          
+                total = total.toString();
+
+            if(total == "0")
+                document.getElementById("subtotalLabel").innerHTML = "SUBTOTAL";
+            else if(missingQuantity)
+                document.getElementById("subtotalLabel").innerHTML = "FALTA UNA CANTIDAD";
+            else if(!exactTotal)
+                document.getElementById("subtotalLabel").innerHTML = "SUBTOTAL ~" + total + "~";
+            else
+                document.getElementById("subtotalLabel").innerHTML = "SUBTOTAL " + total;
+        }
+
+        window.setInterval(function(){
+            getSubTotal();
+        }, 1000);
+
+        //TEMPORARY
+        function SUBTOTALgetOrderProducts() {
+            var typesSequence = ["porPesarCamara", "yaPesadoCamara", "porPesarAfuera", "yaPesadoAfuera", "yaPesadoAfueraTrino", "aCremas", "aJamones"];
+            var order = new Array($("#dynamic-list").children().length);
+            for(var i = 0; i < order.length; i++)
+                order[i] = new Array(6);
+            
+            var orderIndex = 0;
+            for(var sequenceIndex = 0; sequenceIndex < typesSequence.length; sequenceIndex++) {
+                //iterates over list items
+                $("#dynamic-list").children().each(function(index) {
+                    if(JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo == typesSequence[sequenceIndex]) {
+                        var productItem = $(this).children();
+                        order[orderIndex][0] = $(this).data("id");
+                        order[orderIndex][1] = productItem.eq(0).children().val();
+                        order[orderIndex][2] = productItem.eq(1).text();
+                        order[orderIndex][3] = productItem.eq(2).text();
+                        order[orderIndex][4] = productItem.eq(3).children().val();
+                        order[orderIndex][5] = JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo;
+
+                        orderIndex++;
+                    }
+                });
+            }
+
+            return order;
+        }
 
         //generates a PDF with autoprint
         function generatePDF() {
@@ -708,6 +773,7 @@
                 doc.setFont("Gill Sans MT Condensed Negrita");
                 doc.setFontSize(25);
                 if(calculable) {
+                    total = Math.round(total * 10) / 10;
                     if((total / 1000) >= 1) {
                         doc.setPage(pagesQuantity * 2 - 1);              
                         doc.text(96, 206, total.toLocaleString('en-US'));
