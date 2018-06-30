@@ -71,7 +71,7 @@
             
             <!-- interface buttons -->
             <h2 style="float: right; margin-top: 0px"><span class="label label-default"></span></h2>
-            <label style="margin-top:5px" id="subtotalLabel">SUBTOTAL</label>
+            <label style="margin-top:5px" id="subtotalLabel">TOTAL</label>
             <button type="button" class="btn btn-primary" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF()">IMPRIMIR</button>
             <button type="button" class="btn btn-secondary" onclick="showAddFormat();" style="float: right; margin-right: 10px; font-weight: bold;">AGREGAR</button>
         </div>
@@ -561,8 +561,17 @@
                     exactTotal = false;
                 if(order[i][1] == "" || order[i][1] == 0)
                     missingQuantity = true;
-                else
-                    total += product[0].costo * order[i][1];
+                else { 
+                    if(order[i][3].includes("JAMON") && order[i][3].includes("POR PIEZA") && order[i][5].includes("porPesar"))
+                        total += product[0].costo * order[i][1] * 5;
+                    else if(order[i][3] == "CAJA DE HUEVO")
+                        total += product[0].costo * order[i][1] * 23;
+                    else if(order[i][3] == "1/2 CAJA DE HUEVO ")
+                        total += product[0].costo * order[i][1] * 11.5;
+                    else
+                        total += product[0].costo * order[i][1];
+                    console.log(order[i][3]);
+                }
             }
             total = Math.round(total * 10) / 10;
             if((total / 1000) >= 1)
@@ -571,13 +580,13 @@
                 total = total.toString();
 
             if(total == "0")
-                document.getElementById("subtotalLabel").innerHTML = "SUBTOTAL";
+                document.getElementById("subtotalLabel").innerHTML = "TOTAL";
             else if(missingQuantity)
                 document.getElementById("subtotalLabel").innerHTML = "FALTA UNA CANTIDAD";
             else if(!exactTotal)
-                document.getElementById("subtotalLabel").innerHTML = "SUBTOTAL ~" + total + "~";
+                document.getElementById("subtotalLabel").innerHTML = "TOTAL APROX " + total;
             else
-                document.getElementById("subtotalLabel").innerHTML = "SUBTOTAL " + total;
+                document.getElementById("subtotalLabel").innerHTML = "TOTAL " + total;
         }
 
         window.setInterval(function(){
