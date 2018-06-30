@@ -568,6 +568,8 @@
                         total += product[0].costo * order[i][1] * 23;
                     else if(order[i][3] == "1/2 CAJA DE HUEVO ")
                         total += product[0].costo * order[i][1] * 11.5;
+                    else if(order[i][1] < 0)
+                        total += product[0].costo * order[i][1] * (-1);
                     else
                         total += product[0].costo * order[i][1];
                     console.log(order[i][3]);
@@ -713,8 +715,11 @@
                         doc.text(119.5, firstLineYPosition + (currentLine * lineHeight) + .5, (product[0].costo * order[i][1]).toLocaleString('en-US'), null, null, "center");
                         doc.setPage(pagesQuantity * 2);    
                         doc.text(119.5, firstLineYPosition + (currentLine * lineHeight) + .5, (product[0].costo * order[i][1]).toLocaleString('en-US'), null, null, "center");
-
-                        total += product[0].costo * order[i][1];
+                        
+                        if(order[i][1] < 0)
+                            total += product[0].costo * order[i][1] * (-1);
+                        else
+                            total += product[0].costo * order[i][1];
                     } else
                         calculable = false;
 
