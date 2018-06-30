@@ -71,7 +71,8 @@
             
             <!-- interface buttons -->
             <h2 style="float: right; margin-top: 0px"><span class="label label-default"></span></h2>
-            <label style="margin-top:5px" id="subtotalLabel">TOTAL</label>
+            <label style="margin-top:5px" id="totalLabel">TOTAL</label>
+            <label style="margin-top:5px" id="subtotalLabel"></label>
             <button type="button" class="btn btn-primary" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF()">IMPRIMIR</button>
             <button type="button" class="btn btn-secondary" onclick="showAddFormat();" style="float: right; margin-right: 10px; font-weight: bold;">AGREGAR</button>
         </div>
@@ -581,14 +582,12 @@
             else          
                 total = total.toString();
 
-            if(total == "0")
-                document.getElementById("subtotalLabel").innerHTML = "TOTAL";
-            else if(missingQuantity)
-                document.getElementById("subtotalLabel").innerHTML = "FALTA UNA CANTIDAD";
+            if(total == "0" || missingQuantity)
+                document.getElementById("subtotalLabel").innerHTML = "";
             else if(!exactTotal)
-                document.getElementById("subtotalLabel").innerHTML = "TOTAL APROX " + total;
+                document.getElementById("subtotalLabel").innerHTML = total + " APROX";
             else
-                document.getElementById("subtotalLabel").innerHTML = "TOTAL " + total;
+                document.getElementById("subtotalLabel").innerHTML = total;
         }
 
         window.setInterval(function(){

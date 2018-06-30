@@ -24,6 +24,12 @@
     margin-bottom: 2.5%;
 }
 
+#totalLabel {
+    color: gray; 
+    padding-left: 15px; 
+
+}
+
 .search-options {
     position: absolute;
     z-index: 1;
