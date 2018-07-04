@@ -58,13 +58,6 @@
                 <label style="color: gray;" class="form-check-label" for="tomorrowCheckbox">&nbsp;PEDIDO PARA MAÑANA</label>
             </div>
 
-            <!-- total label -->
-            <h2 style="float: right; margin-top: 0px">
-                <span class="label label-default"></span>
-            </h2>
-            <label style="margin-top:5px" id="totalLabel">TOTAL</label>
-            <label style="margin-top:5px" id="subtotalLabel"></label>
-
             <!-- interface buttons-->
             <button type="button" class="btn btn-primary" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF()">IMPRIMIR</button>
             <button type="button" class="btn btn-secondary" onclick="addProductModal();" style="float: right; margin-right: 10px; font-weight: bold;">AGREGAR</button>
@@ -167,6 +160,9 @@
             if (e.keyCode == 13)
                 $("#quantityInput").focus();
         });
+
+        //update live view
+        $("#inputName").focusout(function () {updateName($("#inputName").val())});
 
         //inputQuantity enter sequence
         $("#quantityInput").on('keyup', function (e) {
@@ -405,26 +401,30 @@
             $("#dynamic-list").css("opacity", "1");
             $("#inputSearch").val("");
 
+            var date = (new Date()).getTime();
+
             var productListItem =
-                '<li class="list-group-item row product-row" data-id="' + product.clave + '">' +
-                '<div class="col-sm-1 product-quantity">' +
-                '<input type="number" min="0" class="form-control"></input>' +
-                '</div>' +
-                '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
-                '<div class="col-sm-5 product-info">' + product.descripcion + '</div>' +
-                '<div class="col-sm-4 product-notes-container">' +
-                '<input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control product-notes" maxlength="48" placeholder="NOTAS"> </input>' +
-                '</div>' +
-                '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button">' +
-                '<span class="glyphicon glyphicon-remove" style="color:grey; padding-top: 3px"></span>' +
-                '</button>' +
+                '<li class="list-group-item row product-row" data-id="' + product.clave + '" + data-date="' + date + '">' +
+                    '<div class="col-sm-1 product-quantity">' +
+                        '<input type="number" min="0" class="form-control"></input>' +
+                    '</div>' +
+                    '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
+                    '<div class="col-sm-5 product-info">' + product.descripcion + '</div>' +
+                    '<div class="col-sm-4 product-notes-container">' +
+                        '<input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control product-notes" maxlength="48" placeholder="NOTAS"> </input>' +
+                    '</div>' +
+                    '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button">' +
+                        '<span class="glyphicon glyphicon-remove" style="color:grey; padding-top: 3px"></span>' +
+                    '</button>' +
                 '</li>';
 
             //add list element
             $('#dynamic-list').prepend(productListItem);
 
             //populate quantity and clean original (outter) input
-            $('#dynamic-list').find('input').first().val($("#quantityInput").val());
+            var outterQuantity = $("#quantityInput").val();
+            var inputQuantity = $('#dynamic-list').find('input').first();
+            inputQuantity.val(outterQuantity);
             $("#quantityInput").val("");
 
             //inputSearch sequence
@@ -452,9 +452,15 @@
                 }
             });
 
+            //upload or update order item
+            uploadOrderProduct(date, outterQuantity, product.unidad, product.descripcion, "", product.costo , product.tipo);
+            inputQuantity.focusout(function () {updateOrderProductQuantity(date, inputQuantity.val())});
+            inputNotes.focusout(function () {updateOrderProductNotes(date, inputNotes.val())});
+
             //deleteButton action
             $("#dynamic-list").on("click", "button", function (e) {
                 e.preventDefault();
+                removeOrderProduct($(this).parent().data("date"));
                 $(this).parent().remove();
             });
         }
@@ -485,78 +491,6 @@
                             alert("Un producto no tiene cantidad, ingresa todas las cantidades.");
                             verificatedOrder = false;
                         }
-
-                        orderIndex++;
-                    }
-                });
-            }
-
-            return order;
-        }
-
-        //FUTURE FIX
-        function getSubTotal() {
-            var order = SUBTOTALgetOrderProducts();
-            var total = 0;
-            var missingQuantity = false;
-            var exactTotal = true;
-            for (var i = 0; i < order.length; i++) {
-                product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
-                if (order[i][5] == "porPesarCamara" || order[i][5] == "porPesarAfuera")
-                    exactTotal = false;
-                if (order[i][1] == "" || order[i][1] == 0)
-                    missingQuantity = true;
-                else {
-                    if (order[i][3].includes("JAMON") && order[i][3].includes("POR PIEZA") && order[i][5].includes("porPesar"))
-                        total += product[0].costo * order[i][1] * 5;
-                    else if (order[i][3] == "CAJA DE HUEVO")
-                        total += product[0].costo * order[i][1] * 23;
-                    else if (order[i][3] == "1/2 CAJA DE HUEVO ")
-                        total += product[0].costo * order[i][1] * 11.5;
-                    else if (order[i][1] < 0)
-                        total += product[0].costo * order[i][1] * (-1);
-                    else
-                        total += product[0].costo * order[i][1];
-                    console.log(order[i][3]);
-                }
-            }
-            total = Math.round(total * 10) / 10;
-            if ((total / 1000) >= 1)
-                total = total.toLocaleString('en-US');
-            else
-                total = total.toString();
-
-            if (total == "0" || missingQuantity)
-                document.getElementById("subtotalLabel").innerHTML = "";
-            else if (!exactTotal)
-                document.getElementById("subtotalLabel").innerHTML = total + " APROX";
-            else
-                document.getElementById("subtotalLabel").innerHTML = total;
-        }
-
-        window.setInterval(function () {
-            getSubTotal();
-        }, 1000);
-
-        //TEMPORARY
-        function SUBTOTALgetOrderProducts() {
-            var typesSequence = ["porPesarCamara", "yaPesadoCamara", "porPesarAfuera", "yaPesadoAfuera", "yaPesadoAfueraTrino", "aCremas", "aJamones"];
-            var order = new Array($("#dynamic-list").children().length);
-            for (var i = 0; i < order.length; i++)
-                order[i] = new Array(6);
-
-            var orderIndex = 0;
-            for (var sequenceIndex = 0; sequenceIndex < typesSequence.length; sequenceIndex++) {
-                //iterates over list items
-                $("#dynamic-list").children().each(function (index) {
-                    if (JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo == typesSequence[sequenceIndex]) {
-                        var productItem = $(this).children();
-                        order[orderIndex][0] = $(this).data("id");
-                        order[orderIndex][1] = productItem.eq(0).children().val();
-                        order[orderIndex][2] = productItem.eq(1).text();
-                        order[orderIndex][3] = productItem.eq(2).text();
-                        order[orderIndex][4] = productItem.eq(3).children().val();
-                        order[orderIndex][5] = JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo;
 
                         orderIndex++;
                     }
@@ -752,6 +686,7 @@
 
                 //erase current order
                 eraseOrder();
+                finishOrderProducts(true);
 
                 //OUTDATED FIX
                 //location.reload();
@@ -836,6 +771,43 @@
             return canvas.toDataURL();
         }
 
+        //uploads or updates an order product
+        function uploadOrderProduct(date, quantity, unit, description, notes, price, type) {
+            firebase.database().ref('liveView1/order/' + date).set({
+                cantidad: quantity,
+                unidad: unit,
+                descripcion: description,
+                notas: notes,
+                precio: price,
+                tipo: type
+            });
+        }
+
+        function updateName(name) {
+            firebase.database().ref('liveView1/name').set(name);
+        }
+
+        function updateOrderProductNotes(date, notes) {
+            firebase.database().ref('liveView1/order/' + date + "/notas").set(notes);
+        }
+
+        function updateOrderProductQuantity(date, quantity) {
+            firebase.database().ref('liveView1/order/' + date + "/cantidad").set(quantity);
+        }
+
+        function removeOrderProduct(date) {
+            firebase.database().ref('liveView1/order/' + date).remove();
+        }
+
+        function removeOrderProducts() {
+            firebase.database().ref('liveView1').remove();
+            finishOrderProducts(false);
+        }
+
+        function finishOrderProducts(isDone) {
+            firebase.database().ref('liveView1/done').set(isDone);
+        }
+
         //uploads the aCremas product
         function aCremasOrder(productOrder, i) {
             var time = new Date();
@@ -905,8 +877,11 @@
             printButton.style.color = "#FFFFFF";
         }
 
-        //startS listening to connection stauts
+        //starts listening to connection stauts
         checkConnection();
+
+        //removes any products from the life view
+        removeOrderProducts();
 
         //some shortcuts. get the keycodes from here http://keycode.info
         $(document).keydown(function (e) {
