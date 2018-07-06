@@ -244,7 +244,7 @@
                     '<div class="col-sm-1">' + searchResult[i].unidad + '</div>' +
                     '<div class="col-sm-7">' + searchResult[i].descripcion + '</div>' +
                     '<div class="col-sm-1">' + searchResult[i].costo + '</div>' +
-                    '<div type="button" class="btn btn-sm col-sm-1 edit-button" onclick="editProductModal&#39;' + searchResult[i].clave + '&#39;)">' +
+                    '<div type="button" class="btn btn-sm col-sm-1 edit-button" onclick="editProductModal(&#39;' + searchResult[i].clave + '&#39;)">' +
                     '<span style="color:grey;"> EDITAR </span>' +
                     '</div>' +
                     '</button>';
@@ -773,7 +773,7 @@
 
         //uploads or updates an order product
         function uploadOrderProduct(date, quantity, unit, description, notes, price, type) {
-            firebase.database().ref('liveView1/order/' + date).set({
+            firebase.database().ref('liveview3/order/' + date).set({
                 cantidad: quantity,
                 unidad: unit,
                 descripcion: description,
@@ -784,28 +784,28 @@
         }
 
         function updateName(name) {
-            firebase.database().ref('liveView1/name').set(name);
+            firebase.database().ref('liveview3/name').set(name);
         }
 
         function updateOrderProductNotes(date, notes) {
-            firebase.database().ref('liveView1/order/' + date + "/notas").set(notes);
+            firebase.database().ref('liveview3/order/' + date + "/notas").set(notes);
         }
 
         function updateOrderProductQuantity(date, quantity) {
-            firebase.database().ref('liveView1/order/' + date + "/cantidad").set(quantity);
+            firebase.database().ref('liveview3/order/' + date + "/cantidad").set(quantity);
         }
 
         function removeOrderProduct(date) {
-            firebase.database().ref('liveView1/order/' + date).remove();
+            firebase.database().ref('liveview3/order/' + date).remove();
         }
 
         function removeOrderProducts() {
-            firebase.database().ref('liveView1').remove();
+            firebase.database().ref('liveview3').remove();
             finishOrderProducts(false);
         }
 
         function finishOrderProducts(isDone) {
-            firebase.database().ref('liveView1/done').set(isDone);
+            firebase.database().ref('liveview3/done').set(isDone);
         }
 
         //uploads the aCremas product
