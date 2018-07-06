@@ -172,8 +172,11 @@
 
         //FIX when edit product is clicked, its being added to the order, this fixes that.
         $("#addProductModal").on("hidden.bs.modal", function () {
-            if ($('#saveButton').data("type") == "editProduct")
+            if ($('#saveButton').data("type") == "editProduct") {
+                //FIX it is also being added to the liveView
+                removeOrderProduct($('#dynamic-list li:first-child').data("date"));
                 $('#dynamic-list li:first-child').remove();
+            }
         });
 
         //inputSearch search onkeyup (life search action)
