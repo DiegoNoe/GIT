@@ -773,7 +773,7 @@
 
         //uploads or updates an order product
         function uploadOrderProduct(date, quantity, unit, description, notes, price, type) {
-            firebase.database().ref('liveview3/order/' + date).set({
+            firebase.database().ref('liveView3/order/' + date).set({
                 cantidad: quantity,
                 unidad: unit,
                 descripcion: description,
@@ -784,28 +784,28 @@
         }
 
         function updateName(name) {
-            firebase.database().ref('liveview3/name').set(name);
+            firebase.database().ref('liveView3/name').set(name);
         }
 
         function updateOrderProductNotes(date, notes) {
-            firebase.database().ref('liveview3/order/' + date + "/notas").set(notes);
+            firebase.database().ref('liveView3/order/' + date + "/notas").set(notes);
         }
 
         function updateOrderProductQuantity(date, quantity) {
-            firebase.database().ref('liveview3/order/' + date + "/cantidad").set(quantity);
+            firebase.database().ref('liveView3/order/' + date + "/cantidad").set(quantity);
         }
 
         function removeOrderProduct(date) {
-            firebase.database().ref('liveview3/order/' + date).remove();
+            firebase.database().ref('liveView3/order/' + date).remove();
         }
 
         function removeOrderProducts() {
-            firebase.database().ref('liveview3').remove();
+            firebase.database().ref('liveView3').remove();
             finishOrderProducts(false);
         }
 
         function finishOrderProducts(isDone) {
-            firebase.database().ref('liveview3/done').set(isDone);
+            firebase.database().ref('liveView3/done').set(isDone);
         }
 
         //uploads the aCremas product
