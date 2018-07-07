@@ -30,7 +30,7 @@
         }
 
         #dynamic-list {
-            height: 750px;
+            height: 900px;
             overflow: hidden;
             overflow-y: scroll;
             font-family: GillSansMTCondBold;
@@ -152,7 +152,10 @@
 
 <body>
     <h1 id="thankyouMessage"></h1>
-    <h1 id="welcomeMessage">BIENVENIDO</h1>
+    <h1 id="welcomeMessage">
+        <img src="logo.png" width="400px" style="position: absolute; top: 100px" alt="Logo">
+        BIENVENIDO
+    </h1>
     <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
         <strong>No hay conexión.</strong>
     </div>
@@ -203,6 +206,8 @@
                             var cost = quantity * childSnapshot.child("precio").val() * 24;
                         else if (description == "1/2 CAJA DE HUEVO ")
                             var cost = quantity * childSnapshot.child("precio").val() * 12;
+                        else if (description == "QUESO PANELA IMPERIAL")
+                            var cost = quantity * childSnapshot.child("precio").val() * .6;    
                         else if (quantity < 0)
                             var cost = quantity * childSnapshot.child("precio").val() * (-1);
                         else

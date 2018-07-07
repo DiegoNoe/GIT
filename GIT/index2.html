@@ -527,7 +527,6 @@
                 //add defaults values
                 addTimePDF(doc);
                 addNamePDF(doc);
-                doc.addImage(generateQR($("#inputName").val()), 'JPEG', 4.5, 196.8, 12, 12);
 
                 //add copy
                 addPagePDF(doc);
@@ -668,7 +667,7 @@
                 doc.setFont("Gill Sans MT Condensed Negrita");
                 doc.setFontSize(25);
                 if (calculable) {
-                    total = Math.round(total * 10) / 10;
+                    total = roundDecimals(Math.round(total * 10) / 10);
                     //if thousand adds comma
                     if ((total / 1000) >= 1) {
                         doc.setPage(pagesQuantity * 2 - 1);
@@ -680,6 +679,16 @@
                         doc.text(96, 206, total.toString());
                         doc.setPage(pagesQuantity * 2);
                         doc.text(96, 206, total.toString());
+                    }
+                    //generates QR code with total embeded in
+                    for(var i = 1; i <= pagesQuantity * 2; i++) {
+                        doc.setPage(i);
+                        doc.addImage(generateQR($("#inputName").val() + "-" + total), 'JPEG', 4.5, 196.8, 12, 12);
+                    }
+                } else {
+                    for(var i = 1; i <= pagesQuantity * 2; i++) {
+                        doc.setPage(i);
+                        doc.addImage(generateQR($("#inputName").val()), 'JPEG', 4.5, 196.8, 12, 12);
                     }
                 }
 
@@ -696,12 +705,15 @@
             }
         }
 
+        function roundDecimals(number) {
+            return Math.round(number * 2) / 2;
+        }
+
         //adds a new page with all the values
         function addPagePDF(doc) {
             doc.addPage();
             addTimePDF(doc);
             addNamePDF(doc);
-            doc.addImage(generateQR($("#inputName").val()), 'JPEG', 4.5, 196.8, 12, 12);
         }
 
         //adds date and time to the top right corner
