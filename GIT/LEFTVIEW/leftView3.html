@@ -83,6 +83,10 @@
             src: url(GillSansStd-Condensed.otf);
         }
 
+        html {
+            zoom: 200%;
+        }
+
         .container-fluid {
             padding-top: 20px;
             padding-left: 40px;
@@ -139,7 +143,7 @@
         .price {
             font-family: GillSansMTCond;
             font-size: 35px;
-            color: rgb(158, 158, 158);
+            color: rgb(116, 116, 116);
             padding-left: 10px;
             line-height: 0px;
         }
@@ -359,9 +363,10 @@
         }
 
         function insertAlphabetically(name) {
-            if (name.includes("-")) {
-                var justName = name.substring(0, name.indexOf("-"));
-                var justTotal = name.substring(name.indexOf("-") + 1, name.length);
+            var words = name.split(" ");
+            if(!isNaN(words[words.length - 1])) {
+                var justName = name.substring(0, name.lastIndexOf(" "));
+                var justTotal = words[words.length - 1];
                 var nameListItem =
                     '<li id="' + name.replace(/ /g, "_").replace(".", "_") + '" data-hour="' + new Date() + '"class="product">' +
                         '<span class="name">' + justName.substring(0, 13) + '</span>' +
@@ -428,9 +433,8 @@
                 nameDate = new Date($(this).data("hour"));
                 var timeDiff = Math.abs(currentDate.getTime() - nameDate.getTime());
                 var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
-                if (diffMinutes > 120) {
+                if (diffMinutes > 120)
                     $(this).remove();
-                }
             });
             setTimeout(function () {
                 checkForOldNames();
@@ -438,15 +442,31 @@
         }
 
         function speakName(name) {
-            if (name.includes("-"))
-                name = name.split("-")[0];
+            var justName = name;
+            var justTotal;
+            var words = name.split(" ");
+            if(!isNaN(words[words.length - 1])) {
+                justName = name.substring(0, name.lastIndexOf(" "));
+                justTotal = words[words.length - 1];
+                if(justTotal.includes(".5"))
+                    justTotal = justTotal.substring(0, justTotal.length - 2) + " con 50";
+            }
+
             var msg = new SpeechSynthesisUtterance();
             msg.rate = .75;
-            msg.text = name;
             msg.lang = "es-US";
             msg.voice = window.speechSynthesis.getVoices()[5]; //15
+            msg.text = justName;
             window.speechSynthesis.speak(msg);
             window.speechSynthesis.speak(msg);
+            if(!isNaN(words[words.length - 1])) {
+                var msg2 = new SpeechSynthesisUtterance();
+                msg2.rate = .75;
+                msg2.lang = "es-US";
+                msg2.voice = window.speechSynthesis.getVoices()[5]; //15
+                msg2.text = justTotal;
+                window.speechSynthesis.speak(msg2);
+            }
         }
 
         function toTitleCase(str) {
