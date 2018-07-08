@@ -683,7 +683,7 @@
                     //generates QR code with total embeded in
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
-                        doc.addImage(generateQR($("#inputName").val() + " " + total), 'JPEG', 4.5, 196.8, 12, 12);
+                        doc.addImage(generateQR($("#inputName").val().replace("Ñ", "NN") + " " + total), 'JPEG', 4.5, 196.8, 12, 12);
                     }
                 } else {
                     for(var i = 1; i <= pagesQuantity * 2; i++) {

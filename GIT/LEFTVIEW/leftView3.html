@@ -143,7 +143,15 @@
         .price {
             font-family: GillSansMTCond;
             font-size: 35px;
-            color: rgb(116, 116, 116);
+            color: rgb(148, 148, 148);
+            padding-left: 10px;
+            line-height: 0px;
+        }
+
+        .totalName {
+            font-family: GillSansMTCond;
+            font-size: 35px;
+            color: rgb(99, 99, 99);
             padding-left: 10px;
             line-height: 0px;
         }
@@ -337,7 +345,7 @@
         function manageScannerInput() {
             if ($("#inputName").val() != "") {
                 if ($("#inputName").val() != "cvUYjDXj") {
-                    var name = toTitleCase($("#inputName").val());
+                    var name = toTitleCase($("#inputName").val().replace("Ñ", ":").replace("NN", "Ñ"));
                     $("#inputName").val("");
 
                     if (!$("#dynamic-list #" + name.replace(/ /g, "_").replace(".", "_")).length) {
@@ -364,13 +372,13 @@
 
         function insertAlphabetically(name) {
             var words = name.split(" ");
-            if(!isNaN(words[words.length - 1])) {
+            if(!isNaN(words[words.length - 1]) && words[words.length - 1] != "") {
                 var justName = name.substring(0, name.lastIndexOf(" "));
                 var justTotal = words[words.length - 1];
                 var nameListItem =
                     '<li id="' + name.replace(/ /g, "_").replace(".", "_") + '" data-hour="' + new Date() + '"class="product">' +
-                        '<span class="name">' + justName.substring(0, 13) + '</span>' +
-                        '<span class="price">$' + justTotal + '</span>' +
+                        '<span class="name">' + justName.substring(0, 15) + '</span>' +
+                        '<span class="totalName">$' + justTotal + '</span>' +
                     '</li>';
             } else {
                 var nameListItem =
