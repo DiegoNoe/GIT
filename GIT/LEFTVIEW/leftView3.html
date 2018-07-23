@@ -22,7 +22,6 @@
             messagingSenderId: "445465872507"
         };
         firebase.initializeApp(config);
-
         var database = firebase.database().ref('productos');
         database.on('value', function (snapshot) {
             //Carnes Frías
@@ -66,8 +65,6 @@
             document.getElementById("SSR2").innerHTML = "$" + snapshot.val().SASRM.costo;
             document.getElementById("SPF5").innerHTML = "$" + snapshot.val().SAPFM.costo;
         });
-
-
         var animationState = false;
             //style="position: absolute; left: -9999px;"
     </script>
@@ -77,35 +74,28 @@
             font-family: GillSansMTCondBold;
             src: url(GillSansMTCondensedBold.ttf);
         }
-
         @font-face {
             font-family: GillSansMTCond;
             src: url(GillSansStd-Condensed.otf);
         }
-
         html {
             zoom: 200%;
         }
-
         .container-fluid {
             padding-top: 20px;
             padding-left: 40px;
             padding-right: 0px;
         }
-
         .col-sm-3 {
             padding-left: 10px;
             padding-right: 0px;
         }
-
         #secondColumn .product {
             line-height: 320%;
         }
-
         #thirdColumn .product {
             line-height: 310%;
         }
-
         #pedidosListosTitle {
             position: absolute;
             z-index: 1;
@@ -113,13 +103,11 @@
             box-shadow: 0px 5px 5px #FFFFFF;
             padding-bottom: 0px;
         }
-
         ul {
             list-style-type: none;
             padding-left: 0px;
             margin-top: 95px;
         }
-
         .title {
             font-family: GillSansMTCondBold;
             font-size: 50px;
@@ -128,18 +116,15 @@
             padding-bottom: 5px;
             margin-top: 5px;
         }
-
         .product {
             line-height: 325%;
         }
-
         .name {
             font-family: GillSansMTCond;
             font-size: 45px;
             color: black;
             line-height: 0px;
         }
-
         .price {
             font-family: GillSansMTCond;
             font-size: 35px;
@@ -147,7 +132,6 @@
             padding-left: 10px;
             line-height: 0px;
         }
-
         .totalName {
             font-family: GillSansMTCond;
             font-size: 35px;
@@ -155,7 +139,6 @@
             padding-left: 10px;
             line-height: 0px;
         }
-
         html {
             overflow-y: hidden;
             overflow-x: hidden;
@@ -334,20 +317,17 @@
         </div>
     </div>
     <script>
-
         $("#inputName").focus();
         $("#inputName").on('keyup', function (e) {
             setTimeout(function () {
                 manageScannerInput();
             }, 500);
         });
-
         function manageScannerInput() {
             if ($("#inputName").val() != "") {
                 if ($("#inputName").val() != "cvUYjDXj") {
                     var name = toTitleCase($("#inputName").val().replace("Ñ", ":").replace("NN", "Ñ"));
                     $("#inputName").val("");
-
                     if (!$("#dynamic-list #" + name.replace(/ /g, "_").replace(".", "_")).length) {
                         speakName(name);
                         insertAlphabetically(name);
@@ -369,31 +349,35 @@
                 }
             }
         }
-
         function insertAlphabetically(name) {
             var words = name.split(" ");
             if(!isNaN(words[words.length - 1]) && words[words.length - 1] != "") {
-                var justName = name.substring(0, name.lastIndexOf(" "));
-                var justTotal = words[words.length - 1];
-                var nameListItem =
+                if(words[words.length - 1] < 1500) {
+                    var justName = name.substring(0, name.lastIndexOf(" "));
+                    var justTotal = words[words.length - 1];
+                    var nameListItem =
+                        '<li id="' + name.replace(/ /g, "_").replace(".", "_") + '" data-hour="' + new Date() + '"class="product">' +
+                            '<span class="name">' + justName.substring(0, 15) + '</span>' +
+                            '<span class="totalName">$' + justTotal + '</span>' +
+                        '</li>';
+                } else {
+                    var justName = name.substring(0, name.lastIndexOf(" "));
+                    var nameListItem =
                     '<li id="' + name.replace(/ /g, "_").replace(".", "_") + '" data-hour="' + new Date() + '"class="product">' +
-                        '<span class="name">' + justName.substring(0, 15) + '</span>' +
-                        '<span class="totalName">$' + justTotal + '</span>' +
+                        '<span class="name">' + justName + '</span>'
                     '</li>';
+                }
             } else {
                 var nameListItem =
                     '<li id="' + name.replace(/ /g, "_").replace(".", "_") + '" data-hour="' + new Date() + '"class="product">' +
                         '<span class="name">' + name + '</span>'
                     '</li>';
             }
-
             var listItem = document.createElement('div');
             listItem.innerHTML = nameListItem.trim();
             document.getElementById("dynamic-list").appendChild(listItem.firstElementChild);
-
             sortList();
         }
-
         function sortList() {
             var list, i, switching, b, shouldSwitch;
             list = document.getElementById("dynamic-list");
@@ -414,7 +398,6 @@
                 }
             }
         }
-
         function nameAllNames() {
             var msg = new SpeechSynthesisUtterance();
             msg.rate = .95;
@@ -434,7 +417,6 @@
                 window.speechSynthesis.speak(msg);
             });
         }
-
         function checkForOldNames() {
             currentDate = new Date();
             $('#dynamic-list li').each(function (index) {
@@ -448,18 +430,19 @@
                 checkForOldNames();
             }, 60000);
         }
-
         function speakName(name) {
             var justName = name;
             var justTotal;
             var words = name.split(" ");
             if(!isNaN(words[words.length - 1])) {
-                justName = name.substring(0, name.lastIndexOf(" "));
-                justTotal = words[words.length - 1];
-                if(justTotal.includes(".5"))
-                    justTotal = justTotal.substring(0, justTotal.length - 2) + " con 50";
+                if(words[words.length - 1] < 1500) {
+                    justName = name.substring(0, name.lastIndexOf(" "));
+                    justTotal = words[words.length - 1];
+                    if(justTotal.includes(".5"))
+                        justTotal = justTotal.substring(0, justTotal.length - 2) + " con 50";
+                } else
+                    justName = name.substring(0, name.lastIndexOf(" "));
             }
-
             var msg = new SpeechSynthesisUtterance();
             msg.rate = .75;
             msg.lang = "es-US";
@@ -468,21 +451,21 @@
             window.speechSynthesis.speak(msg);
             window.speechSynthesis.speak(msg);
             if(!isNaN(words[words.length - 1])) {
-                var msg2 = new SpeechSynthesisUtterance();
-                msg2.rate = .75;
-                msg2.lang = "es-US";
-                msg2.voice = window.speechSynthesis.getVoices()[5]; //15
-                msg2.text = justTotal;
-                window.speechSynthesis.speak(msg2);
+                if(words[words.length - 1] < 1500) {
+                    var msg2 = new SpeechSynthesisUtterance();
+                    msg2.rate = .75;
+                    msg2.lang = "es-US";
+                    msg2.voice = window.speechSynthesis.getVoices()[5]; //15
+                    msg2.text = justTotal;
+                    window.speechSynthesis.speak(msg2);
+                }
             }
         }
-
         function toTitleCase(str) {
             return str.replace(/\w\S*/g, function (txt) {
                 return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
             });
         }
-
         $.fn.scrollList = function (delay) {
             delay = delay || 200;
             var animateList = function ($list) {
@@ -515,15 +498,11 @@
             } else {
                 return;
             }
-
         };
-
         document.onclick = function () {
             $("#inputName").focus();
         }
-
         checkForOldNames();
-
     </script>
 </body>
 

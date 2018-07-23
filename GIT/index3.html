@@ -464,7 +464,7 @@
             $("#dynamic-list").on("click", "button", function (e) {
                 e.preventDefault();
                 removeOrderProduct($(this).parent().data("date"));
-                $(this).parent().remove();
+                $("#dynamic-list").find("[data-date='" + $(this).parent().data("date") + "']").remove();
             });
         }
 
