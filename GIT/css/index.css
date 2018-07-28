@@ -11,12 +11,17 @@
 }
 
 .container-fluid {
-    margin-top: 2.5%;
+    margin-top: 1%;
     margin-left: 10%;
     margin-right: 10%;
     position: relative;
     font-weight: bold;
     font-size: 15px;
+}
+
+.first-row {
+    height: 56px;
+    padding-bottom: 0px;
 }
 
 #inputNameContainer {
@@ -42,7 +47,6 @@
 .search-options-item {
     padding-top: 5px;
     padding-bottom: 5px;
-
 }
 
 .product-row {
