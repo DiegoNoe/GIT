@@ -472,36 +472,53 @@
         function getOrderProducts() {
             verificatedOrder = true;
             var typesSequence = ["porPesarCamara", "yaPesadoCamara", "porPesarAfuera", "yaPesadoAfuera", "yaPesadoAfueraTrino", "aCremas", "aJamones"];
-            var order = new Array($("#dynamic-list").children().length);
-            for (var i = 0; i < order.length; i++)
-                order[i] = new Array(6);
+            
+            var newOrder = [];
 
-            var orderIndex = 0;
+            //iterates over order types to divide them
             for (var sequenceIndex = 0; sequenceIndex < typesSequence.length; sequenceIndex++) {
+                var orderTypeSection = [];
                 //iterates over order list items
                 $("#dynamic-list").children().each(function (index) {
                     if (JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo == typesSequence[sequenceIndex]) {
                         var productItem = $(this).children();
-                        order[orderIndex][0] = $(this).data("id");
-                        order[orderIndex][1] = productItem.eq(0).children().val();
-                        order[orderIndex][2] = productItem.eq(1).text();
-                        order[orderIndex][3] = productItem.eq(2).text();
-                        order[orderIndex][4] = productItem.eq(3).children().val();
-                        order[orderIndex][5] = JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo;
+
+                        var orderTypeUnit = [];
+                        orderTypeUnit.push($(this).data("id"));
+                        orderTypeUnit.push(productItem.eq(0).children().val());
+                        orderTypeUnit.push(productItem.eq(1).text());
+                        orderTypeUnit.push(productItem.eq(2).text());
+                        orderTypeUnit.push(productItem.eq(3).children().val());
+                        orderTypeUnit.push(JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo);
+
+                        orderTypeSection.push(orderTypeUnit);
 
                         //verificating quantity
-                        if (order[orderIndex][1] == "" || order[orderIndex][1] == "0") {
+                        if (orderTypeUnit[1] == "" || orderTypeUnit[1] == "0") {
                             alert("Un producto no tiene cantidad, ingresa todas las cantidades.");
                             verificatedOrder = false;
                         }
-
-                        orderIndex++;
                     }
                 });
+                
+                orderTypeSection.sort(compareOrders);
+                if(orderTypeSection.length > 0)
+                    for(var i in orderTypeSection)
+                        newOrder.push(orderTypeSection[i]);
+                
             }
 
-            return order;
+            return newOrder;
         }
+
+        function compareOrders(a, b) {
+            if (a[3] < b[3])
+                return -1;
+            if (a[3] > b[3])
+                return 1;
+            return 0;
+        }
+
 
         //FUTURE FIX (HUGE FUNCTION) - generates a PDF with autoprint
         function generatePDF() {
@@ -590,10 +607,11 @@
                     doc.setFont("Gill Sans MT Condensed Negrita");
                     product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
                     if (order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
+                        var totalProduct = roundDecimals(Math.round(product[0].costo * order[i][1] * 10) / 10);
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(119.5, firstLineYPosition + (currentLine * lineHeight) + .5, (product[0].costo * order[i][1]).toLocaleString('en-US'), null, null, "center");
+                        doc.text(119.5, firstLineYPosition + (currentLine * lineHeight) + .5, totalProduct.toLocaleString('en-US'), null, null, "center");
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(119.5, firstLineYPosition + (currentLine * lineHeight) + .5, (product[0].costo * order[i][1]).toLocaleString('en-US'), null, null, "center");
+                        doc.text(119.5, firstLineYPosition + (currentLine * lineHeight) + .5, totalProduct.toLocaleString('en-US'), null, null, "center");
 
                         //calculating current total
                         if (order[i][1] < 0)
