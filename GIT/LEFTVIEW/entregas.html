@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Entregas</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+
+    <script language="javascript" type="text/javascript" src="jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="bootstrap.min.js"></script>
+    <script language="javascript" type="text/javascript" src="firebase.js"></script>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
+            authDomain: "cremeria-imperial.firebaseapp.com",
+            databaseURL: "https://cremeria-imperial.firebaseio.com",
+            projectId: "cremeria-imperial",
+            storageBucket: "cremeria-imperial.appspot.com",
+            messagingSenderId: "445465872507"
+        };
+        firebase.initializeApp(config);
+        var pendingOrders = firebase.database().ref('pendingOrders');
+        var aCremas = firebase.database().ref('aCremas');
+        var aJamones = firebase.database().ref('aJamones');
+        var aBodega = firebase.database().ref('aBodega');
+
+
+    </script>
+
+</head>
+
+<body>
+    <txt id="console"></txt>
+    <input id="inputScanner" onblur="focusOnBlur()" style="position: absolute; left: -9999px;" autofocus></input>
+    
+    <script>
+
+        $("#inputScanner").on('keyup', function (e) {
+            if (e.keyCode == 13 && $("#inputScanner").val() != "") {
+                manageScannerInput();
+            } 
+        });
+
+        function focusOnBlur() {
+            setTimeout(function() { $("#inputScanner").focus(); }, 0);
+        }
+
+        function manageScannerInput() {
+            var input = $("#inputScanner").val();
+            $("#inputScanner").val("");
+            var visualConsole = document.getElementById("console");
+            visualConsole.innerHTML = input + "<br>" + visualConsole.innerHTML;
+
+            var name = input.slice(1, input.length - 1);
+            name = name.replace("Ñ", ":").replace("NN", "Ñ");
+            speakName(name);
+
+            var pendingOrderID = "";
+            pendingOrders.orderByChild('id').equalTo(input).on("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    pendingOrderID = childSnapshot.key;
+                    childSnapshot.child("aCremas").forEach(function(specificOrderChild) {
+                        firebase.database().ref('aCremas/porEntregar/' + specificOrderChild.key).set(specificOrderChild.val());
+                    });
+                    childSnapshot.child("aJamones").forEach(function(specificOrderChild) {
+                        firebase.database().ref('aJamones/porEntregar/' + specificOrderChild.key).set(specificOrderChild.val());
+                    });
+                    childSnapshot.child("aBodega").forEach(function(specificOrderChild) {
+                        firebase.database().ref('aBodega/porEntregar/' + specificOrderChild.key).set(specificOrderChild.val());
+                        console.log(specificOrderChild.key);
+                    });
+                });
+            });
+            setTimeout(function () {
+                pendingOrders.child(pendingOrderID).remove();
+            }, 1000);
+        }
+      
+        function speakName(name) {
+            var justName = name;
+            var words = name.split(" ");
+            if(!isNaN(words[words.length - 1]))
+                justName = name.substring(0, name.lastIndexOf(" "));
+            var msg = new SpeechSynthesisUtterance();
+            msg.rate = .8;
+            msg.lang = "es-US";
+            //msg.voice = window.speechSynthesis.getVoices()[65]; //15
+            msg.text = justName;
+            window.speechSynthesis.speak(msg);
+            console.log(window.speechSynthesis.getVoices());
+        }
+
+    </script>
+</body>
+
+</html>

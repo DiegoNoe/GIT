@@ -15,13 +15,63 @@
     margin-left: 10%;
     margin-right: 10%;
     position: relative;
-    font-weight: bold;
     font-size: 15px;
+    font-family: GillSansMTCondensedBold;
+}
+
+#addProductModal {
+    font-family: GillSansMTCondensedBold;
+}
+
+#addProductModalLabel {
+    font-size: 25px !important;
+    line-height: 25px;
+}
+
+input, button:not(.cross), label, span:not(.cross) {
+    font-size: 23px !important;
+}
+
+#inputEmployeeName {
+    font-family: GillSansMTCondensedBold !important;
+    font-size: 23px !important;
+    width: 200px;
+}
+
+.cross {
+    font-size: 13px !important;
+}
+
+#editar-button {
+    line-height: 28px;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    opacity: .5; /* Firefox */
+}
+
+#printByPhoneButton, #printButton, .glyphicon-user, .glyphicon-phone-alt {
+    line-height: 0px !important;
+}
+
+.interface-button {
+    height: 35px;
+    line-height: 24px !important;
 }
 
 .first-row {
     height: 56px;
     padding-bottom: 0px;
+    margin-bottom: 15px;
+}
+
+.product-row {
+    font-size: 23px !important;
+    line-height: 22px;
+}
+
+.glyphicon-remove {
+    padding-right: 6px;
 }
 
 #inputNameContainer {
@@ -31,7 +81,6 @@
 #totalLabel {
     color: gray; 
     padding-left: 15px; 
-
 }
 
 .search-options {
@@ -54,7 +103,11 @@
     margin-right: 0px;
     padding-top: 5px;
     padding-bottom: 5px;
+}
 
+.form-control:focus {
+    border-color: rgb(239, 154, 154);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
 }
 
 .product-info {

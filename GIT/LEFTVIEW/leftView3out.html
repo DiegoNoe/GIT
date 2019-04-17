@@ -35,21 +35,18 @@
             document.getElementById("PEPE").innerHTML = "$" + snapshot.val().PEM.costo;
             document.getElementById("LOMO").innerHTML = "$" + snapshot.val().LOCI.costo;
             document.getElementById("ARRA").innerHTML = "$" + snapshot.val().ARRI.costo;
-            //document.getElementById("ARRAP").innerHTML = "$" + snapshot.val().PUARRI.costo;
-            document.getElementById("QUEPU").innerHTML = "$" + snapshot.val().QUPI.costo;
+            document.getElementById("ARRAP").innerHTML = "$" + snapshot.val().PUARRI.costo;
             document.getElementById("HAMB").innerHTML = "$" + snapshot.val().CARIH.costo;
             document.getElementById("COD").innerHTML = "$" + snapshot.val().CACO.costo;
-            document.getElementById("CHIBO").innerHTML = "$" + snapshot.val().CHP.costo;
-            
-            /*
+            document.getElementById("CHIBO").innerHTML = "$" + snapshot.val().CHPR.costo;
             //Jamones
             document.getElementById("JVIRP").innerHTML = "$" + snapshot.val().JAPV.costo;
             document.getElementById("JATY").innerHTML = "$" + snapshot.val().JAYI.costo;
-            document.getElementById("JAPF").innerHTML = "$" + snapshot.val().JAPF.costo;
+            document.getElementById("QUEPU").innerHTML = "$" + snapshot.val().QUP.costo;
             document.getElementById("JAHOV").innerHTML = "$" + snapshot.val().JAHV.costo;
             document.getElementById("JAIMP").innerHTML = "$" + snapshot.val().JAI.costo;
             //Jamones de pavo
-            document.getElementById("JASAN").innerHTML = "$" + snapshot.val().JAPPSR.costo;
+            document.getElementById("JASAN").innerHTML = "$" + snapshot.val().JAPSR.costo;
             document.getElementById("JAHUF").innerHTML = "$" + snapshot.val().JAAF.costo;
             document.getElementById("JAVIP").innerHTML = "$" + snapshot.val().JAPVV.costo;
             document.getElementById("JANOR").innerHTML = "$" + snapshot.val().JAN.costo;
@@ -63,20 +60,13 @@
             document.getElementById("SJPF").innerHTML = "$" + snapshot.val().SAJF.costo;
             document.getElementById("SALVP").innerHTML = "$" + snapshot.val().SAPV.costo;
             document.getElementById("SPF2").innerHTML = "$" + snapshot.val().SAPF2.costo;
-            document.getElementById("SFRA").innerHTML = "$" + snapshot.val().SAF2.costo;
+            document.getElementById("SFRA").innerHTML = "$" + snapshot.val().SAF3.costo;
             document.getElementById("SCHI").innerHTML = "$" + snapshot.val().SAP.costo;
             document.getElementById("SSR2").innerHTML = "$" + snapshot.val().SASRM.costo;
             document.getElementById("SPF5").innerHTML = "$" + snapshot.val().SAPFM.costo;
-            */
-            //Dólar
-            document.getElementById("DOLAR").innerHTML = "$" + snapshot.val().DOLAR.costo;
-
         });
-
-        // global variables
         var animationState = false;
-        var priceCorrection = "";
-
+            //style="position: absolute; left: -9999px;"
     </script>
 
     <style>
@@ -185,203 +175,186 @@
                     <span class="price" id="CHOHO"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Chuleta Imperial</span>
+                    <span class="name">Chuleta</span>
                     <span class="price" id="CHUL"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Tocino Imperial</span>
+                    <span class="name">Tocino</span>
                     <span class="price" id="TOCO"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Salami Imperial</span>
+                    <span class="name">Salami</span>
                     <span class="price" id="SALA"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Peperoni</span>
+                    <span class="price" id="PEPE"> </span>
                 </div>
                 <div class="product">
                     <span class="name">Lomo Imperial</span>
                     <span class="price" id="LOMO"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Peperoni T.Manga</span>
-                    <span class="price" id="PEPE"> </span>
-                </div>
-                <div class="product">
-                    <span class="name">Arrachera Imp.</span>
+                    <span class="name">Arrachera</span>
                     <span class="price" id="ARRA"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Carne Codorniz</span>
-                    <span class="price" id="COD"> </span>
+                    <span class="name">Puntas Arrach.</span>
+                    <span class="price" id="ARRAP"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Queso de Puerco</span>
-                    <span class="price" id="QUEPU"> </span>
+                    <span class="name">C. Hamburguesa</span>
+                    <span class="price" id="HAMB"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Codorniz</span>
+                    <span class="price" id="COD"> </span>
                 </div>
                 <div class="product">
                     <span class="name">Chicharron Pren.</span>
                     <span class="price" id="CHIBO"> </span>
                 </div>
-                 <div class="product">
-                    <span class="name">C. Hamburg. Imp</span>
-                    <span class="price" id="HAMB"> </span>
-                </div>
             </div>
             <div class="col-sm-3" id="secondColumn">
                 <h3 class="title">Jamones</h3>
                 <div class="product">
-                    <span class="name">Virginia Fud</span>
-                    <span class="price" style="display: none;" id="JVIRP"> </span>
-                </div>
-                <div class="product">
-                    <span class="name">Viva Horneado</span>
-                    <span class="price" style="display: none;" id="JAHOV"> </span>
+                    <span class="name">Virginia</span>
+                    <span class="price" id="JVIRP"> </span>
                 </div>
                 <div class="product">
                     <span class="name">York Imperial</span>
-                    <span class="price" style="display: none;" id="JATY"> </span>
+                    <span class="price" id="JATY"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Pierna Fud</span>
-                    <span class="price" style="display: none;" id="JAPF"> </span>
+                    <span class="name">Queso Puerco</span>
+                    <span class="price" id="QUEPU"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Viva Horneado</span>
+                    <span class="price" id="JAHOV"> </span>
                 </div>
                 <div class="product">
                     <span class="name">Imperial</span>
-                    <span class="price" style="display: none;" id="JAIMP"> </span>
+                    <span class="price" id="JAIMP"> </span>
                 </div>
                 <h3 class="title">Jamones
                     <br> de pavo</h3>
                 <div class="product">
                     <span class="name">Pechuga San R</span>
-                    <span class="price" style="display: none;" id="JASAN"> </span>
+                    <span class="price" id="JASAN"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Ahumado Fud</span>
-                    <span class="price" style="display: none;" id="JAHUF"> </span>
+                    <span class="name">Ahumado Fud.</span>
+                    <span class="price" id="JAHUF"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Virginia Fud</span>
-                    <span class="price" style="display: none;" id="JAVIP"> </span>
+                    <span class="name">Virginia</span>
+                    <span class="price" id="JAVIP"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Norteño Chimex</span>
-                    <span class="price" style="display: none;" id="JANOR"> </span>
+                    <span class="name">Norteño</span>
+                    <span class="price" id="JANOR"> </span>
                 </div>
                 <div class="product">
                     <span class="name">Tradicional</span>
-                    <span class="price" style="display: none;" id="JATP"> </span>
-                </div>
-                <div class="product">
-                    <span class="name">Lonchero</span>
-                    <span class="price" style="display: none;" id="JALON"> </span>
+                    <span class="price" id="JATP"> </span>
                 </div>
                 <div class="product">
                     <span class="name">Cocido Viva</span>
-                    <span class="price" style="display: none;" id="JACOV"> </span>
+                    <span class="price" id="JACOV"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Lonchero</span>
+                    <span class="price" id="JALON"> </span>
                 </div>
             </div>
             <div class="col-sm-3" id="thirdColumn">
                 <h3 class="title">Salchichas tipo viena</h3>
                 <div class="product">
-                    <span class="name">HotDog Fud 3k</span>
-                    <span class="price" style="display: none;" id="SHDF"> </span>
+                    <span class="name">Hot Dog Fud</span>
+                    <span class="price" id="SHDF"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Viva 3k</span>
-                    <span class="price" style="display: none;" id="SALV"> </span>
+                    <span class="name">Viva</span>
+                    <span class="price" id="SALV"> </span>
                 </div>
                 <h3 class="title">Salchichas
                     <br> de pavo</h3>
                 <div class="product">
-                    <span class="name">Jumbo Fud 3k</span>
-                    <span class="price" style="display: none;" id="SJPF"> </span>
+                    <span class="name">Jumbo Fud</span>
+                    <span class="price" id="SJPF"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Viva 2.2k</span>
-                    <span class="price" style="display: none;" id="SALVP"> </span>
+                    <span class="name">Viva</span>
+                    <span class="price" id="SALVP"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Fud 2.2k</span>
-                    <span class="price" style="display: none;" id="SPF2"> </span>
+                    <span class="name">Fud</span>
+                    <span class="price" id="SPF2"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Frankfurt 2.2k</span>
-                    <span class="price" style="display: none;" id="SFRA"> </span>
+                    <span class="name">Frankfurt</span>
+                    <span class="price" id="SFRA"> </span>
                 </div>
                 <div class="product">
-                    <span class="name">Salchirrica 2.5k</span>
-                    <span class="price" style="display: none;" id="SCHI"> </span>
+                    <span class="name">Salchirrica</span>
+                    <span class="price" id="SCHI"> </span>
                 </div>
                 <div class="product">
                     <span class="name">San Rafael ½k</span>
-                    <span class="price" style="display: none;" id="SSR2"> </span>
+                    <span class="price" id="SSR2"> </span>
                 </div>
                 <div class="product">
                     <span class="name">Fud ½k</span>
-                    <span class="price" style="display: none;" id="SPF5"> </span>
+                    <span class="price" id="SPF5"> </span>
                 </div>
-                <h3 class="title">Dólar</h3>
+                <h3 class="title">Latería</h3>
                 <div class="product">
-                    <span class="name">Se toma a:</span>
-                    <span class="price" id="DOLAR"></span>
+                    <span class="name">Gran surtido</span>
+                    <span class="price" id=""></span>
                 </div>
             </div>
         </div>
     </div>
     <script>
-
         $("#inputName").focus();
         $("#inputName").on('keyup', function (e) {
-            if (e.keyCode == 13) {
-                if ($("#inputName").val() != "") {
-                    if (!$("#inputName").val().match(/[A-Z]/i)) {
-                        priceCorrection = $("#inputName").val();
-                        if(priceCorrection.includes(".50"))
-                            priceCorrection.substring(0, justTotal.length - 1);
-                        $("#inputName").val("");
-                    } else {
-                        manageScannerInput();
-                        priceCorrection = "";
-                    }
-                }
-            }
+            setTimeout(function () {
+                manageScannerInput();
+            }, 500);
         });
-
         function manageScannerInput() {
-            if ($("#inputName").val() != "cvUYjDXj") {
-                var name = $("#inputName").val();
-                $("#inputName").val("");
-
-                name = name.slice(1, name.length - 1);
-                name = toTitleCase(name.replace("Ñ", ":").replace("NN", "Ñ"));
-
-                if (!$("#dynamic-list #" + name.replace(/ /g, "_").replace(".", "_")).length) {
-                    speakName(name);
-                    insertAlphabetically(name);
-                } else {
-                    $("#dynamic-list #" + name.replace(/ /g, "_").replace(".", "_")).remove();
-                }
-                if ($("#dynamic-list li").length > 13) {
-                    if (!animationState) {
-                        animationState = true;
-                        $('#dynamic-list').scrollList();
+            if ($("#inputName").val() != "") {
+                if ($("#inputName").val() != "cvUYjDXj") {
+                    var name = toTitleCase($("#inputName").val().replace("Ñ", ":").replace("NN", "Ñ"));
+                    $("#inputName").val("");
+                    if (!$("#dynamic-list #" + name.replace(/ /g, "_").replace(".", "_")).length) {
+                        speakName(name);
+                        insertAlphabetically(name);
+                    } else {
+                        $("#dynamic-list #" + name.replace(/ /g, "_").replace(".", "_")).remove();
+                    }
+                    if ($("#dynamic-list li").length > 13) {
+                        if (!animationState) {
+                            animationState = true;
+                            $('#dynamic-list').scrollList();
+                        }
+                    } else {
+                        animationState = false;
+                        sortList();
                     }
                 } else {
-                    animationState = false;
-                    sortList();
+                    nameAllNames();
+                    $("#inputName").val("");
                 }
-            } else {
-                nameAllNames();
-                $("#inputName").val("");
             }
         }
-
         function insertAlphabetically(name) {
             var words = name.split(" ");
             if(!isNaN(words[words.length - 1]) && words[words.length - 1] != "") {
                 if(words[words.length - 1] < 1500) {
                     var justName = name.substring(0, name.lastIndexOf(" "));
                     var justTotal = words[words.length - 1];
-                    if(priceCorrection != "")
-                        justTotal = priceCorrection;
                     var nameListItem =
                         '<li id="' + name.replace(/ /g, "_").replace(".", "_") + '" data-hour="' + new Date() + '"class="product">' +
                             '<span class="name">' + justName.substring(0, 15) + '</span>' +
@@ -465,22 +438,18 @@
                 if(words[words.length - 1] < 1500) {
                     justName = name.substring(0, name.lastIndexOf(" "));
                     justTotal = words[words.length - 1];
-                    if(priceCorrection != "")
-                        justTotal = priceCorrection;
                     if(justTotal.includes(".5"))
                         justTotal = justTotal.substring(0, justTotal.length - 2) + " con 50";
                 } else
                     justName = name.substring(0, name.lastIndexOf(" "));
             }
             var msg = new SpeechSynthesisUtterance();
-            msg.rate = .95;
+            msg.rate = .75;
             msg.lang = "es-US";
-            msg.voice = window.speechSynthesis.getVoices()[16]; //15
+            msg.voice = window.speechSynthesis.getVoices()[5]; //15
             msg.text = justName;
             window.speechSynthesis.speak(msg);
             window.speechSynthesis.speak(msg);
-            console.log(window.speechSynthesis.getVoices());
-
             if(!isNaN(words[words.length - 1])) {
                 if(words[words.length - 1] < 1500) {
                     var msg2 = new SpeechSynthesisUtterance();
