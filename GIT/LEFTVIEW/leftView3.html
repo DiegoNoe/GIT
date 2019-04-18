@@ -25,6 +25,7 @@
         var database = firebase.database().ref('productos');
         database.on('value', function (snapshot) {
             //Carnes Frías
+            /*
             document.getElementById("CHOPI").innerHTML = "$" + snapshot.val().CHPI.costo;
             document.getElementById("CHOIM").innerHTML = "$" + snapshot.val().CHI.costo;
             document.getElementById("CHORA").innerHTML = "$" + snapshot.val().CHR.costo;
@@ -40,7 +41,7 @@
             document.getElementById("HAMB").innerHTML = "$" + snapshot.val().CARIH.costo;
             document.getElementById("COD").innerHTML = "$" + snapshot.val().CACO.costo;
             document.getElementById("CHIBO").innerHTML = "$" + snapshot.val().CHP.costo;
-            
+            */
             /*
             //Jamones
             document.getElementById("JVIRP").innerHTML = "$" + snapshot.val().JAPV.costo;
@@ -334,6 +335,8 @@
                 if ($("#inputName").val() != "") {
                     if (!$("#inputName").val().match(/[A-Z]/i)) {
                         priceCorrection = $("#inputName").val();
+                        if(priceCorrection == "123456789")
+                            location.reload();
                         if(priceCorrection.includes(".50"))
                             priceCorrection.substring(0, justTotal.length - 1);
                         $("#inputName").val("");
@@ -430,7 +433,6 @@
             msg.rate = .95;
             msg.text = "Los pedidos de las últimas 2 horas son.";
             msg.lang = "es-US";
-            msg.voice = window.speechSynthesis.getVoices()[5]; //15
             window.speechSynthesis.speak(msg);
             $('#dynamic-list li').each(function (index) {
                 var msg = new SpeechSynthesisUtterance();
@@ -440,7 +442,7 @@
                 else
                     msg.text = $(this).text();
                 msg.lang = "es-US";
-                msg.voice = window.speechSynthesis.getVoices()[5]; //15
+                //msg.voice = window.speechSynthesis.getVoices()[5]; //15
                 window.speechSynthesis.speak(msg);
             });
         }
@@ -475,7 +477,7 @@
             var msg = new SpeechSynthesisUtterance();
             msg.rate = .95;
             msg.lang = "es-US";
-            msg.voice = window.speechSynthesis.getVoices()[16]; //15
+            //msg.voice = window.speechSynthesis.getVoices()[16]; //15
             msg.text = justName;
             window.speechSynthesis.speak(msg);
             window.speechSynthesis.speak(msg);
@@ -486,7 +488,7 @@
                     var msg2 = new SpeechSynthesisUtterance();
                     msg2.rate = .75;
                     msg2.lang = "es-US";
-                    msg2.voice = window.speechSynthesis.getVoices()[5]; //15
+                    //msg2.voice = window.speechSynthesis.getVoices()[5]; //15
                     msg2.text = justTotal;
                     window.speechSynthesis.speak(msg2);
                 }
