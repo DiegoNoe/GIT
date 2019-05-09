@@ -192,7 +192,7 @@
         };
 
         firebase.initializeApp(config);
-        var database = firebase.database().ref('liveView0/order');
+        var database = firebase.database().ref('liveView4/order');
         var globalName,
             globalEmployee,
             globalOrderByPhone;
@@ -287,7 +287,7 @@
         }
 
         function populateName() {
-            firebase.database().ref('liveView0/name').on('value', function (snapshot) {
+            firebase.database().ref('liveView4/name').on('value', function (snapshot) {
                 if(snapshot.val() != null) {
                     $('#nameLabel').text("BIENVENIDO " + snapshot.val());
                     globalName = snapshot.val();
@@ -299,7 +299,7 @@
         }
 
         function populateEmployee() {
-            firebase.database().ref('liveView0/employee').on('value', function (snapshot) {
+            firebase.database().ref('liveView4/employee').on('value', function (snapshot) {
                 if(snapshot.val() != null)
                     globalEmployee = snapshot.val();
             });
@@ -404,13 +404,13 @@
         }
 
         function checkOrderByPhone() {
-            firebase.database().ref('liveView0/phoneOrder').on('value', function (snapshot) {
+            firebase.database().ref('liveView4/phoneOrder').on('value', function (snapshot) {
                 globalOrderByPhone = snapshot.val();
             });
         }
 
         function checkDoneOrder() {
-            firebase.database().ref('liveView0/done').on('value', function (snapshot) {
+            firebase.database().ref('liveView4/done').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     if(!globalOrderByPhone) {
                         var totalMessage = $('#totalTitleLabel').text() + " " + $('#totalTitle').text();
@@ -418,7 +418,7 @@
                         $("#thankyouMessage").show();
                         $("#survey").show();
                         speak("Gracias " + globalName + ", en un momento te nombramos en caja.");
-                        firebase.database().ref('liveView0').remove();
+                        firebase.database().ref('liveView4').remove();
                         setTimeout(function(){
                             $("#survey").hide();
                             $("#surveyMessage").hide();
@@ -428,7 +428,7 @@
                             globalName = "";
                         }, 10000);
                     } else {
-                        firebase.database().ref('liveView0').remove();
+                        firebase.database().ref('liveView4').remove();
                         $("#survey").hide();
                         $("#surveyMessage").hide();
                         $("#thankyouMessage").hide();
