@@ -11,6 +11,7 @@
     <script language="javascript" type="text/javascript" src="jquery.min.js"></script>
     <script language="javascript" type="text/javascript" src="bootstrap.min.js"></script>
     <script language="javascript" type="text/javascript" src="firebase.js"></script>
+    <script language="javascript" type="text/javascript" src="array_nombres.js"></script>
 
     <script>
         var config = {
@@ -22,10 +23,6 @@
             messagingSenderId: "445465872507"
         };
         firebase.initializeApp(config);
-        var pendingOrders = firebase.database().ref('pendingOrders');
-        var aCremas = firebase.database().ref('aCremas');
-        var aJamones = firebase.database().ref('aJamones');
-        var aBodega = firebase.database().ref('aBodega');
     </script>
 
 </head>
@@ -35,6 +32,13 @@
     <input id="inputScanner" onblur="focusOnBlur()" style="position: absolute; left: -9999px;" autofocus></input>
     
     <script>
+
+        var namesDictonary = {};
+        populateDictonary(namesArray);
+
+        checkDayChange();
+        window.setInterval(checkDayChange, 5*60*1000);
+        reloadOnUpdate();
 
         $("#inputScanner").on('keyup', function (e) {
             if (e.keyCode == 13 && $("#inputScanner").val() != "") {
@@ -54,27 +58,69 @@
 
             var name = input.slice(1, input.length - 1);
             name = name.replace("Ñ", ":").replace("NN", "Ñ");
-            speakName(name);
 
-            var pendingOrderID = "";
-            pendingOrders.orderByChild('id').equalTo(input).on("value", function(snapshot) {
-                snapshot.forEach(function(childSnapshot) {
-                    pendingOrderID = childSnapshot.key;
-                    childSnapshot.child("aCremas").forEach(function(specificOrderChild) {
-                        firebase.database().ref('aCremas/porEntregar/' + specificOrderChild.key).set(specificOrderChild.val());
+            //search order then access first child (searched order)
+            firebase.database().ref('pendingOrders').orderByChild('id').equalTo(input).once("value", function(snapshot) {
+                if(snapshot.val()) { 
+                    snapshot.forEach(function(childSnapshot) {
+                        if(!childSnapshot.val().porEntregar) {
+                            speakName(name);
+
+                            addToPorEntregar(childSnapshot, "aCremas");
+                            addToPorEntregar(childSnapshot, "aJamones");
+                            addToPorEntregar(childSnapshot, "aBodega");
+
+                            firebase.database().ref('pendingOrders/' + childSnapshot.key + '/porEntregar').set(true);
+                        } else {
+                            backFromPorEntregar(childSnapshot, "aCremas");
+                            backFromPorEntregar(childSnapshot, "aJamones");
+                            backFromPorEntregar(childSnapshot, "aBodega");
+
+                            firebase.database().ref('pendingOrders/' + childSnapshot.key + '/porEntregar').set(false);
+                        }
                     });
-                    childSnapshot.child("aJamones").forEach(function(specificOrderChild) {
-                        firebase.database().ref('aJamones/porEntregar/' + specificOrderChild.key).set(specificOrderChild.val());
-                    });
-                    childSnapshot.child("aBodega").forEach(function(specificOrderChild) {
-                        firebase.database().ref('aBodega/porEntregar/' + specificOrderChild.key).set(specificOrderChild.val());
-                        console.log(specificOrderChild.key);
-                    });
-                });
+                } else {
+                    speakName(name);
+                }
             });
-            setTimeout(function () {
-                pendingOrders.child(pendingOrderID).remove();
-            }, 1000);
+        }
+
+        function addToPorEntregar(childSnapshot, area) {
+            childSnapshot.child(area).forEach(function(specificOrderChild) {
+                // check for served status
+                firebase.database().ref(area + '/pendientes/' + specificOrderChild.key).once('value', function(servedChild) {
+                    var jsonProduct = specificOrderChild.val(); 
+                    jsonProduct.porSurtir = servedChild.exists();
+                    // upload the product with served status
+                    firebase.database().ref('pendingOrders/' + childSnapshot.key + '/' + area + '/' + specificOrderChild.key).set(jsonProduct);
+                    firebase.database().ref(area + '/porEntregar/' + specificOrderChild.key).set(jsonProduct).then(function() {
+                        // delete old product
+                        if(servedChild.exists())
+                            firebase.database().ref(area + '/pendientes/' + specificOrderChild.key).remove();
+                        else
+                            firebase.database().ref(area + '/hechas/' + specificOrderChild.key).remove();
+                    });
+                });                        
+            });
+        }
+
+        function backFromPorEntregar(childSnapshot, area) {
+            childSnapshot.child(area).forEach(function(specificOrderChild) {
+                // check for served status
+                if(specificOrderChild.val().porSurtir) {
+                    // adds the product to porSurtir and then deletes the porEntregar or entregadas product
+                    firebase.database().ref(area + '/pendientes/' + specificOrderChild.key).set(specificOrderChild.val()).then(function() {
+                        firebase.database().ref(area + '/porEntregar/' + specificOrderChild.key).remove();
+                        firebase.database().ref(area + '/entregadas/' + specificOrderChild.key).remove();
+                    });
+                } else {
+                    // adds the product to surtidas and then deletes the porEntregar or entregadas product
+                    firebase.database().ref(area + '/hechas/' + specificOrderChild.key).set(specificOrderChild.val()).then(function() {
+                        firebase.database().ref(area + '/porEntregar/' + specificOrderChild.key).remove();
+                        firebase.database().ref(area + '/entregadas/' + specificOrderChild.key).remove();
+                    });
+                }                
+            });
         }
       
         function speakName(name) {
@@ -82,13 +128,74 @@
             var words = name.split(" ");
             if(!isNaN(words[words.length - 1]))
                 justName = name.substring(0, name.lastIndexOf(" "));
+            justName = addAccent(justName);
             var msg = new SpeechSynthesisUtterance();
             msg.rate = .8;
             msg.lang = "es-US";
             //msg.voice = window.speechSynthesis.getVoices()[65]; //15
             msg.text = justName;
             window.speechSynthesis.speak(msg);
-            console.log(window.speechSynthesis.getVoices());
+        }
+        
+        function reloadOnUpdate() {
+            firebase.database().ref("updates/entregas").on('value', function(snapshot) {
+                if(snapshot.val()){
+                    firebase.database().ref("updates/entregas").set(false).then(function() {
+                        location.reload();
+                    });
+                }
+            });
+        }
+
+        function checkDayChange() {
+            var now = new Date();
+            now.setHours(now.getHours() - 7);
+            var millisTill7pm = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 29, 0, 0) - now;
+
+            var visualConsole = document.getElementById("console");
+            visualConsole.innerHTML = now.toTimeString() + "<br>" + visualConsole.innerHTML;
+
+            if (millisTill7pm < 0) {
+                firebase.database().ref('aCremas').remove();
+                firebase.database().ref('aJamones').remove();
+                firebase.database().ref('aBodega').remove();
+                firebase.database().ref('pendingOrders').remove();
+                
+            }
+        }
+
+        function addAccent(name) {
+            name = name.toUpperCase();
+            var newName = "";
+            var words = name.split(" ");
+            words.forEach(function (value, i) {
+                if(namesDictonary[value] != null) 
+                    newName = newName + " " + namesDictonary[value];
+                else 
+                    newName = newName +  " " + value;
+            });
+            console.log(newName);
+            return newName;
+            
+        }
+
+        function populateDictonary(names) {
+            names = removeDups(names);
+            names = names.sort();
+
+            namesArray.forEach(function (value, i) {
+                namesDictonary[value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase()] = value.toUpperCase();
+            });
+        }
+
+        function removeDups(names) {
+            let unique = {};
+            names.forEach(function(i) {
+                if(!unique[i]) {
+                    unique[i] = true;
+                }
+            });
+            return Object.keys(unique);
         }
 
     </script>

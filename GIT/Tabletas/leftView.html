@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Left View</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <script>
+            var config = {
+                apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
+                authDomain: "cremeria-imperial.firebaseapp.com",
+                databaseURL: "https://cremeria-imperial.firebaseio.com",
+                projectId: "cremeria-imperial",
+                storageBucket: "cremeria-imperial.appspot.com",
+                messagingSenderId: "445465872507"
+            };
+            firebase.initializeApp(config);
+
+            var database = firebase.database().ref('productos');
+            database.on('value', function(snapshot) {
+                //Carnes Frías
+                document.getElementById("CHOPI").innerHTML = "$" + snapshot.val().CHOPI.costo;
+                document.getElementById("CHOIM").innerHTML = "$" + snapshot.val().CHOIM.costo;
+                document.getElementById("CHORA").innerHTML = "$" + snapshot.val().CHORA.costo;
+                document.getElementById("CHOHO").innerHTML = "$" + snapshot.val().CHOHO.costo;
+                document.getElementById("CHUL").innerHTML = "$" + snapshot.val().CHUL.costo;
+                document.getElementById("TOCO").innerHTML = "$" + snapshot.val().TOCO.costo;
+                document.getElementById("SALA").innerHTML = "$" + snapshot.val().SALA.costo;
+                document.getElementById("PEPE").innerHTML = "$" + snapshot.val().PEPE.costo;
+                document.getElementById("LOMO").innerHTML = "$" + snapshot.val().LOMO.costo;
+                document.getElementById("ARRA").innerHTML = "$" + snapshot.val().ARRA.costo;
+                document.getElementById("ARRAP").innerHTML = "$" + snapshot.val().ARRAP.costo;
+                document.getElementById("HAMB").innerHTML = "$" + snapshot.val().HAMB.costo;
+                document.getElementById("COD").innerHTML = "$" + snapshot.val().COD.costo;
+                document.getElementById("CHIBO").innerHTML = "$" + snapshot.val().CHIBO.costo;
+                //Jamones
+                document.getElementById("JVIRP").innerHTML = "$" + snapshot.val().JVIRP.costo;
+                document.getElementById("JATY").innerHTML = "$" + snapshot.val().JATY.costo;
+                document.getElementById("QUEPU").innerHTML = "$" + snapshot.val().QUEPU.costo;
+                document.getElementById("JAHOV").innerHTML = "$" + snapshot.val().JAHOV.costo;
+                document.getElementById("JAIMP").innerHTML = "$" + snapshot.val().JAIMP.costo;
+                //Jamones de pavo
+                document.getElementById("JASAN").innerHTML = "$" + snapshot.val().JASAN.costo;
+                document.getElementById("JAHUF").innerHTML = "$" + snapshot.val().JAHUF.costo;
+                document.getElementById("JAVIP").innerHTML = "$" + snapshot.val().JAVIP.costo;
+                document.getElementById("JANOR").innerHTML = "$" + snapshot.val().JANOR.costo;
+                document.getElementById("JATP").innerHTML = "$" + snapshot.val().JATP.costo;
+                document.getElementById("JACOV").innerHTML = "$" + snapshot.val().JACOV.costo;
+                document.getElementById("JALON").innerHTML = "$" + snapshot.val().JALON.costo;
+                //Salchichas tipo viena
+                document.getElementById("SHDF").innerHTML = "$" + snapshot.val().SHDF.costo;
+                document.getElementById("SALV").innerHTML = "$" + snapshot.val().SALV.costo;
+                //Salchichas de pavo
+                document.getElementById("SJPF").innerHTML = "$" + snapshot.val().SJPF.costo;
+                document.getElementById("SALVP").innerHTML = "$" + snapshot.val().SALVP.costo;
+                document.getElementById("SPF2").innerHTML = "$" + snapshot.val().SPF2.costo;
+                document.getElementById("SFRA").innerHTML = "$" + snapshot.val().SFRA.costo;
+                document.getElementById("SCHI").innerHTML = "$" + snapshot.val().SCHI.costo;
+                document.getElementById("SSR2").innerHTML = "$" + snapshot.val().SSR2.costo;
+                document.getElementById("SPF5").innerHTML = "$" + snapshot.val().SPF5.costo;
+            });
+
+            var animationState = false;
+            //style="position: absolute; left: -9999px;"
+        </script>
+
+    <script type="text/javascript">
+            function speechText(name) {
+                Android.speechText(name);
+            }
+        </script>
+
+    <style>
+        @font-face {
+            font-family: GillSansMTCondBold;
+                src: url(GillSansMTCondensedBold.ttf);
+            }
+
+            @font-face {
+                font-family: GillSansMTCond;
+                src: url(GillSansStd-Condensed.otf);
+            }
+
+            .container-fluid {
+                padding-top: 20px;
+                padding-left: 40px;
+                padding-right: 0px;
+            }
+
+            .col-sm-3 {
+                padding-left: 10px;
+                padding-right: 0px;
+            }
+
+            #secondColumn .product{
+                line-height: 320%;
+            }
+
+            #thirdColumn .product{
+                line-height: 310%;
+            }
+
+            #pedidosListosTitle {
+                position: absolute;
+                z-index: 1;
+                background-color: white;
+                box-shadow: 0px 5px 5px #FFFFFF;
+                padding-bottom: 0px;
+            }
+
+            ul {
+                list-style-type: none;
+                padding-left: 0px;
+                margin-top: 95px;
+            }
+
+            .title {
+                font-family: GillSansMTCondBold;
+                font-size: 50px;
+                color: red;
+                line-height: 80%;
+                padding-bottom: 5px;
+                margin-top: 5px;
+            }
+
+            .product{
+                line-height: 325%;
+            }
+
+            .name {
+                font-family: GillSansMTCond;
+                font-size: 45px;
+                color: black;
+                line-height: 0px;
+            }
+
+            .price {
+                font-family: GillSansMTCond;
+                font-size: 35px;
+                color: rgb(128,128,128);
+                padding-left: 10px;
+                line-height: 0px;
+            }
+        </style>
+
+</head>
+<body>
+<div class="container-fluid">
+    <input id="inputName" style="position: absolute; left: -9999px;"></input>
+    <div class="row">
+        <div class="col-sm-3" id="fourthColumn">
+            <h3 id="pedidosListosTitle" class="title">Pedidos<br>Listos</h3>
+            <ul id="dynamic-list"></ul>
+        </div>
+        <div class="col-sm-3" id="firstColumn">
+            <h3 class="title">Carnes frías</h3>
+            <div class="product">
+                <span class="name">Chorizo Pierna</span>
+                <span  class="price" id="CHOPI">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Chorizo Imperial</span>
+                <span  class="price" id="CHOIM">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Chorizo Ranchero</span>
+                <span  class="price" id="CHORA">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Chorizo hoja</span>
+                <span  class="price" id="CHOHO">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Chuleta</span>
+                <span  class="price" id="CHUL">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Tocino</span>
+                <span  class="price" id="TOCO">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Salami</span>
+                <span  class="price" id="SALA">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Peperoni</span>
+                <span  class="price" id="PEPE">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Lomo Imperial</span>
+                <span  class="price" id="LOMO">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Arrachera</span>
+                <span  class="price" id="ARRA">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Puntas Arrach.</span>
+                <span  class="price" id="ARRAP">  </span>
+            </div>
+            <div class="product">
+                <span class="name">C. Hambuerguesa</span>
+                <span  class="price" id="HAMB">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Codorniz</span>
+                <span  class="price" id="COD">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Chicharron</span>
+                <span  class="price" id="CHIBO">  </span>
+            </div>
+        </div>
+        <div class="col-sm-3" id="secondColumn">
+            <h3 class="title">Jamones</h3>
+            <div class="product">
+                <span class="name">Virginia</span>
+                <span  class="price" id="JVIRP">  </span>
+            </div>
+            <div class="product">
+                <span class="name">York Fud</span>
+                <span  class="price" id="JATY">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Queso puerco</span>
+                <span  class="price" id="QUEPU">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Viva horneado</span>
+                <span  class="price" id="JAHOV">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Imperial</span>
+                <span  class="price" id="JAIMP">  </span>
+            </div>
+            <h3 class="title">Jamones <br> de pavo</h3>
+            <div class="product">
+                <span class="name">Pechuga San R</span>
+                <span  class="price" id="JASAN">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Ahumado Fud.</span>
+                <span  class="price" id="JAHUF">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Virginia</span>
+                <span  class="price" id="JAVIP">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Norteño</span>
+                <span  class="price" id="JANOR">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Tradicional</span>
+                <span  class="price" id="JATP">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Cocido Viva</span>
+                <span  class="price" id="JACOV">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Lonchero</span>
+                <span  class="price" id="JALON">  </span>
+            </div>
+        </div>
+        <div class="col-sm-3" id="thirdColumn">
+            <h3 class="title">Salchichas tipo viena</h3>
+            <div class="product">
+                <span class="name">Hot Dog Fud</span>
+                <span  class="price" id="SHDF">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Viva</span>
+                <span  class="price" id="SALV">  </span>
+            </div>
+            <h3 class="title">Salchichas <br> de pavo</h3>
+            <div class="product">
+                <span class="name">Jumbo Fud</span>
+                <span  class="price" id="SJPF">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Viva</span>
+                <span  class="price" id="SALVP">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Fud</span>
+                <span  class="price" id="SPF2">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Frankfurt</span>
+                <span  class="price" id="SFRA">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Salchirrica</span>
+                <span  class="price" id="SCHI">  </span>
+            </div>
+            <div class="product">
+                <span class="name">San Rafael ½k</span>
+                <span  class="price" id="SSR2">  </span>
+            </div>
+            <div class="product">
+                <span class="name">Fud ½k</span>
+                <span  class="price" id="SPF5">  </span>
+            </div>
+            <h3 class="title">Latería</h3>
+            <div class="product">
+                <span class="name">Gran surtido</span>
+                <span  class="price" id=""></span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    //$("#inputName").focus();
+    document.getElementById("inputName").focus();
+
+    document.getElementById("inputName").addEventListener("keyup", listenerFunction);
+    function listenerFunction() {
+        setTimeout(function(){
+            manageScannerInput();
+        }, 500);
+    }
+
+    function manageScannerInput() {
+        if(document.getElementById("inputName").value != "") {
+            var inputValue = document.getElementById("inputName").value;
+            document.getElementById("inputName").value = "";
+
+            var name = toTitleCase(inputValue.slice(0, inputValue.length -2));
+
+            //if(!$("#dynamic-list #" + name.replace(/ /g,"_")).length) {
+            if(document.getElementById(name.replace(/ /g,"_")) == null) {
+                speechText(name);
+                insertAlphabetically(name);
+            } else {
+                //$("#dynamic-list #" + name.replace(/ /g,"_")).remove();
+                document.getElementById(name.replace(/ /g,"_")).remove();
+            }
+            //if($("#dynamic-list li").length > 13) {
+            if(document.getElementById("dynamic-list").childElementCount > 13) {
+                if(!animationState) {
+                    animationState = true;
+                    $('#dynamic-list').scrollList();
+                }
+            } else {
+                animationState = false;
+                sortList();
+            }
+        }
+    }
+
+    function insertAlphabetically(name) {
+        var nameListItem =
+            '<li id="' + name.replace(/ /g,"_") + '" class="product">' +
+                '<span class="name">' + name + '</span>' +
+            '</li>';
+
+        //$('#dynamic-list').append(nameListItem);
+        var listItem = document.createElement('div');
+        listItem.innerHTML = nameListItem.trim();
+        document.getElementById("dynamic-list").appendChild(listItem.firstElementChild);
+
+        sortList();
+    }
+
+    function sortList() {
+        var list, i, switching, b, shouldSwitch;
+        list = document.getElementById("dynamic-list");
+        switching = true;
+        while (switching) {
+            switching = false;
+            b = list.getElementsByTagName("LI");
+            for (i = 0; i < (b.length - 1); i++) {
+                shouldSwitch = false;
+                if (b[i].firstElementChild.innerHTML.toLowerCase() > b[i + 1].firstElementChild.innerHTML.toLowerCase()) {
+                    shouldSwitch= true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                b[i].parentNode.insertBefore(b[i + 1], b[i]);
+                switching = true;
+            }
+        }
+    }
+
+    function toTitleCase(str) {
+        return str.replace(/\w\S*/g, function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+    }
+
+    $.fn.scrollList = function (delay) {
+        delay = delay || 750;
+        var animateList = function ($list) {
+            if(animationState) {
+                //get first child
+                var $first = $list.children('li:first');
+                var height = $first.outerHeight(true);
+                //animate first two off the screen
+                $first.animate({
+                    'margin-top': $list.children('li:first').height() * -1
+                },
+                // on animation complete
+                function () {
+                    //reset and move to the end of the list
+                    $(this).css('margin-top', 0).add($(this)).appendTo($list);
+                    //start again after delay
+                    setTimeout(function () {
+                        animateList($list)
+                    }, delay);
+                });
+            }
+        };
+        if(animationState) {
+            return this.each(function () {
+                var $that = $(this)
+                setTimeout(function () {
+                    animateList($that);
+                }, delay);
+            });
+        } else {
+            return;
+        }
+
+    };
+
+    document.onclick = function() {
+        //$("#inputName").focus();
+        document.getElementById("inputName").focus();
+    }
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: white;">
+<head>
+	<title>Migue view</title>
+
+	<meta charset="utf-8">
+    <meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+	<!-- local js resources -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+	<script language="javascript" type="text/javascript" src="defiant.min.js"></script>
+	
+	<script>
+		//function playSound() {Android.playSound();}
+	</script>
+
+	<script>
+		var config = {
+			apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
+			authDomain: "cremeria-imperial.firebaseapp.com",
+			databaseURL: "https://cremeria-imperial.firebaseio.com",
+			projectId: "cremeria-imperial",
+			storageBucket: "cremeria-imperial.appspot.com",
+			messagingSenderId: "445465872507"
+		};
+
+		firebase.initializeApp(config);
+
+		var products;
+		firebase.database().ref('productos/').on('value', function (snapshot) {
+			products = Defiant.getSnapshot(snapshot.val());
+		});
+	</script>
+
+	<style>
+
+		@font-face {
+            font-family: GillSansMTCondensedBold;
+            font-style: normal;
+            src: url(GillSansMTCondensedBold.ttf);
+        }
+		.container-fluid {
+			font-family: GillSansMTCondensedBold;
+			margin-left: 1%;
+			margin-right: 1%;
+			margin-top: 1.5%;
+			position: relative;
+		}
+
+		#addProductModal {
+			font-family: GillSansMTCondensedBold;
+			font-size: 25px;
+		}
+		
+		#addProductModalLabel {
+			font-size: 27px;
+		}
+
+		.modal-body {
+			padding-top: 5px;
+		}
+
+		#verificationMessage {
+			font-size: 16px;
+		}
+
+		#dynamic-list {
+			height: 835px;
+			overflow: hidden;
+			overflow-y: scroll;
+		}
+
+		#addNewProductDBForm input{
+			font-size: 17px;
+		}
+
+		#addNewProductDBForm select{
+			font-size: 17px;
+		}
+
+		#addNewProductDBForm label{
+			font-size: 18px;
+		}
+
+		.employee-row {
+			margin-left: 0px;
+			margin-right: 0px;
+			padding-left: 12px; 
+			padding-right: 12px;
+		}
+
+		.employee-name {
+			font-size: 36px;
+			line-height: 30px;
+		}
+
+		.tabcontent {
+			display: none;
+		}
+
+		.btn-modal {
+			font-size: 20px;
+			line-height: 18px;
+		}
+		
+		.break-button {
+			height: 32px;
+			width: 170px;
+			background-color: #689f38;
+			font-size: 30px;
+			line-height: 18px;
+		}
+
+		.break-button:focus {
+  			outline: none; 
+		}
+		
+		.first-break {
+			margin-right: 5px;
+		}
+		
+		.second-break {
+			margin-left: 5px;
+		}
+
+		#secundaryButton {
+			float: right; 
+			margin-top: 9px; 
+			font-weight: bold;
+			background-color: #0288d1;
+			border-color: #0288d1;
+		}
+
+		#primaryButton {
+			float: right; 
+			margin-right: 10px; 
+			margin-top: 9px; 
+			font-weight: bold;
+			background-color: #C0C0C0;
+			border-color: #C0C0C0;
+		}
+
+		#searchOptions {
+			-webkit-overflow-scrolling: touch;
+			margin-top: 15px;
+			padding-right: 0px;
+			position: absolute;
+			left: 15px;
+			right: 0px;
+			padding-left: 15px;
+			font-size: 16px;
+			line-height: 20px;
+			overflow: hidden;
+			overflow-y: scroll;
+		}
+
+		#inputSearch {
+			font-weight: bold;
+			font-size: 24px;
+		}	
+
+		#primaryButton, #secundaryButton {
+			font-size: 20px;
+			line-height: 18px;
+			display: none;
+		}
+
+		.form-control:focus {
+			border-color: rgb(239, 154, 154);
+			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
+		}
+
+		#splashScreen {
+            background-color: white;
+            color: black;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            z-index: 10;
+            text-align: center;
+			font-size: 70px;
+			font-family: GillSansMTCondensedBold;
+			font-size: 30px;
+		}
+
+		#logo-image {
+			width: 80%;
+			padding-top: 20%;
+			padding-right: 15px;
+		}
+
+	</style>
+</head>
+<body style="zoom: 100%; background-color: white;">
+	<div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
+		<strong>No hay conexión.</strong> Puede que los precios no estén actualizados.
+	</div>
+	<div class="container-fluid" style="background-color: white;">
+		<button type="button" id="secundaryButton" class="btn btn-secondary" onclick="showProducts(event)">PRODUCTOS</button>
+		<button type="button" id="primaryButton" class="btn btn-primary" onclick="showBreaks(event)">MEDIAS</button>
+		<h1 class="modal-title" id="mediasTitle" style="margin-bottom:1.5%; margin-top:.5px"> </h1>
+		<h1 class="modal-title" id="time" style="display: none; position:absolute; left:220px; top:0px"> </h1>
+		<div class='wrapper'>
+			<ul id="dynamic-list" class="list-group tabcontent" style="display:block;"> </ul>
+			<div id="products-tap-content" class="tabcontent"> 
+				<div class="row">
+					<div class="col-xs-10" style="padding: 0; margin-left: 15px; padding-top: 1px;">
+						<input type="input" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"> </input>
+					</div>
+					<button onclick="addProductModal();" class="col-xs-1 btn btn-success glyphicon glyphicon-plus" style="padding: 0; margin-left: 12px; height: 34px;"></button>
+				</div>
+				<ul class="list-group search-options" style="display:block; height:560px;" id="searchOptions"></ul>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+
+				<!-- modal title -->
+				<div class="modal-header">
+					<h4 class="modal-title" id="addProductModalLabel">AGREGAR PRODUCTO</h4>
+				</div>
+				<div class="modal-body">
+					<form id="addNewProductDBForm">
+						<!-- form -->
+						<div class="form-group">
+							<!-- error message div -->
+							<label id="verificationMessage" style="color: red;"></label>
+							<div class="row" style="margin-bottom: 0px;">
+								<!-- description -->
+								<div class="col-xs-9">
+									<label for="descriptionInput">DESCRIPCION</label>
+									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" maxlength="38" placeholder="DESCRIPCION"
+										required>
+								</div>
+								<!-- id -->
+								<div class="col-xs-3" style="padding-left: 0;">
+									<label for="IDInput">CLAVE</label>
+									<input id="inputID" oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="CLAVE"
+										required>
+								</div>
+							</div>
+
+							<div class="row">
+								<!-- unit -->
+								<div class="col-xs-4">
+									<label for="unitInput">UNIDAD</label>
+									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="PIEZA, CAJA, KILO..."
+										required>
+								</div>
+								<!-- cost -->
+								<div class="col-xs-2" style="padding: 0;">
+									<label for="priceInput">COSTO</label>
+									<input class="form-control" type="number" min="0" placeholder="8.50" required>
+								</div>
+								<!-- type -->
+								<div class="col-xs-6">
+									<div class="form-group">
+										<label for="typeSelect">TIPO</label>
+										<select class="form-control" id="typeSelect">
+											<option value="porPesarCamara">CAMARA - SE NECESITA PESAR</option>
+											<option value="yaPesadoCamara">CAMARA - YA VIENE PESADO</option>
+											<option value="porPesarAfuera">AFUERA - SE NECESITA PESAR</option>
+											<option value="yaPesadoAfuera">AFUERA - YA VIENE PESADO</option>
+											<option value="yaPesadoAfueraTrino">AFUERA - YA VIENE PESADO - TRINO</option>
+											<option value="aJamones">AREA DE JAMONES</option>
+											<option value="aCremas">AREA DE CREMAS</option>
+											<option value="aBodega">AREA DE BODEGA</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<!-- modal interface buttons (delete is hidden when "add new product" view is active) -->
+				<div class="modal-footer" style="text-align: center">
+					<button type="button" style="font-size: 17px" class="btn btn-secondary btn-modal" data-dismiss="modal">CANCELAR</button>
+					<button type="button" style="font-size: 17px" id="deleteButton" class="btn btn-danger btn-modal" data-dismiss="modal" onclick="deleteProductDB();" style="display: none">ELIMINAR</button>
+					<button type="button" style="font-size: 17px" class="btn btn-primary btn-modal" id="saveButton" data-type="newProduct" onclick="verificateNewProduct();">GUARDAR</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+
+		var globalCounter = 30;
+		var employeesOnBreak = 0;
+
+		loadEmployees();
+		startClockTime();
+		checkConnection();
+
+		//Activates tab
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("tabcontent");
+		for (i = 0; i < tabcontent.length; i++)
+			tabcontent[i].style.display = "none";
+		document.getElementById("secundaryButton").click();
+
+		window.setInterval(checkDayChange, 60*60*1000);
+		
+		function loadEmployees() {
+			var empleadosDB;
+			firebase.database().ref("empleados").once('value', function(snapshot) {
+				empleadosDB = snapshot.val();
+			}).then(function(){
+				var employeesNames = [];
+				var employeesPronunciation = [];
+				$.each(empleadosDB, function(key, value) {
+					employeesNames.push(key);
+					employeesPronunciation.push(value);
+				});
+				populateEmployeesList(employeesNames, employeesPronunciation);
+			});
+		}
+		
+		function populateEmployeesList(names, pronunciations) {
+			globalCounter = 30;
+			var justOneBreak = false;
+			var currentDate = new Date();
+			if(currentDate.getDay() == 6) {
+				globalCounter = 40;
+				justOneBreak = true;
+			} else if(currentDate.getDay() == 0) {
+				globalCounter = 30;
+				justOneBreak = true;
+			}
+
+			if(justOneBreak) {
+				names.forEach(function (name, i){
+					var sigmaEmployee = false;
+					if(pronunciations[i].charAt(0) == 0) {
+						var sigmaEmployee = true;
+						pronunciations[i] = pronunciations[i].substring(1, name.length);
+					}
+
+					var employeeListItem =
+					'<ul class="list-group-item row employee-row">' +
+						'<h2 class="col-xs-8 employee-name" style="padding: 0px; margin: 0px; padding-left: 5px;">' + name + '</h2>' +
+						'<button type="button" class="col-xs-4 btn btn-secondary break-button first-break" style="background-color:#689f38;" onclick="manageFirstBreak(event)" data-name="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
+					'</ul>';
+												
+					$('#dynamic-list').append(employeeListItem);
+					//$("#dynamic-list").on("click", "button", function(e) {$(this).remove();});	
+				});
+			} else {
+				names.forEach(function (name, i){
+					var sigmaEmployee = false;
+					if(pronunciations[i].charAt(0) == 0) {
+						var sigmaEmployee = true;
+						pronunciations[i] = pronunciations[i].substring(1, name.length);
+					}
+
+					var employeeListItem =
+					'<ul class="list-group-item row employee-row">' +
+						'<h2 class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 5px;">' + name + '</h2>' +
+						'<button type="button" class="col-xs-4 btn btn-secondary break-button first-break" style="background-color:#689f38;" onclick="manageFirstBreak(event)" data-name="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
+						'<button type="button" class="col-xs-4 btn btn-secondary break-button second-break" style="background-color:#689f38;" onclick="manageSecondBreak(event)" data-name="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
+					'</ul>';
+												
+					$('#dynamic-list').append(employeeListItem);
+					//$("#dynamic-list").on("click", "button", function(e) {$(this).remove();});	
+				});
+			}
+			
+		}
+		
+		function manageFirstBreak(event) {
+			if(event.target.style.backgroundColor == "rgb(104, 159, 56)")
+				startBreak(event.target);
+			else if (event.target.style.backgroundColor == "rgb(229, 57, 53)")
+				speakName(event.target.getAttribute("data-name"));
+		}
+		
+		function manageSecondBreak(event) {
+			if(event.target.previousSibling.style.backgroundColor == "rgb(229, 57, 53)" && event.target.style.backgroundColor == "rgb(104, 159, 56)")
+				startBreak(event.target);
+			else if (event.target.style.backgroundColor == "rgb(229, 57, 53)")
+				speakName(event.target.getAttribute("data-name"));
+		}
+		
+		function startBreak(breakButton) {
+			var counter = globalCounter;
+			if(counter == 40 && breakButton.getAttribute("data-sigma") == "true")
+				counter = 30;
+			employeesOnBreak++;
+
+			breakButton.innerText = counter;
+			event.target.style.backgroundColor = "#eeff41";
+			//document.getElementById('mediasTitle').innerText = "MEDIAS: " + employeesOnBreak;
+			
+			var interval = setInterval(function() {
+				counter--;
+				if (counter > 0) {
+					breakButton.innerText = counter;
+				} else {
+					employeesOnBreak--;
+					document.getElementById('mediasTitle').innerText = "MEDIAS: " + employeesOnBreak;
+					
+					speakName(breakButton.getAttribute("data-name"));
+					breakButton.style.backgroundColor = "#e53935";
+					breakButton.style.color = "white";
+					breakButton.innerText = document.getElementById("time").textContent;
+					clearInterval(interval);
+				}
+			}, 60000);
+		} 
+		
+		function speakName(name) {
+			var msg = new SpeechSynthesisUtterance();
+			msg.rate = .80;
+			//msg.lang = "es-US";
+			msg.voice = window.speechSynthesis.getVoices()[39]; //15
+			msg.text = name;
+			console.log(window.speechSynthesis.getVoices());
+			window.speechSynthesis.speak(msg);
+			window.speechSynthesis.speak(msg);
+		}
+		
+		function startClockTime() {
+			var today = new Date();
+			var h = today.getHours();
+			var m = today.getMinutes();
+			if (h > 12) h = h - 12;
+			if (m < 10) m = "0" + m;
+			document.getElementById('time').innerText = h + ":" + m;
+			var t = setTimeout(startClockTime, 1000);
+		}
+
+		function showBreaks(evt) {
+			changeTab(evt, "dynamic-list");
+			changeToActiveColor("primaryButton");
+			changeToDeactiveColor("secundaryButton");
+		}
+
+		function showProducts(evt) {
+			$("#inputSearch").val("");
+			$("#searchOptions").empty();
+			changeTab(evt, "products-tap-content");
+			changeToActiveColor("secundaryButton");
+			changeToDeactiveColor("primaryButton");
+			$("#inputSearch").focus();
+
+		}
+
+		function changeToActiveColor(buttonID) {
+			var button = document.getElementById(buttonID);
+			button.style.backgroundColor = "#e53935";
+			button.style.borderColor = "#e53935";
+			button.style.color = "#FFFFFF";
+		}
+
+		function changeToDeactiveColor(buttonID) {
+			var button = document.getElementById(buttonID);
+			button.style.backgroundColor = "#C0C0C0";
+			button.style.borderColor = "#C0C0C0";
+			button.style.color = "#000000";
+		}
+
+		function changeTab(evt, listID) {
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++)
+				tabcontent[i].style.display = "none";
+			document.getElementById(listID).style.display = "block";
+			evt.currentTarget.className += " active";
+		}
+		
+		$("#inputSearch").on('keyup', function (e) {
+			searchProduct();
+		});
+
+
+		function searchProduct() {
+			var searchResult;
+			var inputSearchValue = $('#inputSearch').val();
+			//search two or more words (imposible id)
+			if (inputSearchValue.includes(" ")) {
+				inputSearchValue = inputSearchValue.split(" ");
+				for (i = 0; i < inputSearchValue.length; i++) {
+					if (inputSearchValue[i] != "") {
+						if (searchResult == null)
+							searchResult = JSON.search(products, '//*[contains(descripcion, "' + inputSearchValue[i] + '")]' +
+								'|//*[contains(unidad, "' + inputSearchValue[i] + '")]');
+						else
+							searchResult = JSON.search(searchResult, '//*[contains(descripcion, "' + inputSearchValue[i] + '")]' +
+								'|//*[contains(unidad, "' + inputSearchValue[i] + '")]');
+					}
+				}
+			}
+			//search just one word (posible id)
+			else {
+				if ($('#inputSearch').val() != "") {
+					searchResult = JSON.search(products, '//*[contains(clave, "' + $('#inputSearch').val() + '")]');
+					searchResultSecond = JSON.search(products, '//*[contains(descripcion, "' + $('#inputSearch').val() + '")]' +
+						'|//*[contains(unidad, "' + $('#inputSearch').val() + '")]');
+					Array.prototype.push.apply(searchResult, searchResultSecond);
+				}
+			}
+
+			//loads the results into the list
+			$("#searchOptions").empty();
+			if ($('#inputSearch').val() != "")
+				populateLifeSearchList(searchResult);
+		}
+
+		//populates life search list after the result has been processed
+		function populateLifeSearchList(searchResult) {
+			var searchItem = "";
+			//up to 51 results in search bar
+			for (var i = 0; i < searchResult.length && i < 101; i++) {
+				searchItem =
+					'<button class="list-group-item row btn-default search-options-item" style="font-weight:bold">' +
+						'<div class="col-xs-10" style="padding: 0px">' + searchResult[i].unidad + "<br>" +  searchResult[i].descripcion + '</div>' +
+						'<div class="col-xs-1" style="padding: 0px;">' + searchResult[i].costo + '</div>' +
+						'<div type="button" class="btn btn-sm col-xs-1 edit-button" style="height:20px; padding:0px" onclick="editProductModal(&#39;' + searchResult[i].clave + '&#39;)">' +
+							'<span style="color:grey;font-size:20px; line-height:96%;">&nbsp;&nbsp;&#9998;</span>' +
+						'</div>' +
+					'</button>';
+				$("#searchOptions").append(searchItem);
+			}
+		}
+
+		//edit or delete product modal values
+        function editProductModal(id) {
+            document.getElementById("addProductModalLabel").innerHTML = "EDITAR PRODUCTO";
+            //document.getElementById("inputID").disabled = true;
+            document.getElementById("deleteButton").style.display = "inline";
+            document.getElementById("verificationMessage").innerHTML = "";
+
+            var productToEdit = JSON.search(products, '//*[clave="' + id + '"]')[0];
+            var form = document.getElementById("addNewProductDBForm");
+            //{description:0, id:1, unit:2, cost:3, type:4}
+            form.elements[0].value = productToEdit.descripcion;
+            form.elements[1].value = productToEdit.clave;
+            form.elements[2].value = productToEdit.unidad;
+            form.elements[3].value = productToEdit.costo;
+            $("#typeSelect").val(productToEdit.tipo);
+
+            //sets buttons inner values
+            $('#saveButton').data("type", "editProduct");
+            $('#saveButton').data("id", form.elements[1].value);
+
+            $('#addProductModal').modal('show');
+		}
+
+		//sets modal to add product view
+        function addProductModal() {
+            document.getElementById("addProductModalLabel").innerHTML = "AGREGAR PRODUCTO";
+            document.getElementById("inputID").disabled = false;
+            document.getElementById("deleteButton").style.display = "none";
+            document.getElementById("verificationMessage").innerHTML = "";
+            emptyForm(document.getElementById("addNewProductDBForm"), 5);
+
+            $('#saveButton').data("type", "newProduct");
+            $('#addProductModal').modal('show');
+        }
+
+        //verificates input of modal form
+        function verificateNewProduct() {
+            var messageLabel = document.getElementById("verificationMessage");
+            var form = document.getElementById("addNewProductDBForm");
+            var verificated = true;
+
+            //checks for blanks
+            var inputs = new Array(5);
+            //{description:0, id:1, unit:2, cost:3, type:4}
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i] = form.elements[i].value;
+                if (inputs[i] == "") {
+                    messageLabel.innerHTML = "LLENA TODOS LOS CAMPOS.";
+                    verificated = false;
+                    break;
+                }
+            }
+
+            //checks for valid units
+            var validUnits = ["KILO", "PIEZA", "CAJA", "CUB", "PROMO"];
+            if (form.elements[2].value != "" && !validUnits.includes(form.elements[2].value)) {
+                messageLabel.innerHTML = "LA UNIDAD UNICAMENTE PUEDE SER: ";
+                for (var i = 0; i < validUnits.length - 1; i++)
+                    messageLabel.innerHTML += validUnits[i] + ", ";
+                messageLabel.innerHTML += validUnits[validUnits.length - 1] + ".";
+                verificated = false;
+            }
+
+            //checks for $ or -
+            if (form.elements[1].value.indexOf("$") >= 0 || form.elements[1].value.indexOf("-") >= 0) {
+                messageLabel.innerHTML = "LA CLAVE SOLO PUEDE TENER LETRAS Y/O NUMEROS";
+                verificated = false;
+            }
+
+            //if everything is checked, upload form
+            if (verificated) {
+                editProductDB(inputs);
+				messageLabel.innerHTML = "";
+				//$("#inputSearch").val("");
+				//$("#searchOptions").empty();
+				searchProduct();
+            }
+		}
+
+		//adds or updates a product to firebase
+        function editProductDB(inputs) {
+            firebase.database().ref('productos/' + inputs[1]).set({
+                clave: inputs[1],
+                costo: inputs[3],
+                descripcion: inputs[0],
+                tipo: inputs[4],
+                unidad: inputs[2]
+            }).then(function () {
+                $('#addProductModal').modal('toggle');
+            });
+		}
+		
+		//clears modal form values
+        function emptyForm(form, length) {
+            for (var i = 0; i < length; i++)
+                form.elements[i].value = "";
+        }
+		
+		//deletes an existing product from the db
+		function deleteProductDB() {
+			//$("#searchOptions").empty();
+			//$("#inputSearch").val("");
+            var id = document.getElementById("addNewProductDBForm").elements[1].value;
+            firebase.database().ref('productos/').child(id).remove();
+			searchProduct();
+		}
+
+		//No connections alert
+		function checkConnection() {
+			var connectedRef = firebase.database().ref(".info/connected");
+			connectedRef.on("value", function(snap) {
+				if (snap.val() === true) document.getElementById("noConnectionAlert").style.display = "none";
+				else document.getElementById("noConnectionAlert").style.display = "block";
+			});
+		}
+
+		//Reloads the page when shift has ended
+		function checkDayChange() {
+            var now = new Date();
+			var millisTill5am = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 5, 0, 0, 0) - now;
+            if (millisTill5pm >= 0)
+				location.reload();
+		}
+
+		var idleTime = 0;
+		$(document).ready(function () {
+			//var idleInterval = setInterval(timerIncrement, 10000);
+			$(this).mousemove(function (e) { idleTime = 0; });
+			$(this).keypress(function (e) { idleTime = 0; });
+		});
+
+		function timerIncrement() {
+			idleTime = idleTime + 1;
+			if (idleTime > 6)
+				document.getElementById("primaryButton").click();
+		}
+
+	</script>
+</body>

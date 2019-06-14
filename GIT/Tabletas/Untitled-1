@@ -1,0 +1,36 @@
+function formatProductToSpeech(product) {
+            var unit = product.child("unit").val();
+            var quantity = parseFloat(product.child("quantity").val()).toString();
+            var description = product.child("description").val();
+            var indexOfJamon = description.indexOf('JAMON');
+            if(indexOfJamon >= 0)
+                description = description.replace(description.substring(indexOfJamon, indexOfJamon + 5), "");
+            if(description.substr(0, 3) == " DE")
+                description = description.substr(4, description.length);
+            var notes = product.child("notes").val();
+
+            if(quantity == .5)
+                quantity = "MEDIO";
+            else if(quantity.includes(".5"))
+                quantity = quantity.substring(0, quantity.length - 2) + " Y MEDIO";
+            else if(quantity == ".25")
+                quantity = "UN CUARTO";
+            else if(quantity.includes(".25"))
+                quantity = quantity.substring(0, quantity.length - 3) + " Y CUARTO";
+            else if(quantity == ".75")
+                quantity = "TRES CUARTOS";
+            else if(quantity.includes(".75"))
+                quantity = quantity.substring(0, quantity.length - 3) + " Y TRES CUARTOS";
+            else if(quantity.includes(".")) {
+                quantity = parseFloat(quantity).toFixed(3);
+                quantity = quantity.substring(0, quantity.length - 4) + " Y " + quantity.substring(quantity.length - 3, quantity.length);
+                quantity = quantity + " GRAMOS";
+            } 
+            
+            if(unit = "KILO" || unit == "PIEZA") 
+                unit = "";
+            if(notes.includes("-")) 
+                notes = String(notes).replace("-", " ");
+            
+            return quantity + " " + unit + "" + description + " " + notes;
+        }

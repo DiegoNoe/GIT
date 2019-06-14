@@ -330,8 +330,6 @@
     </div>
     <script>
 
-        reloadOnUpdate();
-
         var namesDictonary = {};
         populateDictonary(namesArray);
 
@@ -414,6 +412,7 @@
             document.getElementById("dynamic-list").appendChild(listItem.firstElementChild);
             sortList();
         }
+
         function sortList() {
             var list, i, switching, b, shouldSwitch;
             list = document.getElementById("dynamic-list");
@@ -434,10 +433,11 @@
                 }
             }
         }
+
         function nameAllNames() {
             var msg = new SpeechSynthesisUtterance();
             msg.rate = .95;
-            msg.text = "Los pedidos de las últimas 2 horas son.";
+            msg.text = "Los pedidos de la última hora son.";
             msg.lang = "es-US";
             window.speechSynthesis.speak(msg);
             $('#dynamic-list li').each(function (index) {
@@ -447,26 +447,27 @@
                     msg.text = $(this).text().substring(0, $(this).text().indexOf("$"));
                 else
                     msg.text = $(this).text();
-
-                msg.text = addAccent(msg.text);
                 msg.lang = "es-US";
+                msg.text = addAccent(msg.text);
                 //msg.voice = window.speechSynthesis.getVoices()[5]; //15
                 window.speechSynthesis.speak(msg);
             });
         }
+
         function checkForOldNames() {
             currentDate = new Date();
             $('#dynamic-list li').each(function (index) {
                 nameDate = new Date($(this).data("hour"));
                 var timeDiff = Math.abs(currentDate.getTime() - nameDate.getTime());
                 var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
-                if (diffMinutes > 120)
+                if (diffMinutes > 90)
                     $(this).remove();
             });
             setTimeout(function () {
                 checkForOldNames();
-            }, 60000);
+            }, 10000);
         }
+
         function speakName(name) {
             var justName = name;
             var justTotal;
@@ -482,12 +483,12 @@
                 } else
                     justName = name.substring(0, name.lastIndexOf(" "));
             }
+
             var msg = new SpeechSynthesisUtterance();
             msg.rate = .95;
             msg.lang = "es-US";
             //msg.voice = window.speechSynthesis.getVoices()[16]; //15
-            msg.text = justName;
-            msg.text = addAccent(msg.text);
+            msg.text = addAccent(justName);
             window.speechSynthesis.speak(msg);
             window.speechSynthesis.speak(msg);
 
@@ -502,6 +503,41 @@
                 }
             }
         }
+
+        function addAccent(name) {
+            name = name.toUpperCase();
+            var newName = "";
+            var words = name.split(" ");
+            words.forEach(function (value, i) {
+                if(namesDictonary[value] != null) 
+                    newName = newName + " " + namesDictonary[value];
+                else 
+                    newName = newName +  " " + value;
+            });
+            console.log(newName);
+            return newName;
+            
+        }
+
+        function populateDictonary(names) {
+            names = removeDups(names);
+            names = names.sort();
+
+            namesArray.forEach(function (value, i) {
+                namesDictonary[value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase()] = value.toUpperCase();
+            });
+        }
+
+        function removeDups(names) {
+            let unique = {};
+            names.forEach(function(i) {
+                if(!unique[i]) {
+                    unique[i] = true;
+                }
+            });
+            return Object.keys(unique);
+        }
+
         function toTitleCase(str) {
             return str.replace(/\w\S*/g, function (txt) {
                 return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -540,51 +576,6 @@
                 return;
             }
         };
-
-        function reloadOnUpdate() {
-            firebase.database().ref("updates/caja").on('value', function(snapshot) {
-                if(snapshot.val()){
-                    firebase.database().ref("updates/caja").set(false).then(function() {
-                        location.reload();
-                    });
-                }
-            });
-        }
-
-        function addAccent(name) {
-            name = name.toUpperCase();
-            var newName = "";
-            var words = name.split(" ");
-            words.forEach(function (value, i) {
-                if(namesDictonary[value] != null) 
-                    newName = newName + " " + namesDictonary[value];
-                else 
-                    newName = newName +  " " + value;
-            });
-            console.log(newName);
-            return newName;
-            
-        }
-
-        function populateDictonary(names) {
-            names = removeDups(names);
-            names = names.sort();
-
-            namesArray.forEach(function (value, i) {
-                namesDictonary[value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase()] = value.toUpperCase();
-            });
-        }
-
-        function removeDups(names) {
-            let unique = {};
-            names.forEach(function(i) {
-                if(!unique[i]) {
-                    unique[i] = true;
-                }
-            });
-            return Object.keys(unique);
-        }
-
         document.onclick = function () {
             $("#inputName").focus();
         }
