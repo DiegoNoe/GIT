@@ -775,7 +775,7 @@
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
                         productsRefID = randomLetter1 + $("#inputName").val() + " " + total + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 4.8, 192.2, 18, 18);
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 4.8, 191.5, 18, 18);
                     }
                 } else {
                     doc.setPage(pagesQuantity * 2 - 1);
@@ -787,7 +787,7 @@
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
                         productsRefID = randomLetter1 + $("#inputName").val() + " " + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 4.8, 192.2, 19, 19);
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 4.8, 191.5, 19, 19);
                     }
                 }
 
@@ -837,6 +837,7 @@
             doc.addPage();
             addTimePDF(doc);
             addNamePDF(doc);
+            addMethodPDF(doc);
         }
 
         //adds date and time to the top right corner
