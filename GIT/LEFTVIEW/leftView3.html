@@ -344,7 +344,7 @@
                         if(priceCorrection == "123456789")
                             location.reload();
                         if(priceCorrection.includes(".50"))
-                            priceCorrection.substring(0, justTotal.length - 1);
+                            priceCorrection = priceCorrection.substring(0, justTotal.length - 1);
                         $("#inputName").val("");
                     } else {
                         manageScannerInput();
@@ -436,21 +436,26 @@
         }
         function nameAllNames() {
             var synUtterance3 = new SpeechSynthesisUtterance("Los pedidos de la última hora son.");
-            synUtterance3.rate = parseFloat(.90);
+            synUtterance3.rate = parseFloat(.9);
+            synUtterance3.pitch = parseFloat(1.1);
+            synUtterance3.voice = speechSynthesis.getVoices()[15];
             window.speechSynthesis.speak(synUtterance3);
-            console.log("Los pedidos de la última hora son.");
 
             $('#dynamic-list li').each(function (index) {
                 var msg = new SpeechSynthesisUtterance();
                 msg.rate = .70;
                 if($(this).text().includes("$")) {
                     var synUtterance4 = new SpeechSynthesisUtterance(addAccent($(this).text().substring(0, $(this).text().indexOf("$"))));
-                    synUtterance4.rate = parseFloat(.90);
+                    synUtterance4.rate = parseFloat(.9);
+                    synUtterance4.pitch = parseFloat(1.1);
+                    synUtterance4.voice = speechSynthesis.getVoices()[15];
                     window.speechSynthesis.speak(synUtterance4);
                 }
                 else {
                     var synUtterance4 = new SpeechSynthesisUtterance(addAccent($(this).text()));
-                    synUtterance4.rate = parseFloat(.90);
+                    synUtterance4.rate = parseFloat(.9);
+                    synUtterance4.pitch = parseFloat(1.1);
+                    synUtterance4.voice = speechSynthesis.getVoices()[15];
                     window.speechSynthesis.speak(synUtterance4);
                 }
             });
@@ -486,14 +491,18 @@
 
             var synUtterance = new SpeechSynthesisUtterance(addAccent(justName));
             synUtterance.rate = parseFloat(.9);
-            console.log(speechSynthesisInstance.getVoices());
+            synUtterance.pitch = parseFloat(1.1);
+            synUtterance.voice = speechSynthesis.getVoices()[15];
+            console.log(speechSynthesis.getVoices());
             window.speechSynthesis.speak(synUtterance);
             window.speechSynthesis.speak(synUtterance);
 
             if(!isNaN(words[words.length - 1])) {
                 if(words[words.length - 1] < 1500) {
                     var synUtterance2 = new SpeechSynthesisUtterance(justTotal);
-                    synUtterance2.rate = parseFloat(.8);
+                    synUtterance2.rate = parseFloat(.9);
+                    synUtterance2.pitch = parseFloat(1.1);
+                    synUtterance2.voice = speechSynthesis.getVoices()[15];
                     window.speechSynthesis.speak(synUtterance2);
                 }
             }
