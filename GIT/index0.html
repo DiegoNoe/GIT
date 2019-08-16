@@ -18,6 +18,7 @@
     <script language="javascript" type="text/javascript" src="js/default_vfs.js"></script>
     <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
     <script language="javascript" type="text/javascript" src="js/qrcode.js"></script>
+    <script language="javascript" type="text/javascript" src="js/aes.js"></script>
     <script language="javascript" type="text/javascript" src="js/index.js"></script>
 
     <script>
@@ -29,6 +30,15 @@
             products = Defiant.getSnapshot(snapshot.val());
         });
         var globalComputer = "liveView0";
+
+        var aesEcb = new aesjs.ModeOfOperation.ecb(key);
+        var encrypted = aesEcb.encrypt("CLAVE", "Yu&=4kxz");
+        console.log("AES " + encrypted.toString());
+
+        //var decrypted = CryptoJS.AES.decrypt(encrypted, "Yu&=4kxz");
+        //console.log("AES " + decrypted.toString(CryptoJS.enc.Utf8));
+
+
     </script>
 
 </head>
