@@ -572,7 +572,7 @@
                 var doc = new jsPDF({
                     orientation: 'p',
                     unit: 'mm',
-                    format: [214, 140]
+                    format: [213, 140]
                 });
 
                 //add custom fonts
@@ -774,8 +774,8 @@
                     //generates QR code with total embeded in
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
-                        productsRefID = randomLetter1 + $("#inputName").val() + " " + total + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 4.8, 191.5, 18, 18);
+                        productsRefID = randomLetter1 + $("#inputName").val() + " " + total.replace(/,/g, '') + randomLetter2;
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 6, 194, 15, 15);
                     }
                 } else {
                     doc.setPage(pagesQuantity * 2 - 1);
@@ -787,7 +787,7 @@
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
                         productsRefID = randomLetter1 + $("#inputName").val() + " " + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 4.8, 191.5, 19, 19);
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 6, 194, 15, 15);
                     }
                 }
 
@@ -848,10 +848,10 @@
             var date = new Date();
             var months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
             var fullDate = date.getDate().toString() + " / " + months[date.getMonth()] + " / " + date.getFullYear().toString();
-            doc.text(19.9, 38, fullDate, 'center');
+            doc.text(19.9, 38.5, fullDate, 'center');
 
             var hourWithMinutes = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-            doc.text(53.5, 38, hourWithMinutes, 'center');
+            doc.text(53.5, 38.5, hourWithMinutes, 'center');
         }
 
         function addMethodPDF(doc) {
@@ -861,14 +861,14 @@
             //special mark if the order is for the next day
             if ($("#tomorrowCheckbox").is(':checked')) {
                 doc.setTextColor(255, 0, 0);
-                doc.text(87, 38, "MANANA", 'center');
+                doc.text(87, 38.5, "MANANA", 'center');
                 doc.setTextColor(0, 0, 0);
             } else if(event.srcElement.id == "printByPhoneButton")
-                doc.text(87, 38, "TELEFONO", 'center');
+                doc.text(87, 38.5, "TELEFONO", 'center');
             else if(event.srcElement.id == "printByWhatsButton")
-                doc.text(87, 38, "WHATSAPP", 'center');
+                doc.text(87, 38.5, "WHATSAPP", 'center');
             else
-                doc.text(87, 38, "MOSTRADOR", 'center');
+                doc.text(87, 38.5, "MOSTRADOR", 'center');
 
             //special counter if the order was made by phone
             if(event.srcElement.id == "printByPhoneButton") {
@@ -888,7 +888,7 @@
 
             doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
-            doc.text(43, 194.7, replaceAEIOUN($("#inputEmployeeName").val()));
+            doc.text(43, 195.5, replaceAEIOUN($("#inputEmployeeName").val()));
         }
 
         //draws circle besides the description
@@ -924,6 +924,7 @@
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.L
             });
+            console.log(name);
             var canvas = document.getElementById('qrcode').querySelector('canvas');
             return canvas.toDataURL();
         }

@@ -18,7 +18,6 @@
     <script language="javascript" type="text/javascript" src="js/default_vfs.js"></script>
     <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
     <script language="javascript" type="text/javascript" src="js/qrcode.js"></script>
-    <script language="javascript" type="text/javascript" src="js/aes.js"></script>
     <script language="javascript" type="text/javascript" src="js/index.js"></script>
 
     <script>
@@ -30,15 +29,6 @@
             products = Defiant.getSnapshot(snapshot.val());
         });
         var globalComputer = "liveView0";
-
-        var aesEcb = new aesjs.ModeOfOperation.ecb(key);
-        var encrypted = aesEcb.encrypt("CLAVE", "Yu&=4kxz");
-        console.log("AES " + encrypted.toString());
-
-        //var decrypted = CryptoJS.AES.decrypt(encrypted, "Yu&=4kxz");
-        //console.log("AES " + decrypted.toString(CryptoJS.enc.Utf8));
-
-
     </script>
 
 </head>
@@ -582,7 +572,7 @@
                 var doc = new jsPDF({
                     orientation: 'p',
                     unit: 'mm',
-                    format: [214, 140]
+                    format: [213, 140]
                 });
 
                 //add custom fonts
@@ -621,7 +611,7 @@
                 var calculable = true;
                 var total = 0;
 
-                var firstLineYPosition = 48.5;
+                var firstLineYPosition = 48.8;
                 var lineHeight = 8.54;
                 var currentLine = 0;
                 var pagesQuantity = 1;
@@ -784,8 +774,8 @@
                     //generates QR code with total embeded in
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
-                        productsRefID = randomLetter1 + $("#inputName").val() + " " + total + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 4.8, 191.5, 18, 18);
+                        productsRefID = randomLetter1 + $("#inputName").val() + " " + total.replace(/,/g, '') + randomLetter2;
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 6, 194, 15, 15);
                     }
                 } else {
                     doc.setPage(pagesQuantity * 2 - 1);
@@ -797,7 +787,7 @@
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
                         productsRefID = randomLetter1 + $("#inputName").val() + " " + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 4.8, 191.5, 19, 19);
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 6, 194, 15, 15);
                     }
                 }
 
@@ -858,10 +848,10 @@
             var date = new Date();
             var months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
             var fullDate = date.getDate().toString() + " / " + months[date.getMonth()] + " / " + date.getFullYear().toString();
-            doc.text(19.5, 37.5, fullDate, 'center');
+            doc.text(19.9, 38.5, fullDate, 'center');
 
             var hourWithMinutes = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-            doc.text(53.5, 37.5, hourWithMinutes, 'center');
+            doc.text(53.5, 38.5, hourWithMinutes, 'center');
         }
 
         function addMethodPDF(doc) {
@@ -871,14 +861,14 @@
             //special mark if the order is for the next day
             if ($("#tomorrowCheckbox").is(':checked')) {
                 doc.setTextColor(255, 0, 0);
-                doc.text(87, 37.5, "MANANA", 'center');
+                doc.text(87, 38.5, "MANANA", 'center');
                 doc.setTextColor(0, 0, 0);
             } else if(event.srcElement.id == "printByPhoneButton")
-                doc.text(87, 37.5, "TELEFONO", 'center');
+                doc.text(87, 38.5, "TELEFONO", 'center');
             else if(event.srcElement.id == "printByWhatsButton")
-                doc.text(87, 37.5, "WHATSAPP", 'center');
+                doc.text(87, 38.5, "WHATSAPP", 'center');
             else
-                doc.text(87, 37.5, "PERSONA", 'center');
+                doc.text(87, 38.5, "MOSTRADOR", 'center');
 
             //special counter if the order was made by phone
             if(event.srcElement.id == "printByPhoneButton") {
@@ -898,7 +888,7 @@
 
             doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
-            doc.text(43, 194.2, replaceAEIOUN($("#inputEmployeeName").val()));
+            doc.text(43, 195.5, replaceAEIOUN($("#inputEmployeeName").val()));
         }
 
         //draws circle besides the description
@@ -908,7 +898,7 @@
             else if (validColor == "red")
                 doc.setFillColor(255, 0, 0);
 
-            doc.circle(4.5, YCoordinate - 1.7, .8, 'F');
+            doc.circle(5, YCoordinate - 1.7, .8, 'F');
         }
 
         //replaces special characters (current jspdf doesn´t support them)
@@ -934,6 +924,7 @@
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.L
             });
+            console.log(name);
             var canvas = document.getElementById('qrcode').querySelector('canvas');
             return canvas.toDataURL();
         }
