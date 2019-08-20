@@ -611,13 +611,13 @@
                 var calculable = true;
                 var total = 0;
 
-                var firstLineYPosition = 48.8;
+                var firstLineYPosition = 49.8;
                 var lineHeight = 8.54;
                 var currentLine = 0;
                 var pagesQuantity = 1;
                 for (var i = 0; i < order.length; i++) {
                     //adds new page if necessary
-                    if (currentLine == 18 || (currentLine == 17 && order[i][4] != "")) {
+                    if (currentLine == 17 || (currentLine == 16 && order[i][4] != "")) {
                         pagesQuantity++;
                         addPagePDF(doc);
                         addPagePDF(doc);
