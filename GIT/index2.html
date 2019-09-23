@@ -786,7 +786,7 @@
                     //generates QR code with total embeded in
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
-                        productsRefID = randomLetter1 + $("#inputName").val() + " " + randomLetter2;
+                        productsRefID = randomLetter1 + $("#inputName").val() + " " + total.replace(/,/g, '') + randomLetter2;
                         doc.addImage(generateQR(productsRefID), 'JPEG', 6, 194, 15, 15);
                     }
                 }
