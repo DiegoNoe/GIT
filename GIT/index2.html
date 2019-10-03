@@ -19,6 +19,8 @@
     <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
     <script language="javascript" type="text/javascript" src="js/qrcode.js"></script>
     <script language="javascript" type="text/javascript" src="js/index.js"></script>
+    <script language="javascript" type="text/javascript" src="js/aes.js"></script>
+
 
     <script>
         var products;
@@ -29,6 +31,8 @@
             products = Defiant.getSnapshot(snapshot.val());
         });
         var globalComputer = "liveView2";
+        var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
+
     </script>
 
 </head>
@@ -615,6 +619,7 @@
                 var lineHeight = 8.54;
                 var currentLine = 0;
                 var pagesQuantity = 1;
+                var surveyValues = order;
                 for (var i = 0; i < order.length; i++) {
                     //adds new page if necessary
                     if (currentLine == 17 || (currentLine == 16 && order[i][4] != "")) {
@@ -803,6 +808,7 @@
  
                 //survey values
                 increaseEmployeeCounter($("#inputEmployeeName").val());
+                uploadSurvey(surveyValues);
 
                 //erase current order
                 eraseOrder();
@@ -874,7 +880,6 @@
             if(event.srcElement.id == "printByPhoneButton") {
                 increaseEmployeeCounterPhone($("#inputEmployeeName").val());
                 firebase.database().ref(globalComputer + '/phoneOrder').set(true);
-                console.log("Cambios en nota: Por telefono");
             }
 
         }
@@ -924,7 +929,7 @@
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.L
             });
-            console.log(name);
+            //console.log(name);
             var canvas = document.getElementById('qrcode').querySelector('canvas');
             return canvas.toDataURL();
         }
@@ -939,6 +944,59 @@
                 precio: price,
                 tipo: type
             });
+        }
+
+        function joinRepeatedProducts(surveyValues) {
+            result = [];
+            surveyValues.forEach(function (a) {
+                if (!this[a[0]]) {
+                    this[a[0]] = [a[0], 0];
+                    result.push(this[a[0]]);
+                }
+                this[a[0]][1] += parseInt(Math.trunc(a[1] * 100), 10);
+            }, Object.create(null));
+            return result;
+        }
+
+        function uploadSurvey(surveyValues) {
+            console.log("SURVEY VALUES");
+            console.log(surveyValues);
+            surveyValues = joinRepeatedProducts(surveyValues);
+            console.log("JOINED SURVEY VALUES");
+            console.log(surveyValues);
+            for (var i = 0; i < surveyValues.length; i++) {
+                let id = surveyValues[i][0];
+                let key = toAES(surveyValues[i][0]);
+                let sale = surveyValues[i][1];
+                firebase.database().ref('survey/' + key).once('value', function(snapshot) {
+                    var aes = snapshot.key;
+                    var current = snapshot.val();
+                    var num = parseInt(current, 16) + sale;
+                    var baseNumber = parseInt(aes.substr(aes.length - 8), 16);
+
+                    console.log("_______________NEW PRODUCT_______________");
+                    console.log("id " + id);
+                    console.log("key " + aes);
+                    console.log("base hex " + aes.substr(aes.length - 8));
+                    console.log("current hex " + current);
+                    console.log("base dec " + baseNumber);
+                    console.log("current dec " + parseInt(current, 16));
+                    console.log("sale * 100 " + sale);
+                    console.log("current + sale " + num);
+                    console.log("current + sale - base " + (num - baseNumber));
+                    console.log("current + sale hex " + num.toString(16));
+                    
+                    firebase.database().ref('survey/' + aes).set(num.toString(16));
+                });
+            }
+        }
+
+        function toAES(string) {
+            return aesjs.utils.hex.fromBytes(aesEcb.encrypt(aesjs.utils.utf8.toBytes(to16Bytes(string))));
+        }
+
+        function to16Bytes(string) {
+            return string + " ".repeat(16 - string.length);
         }
 
         function updateName(name) {

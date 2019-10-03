@@ -59,28 +59,24 @@
             var name = input.slice(1, input.length - 1);
             name = name.replace("Ñ", ":").replace("NN", "Ñ");
 
+            speakName(name);
+
             //search order then access first child (searched order)
             firebase.database().ref('pendingOrders').orderByChild('id').equalTo(input).once("value", function(snapshot) {
                 if(snapshot.val()) { 
                     snapshot.forEach(function(childSnapshot) {
                         if(!childSnapshot.val().porEntregar) {
-                            speakName(name);
-
                             addToPorEntregar(childSnapshot, "aCremas");
                             addToPorEntregar(childSnapshot, "aJamones");
                             addToPorEntregar(childSnapshot, "aBodega");
-
                             firebase.database().ref('pendingOrders/' + childSnapshot.key + '/porEntregar').set(true);
                         } else {
                             backFromPorEntregar(childSnapshot, "aCremas");
                             backFromPorEntregar(childSnapshot, "aJamones");
                             backFromPorEntregar(childSnapshot, "aBodega");
-
                             firebase.database().ref('pendingOrders/' + childSnapshot.key + '/porEntregar').set(false);
                         }
                     });
-                } else {
-                    speakName(name);
                 }
             });
         }
@@ -149,7 +145,7 @@
 
         function checkDayChange() {
             var now = new Date();
-            now.setHours(now.getHours() - 7);
+            //now.setHours(now.getHours() - 7);
             var millisTill7pm = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 29, 0, 0) - now;
 
             var visualConsole = document.getElementById("console");
