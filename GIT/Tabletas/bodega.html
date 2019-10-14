@@ -177,6 +177,9 @@
         populatePorSurtir();
         populatePorEntregar();
         startClockTime();
+        setTimeout(function () {
+            checkUpdatedStatus();
+        }, 60000);
 
         ///Activates tabs
 		var i, tabcontent, tablinks;
@@ -237,10 +240,8 @@
             });
 
             database.child("hechas").on('child_added', function(snapshot) {
-                if(snapshot.child("porSurtir").exists()){
-                    console.log("siempre no, pero desde un surtidas");
+                if(snapshot.child("porSurtir").exists())
                     speakOnce("siempre no");
-                }
             });
         }
 
@@ -466,7 +467,6 @@
                 description = "CAJAS DE HUEVO PARA";
             }
 
-            console.log(quantity + " " + unit + " " + description + " " + notes);
             return quantity + " " + unit + " " + description + " " + notes;
         }
 
@@ -534,6 +534,21 @@
 			document.getElementById('time').innerText = h + ":" + m;
 			var t = setTimeout(startClockTime, 1000);
 		}
+
+        function checkUpdatedStatus() {
+            database.child("pendientes").once('value', function(snapshot) {
+                if($('#dynamic-list-porsurtir button').length != snapshot.numChildren())
+                    location.reload();
+                else
+                    document.getElementById("noConnectionAlert").style.display = "none";
+            }, function () {
+                document.getElementById("noConnectionAlert").style.display = "block";
+            });
+            
+            setTimeout(function () {
+                checkUpdatedStatus();
+            }, 60000);
+        }
 
     </script>
 </body>

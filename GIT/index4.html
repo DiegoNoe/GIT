@@ -779,7 +779,7 @@
                     //generates QR code with total embeded in
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
-                        productsRefID = randomLetter1 + $("#inputName").val() + " " + total.replace(/,/g, '') + randomLetter2;
+                        productsRefID = randomLetter1 + $("#inputName").val().trim() + " " + total.replace(/,/g, '') + randomLetter2;
                         doc.addImage(generateQR(productsRefID), 'JPEG', 6, 194, 15, 15);
                     }
                 } else {
@@ -791,7 +791,7 @@
                     //generates QR code with total embeded in
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
-                        productsRefID = randomLetter1 + $("#inputName").val() + " " + total.replace(/,/g, '') + randomLetter2;
+                        productsRefID = randomLetter1 + $("#inputName").val().trim() + " " + total.replace(/,/g, '') + randomLetter2;
                         doc.addImage(generateQR(productsRefID), 'JPEG', 6, 194, 15, 15);
                     }
                 }
@@ -808,7 +808,7 @@
  
                 //survey values
                 increaseEmployeeCounter($("#inputEmployeeName").val());
-                uploadSurvey(surveyValues);
+                //uploadSurvey(surveyValues);
 
                 //erase current order
                 eraseOrder();
@@ -886,7 +886,8 @@
 
         //adds the name
         function addNamePDF(doc) {
-            var name = $("#inputName").val();
+            var name = $("#inputName").val().trim();
+
             doc.setFontSize(29);
             doc.setFont("Gill Sans MT Condensed Negrita");
             doc.text(70, 28, replaceAEIOUN(name), "center");
@@ -929,7 +930,6 @@
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.L
             });
-            //console.log(name);
             var canvas = document.getElementById('qrcode').querySelector('canvas');
             return canvas.toDataURL();
         }
@@ -959,32 +959,14 @@
         }
 
         function uploadSurvey(surveyValues) {
-            console.log("SURVEY VALUES");
-            console.log(surveyValues);
             surveyValues = joinRepeatedProducts(surveyValues);
-            console.log("JOINED SURVEY VALUES");
-            console.log(surveyValues);
             for (var i = 0; i < surveyValues.length; i++) {
-                let id = surveyValues[i][0];
                 let key = toAES(surveyValues[i][0]);
                 let sale = surveyValues[i][1];
                 firebase.database().ref('survey/' + key).once('value', function(snapshot) {
                     var aes = snapshot.key;
                     var current = snapshot.val();
                     var num = parseInt(current, 16) + sale;
-                    var baseNumber = parseInt(aes.substr(aes.length - 8), 16);
-
-                    console.log("_______________NEW PRODUCT_______________");
-                    console.log("id " + id);
-                    console.log("key " + aes);
-                    console.log("base hex " + aes.substr(aes.length - 8));
-                    console.log("current hex " + current);
-                    console.log("base dec " + baseNumber);
-                    console.log("current dec " + parseInt(current, 16));
-                    console.log("sale * 100 " + sale);
-                    console.log("current + sale " + num);
-                    console.log("current + sale - base " + (num - baseNumber));
-                    console.log("current + sale hex " + num.toString(16));
                     
                     firebase.database().ref('survey/' + aes).set(num.toString(16));
                 });

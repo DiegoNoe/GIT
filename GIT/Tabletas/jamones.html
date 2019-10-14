@@ -177,6 +177,9 @@
         populatePorSurtir();
         populatePorEntregar();
         startClockTime();
+        setTimeout(function () {
+            checkUpdatedStatus();
+        }, 60000);
 
         ///Activates tabs
 		var i, tabcontent, tablinks;
@@ -391,6 +394,7 @@
         }
 
         function formatProductToSpeech(product) {
+            var id = product.child("id").val();
             var unit = product.child("unit").val();
             var quantity = parseFloat(product.child("quantity").val()).toString();
             var description = product.child("description").val();
@@ -435,6 +439,12 @@
                 unit = "";
             if(notes.includes("-")) 
                 notes = String(notes).replace("-", " ");
+                
+            if(id == "PRJSR")
+                description = "PROMO DE KILO SAN RAFA";
+                
+            if(id == "PRJSRM")
+                description = "PROMO DE MEDIO SAN RAFA";  
             
             return quantity + " " + unit + "" + description + " " + notes;
         }
@@ -444,7 +454,7 @@
             msg.rate = .95;
             //msg.voice = window.speechSynthesis.getVoices()[36]; //15
             msg.text = message;
-            setTimeout(window.speechSynthesis.speak(msg), 2000);
+            setTimeout(window.speechSynthesis.speak(msg), 4000);
         }
 
         var globalSpeaking = false;
@@ -503,6 +513,21 @@
 			document.getElementById('time').innerText = h + ":" + m;
 			var t = setTimeout(startClockTime, 1000);
 		}
+
+        function checkUpdatedStatus() {
+            database.child("pendientes").once('value', function(snapshot) {
+                if($('#dynamic-list-porsurtir button').length != snapshot.numChildren())
+                    location.reload();
+                else
+                    document.getElementById("noConnectionAlert").style.display = "none";
+            }, function () {
+                document.getElementById("noConnectionAlert").style.display = "block";
+            });
+            
+            setTimeout(function () {
+                checkUpdatedStatus();
+            }, 60000);
+        }
 
     </script>
 </body>

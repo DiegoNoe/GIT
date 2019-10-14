@@ -177,6 +177,9 @@
         populatePorSurtir();
         populatePorEntregar();
         startClockTime();
+        setTimeout(function () {
+            checkUpdatedStatus();
+        }, 60000);
 
         ///Activates tabs
 		var i, tabcontent, tablinks;
@@ -397,6 +400,9 @@
                 quantity = parseFloat(quantity).toFixed(3);
                 quantity = quantity.substring(0, quantity.length - 4) + " Y " + quantity.substring(quantity.length - 3, quantity.length) + " GRAMOS";
             } 
+            
+            if(description.includes("BIONICOS"))
+                description = description.replace("BIONICOS", "BIÓNICOS");
 
             if(unit = "KILO" || unit == "PIEZA") 
                 unit = "";
@@ -473,6 +479,21 @@
 			document.getElementById('time').innerText = h + ":" + m;
 			var t = setTimeout(startClockTime, 1000);
 		}
+
+        function checkUpdatedStatus() {
+            database.child("pendientes").once('value', function(snapshot) {
+                if($('#dynamic-list-porsurtir button').length != snapshot.numChildren())
+                    location.reload();
+                else
+                    document.getElementById("noConnectionAlert").style.display = "none";
+            }, function () {
+                document.getElementById("noConnectionAlert").style.display = "block";
+            });
+            
+            setTimeout(function () {
+                checkUpdatedStatus();
+            }, 60000);
+        }
 
     </script>
 </body>
