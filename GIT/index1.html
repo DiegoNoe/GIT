@@ -20,7 +20,7 @@
     <script language="javascript" type="text/javascript" src="js/qrcode.js"></script>
     <script language="javascript" type="text/javascript" src="js/index.js"></script>
     <script language="javascript" type="text/javascript" src="js/aes.js"></script>
-
+    <script language="javascript" type="text/javascript" src="js/facturama.api.js"></script>
 
     <script>
         var products;
@@ -119,18 +119,28 @@
                                         required>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <!-- unit -->
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <label for="unitInput">UNIDAD</label>
                                     <input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="PIEZA, CAJA, KILO..."
                                         required>
                                 </div>
                                 <!-- cost -->
-                                <div class="col-sm-4">
+                                <div class="col-sm-2">
                                     <label for="priceInput">COSTO</label>
                                     <input class="form-control" type="number" min="0" placeholder="8.50" required>
+                                </div>
+                                <!-- stock -->
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="stockSelect">EXISTENCIA</label>
+                                        <select class="form-control" id="stockSelect">
+                                            <option value="siHay">SÍ HAY</option>
+                                            <option value="noHay">NO HAY</option>
+                                            <option value="pedido">NO HAY / YA SE PIDIÓ</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <!-- type -->
                                 <div class="col-sm-4">
@@ -268,17 +278,34 @@
 
         //populates life search list after the result has been processed
         function populateLifeSearchList(searchResult) {
+            var backgroundColor,
+                color,
+                buttonColor;
             var searchItem = "";
             //up to 51 results in search bar
             for (var i = 0; i < searchResult.length && i < 51; i++) {
+                if(searchResult[i].existencia == "siHay") {
+                    backgroundColor = "white";
+                    color = "#434343";
+                    buttonColor = "gray";
+                } else if(searchResult[i].existencia == "noHay") {
+                    backgroundColor = "rgba(216, 61, 52, 88%)";
+                    color = "white";
+                    buttonColor = "#f6f6f6";
+                } else if(searchResult[i].existencia == "pedido") {
+                    backgroundColor = "rgba(253, 181, 13, 85%)";
+                    color = "#434343";
+                    buttonColor = "gray";
+                }
+
                 searchItem =
-                    '<button class="list-group-item row btn-default search-options-item" onclick="addProductObjectGetter(&#39;' + searchResult[i].clave + '&#39;)">' +
+                    '<button class="list-group-item row btn-default search-options-item" style="background-color: ' + backgroundColor + '; color: ' + color + ';" onclick="addProductObjectGetter(&#39;' + searchResult[i].clave + '&#39;)">' +
                     '<div class="col-sm-2">' + searchResult[i].clave + '</div>' +
                     '<div class="col-sm-1">' + searchResult[i].unidad + '</div>' +
                     '<div class="col-sm-7">' + searchResult[i].descripcion + '</div>' +
                     '<div class="col-sm-1">' + searchResult[i].costo + '</div>' +
                     '<div type="button" class="btn btn-sm col-sm-1 edit-button" onclick="editProductModal(&#39;' + searchResult[i].clave + '&#39;)">' +
-                    '<span id="editar-button" style="color:grey;"> EDITAR </span>' +
+                    '<span id="editar-button" style="color:' + buttonColor + ';"> EDITAR </span>' +
                     '</div>' +
                     '</button>';
                 $("#searchOptions").append(searchItem);
@@ -294,11 +321,12 @@
 
             var productToEdit = JSON.search(products, '//*[clave="' + id + '"]')[0];
             var form = document.getElementById("addNewProductDBForm");
-            //{description:0, id:1, unit:2, cost:3, type:4}
+            //{description:0, id:1, unit:2, cost:3, stock:4, type:5}
             form.elements[0].value = productToEdit.descripcion;
             form.elements[1].value = productToEdit.clave;
             form.elements[2].value = productToEdit.unidad;
             form.elements[3].value = productToEdit.costo;
+            $("#stockSelect").val(productToEdit.existencia);
             $("#typeSelect").val(productToEdit.tipo);
 
             //sets buttons inner values
@@ -334,8 +362,8 @@
             var verificated = true;
 
             //checks for blanks
-            var inputs = new Array(5);
-            //{description:0, id:1, unit:2, cost:3, type:4}
+            var inputs = new Array(6);
+            //{description:0, id:1, unit:2, cost:3, stock:4, type:5}
             for (var i = 0; i < inputs.length; i++) {
                 inputs[i] = form.elements[i].value;
                 if (inputs[i] == "") {
@@ -415,7 +443,8 @@
                 clave: inputs[1],
                 costo: inputs[3],
                 descripcion: inputs[0],
-                tipo: inputs[4],
+                existencia: inputs[4],
+                tipo: inputs[5],
                 unidad: inputs[2]
             }).then(function () {
                 $('#addProductModal').modal('toggle');
@@ -435,16 +464,23 @@
             $("#inputSearch").val("");
 
             var date = (new Date()).getTime();
+            var color;
+            if(product.existencia == "siHay")
+                color = "#434343";
+            else if(product.existencia == "noHay")
+                color = "rgba(216, 61, 52, 95%)";
+            else if(product.existencia == "pedido")
+                color = "rgba(253, 181, 13, 100%)";
 
             var productListItem =
-                '<li class="list-group-item row product-row" data-id="' + product.clave + '" + data-date="' + date + '">' +
+                '<li class="list-group-item row product-row" style= "color: ' + color + ';" data-id="' + product.clave + '" + data-date="' + date + '">' +
                     '<div class="col-sm-1 product-quantity">' +
-                        '<input type="number" min="0" class="form-control"></input>' +
+                        '<input type="number" min="0" class="form-control" style= "color: ' + color + ';"></input>' +
                     '</div>' +
                     '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
                     '<div class="col-sm-5 product-info">' + product.descripcion + '</div>' +
                     '<div class="col-sm-4 product-notes-container">' +
-                        '<input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control product-notes" maxlength="48" placeholder="NOTAS"> </input>' +
+                        '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + ';" class="form-control product-notes" maxlength="48" placeholder="NOTAS"> </input>' +
                     '</div>' +
                     '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button cross">' +
                         '<span class="glyphicon glyphicon-remove cross" style="color:grey; padding-top: 3px;"></span>' +
@@ -494,7 +530,7 @@
             });
 
             //upload or update order item
-            uploadOrderProduct(date, outterQuantity, product.unidad, product.descripcion, "", product.costo , product.tipo);
+            uploadOrderProduct(date, outterQuantity, product.unidad, product.descripcion, "", product.costo, product.existencia, product.tipo);
             inputQuantity.focusout(function () {updateOrderProductQuantity(date, inputQuantity.val())});
             inputNotes.focusout(function () {updateOrderProductNotes(date, inputNotes.val())});
 
@@ -935,13 +971,14 @@
         }
 
         //uploads or updates an order product
-        function uploadOrderProduct(date, quantity, unit, description, notes, price, type) {
+        function uploadOrderProduct(date, quantity, unit, description, notes, price, stock, type) {
             firebase.database().ref(globalComputer + '/order/' + date).set({
                 cantidad: quantity,
                 unidad: unit,
                 descripcion: description,
                 notas: notes,
                 precio: price,
+                existencia: stock,
                 tipo: type
             });
         }

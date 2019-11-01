@@ -12,6 +12,7 @@
     <script language="javascript" type="text/javascript" src="bootstrap.min.js"></script>
     <script language="javascript" type="text/javascript" src="firebase.js"></script>
     <script language="javascript" type="text/javascript" src="array_nombres.js"></script>
+    <script language="javascript" type="text/javascript" src="aes.js"></script>
 
     <script>
         var config = {
@@ -23,6 +24,7 @@
             messagingSenderId: "445465872507"
         };
         firebase.initializeApp(config);
+        var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
     </script>
 
 </head>
@@ -152,12 +154,39 @@
             visualConsole.innerHTML = now.toTimeString() + "<br>" + visualConsole.innerHTML;
 
             if (millisTill7pm < 0) {
+                if(now.getDay() == 0)
+                    surveyUpdate();
                 firebase.database().ref('aCremas').remove();
                 firebase.database().ref('aJamones').remove();
                 firebase.database().ref('aBodega').remove();
                 firebase.database().ref('pendingOrders').remove();
-                
             }
+        }
+        
+        function surveyUpdate() {
+            firebase.database().ref("survey").once('value', function(snapshot) {
+                firebase.database().ref("srecord").set(snapshot.val()).then(function() {
+                    resetSurvey();
+                });;
+            });
+        }
+        
+        function resetSurvey() {
+            firebase.database().ref('survey').remove();
+            firebase.database().ref("productos").once('value', function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    var aes = toAES(childSnapshot.key);
+                    firebase.database().ref('survey/' + aes).set(aes.substr(aes.length - 8));
+                });
+            });
+        }
+
+        function toAES(string) {
+            return aesjs.utils.hex.fromBytes(aesEcb.encrypt(aesjs.utils.utf8.toBytes(to16Bytes(string))));
+        }
+
+        function to16Bytes(string) {
+            return string + " ".repeat(16 - string.length);
         }
 
         function addAccent(name) {

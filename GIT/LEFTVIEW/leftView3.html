@@ -483,6 +483,7 @@
                     justTotal = words[words.length - 1];
                     if(priceCorrection != "")
                         justTotal = priceCorrection;
+                    console.log("checo lo del .5 = " + justTotal.includes(".5"));
                     if(justTotal.includes(".5"))
                         justTotal = justTotal.substring(0, justTotal.length - 2) + " con 50";
                 } else
@@ -493,7 +494,6 @@
             synUtterance.rate = parseFloat(.9);
             synUtterance.pitch = parseFloat(1.1);
             synUtterance.voice = speechSynthesis.getVoices()[15];
-            console.log(speechSynthesis.getVoices());
             window.speechSynthesis.speak(synUtterance);
             window.speechSynthesis.speak(synUtterance);
 
