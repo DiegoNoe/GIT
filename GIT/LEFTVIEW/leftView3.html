@@ -391,6 +391,7 @@
                     var justTotal = words[words.length - 1];
                     if(priceCorrection != "")
                         justTotal = priceCorrection;
+                        justTotal = justTotal.replace(",", ".");
                     var nameListItem =
                         '<li id="' + name.replace(/ /g, "_").replace(".", "_") + '" data-hour="' + new Date() + '"class="product">' +
                             '<span class="name">' + justName.substring(0, 15) + '</span>' +
@@ -483,7 +484,7 @@
                     justTotal = words[words.length - 1];
                     if(priceCorrection != "")
                         justTotal = priceCorrection;
-                    console.log("checo lo del .5 = " + justTotal.includes(".5"));
+                    justTotal = justTotal.replace(",", ".");
                     if(justTotal.includes(".5"))
                         justTotal = justTotal.substring(0, justTotal.length - 2) + " con 50";
                 } else
@@ -494,6 +495,7 @@
             synUtterance.rate = parseFloat(.9);
             synUtterance.pitch = parseFloat(1.1);
             synUtterance.voice = speechSynthesis.getVoices()[15];
+            console.log(speechSynthesis.getVoices());
             window.speechSynthesis.speak(synUtterance);
             window.speechSynthesis.speak(synUtterance);
 

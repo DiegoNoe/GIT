@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" style="background-color: white;">
 <head>
-	<title>Medias view</title>
+	<title>Faltantes</title>
 
 	<meta charset="utf-8">
     <meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
@@ -33,6 +33,7 @@
 		firebase.database().ref('productos/').on('value', function (snapshot) {
 			products = Defiant.getSnapshot(snapshot.val());
 			populateOOSList();
+			document.getElementById("thirdButton").click();
 		});
 
 	</script>
@@ -123,14 +124,6 @@
 			margin-left: 5px;
 		}
 
-		#primaryButton {
-			float: right; 
-			margin-top: 9px; 
-			font-weight: bold;
-			background-color: #0288d1;
-			border-color: #0288d1;
-		}
-
 		#secundaryButton {
 			float: right; 
 			margin-right: 10px; 
@@ -169,7 +162,7 @@
 			font-size: 24px;
 		}	
 
-		#primaryButton, #secundaryButton, #thirdButton {
+		#secundaryButton, #thirdButton {
 			font-size: 24px;
 			line-height: 18px;
 		}
@@ -211,13 +204,11 @@
 		<strong>No hay conexión.</strong> Puede que los precios no estén actualizados.
 	</div>
 	<div class="container-fluid" style="background-color: white;">
-		<button type="button" id="primaryButton" class="btn btn-primary" onclick="showBreaks(event)">MEDIAS</button>
-		<button type="button" id="secundaryButton" class="btn btn-secondary" onclick="showProducts(event)">PRODS</button>
 		<button type="button" id="thirdButton" class="btn btn-secondary" onclick="showOOSProducts(event)">NO HAY</button>
-		<h1 class="modal-title" id="mediasTitle" style="margin-bottom:1.5%; margin-top:.5px">M: 0</h1>
-		<h1 class="modal-title" id="time" style="position:absolute; left:120px; top:0px"> </h1>
+		<button type="button" id="secundaryButton" class="btn btn-secondary" onclick="showProducts(event)">PRODS</button>
+		<h1 class="modal-title" id="mediasTitle" style="margin-bottom:1.5%; margin-top:.5px">FALTANTES</h1>
+		<h1 class="modal-title" id="time" style="position:absolute; left:220px; top:0px"> </h1>
 		<div class='wrapper'>
-			<ul id="dynamic-list" class="list-group tabcontent" style="display:block;"> </ul>
 			<div id="products-tap-content" class="tabcontent"> 
 				<input type="input" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"> </input>
 				<ul class="list-group search-options" style="display:block; height:380px;" id="searchOptions"></ul>
@@ -284,16 +275,16 @@
 									<input class="form-control" type="number" min="0" placeholder="8.50" required>
 								</div>
 								<!-- stock -->
-								<div class="col-xs-3">
-									<div class="form-group">
-										<label for="stockSelect">EXISTENCIA</label>
-										<select class="form-control" id="stockSelect">
-											<option value="siHay">SÍ HAY</option>
-											<option value="noHay">NO HAY</option>
-											<option value="pedido">NO HAY / YA SE PIDIÓ</option>
-										</select>
+                                <div class="col-xs-3">
+										<div class="form-group">
+											<label for="stockSelect">EXISTENCIA</label>
+											<select class="form-control" id="stockSelect">
+												<option value="siHay">SÍ HAY</option>
+												<option value="noHay">NO HAY</option>
+												<option value="pedido">NO HAY / YA SE PIDIÓ</option>
+											</select>
+										</div>
 									</div>
-								</div>
 								<!-- type -->
 								<div class="col-xs-4">
 									<div class="form-group">
@@ -326,9 +317,6 @@
 
 	<script>
 
-		var globalCounter = 30;
-		var employeesOnBreak = 0;
-
 		$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
 			if (document.fullscreen)
 				$("#splashScreen").hide();
@@ -336,7 +324,6 @@
 				$("#splashScreen").show();
 		});
 
-		loadEmployees();
 		startClockTime();
 		checkConnection();
 
@@ -345,146 +332,11 @@
 		tabcontent = document.getElementsByClassName("tabcontent");
 		for (i = 0; i < tabcontent.length; i++)
 			tabcontent[i].style.display = "none";
-		document.getElementById("primaryButton").click();
 
 		window.setInterval(checkDayChange, 60*60*1000);
 
 		function userFullscreen() {
 			document.body.requestFullscreen();
-		}
-		
-		function loadEmployees() {
-			var empleadosDB;
-			firebase.database().ref("empleados").once('value', function(snapshot) {
-				empleadosDB = snapshot.val();
-			}).then(function(){
-				var employeesNames = [];
-				var employeesPronunciation = [];
-				$.each(empleadosDB, function(key, value) {
-					employeesNames.push(key);
-					employeesPronunciation.push(value);
-				});
-				populateEmployeesList(employeesNames, employeesPronunciation);
-			});
-		}
-		
-		function populateEmployeesList(names, pronunciations) {
-			globalCounter = 30;
-			var justOneBreak = false;
-			var currentDate = new Date();
-			if(currentDate.getDay() == 6) {
-				globalCounter = 40;
-				justOneBreak = true;
-			} else if(currentDate.getDay() == 0) {
-				globalCounter = 30;
-				justOneBreak = true;
-			}
-
-			if(justOneBreak) {
-				names.forEach(function (name, i){
-					var sigmaEmployee = false;
-					if(pronunciations[i].charAt(0) == 0) {
-						var sigmaEmployee = true;
-						pronunciations[i] = pronunciations[i].substring(1, name.length);
-					}
-
-					var employeeListItem =
-					'<ul class="list-group-item row employee-row">' +
-						'<h2 class="col-xs-8 employee-name" style="padding: 0px; margin: 0px; padding-left: 5px;">' + name + '</h2>' +
-						'<button type="button" class="col-xs-4 btn btn-secondary break-button first-break" style="background-color:#689f38;" onclick="manageFirstBreak(event)" data-name="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
-					'</ul>';
-												
-					$('#dynamic-list').append(employeeListItem);
-					//$("#dynamic-list").on("click", "button", function(e) {$(this).remove();});	
-				});
-			} else {
-				names.forEach(function (name, i){
-					var sigmaEmployee = false;
-					if(pronunciations[i].charAt(0) == 0) {
-						var sigmaEmployee = true;
-						pronunciations[i] = pronunciations[i].substring(1, name.length);
-					}
-
-					var employeeListItem =
-					'<ul class="list-group-item row employee-row">' +
-						'<h2 class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 5px;">' + name + '</h2>' +
-						'<button type="button" class="col-xs-4 btn btn-secondary break-button first-break" style="background-color:#689f38;" onclick="manageFirstBreak(event)" data-name="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
-						'<button type="button" class="col-xs-4 btn btn-secondary break-button second-break" style="background-color:#689f38;" onclick="manageSecondBreak(event)" data-name="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
-					'</ul>';
-												
-					$('#dynamic-list').append(employeeListItem);
-					//$("#dynamic-list").on("click", "button", function(e) {$(this).remove();});	
-				});
-			}
-			
-		}
-
-		var start;
-		var longpress = 1000;
-		$(".break-button").on('mousedown', function(e){
-			start = new Date().getTime();
-		});
-		$(".break-button").on( 'mouseleave', function( e ) {
-			start = 0;
-		});
-		$( ".break-button" ).on( 'mouseup', function( e ) {
-			if (new Date().getTime() >= (start + longpress)) {
-				console.log('long press!');   
-			} else {
-				console.log('short press!');   
-			}
-		});
-		
-		function manageFirstBreak(event) {
-			if(event.target.style.backgroundColor == "rgb(104, 159, 56)")
-				startBreak(event.target);
-			else if (event.target.style.backgroundColor == "rgb(229, 57, 53)")
-				speakName(event.target.getAttribute("data-name"));
-		}
-		
-		function manageSecondBreak(event) {
-			if(event.target.previousSibling.style.backgroundColor == "rgb(229, 57, 53)" && event.target.style.backgroundColor == "rgb(104, 159, 56)")
-				startBreak(event.target);
-			else if (event.target.style.backgroundColor == "rgb(229, 57, 53)")
-				speakName(event.target.getAttribute("data-name"));
-		}
-		
-		function startBreak(breakButton) {
-			var counter = globalCounter;
-			if(counter == 40 && breakButton.getAttribute("data-sigma") == "true")
-				counter = 30;
-			employeesOnBreak++;
-
-			breakButton.innerText = counter;
-			event.target.style.backgroundColor = "#eeff41";
-			document.getElementById('mediasTitle').innerText = "M: " + employeesOnBreak;
-			
-			var interval = setInterval(function() {
-				counter--;
-				if (counter > 0) {
-					breakButton.innerText = counter;
-				} else {
-					employeesOnBreak--;
-					document.getElementById('mediasTitle').innerText = "M: " + employeesOnBreak;
-					
-					speakName(breakButton.getAttribute("data-name"));
-					breakButton.style.backgroundColor = "#e53935";
-					breakButton.style.color = "white";
-					breakButton.innerText = document.getElementById("time").textContent;
-					clearInterval(interval);
-				}
-			}, 60000);
-		} 
-		
-		function speakName(name) {
-			var msg = new SpeechSynthesisUtterance();
-			msg.rate = .80;
-			//msg.lang = "es-US";
-			msg.voice = window.speechSynthesis.getVoices()[39]; //15
-			msg.text = name;
-			console.log(window.speechSynthesis.getVoices());
-			window.speechSynthesis.speak(msg);
-			window.speechSynthesis.speak(msg);
 		}
 		
 		function startClockTime() {
@@ -497,19 +349,11 @@
 			var t = setTimeout(startClockTime, 1000);
 		}
 
-		function showBreaks(evt) {
-			changeTab(evt, "dynamic-list");
-			changeToActiveColor("primaryButton");
-			changeToDeactiveColor("secundaryButton");
-			changeToDeactiveColor("thirdButton");
-		}
-
 		function showProducts(evt) {
 			$("#inputSearch").val("");
 			$("#searchOptions").empty();
 			changeTab(evt, "products-tap-content");
 			changeToActiveColor("secundaryButton");
-			changeToDeactiveColor("primaryButton");
 			changeToDeactiveColor("thirdButton");
 			$("#inputSearch").focus();
 		}
@@ -519,7 +363,6 @@
 			changeTab(evt, "oos-products-tap-content");
 			changeToActiveColor("thirdButton");
 			changeToDeactiveColor("secundaryButton");
-			changeToDeactiveColor("primaryButton");
 		}
 
 		function populateOOSList() {
@@ -800,7 +643,7 @@
 		function timerIncrement() {
 			idleTime = idleTime + 1;
 			if (idleTime > 6)
-				document.getElementById("primaryButton").click();
+				document.getElementById("thirdButton").click();
 		}
 
 	</script>

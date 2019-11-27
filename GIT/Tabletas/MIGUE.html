@@ -194,6 +194,13 @@
 			padding-right: 15px;
 		}
 
+		.list-group-item {
+			padding-top: 1px;
+			padding-bottom: 1px;
+			padding-left: 12px;
+
+		}
+
 	</style>
 </head>
 <body style="zoom: 100%; background-color: white;">
@@ -209,10 +216,10 @@
 			<ul id="dynamic-list" class="list-group tabcontent" style="display:block;"> </ul>
 			<div id="products-tap-content" class="tabcontent"> 
 				<div class="row">
-					<div class="col-xs-10" style="padding: 0; margin-left: 15px; padding-top: 1px;">
+					<div class="col-xs-9" style="padding: 0; margin-left: 15px; margin-right: 15px; padding-top: 1px;">
 						<input type="input" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"> </input>
 					</div>
-					<button onclick="addProductModal();" class="col-xs-1 btn btn-success glyphicon glyphicon-plus" style="padding: 0; margin-left: 12px; height: 34px;"></button>
+					<button onclick="addProductModal();" class="col-xs-1 btn btn-success glyphicon glyphicon-plus" style="padding: 0; margin-left: 3px; height: 34px; width: 34px;"></button>
 				</div>
 				<ul class="list-group search-options" style="display:block; height:560px;" id="searchOptions"></ul>
 			</div>
@@ -249,7 +256,7 @@
 
 							<div class="row">
 								<!-- unit -->
-								<div class="col-xs-4">
+								<div class="col-xs-3">
 									<label for="unitInput">UNIDAD</label>
 									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="PIEZA, CAJA, KILO..."
 										required>
@@ -259,8 +266,19 @@
 									<label for="priceInput">COSTO</label>
 									<input class="form-control" type="number" min="0" placeholder="8.50" required>
 								</div>
+								<!-- stock -->
+								<div class="col-xs-3" style="padding-right: 0px;">
+									<div class="form-group">
+										<label for="stockSelect">EXIST.</label>
+										<select class="form-control" id="stockSelect">
+											<option value="siHay">SÍ HAY</option>
+											<option value="noHay">NO HAY</option>
+											<option value="pedido">NO HAY / YA SE PIDIÓ</option>
+										</select>
+									</div>
+								</div>
 								<!-- type -->
-								<div class="col-xs-6">
+								<div class="col-xs-4">
 									<div class="form-group">
 										<label for="typeSelect">TIPO</label>
 										<select class="form-control" id="typeSelect">
@@ -532,7 +550,7 @@
 		//edit or delete product modal values
         function editProductModal(id) {
             document.getElementById("addProductModalLabel").innerHTML = "EDITAR PRODUCTO";
-            //document.getElementById("inputID").disabled = true;
+            document.getElementById("inputID").disabled = true;
             document.getElementById("deleteButton").style.display = "inline";
             document.getElementById("verificationMessage").innerHTML = "";
 
@@ -543,6 +561,7 @@
             form.elements[1].value = productToEdit.clave;
             form.elements[2].value = productToEdit.unidad;
             form.elements[3].value = productToEdit.costo;
+			$("#stockSelect").val(productToEdit.existencia);
             $("#typeSelect").val(productToEdit.tipo);
 
             //sets buttons inner values
@@ -571,7 +590,7 @@
             var verificated = true;
 
             //checks for blanks
-            var inputs = new Array(5);
+            var inputs = new Array(6);
             //{description:0, id:1, unit:2, cost:3, type:4}
             for (var i = 0; i < inputs.length; i++) {
                 inputs[i] = form.elements[i].value;
@@ -614,7 +633,8 @@
                 clave: inputs[1],
                 costo: inputs[3],
                 descripcion: inputs[0],
-                tipo: inputs[4],
+				existencia: inputs[4],
+                tipo: inputs[5],
                 unidad: inputs[2]
             }).then(function () {
                 $('#addProductModal').modal('toggle');
