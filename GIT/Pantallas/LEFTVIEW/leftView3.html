@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Left View</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+
+    <script language="javascript" type="text/javascript" src="jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="bootstrap.min.js"></script>
+    <script language="javascript" type="text/javascript" src="firebase.js"></script>
+    <script language="javascript" type="text/javascript" src="array_nombres.js"></script>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
+            authDomain: "cremeria-imperial.firebaseapp.com",
+            databaseURL: "https://cremeria-imperial.firebaseio.com",
+            projectId: "cremeria-imperial",
+            storageBucket: "cremeria-imperial.appspot.com",
+            messagingSenderId: "445465872507"
+        };
+        firebase.initializeApp(config);
+        var database = firebase.database().ref('productos');
+        database.on('value', function (snapshot) {
+            //Carnes Frías
+            /*
+            document.getElementById("CHOPI").innerHTML = "$" + snapshot.val().CHPI.costo;
+            document.getElementById("CHOIM").innerHTML = "$" + snapshot.val().CHI.costo;
+            document.getElementById("CHORA").innerHTML = "$" + snapshot.val().CHR.costo;
+            document.getElementById("CHOHO").innerHTML = "$" + snapshot.val().CHH.costo;
+            document.getElementById("CHUL").innerHTML = "$" + snapshot.val().CHCI.costo;
+            document.getElementById("TOCO").innerHTML = "$" + snapshot.val().TOI.costo;
+            document.getElementById("SALA").innerHTML = "$" + snapshot.val().SA.costo;
+            document.getElementById("PEPE").innerHTML = "$" + snapshot.val().PEM.costo;
+            document.getElementById("LOMO").innerHTML = "$" + snapshot.val().LOCI.costo;
+            document.getElementById("ARRA").innerHTML = "$" + snapshot.val().ARRI.costo;
+            //document.getElementById("ARRAP").innerHTML = "$" + snapshot.val().PUARRI.costo;
+            document.getElementById("QUEPU").innerHTML = "$" + snapshot.val().QUPI.costo;
+            document.getElementById("HAMB").innerHTML = "$" + snapshot.val().CARIH.costo;
+            document.getElementById("COD").innerHTML = "$" + snapshot.val().CACO.costo;
+            document.getElementById("CHIBO").innerHTML = "$" + snapshot.val().CHP.costo;
+            */
+            /*
+            //Jamones
+            document.getElementById("JVIRP").innerHTML = "$" + snapshot.val().JAPV.costo;
+            document.getElementById("JATY").innerHTML = "$" + snapshot.val().JAYI.costo;
+            document.getElementById("JAPF").innerHTML = "$" + snapshot.val().JAPF.costo;
+            document.getElementById("JAHOV").innerHTML = "$" + snapshot.val().JAHV.costo;
+            document.getElementById("JAIMP").innerHTML = "$" + snapshot.val().JAI.costo;
+            //Jamones de pavo
+            document.getElementById("JASAN").innerHTML = "$" + snapshot.val().JAPPSR.costo;
+            document.getElementById("JAHUF").innerHTML = "$" + snapshot.val().JAAF.costo;
+            document.getElementById("JAVIP").innerHTML = "$" + snapshot.val().JAPVV.costo;
+            document.getElementById("JANOR").innerHTML = "$" + snapshot.val().JAN.costo;
+            document.getElementById("JATP").innerHTML = "$" + snapshot.val().JAPT.costo;
+            document.getElementById("JACOV").innerHTML = "$" + snapshot.val().JACV.costo;
+            document.getElementById("JALON").innerHTML = "$" + snapshot.val().JAL.costo;
+            //Salchichas tipo viena
+            document.getElementById("SHDF").innerHTML = "$" + snapshot.val().SAHDF.costo;
+            document.getElementById("SALV").innerHTML = "$" + snapshot.val().SAV3.costo;
+            //Salchichas de pavo
+            document.getElementById("SJPF").innerHTML = "$" + snapshot.val().SAJF.costo;
+            document.getElementById("SALVP").innerHTML = "$" + snapshot.val().SAPV.costo;
+            document.getElementById("SPF2").innerHTML = "$" + snapshot.val().SAPF2.costo;
+            document.getElementById("SFRA").innerHTML = "$" + snapshot.val().SAF2.costo;
+            document.getElementById("SCHI").innerHTML = "$" + snapshot.val().SAP.costo;
+            document.getElementById("SSR2").innerHTML = "$" + snapshot.val().SASRM.costo;
+            document.getElementById("SPF5").innerHTML = "$" + snapshot.val().SAPFM.costo;
+            */
+            //Dólar
+            document.getElementById("DOLAR").innerHTML = "$" + snapshot.val().DOLAR.costo;
+
+        });
+
+        // global variables
+        var animationState = false;
+        var priceCorrection = "";
+
+    </script>
+
+    <style>
+        @font-face {
+            font-family: GillSansMTCondBold;
+            src: url(GillSansMTCondensedBold.ttf);
+        }
+        @font-face {
+            font-family: GillSansMTCond;
+            src: url(GillSansStd-Condensed.otf);
+        }
+        html {
+            zoom: 200%;
+        }
+        .container-fluid {
+            padding-top: 20px;
+            padding-left: 40px;
+            padding-right: 0px;
+        }
+        .col-sm-3 {
+            padding-left: 10px;
+            padding-right: 0px;
+        }
+        #secondColumn .product {
+            line-height: 320%;
+        }
+        #thirdColumn .product {
+            line-height: 310%;
+        }
+        #pedidosListosTitle {
+            position: absolute;
+            z-index: 1;
+            background-color: white;
+            box-shadow: 0px 5px 5px #FFFFFF;
+            padding-bottom: 0px;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0px;
+            margin-top: 95px;
+        }
+        .title {
+            font-family: GillSansMTCondBold;
+            font-size: 50px;
+            color: red;
+            line-height: 80%;
+            padding-bottom: 5px;
+            margin-top: 5px;
+        }
+        .product {
+            line-height: 325%;
+        }
+        .name {
+            font-family: GillSansMTCond;
+            font-size: 45px;
+            color: black;
+            line-height: 0px;
+        }
+        .price {
+            font-family: GillSansMTCond;
+            font-size: 35px;
+            color: rgb(128,128,128);
+            padding-left: 10px;
+            line-height: 0px;
+        }
+        .totalName {
+            font-family: GillSansMTCond;
+            font-size: 35px;
+            color: rgb(128,128,128);
+            padding-left: 10px;
+            line-height: 0px;
+        }
+        html {
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <input id="inputName" style="position: absolute; left: -9999px;"></input>
+        <div class="row">
+            <div class="col-sm-3" id="fourthColumn">
+                <h3 id="pedidosListosTitle" class="title">Pedidos
+                    <br>Listos</h3>
+                <ul id="dynamic-list"></ul>
+            </div>
+            <div class="col-sm-3" id="firstColumn">
+                <h3 class="title">Carnes frías</h3>
+                <div class="product">
+                    <span class="name">Chorizo Pierna</span>
+                    <span class="price" id="CHOPI"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Chorizo Imperial</span>
+                    <span class="price" id="CHOIM"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Chorizo Ranchero</span>
+                    <span class="price" id="CHORA"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Chorizo hoja</span>
+                    <span class="price" id="CHOHO"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Chuleta Imperial</span>
+                    <span class="price" id="CHUL"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Tocino Imperial</span>
+                    <span class="price" id="TOCO"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Salami Imperial</span>
+                    <span class="price" id="SALA"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Lomo Imperial</span>
+                    <span class="price" id="LOMO"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Peperoni T.Manga</span>
+                    <span class="price" id="PEPE"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Arrachera Imp.</span>
+                    <span class="price" id="ARRA"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Carne Codorniz</span>
+                    <span class="price" id="COD"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Queso de Puerco</span>
+                    <span class="price" id="QUEPU"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Chicharron Pren.</span>
+                    <span class="price" id="CHIBO"> </span>
+                </div>
+                 <div class="product">
+                    <span class="name">C. Hamburg. Imp</span>
+                    <span class="price" id="HAMB"> </span>
+                </div>
+            </div>
+            <div class="col-sm-3" id="secondColumn">
+                <h3 class="title">Jamones</h3>
+                <div class="product">
+                    <span class="name">Virginia Fud</span>
+                    <span class="price" style="display: none;" id="JVIRP"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Viva Horneado</span>
+                    <span class="price" style="display: none;" id="JAHOV"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">York Imperial</span>
+                    <span class="price" style="display: none;" id="JATY"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Pierna Fud</span>
+                    <span class="price" style="display: none;" id="JAPF"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Imperial</span>
+                    <span class="price" style="display: none;" id="JAIMP"> </span>
+                </div>
+                <h3 class="title">Jamones
+                    <br> de pavo</h3>
+                <div class="product">
+                    <span class="name">Pechuga San R</span>
+                    <span class="price" style="display: none;" id="JASAN"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Ahumado Fud</span>
+                    <span class="price" style="display: none;" id="JAHUF"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Virginia Fud</span>
+                    <span class="price" style="display: none;" id="JAVIP"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Norteño Chimex</span>
+                    <span class="price" style="display: none;" id="JANOR"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Tradicional</span>
+                    <span class="price" style="display: none;" id="JATP"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Lonchero</span>
+                    <span class="price" style="display: none;" id="JALON"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Cocido Viva</span>
+                    <span class="price" style="display: none;" id="JACOV"> </span>
+                </div>
+            </div>
+            <div class="col-sm-3" id="thirdColumn">
+                <h3 class="title">Salchichas tipo viena</h3>
+                <div class="product">
+                    <span class="name">HotDog Fud 3k</span>
+                    <span class="price" style="display: none;" id="SHDF"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Viva 3k</span>
+                    <span class="price" style="display: none;" id="SALV"> </span>
+                </div>
+                <h3 class="title">Salchichas
+                    <br> de pavo</h3>
+                <div class="product">
+                    <span class="name">Jumbo Fud 3k</span>
+                    <span class="price" style="display: none;" id="SJPF"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Viva 2.2k</span>
+                    <span class="price" style="display: none;" id="SALVP"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Fud 2.2k</span>
+                    <span class="price" style="display: none;" id="SPF2"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Frankfurt 2.2k</span>
+                    <span class="price" style="display: none;" id="SFRA"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Salchirrica 2.5k</span>
+                    <span class="price" style="display: none;" id="SCHI"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">San Rafael ½k</span>
+                    <span class="price" style="display: none;" id="SSR2"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Fud ½k</span>
+                    <span class="price" style="display: none;" id="SPF5"> </span>
+                </div>
+                <h3 class="title">Dólar</h3>
+                <div class="product">
+                    <span class="name">Se toma a:</span>
+                    <span class="price" id="DOLAR"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        reloadOnUpdate();
+
+        var namesDictonary = {};
+        populateDictonary(namesArray);
+
+        $("#inputName").focus();
+        $("#inputName").on('keyup', function (e) {
+            if (e.keyCode == 13) {
+                if ($("#inputName").val() != "") {
+                    if (!$("#inputName").val().match(/[A-Z]/i)) {
+                        priceCorrection = $("#inputName").val();
+                        if(priceCorrection == "123456789")
+                            location.reload();
+                        if(priceCorrection.includes(".50"))
+                            priceCorrection = priceCorrection.substring(0, justTotal.length - 1);
+                        $("#inputName").val("");
+                    } else {
+                        manageScannerInput();
+                        priceCorrection = "";
+                    }
+                }
+            }
+        });
+
+        function manageScannerInput() {
+            if ($("#inputName").val() != "cvUYjDXj") {
+                var name = $("#inputName").val();
+                $("#inputName").val("");
+
+                name = name.slice(1, name.length - 1);
+                name = toTitleCase(name.replace("Ñ", ":").replace("NN", "Ñ"));
+
+                if (!$("#dynamic-list #" + name.replace(/ /g, "_").replace(".", "_")).length) {
+                    speakName(name);
+                    insertAlphabetically(name);
+                } else {
+                    $("#dynamic-list #" + name.replace(/ /g, "_").replace(".", "_")).remove();
+                }
+                if ($("#dynamic-list li").length > 13) {
+                    if (!animationState) {
+                        animationState = true;
+                        $('#dynamic-list').scrollList();
+                    }
+                } else {
+                    animationState = false;
+                    sortList();
+                }
+            } else {
+                nameAllNames();
+                $("#inputName").val("");
+            }
+        }
+
+        function insertAlphabetically(name) {
+            var words = name.split(" ");
+            if(!isNaN(words[words.length - 1]) && words[words.length - 1] != "") {
+                
+                //FIX
+                var limitTotal = words[words.length - 1];
+                if(priceCorrection != "")
+                    limitTotal = priceCorrection;
+                    limitTotal = limitTotal.replace(",", ".");
+
+                if(limitTotal < 1500) {
+                    var justName = name.substring(0, name.lastIndexOf(" "));
+                    var justTotal = words[words.length - 1];
+                    if(priceCorrection != "")
+                        justTotal = priceCorrection;
+                    justTotal = justTotal.replace(",", ".");
+                    justTotal = (Math.round(justTotal * 100) / 100) + "";
+                    var nameListItem =
+                        '<li id="' + name.replace(/ /g, "_").replace(".", "_") + '" data-hour="' + new Date() + '"class="product">' +
+                            '<span class="name">' + justName.substring(0, 15) + '</span>' +
+                            '<span class="totalName">$' + justTotal + '</span>' +
+                        '</li>';
+                } else {
+                    var justName = name.substring(0, name.lastIndexOf(" "));
+                    var nameListItem =
+                    '<li id="' + name.replace(/ /g, "_").replace(".", "_") + '" data-hour="' + new Date() + '"class="product">' +
+                        '<span class="name">' + justName + '</span>'
+                    '</li>';
+                }
+            } else {
+                var nameListItem =
+                    '<li id="' + name.replace(/ /g, "_").replace(".", "_") + '" data-hour="' + new Date() + '"class="product">' +
+                        '<span class="name">' + name + '</span>'
+                    '</li>';
+            }
+            var listItem = document.createElement('div');
+            listItem.innerHTML = nameListItem.trim();
+            document.getElementById("dynamic-list").appendChild(listItem.firstElementChild);
+            sortList();
+        }
+        
+        function sortList() {
+            var list, i, switching, b, shouldSwitch;
+            list = document.getElementById("dynamic-list");
+            switching = true;
+            while (switching) {
+                switching = false;
+                b = list.getElementsByTagName("LI");
+                for (i = 0; i < (b.length - 1); i++) {
+                    shouldSwitch = false;
+                    if (b[i].firstElementChild.innerHTML.toLowerCase() > b[i + 1].firstElementChild.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    b[i].parentNode.insertBefore(b[i + 1], b[i]);
+                    switching = true;
+                }
+            }
+        }
+        function nameAllNames() {
+            var synUtterance3 = new SpeechSynthesisUtterance("Los pedidos de la última hora son.");
+            synUtterance3.rate = parseFloat(.9);
+            synUtterance3.pitch = parseFloat(1.1);
+            synUtterance3.voice = speechSynthesis.getVoices()[15];
+            window.speechSynthesis.speak(synUtterance3);
+
+            $('#dynamic-list li').each(function (index) {
+                var msg = new SpeechSynthesisUtterance();
+                msg.rate = .70;
+                if($(this).text().includes("$")) {
+                    var synUtterance4 = new SpeechSynthesisUtterance(addAccent($(this).text().substring(0, $(this).text().indexOf("$"))));
+                    synUtterance4.rate = parseFloat(.9);
+                    synUtterance4.pitch = parseFloat(1.1);
+                    synUtterance4.voice = speechSynthesis.getVoices()[15];
+                    window.speechSynthesis.speak(synUtterance4);
+                }
+                else {
+                    var synUtterance4 = new SpeechSynthesisUtterance(addAccent($(this).text()));
+                    synUtterance4.rate = parseFloat(.9);
+                    synUtterance4.pitch = parseFloat(1.1);
+                    synUtterance4.voice = speechSynthesis.getVoices()[15];
+                    window.speechSynthesis.speak(synUtterance4);
+                }
+            });
+        }
+        function checkForOldNames() {
+            currentDate = new Date();
+            $('#dynamic-list li').each(function (index) {
+                nameDate = new Date($(this).data("hour"));
+                var timeDiff = Math.abs(currentDate.getTime() - nameDate.getTime());
+                var diffMinutes = Math.ceil(timeDiff / (1000 * 60));
+                if (diffMinutes > 120)
+                    $(this).remove();
+            });
+            setTimeout(function () {
+                checkForOldNames();
+            }, 60000);
+        }
+        function speakName(name) {
+            var justName = name;
+            var justTotal;
+            var words = name.split(" ");
+            if(!isNaN(words[words.length - 1])) {
+                
+                //FIX
+                var limitTotal = words[words.length - 1];
+                if(priceCorrection != "")
+                    limitTotal = priceCorrection;
+                limitTotal = limitTotal.replace(",", ".");
+
+                if(limitTotal < 1500) {
+                    justName = name.substring(0, name.lastIndexOf(" "));
+                    justTotal = words[words.length - 1];
+                    if(priceCorrection != "")
+                        justTotal = priceCorrection;
+                    justTotal = justTotal.replace(",", ".");
+                    justTotal = (Math.round(justTotal * 100) / 100) + "";
+
+                    if(justTotal.includes(".5"))
+                        justTotal = justTotal.substring(0, justTotal.length - 2) + " con 50";
+                } else
+                    justName = name.substring(0, name.lastIndexOf(" "));
+            }
+
+            var synUtterance = new SpeechSynthesisUtterance(addAccent(justName));
+            synUtterance.rate = parseFloat(.9);
+            synUtterance.pitch = parseFloat(1.1);
+            synUtterance.voice = speechSynthesis.getVoices()[15];
+            window.speechSynthesis.speak(synUtterance);
+            window.speechSynthesis.speak(synUtterance);
+
+            if(!isNaN(words[words.length - 1])) {
+                if(limitTotal < 1500) {
+                    var synUtterance2 = new SpeechSynthesisUtterance(justTotal);
+                    synUtterance2.rate = parseFloat(.9);
+                    synUtterance2.pitch = parseFloat(1.1);
+                    synUtterance2.voice = speechSynthesis.getVoices()[15];
+                    window.speechSynthesis.speak(synUtterance2);
+                }
+            }
+        }
+        function toTitleCase(str) {
+            return str.replace(/\w\S*/g, function (txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+        }
+        $.fn.scrollList = function (delay) {
+            delay = delay || 200;
+            var animateList = function ($list) {
+                if (animationState) {
+                    //get first child
+                    var $first = $list.children('li:first');
+                    var height = $first.outerHeight(true);
+                    //animate first two off the screen
+                    $first.animate({
+                        'margin-top': $list.children('li:first').height() * -1
+                    },
+                        // on animation complete
+                        function () {
+                            //reset and move to the end of the list
+                            $(this).css('margin-top', 0).add($(this)).appendTo($list);
+                            //start again after delay
+                            setTimeout(function () {
+                                animateList($list)
+                            }, delay);
+                        });
+                }
+            };
+            if (animationState) {
+                return this.each(function () {
+                    var $that = $(this)
+                    setTimeout(function () {
+                        animateList($that);
+                    }, delay);
+                });
+            } else {
+                return;
+            }
+        };
+
+        function reloadOnUpdate() {
+            firebase.database().ref("updates/caja").on('value', function(snapshot) {
+                if(snapshot.val()){
+                    firebase.database().ref("updates/caja").set(false).then(function() {
+                        location.reload();
+                    });
+                }
+            });
+        }
+
+        function addAccent(name) {
+            name = name.toUpperCase();
+            var newName = "";
+            var words = name.split(" ");
+            words.forEach(function (value, i) {
+                if(namesDictonary[value] != null) 
+                    newName = newName + " " + namesDictonary[value];
+                else 
+                    newName = newName +  " " + value;
+            });
+            return newName;
+            
+        }
+
+        function populateDictonary(names) {
+            names = removeDups(names);
+            names = names.sort();
+
+            namesArray.forEach(function (value, i) {
+                namesDictonary[value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase()] = value.toUpperCase();
+            });
+        }
+
+        function removeDups(names) {
+            let unique = {};
+            names.forEach(function(i) {
+                if(!unique[i]) {
+                    unique[i] = true;
+                }
+            });
+            return Object.keys(unique);
+        }
+
+        document.onclick = function () {
+            $("#inputName").focus();
+        }
+        checkForOldNames();
+    </script>
+</body>
+
+</html>

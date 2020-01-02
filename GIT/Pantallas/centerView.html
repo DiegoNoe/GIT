@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Center view</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="centerView.css">  
+    
+    <script>
+        snow = {
+	count: 60,
+	delay: 10,
+	flutter: 0.2,
+	wind: 1.0,
+	w1: 1,
+	minSpeed: 0.3,
+	maxSpeed: 4,
+	cv: null,
+	flakes: [],
+	toggle: function() {
+		if(window.snowtimer)
+			snow.stop();
+		else
+			snow.start();
+	},
+	resize: function() {
+		snow.cv.width = innerWidth;
+		snow.cv.height = outerHeight;
+		snow.gt = snow.ct.createLinearGradient(0,0,0,snow.cv.height);
+		snow.gt.addColorStop(0.0, '#FFFFFF');
+		snow.gt.addColorStop(1.0, '#FFFFFFFF');
+		snow.ct.fillStyle = snow.gt;
+	},
+	start: function() {
+		snow.cv = document.createElement('canvas');
+		snow.cv.width = snow.cv.height = 10; // set initial size
+		snow.cv.id = 'backgroundSnowCanvas';
+		document.body.appendChild(snow.cv);
+		snow.createFlake();
+		snow.ct = snow.cv.getContext('2d');
+		snow.cv.style.position = 'absolute';
+		snow.cv.style.top = 0;
+		snow.cv.style.left = 0;
+		snow.cv.style.zIndex = -1;
+		snow.resize();
+		var c = snow.count;
+		snow.flakes = [];
+		do {
+			snow.flakes.push(new snow.flake());
+		} while(--c);
+		snow.ct.fillRect(0,0,snow.cv.width,snow.cv.height);
+		window.snowtimer = window.setInterval(snow.draw, snow.delay);
+		window.addEventListener('resize',snow.resize);
+	},
+	stop: function() {
+		window.clearInterval(window.snowtimer);
+		var c = document.getElementById('backgroundSnowCanvas');
+		c.parentNode.removeChild(c);
+		window.snowtimer=snow=null;
+	},
+	draw: function() {
+		var ct = snow.ct, f = snow.flakes, c = snow.count;
+		ct.fillRect(0,0,snow.cv.width,snow.cv.height);
+
+		do {
+			if(f[--c].draw(ct) && ++fdone) { };
+		} while(c);
+		snow.wind += Math.cos(snow.w1++ / 180.0);
+	},
+	flake: function() {
+		this.draw = function(ct) {
+			ct.drawImage(snow.flakeImage,this.x + snow.wind,this.y,this.sz,this.sz);
+			this.animate();
+		};
+		this.animate = function() {
+			this.y += this.speed;
+			this.x += this.flutter * Math.cos(snow.flutter * snow.flutter * this.y);
+			if(this.y > innerHeight)
+				this.init(1);
+		};
+		this.init = function(f) {
+			this.speed = snow.minSpeed + (Math.random() * (snow.maxSpeed - snow.minSpeed));
+			this.sz = ~~(Math.random() * 40) + 20;
+			this.flutter = ~~(Math.random() * snow.flutter * (60-this.sz));
+			this.x = (Math.random() * (innerWidth + this.sz)) - this.sz;
+			this.y = f ? -this.sz : Math.random() * innerHeight;
+		};
+		this.init();
+	},
+	createFlake: function() {
+		snow.flakeImage = document.createElement('canvas');
+		snow.flakeImage.width = snow.flakeImage.height = 40;
+		var c = snow.flakeImage.getContext('2d');
+		c.fillStyle = '#E6E6E6';
+		c.translate(20,20);
+		c.beginPath();
+		c.rect(-5,-20,10,40);
+		c.rotate(Math.PI / 3.0);
+		c.rect(-5,-20,10,40);
+		c.rotate(Math.PI / 3.0);
+		c.rect(-5,-20,10,40);
+		c.closePath();
+		c.fill();
+	},
+};
+    </script>
+    <script>
+        window.onload = function() {
+            try {
+                snow.count = 30;   // number of flakes
+                snow.delay = 20;   // timer interval
+                snow.minSpeed = 2; // minimum movement/time slice
+                snow.maxSpeed = 5; // maximum movement/time slice
+                snow.start();
+            } catch(e) {
+                // no snow :(
+            }
+        };
+    </script>
+
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <script>
+
+        var config = {
+            apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
+            authDomain: "cremeria-imperial.firebaseapp.com",
+            databaseURL: "https://cremeria-imperial.firebaseio.com",
+            projectId: "cremeria-imperial",
+            storageBucket: "cremeria-imperial.appspot.com",
+            messagingSenderId: "445465872507"
+        };
+
+        firebase.initializeApp(config);
+        
+        var database = firebase.database().ref('productos');
+        database.on('value', function(snapshot) {
+            /*
+            //Endulzantes
+            document.getElementById("CAJK").innerHTML = "$" + snapshot.val().CA1.costo;
+            document.getElementById("MIELK").innerHTML = "$" + snapshot.val().M1.costo;
+            document.getElementById("MIEPUK").innerHTML = "$" + snapshot.val().MIP1.costo;
+            document.getElementById("CONA1").innerHTML = "$" + snapshot.val().LEI1.costo;
+            document.getElementById("MERF").innerHTML = "$" + snapshot.val().ME1.costo;
+            document.getElementById("MERP").innerHTML = "$" + snapshot.val().ME1.costo;
+            document.getElementById("ATE").innerHTML = "$" + snapshot.val().ATM.costo;
+            //Cremas
+            document.getElementById("CRH").innerHTML = "$" + snapshot.val().CRC.costo;
+            document.getElementById("CREX").innerHTML = "$" + snapshot.val().CRE.costo;
+            document.getElementById("CRPU").innerHTML = "$" + snapshot.val().CRP.costo;
+            document.getElementById("CRME").innerHTML = "$" + snapshot.val().CRM.costo;
+            document.getElementById("CRBIO").innerHTML = "$" + snapshot.val().CRB.costo;
+            document.getElementById("CCHA").innerHTML = "$" + snapshot.val().CRBC1.costo;
+            //Quesos
+            document.getElementById("ADFIM").innerHTML = "$" + snapshot.val().ADF1.costo;
+            document.getElementById("COT1").innerHTML = "$" + snapshot.val().QUC1.costo;
+            document.getElementById("PANE").innerHTML = "$" + snapshot.val().QUP.costo;
+            document.getElementById("OAXAK").innerHTML = "$" + snapshot.val().QUOI1.costo;
+            document.getElementById("CHIHUA").innerHTML = "$" + snapshot.val().QUCH.costo;
+            document.getElementById("MZLA").innerHTML = "$" + snapshot.val().QUMZ.costo;
+            document.getElementById("COT380").innerHTML = "$" + snapshot.val().COL700.costo;
+            document.getElementById("MOLEC").innerHTML = "$" + snapshot.val().QUME.costo;
+            document.getElementById("QURAN").innerHTML = "$" + snapshot.val().QUR200.costo;
+            document.getElementById("ADMIM").innerHTML = "$" + snapshot.val().ADM1.costo;
+            document.getElementById("COT2").innerHTML = "$" + snapshot.val().QUC2.costo;
+            document.getElementById("REQUE").innerHTML = "$" + snapshot.val().RE.costo;
+            document.getElementById("CHEDA").innerHTML = "$" + snapshot.val().QUC.costo;
+            document.getElementById("MCHE").innerHTML = "$" + snapshot.val().QUMI.costo;
+            document.getElementById("GOUDA").innerHTML = "$" + snapshot.val().QUGH.costo;
+            document.getElementById("QPARM").innerHTML = "$" + snapshot.val().QUP200.costo;
+            document.getElementById("ASAD").innerHTML = "$" + snapshot.val().QUAC1.costo;
+            document.getElementById("QUENA").innerHTML = "$" + snapshot.val().QUN1.costo;
+            //Quesos en rebandas
+            document.getElementById("SING").innerHTML = "$" + snapshot.val().QUAS.costo;
+            document.getElementById("QAMEF").innerHTML = "$" + snapshot.val().QUAFR.costo;
+            document.getElementById("PQMA").innerHTML = "$" + snapshot.val().QUFMR.costo;
+            document.getElementById("AMAV").innerHTML = "$" + snapshot.val().QUAV.costo;
+            document.getElementById("EXBSAP").innerHTML = "$" + snapshot.val().EXQAS.costo;
+            document.getElementById("QADEXB").innerHTML = "$" + snapshot.val().EXQAD.costo;
+            document.getElementById("PHIR").innerHTML = "$" + snapshot.val().PHR144.costo;
+            //Queso Crema
+            document.getElementById("QCRE2").innerHTML = "$" + snapshot.val().QUCC2.costo;
+            document.getElementById("QCRE1").innerHTML = "$" + snapshot.val().QUCB1.costo;
+            document.getElementById("DCVI").innerHTML = "$" + snapshot.val().QUDCV.costo;
+            document.getElementById("PH19").innerHTML = "$" + snapshot.val().PH190.costo;
+            document.getElementById("PH1K").innerHTML = "$" + snapshot.val().PH2.costo;
+            */
+        });
+    </script>
+
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3" id="firstColumn">
+                <h3 class="title">Endulzantes</h3>  
+                <div class="product">                        
+                    <span class="name">Cajeta Imperial</span>
+                    <span class="price" id="CAJK"> </span>
+                </div>
+                <div class="product">                
+                    <span class="name">Miel Imperial</span>
+                    <span class="price" id="MIELK"> </span>  
+                </div>
+                <div class="product">                               
+                    <span class="name">Miel pura Imperial</span>
+                    <span class="price" id="MIEPUK"> </span>  
+                </div>
+                <div class="product">                               
+                    <span class="name">Leche condensada</span>
+                    <span class="price" id="CONA1"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Mermelada fresa</span>
+                    <span class="price" id="MERF"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Mermelada piña</span>
+                    <span class="price" id="MERP"> </span>
+                </div>
+                <div class="product">                        
+                    <span class="name">Ate membrillo</span>
+                    <span class="price" id="ATE"> </span>
+                </div>
+                <h3 class="title">Cremas</h3>                  
+                <div class="product"> 
+                    <span class="name">Imperial</span>
+                    <span class="price" id="CRH"> </span>
+                </div>
+                <div class="product"> 
+                    <span class="name">Extra</span>
+                    <span class="price" id="CREX"> </span>
+                </div>
+                <div class="product"> 
+                    <span class="name">Pura</span>
+                    <span class="price" id="CRPU"> </span>
+                </div>
+                <div class="product"> 
+                    <span class="name">Media</span>
+                    <span class="price" id="CRME"> </span>
+                </div>
+                <div class="product"> 
+                    <span class="name">Bionicos</span>
+                    <span class="price" id="CRBIO"> </span>
+                </div>
+                <div class="product"> 
+                    <span class="name">Chantilly</span>
+                    <span class="price" id="CCHA"> </span>
+                </div>
+            </div>
+            <div class="col-md-6" id="centerColumn">
+                <h3 class="title">Quesos Imperial</h3>                                  
+                <div class="col-sm-6" id="secondColumn">
+                    <div class="product">                        
+                        <span class="name">Fundir</span>
+                        <span class="price" id="ADFIM"> </span>
+                    </div>
+                    <div class="product">                
+                        <span class="name">Cotija 1</span>
+                        <span class="price" id="COT1"> </span>  
+                    </div>
+                    <div class="product">                               
+                        <span class="name">Panela</span>
+                        <span class="price" id="PANE"> </span>  
+                    </div>
+                    <div class="product">                               
+                        <span class="name">Oaxaca</span>
+                        <span class="price" id="OAXAK"> </span>
+                    </div>
+                    <div class="product">
+                        <span class="name">Chihuahua</span>
+                        <span class="price" id="CHIHUA"> </span>
+                    </div>
+                    <div class="product">                        
+                        <span class="name">Mozzarella</span>
+                        <span class="price" id="MZLA"> </span>
+                    </div>
+                    <div class="product"> 
+                        <span class="name">Cottage</span>
+                        <span class="price" id="COT380"> </span>
+                    </div>
+                    <div class="product"> 
+                        <span class="name">Molido eco.</span>
+                        <span class="price" id="MOLEC"> </span>
+                    </div>
+                    <div class="product"> 
+                        <span class="name">Ranchero</span>
+                        <span class="price" id="QURAN"> </span>
+                    </div>
+                </div>
+                <div class="col-sm-6" id="thirdColumn">
+                    <div class="product">                        
+                        <span class="name">Mesa</span>
+                        <span class="price" id="ADMIM"> </span>
+                    </div>
+                    <div class="product">                
+                        <span class="name">Cotija 2</span>
+                        <span class="price" id="COT2"> </span>  
+                    </div>
+                    <div class="product">                               
+                        <span class="name">Requeson</span>
+                        <span class="price" id="REQUE"> </span>  
+                    </div>
+                    <div class="product">                               
+                        <span class="name">Cheddar</span>
+                        <span class="price" id="CHEDA"> </span>
+                    </div>
+                    <div class="product">
+                        <span class="name">Manchego</span>
+                        <span class="price" id="MCHE"> </span>
+                    </div>
+                    <div class="product">                        
+                        <span class="name">Gouda</span>
+                        <span class="price" id="GOUDA"> </span>
+                    </div>
+                    <div class="product"> 
+                        <span class="name">Parmesano</span>
+                        <span class="price" id="QPARM"> </span>
+                    </div>
+                    <div class="product"> 
+                        <span class="name">Asadero</span>
+                        <span class="price" id="ASAD"> </span>
+                    </div>
+                    <div class="product"> 
+                        <span class="name">P/Nachos</span>
+                        <span class="price" id="QUENA"> </span>
+                    </div>
+                </div>
+                <img id="logo" style="width: 78%; margin-left: 50px;" src="images/logo.png">
+            </div>
+            <div class="col-sm-3" id="fourthColumn">
+                <h3 class="title">Quesos en <br> rebanadas</h3>  
+                <div class="product">                        
+                    <span class="name">Singles</span>
+                    <span class="price" id="SING"> </span>
+                </div>
+                <div class="product">                
+                    <span class="name">Fud Americano</span>
+                    <span class="price" id="QAMEF"> </span>  
+                </div>
+                <div class="product">                        
+                    <span class="name">Fud Manchego</span>
+                    <span class="price" id="PQMA"> </span>
+                </div>
+                <div class="product">                
+                    <span class="name">Villita</span>
+                    <span class="price" id="AMAV"> </span>  
+                </div>
+                <div class="product">                        
+                    <span class="name">Sabino exb</span>
+                    <span class="price" id="EXBSAP"> </span>
+                </div>
+                <div class="product">                
+                    <span class="name">Daisy exb</span>
+                    <span class="price" id="QADEXB"> </span>  
+                </div>
+                <div class="product">                        
+                    <span class="name">Philadelphia</span>
+                    <span class="price" id="PHIR"> </span>
+                </div>
+                <h3 class="title">Quesos Crema</h3>                  
+                <div class="product">                               
+                    <span class="name">Cienega 2k</span>
+                    <span class="price" id="QCRE2"> </span>  
+                </div>
+                <div class="product">                               
+                    <span class="name">La Barca 1k</span>
+                    <span class="price" id="QCRE1"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Villita ½k</span>
+                    <span class="price" id="DCVI"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Philadelphia 190g</span>
+                    <span class="price" id="PH19"> </span>
+                </div>
+                <div class="product">
+                    <span class="name">Philadelphia 1.9k</span>
+                    <span class="price" id="PH1K"> </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+

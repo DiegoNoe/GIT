@@ -200,6 +200,33 @@
 			padding-right: 15px;
 		}
 
+		.pulse {
+			box-shadow: 0 0 0 rgba(204,169,44, 0.4);
+			animation: pulse 1s infinite;
+		}
+
+		@-webkit-keyframes pulse {
+			0% {
+				-webkit-box-shadow: 0 0 0 0 rgba(231, 87, 84, 1);
+			} 70% {
+				-webkit-box-shadow: 0 0 0 6px rgb(229, 57, 53, 1);
+			} 100% {
+				-webkit-box-shadow: 0 0 0 0 rgb(229, 57, 53, 1);
+			}
+		}
+		@keyframes pulse {
+			0% {
+				-moz-box-shadow: 0 0 0 0 rgb(229, 57, 53, 1);
+				box-shadow: 0 0 0 0 rgb(229, 57, 53, 1);
+			} 70% {
+				-moz-box-shadow: 0 0 0 6px rgb(229, 57, 53, 1);
+				box-shadow: 0 0 0 6px rgb(229, 57, 53, 1);
+			} 100% {
+				-moz-box-shadow: 0 0 0 0 rgb(229, 57, 53, 1);
+				box-shadow: 0 0 0 0 rgb(229, 57, 53, 1);
+			}
+		}
+
 	</style>
 </head>
 <body style="zoom: 100%; background-color: white;">
@@ -416,25 +443,23 @@
 					//$("#dynamic-list").on("click", "button", function(e) {$(this).remove();});	
 				});
 			}
-			
+
+			addLongPressListener();
 		}
 
-		var start;
-		var longpress = 1000;
-		$(".break-button").on('mousedown', function(e){
-			start = new Date().getTime();
-		});
-		$(".break-button").on( 'mouseleave', function( e ) {
-			start = 0;
-		});
-		$( ".break-button" ).on( 'mouseup', function( e ) {
-			if (new Date().getTime() >= (start + longpress)) {
-				console.log('long press!');   
-			} else {
-				console.log('short press!');   
-			}
-		});
-		
+		function addLongPressListener() {
+			var start;
+			var longpress = 1000;
+			$(".break-button").on('touchstart', function(e){
+				start = new Date().getTime();
+			});
+			$(".break-button" ).on( 'touchend', function( e ) {
+				if (new Date().getTime() >= (start + longpress))
+					$(this).removeClass("pulse");
+				start = 0;
+			});
+		}
+
 		function manageFirstBreak(event) {
 			if(event.target.style.backgroundColor == "rgb(104, 159, 56)")
 				startBreak(event.target);
@@ -471,6 +496,7 @@
 					breakButton.style.backgroundColor = "#e53935";
 					breakButton.style.color = "white";
 					breakButton.innerText = document.getElementById("time").textContent;
+					breakButton.classList.add("pulse");
 					clearInterval(interval);
 				}
 			}, 60000);
@@ -482,7 +508,6 @@
 			//msg.lang = "es-US";
 			msg.voice = window.speechSynthesis.getVoices()[39]; //15
 			msg.text = name;
-			console.log(window.speechSynthesis.getVoices());
 			window.speechSynthesis.speak(msg);
 			window.speechSynthesis.speak(msg);
 		}
