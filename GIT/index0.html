@@ -530,6 +530,8 @@
                         inputNotes.val("4-4");
                     else if (inputNotes.val() == "5")
                         inputNotes.val("5-5");
+                    else if (inputNotes.val() == "J")
+                        inputNotes.val("JUNTA");
                     $("#quantityInput").focus();
                 }
             });
@@ -744,6 +746,13 @@
 
                     //notes and description
                     doc.setFont("Gill Sans Std Condensed");
+
+                    //if no connection then sign aJamones and aCremas products
+                    //FIX huge if
+                    var aJamonesSpecialProducts = ["RET", "SA", "JAI", "TOI", "JAAA", "JAAN", "JAAR", "JAI", "JAYI", "JAPF", "JAHV"];
+                    if (order[i][5] == "aCremas" || order[i][5] == "aJamones" || aJamonesSpecialProducts.includes(order[i][0]) && order[i][4] != "" || aJamonesSpecialProducts.includes(order[i][0]) && order[i][1] % 1 != 0)
+                        if(document.getElementById("noConnectionAlert").style.display == "block")
+                            order[i][4] = "-ANOTAR- " + order[i][4];
                     if (order[i][4] != "") {
                         //notes and description
                         doc.setFontSize(10);
@@ -780,7 +789,6 @@
                     }
 
                     //send to cremas or jamones with index. some jamones are detected automatically
-                    var aJamonesSpecialProducts = ["RET", "SA", "JAI", "TOI", "JAAA", "JAAN", "JAAR", "JAI", "JAYI", "JAPF", "JAHV"];
                     if (order[i][5] == "aCremas")
                         withPendingProducts = aCremasOrder(order[i], i);
                     else if (order[i][5] == "aJamones")
