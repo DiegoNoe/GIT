@@ -8,6 +8,7 @@
 
     <!-- local style resources -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
 
     <!-- local js resources -->
@@ -64,8 +65,9 @@
             </select>
 
             <!-- interface buttons-->
-            <button type="button" class="btn btn-danger interface-button" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF()">IMPRIMIR&nbsp;<span class="glyphicon glyphicon-user"></span></button>
-            <button type="button" class="btn btn-danger interface-button" id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold;" onclick="generatePDF()">IMPRIMIR&nbsp;<span class="glyphicon glyphicon-phone-alt"></span></button>
+            <button type="button" class="btn btn-danger interface-button" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF()"><span class="glyphicon glyphicon-user"></span></button>
+            <button type="button" class="btn btn-danger interface-button" id="printByWhatsButton" style="float: right; margin-right: 5px; font-weight: bold; -webkit-text-stroke: 1px;" onclick="generatePDF()"><i class="fa fa-whatsapp" style="font-size: 28px; line-height: 22.5px;" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-danger interface-button" id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold;" onclick="generatePDF()"><span class="glyphicon glyphicon-phone-alt"></span></button>
             <button type="button" class="btn btn-secondary interface-button" style="float: right; margin-right: 5px; font-weight: bold;" onclick="addProductModal();">AGREGAR</button>
         </div>
 
