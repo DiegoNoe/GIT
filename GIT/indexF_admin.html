@@ -8,7 +8,6 @@
 
     <!-- local style resources -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
 
     <!-- local js resources -->
@@ -20,7 +19,9 @@
     <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
     <script language="javascript" type="text/javascript" src="js/qrcode.js"></script>
     <script language="javascript" type="text/javascript" src="js/index.js"></script>
-    <script language="javascript" type="text/javascript" src="js/aes.js"></script>
+    <script language="javascript" type="text/javascript" src="js/aes.js"></script> 
+    <script language="javascript" type="text/javascript" src="js/facturama.api.js"></script>
+    <script language="javascript" type="text/javascript" src="js/invoice.js"></script>
 
     <script>
         var products;
@@ -33,17 +34,25 @@
         var globalComputer = "liveView0";
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
 
+        var valuesFacturama = {
+            token: "Y3JlbWVyaWFpbXBlcmlvOnh1dnFvUy16YWpzbzUtbWlyd2Vy",
+            url: "https://apisandbox.facturama.mx/"
+        };
+
+        //VFERNANDO 479F
+
     </script>
 
 </head>
 
-<body>        
+<body>
     <!-- no connection alert -->
     <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
-        <strong> No hay internet. </strong> 
-            Revisa la conexión o el modem. Puedes seguir trabajando pero las cremas, jamones y otros productos no serán enviados a sus departamentos.
+        <strong> No hay internet. </strong>
+        Revisa la conexión o el modem. Puedes seguir trabajando pero las cremas, jamones y otros productos no serán
+        enviados a sus departamentos.
     </div>
-    
+
     <!-- qr code container (invisible) -->
     <div id="qrcode" style="position: absolute; left: -9999px"></div>
 
@@ -51,24 +60,32 @@
     <div class="container-fluid">
         <div class="form-group row first-row" style="padding: 5px 15px">
             <!-- name input -->
-            <div id="inputNameContainer" class="col-md-3" style="padding-left: 0">
-                <input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" id="inputName" maxlength="20" placeholder="NOMBRE"> </input>
+            <div id="inputNameContainer" class="col-md-5" style="padding-left: 0">
+                <input style="float: left; width: 88%; margin-top: 1px;" type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" id="inputName"
+                    maxlength="20" placeholder="NOMBRE"> 
+                </input>
+                <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-plus-sign"
+                    id="addClientButton" style="float:right; font-weight: bold; height: 34px;"
+                    onclick="showAddClientModal()"></button>
             </div>
-            <!-- tomorrow checkbox -->
-            <div class="col-md-2" style="padding-top: 5px; padding-left: 5px;">
-                <input type="checkbox" style="vertical-align: top; margin-top: 4.5px;" class="form-check-input" id="tomorrowCheckbox">
-                <label style="color: gray; margin-bottom: 0px; opacity: .4; line-height: 23px;" class="form-check-label" for="tomorrowCheckbox">&nbsp;MAÑANA</label>
-            </div>
+            
             <!-- employee name input -->
             <select class="col-sm-2 form-control" id="inputEmployeeName">
                 <option disabled selected>ANOTADOR</option>
             </select>
 
             <!-- interface buttons-->
-            <button type="button" class="btn btn-danger interface-button" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF()"><span class="glyphicon glyphicon-user"></span></button>
-            <button type="button" class="btn btn-danger interface-button" id="printByWhatsButton" style="float: right; margin-right: 5px; font-weight: bold; -webkit-text-stroke: 1px;" onclick="generatePDF()"><i class="fa fa-whatsapp" style="font-size: 28px; line-height: 22.5px;" aria-hidden="true"></i></button>
-            <button type="button" class="btn btn-danger interface-button" id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold;" onclick="generatePDF()"><span class="glyphicon glyphicon-phone-alt"></span></button>
-            <button type="button" class="btn btn-secondary interface-button" style="float: right; margin-right: 5px; font-weight: bold;" onclick="addProductModal();">AGREGAR</button>
+            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-user" id="printButton"
+                style="float: right; font-weight: bold;" onclick="generatePDF()"></button>
+            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-phone-alt"
+                id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold;"
+                onclick="generatePDF()"></button>
+            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-circle-arrow-down"
+                id="showInvoiceIdModalButton" style="float: right; margin-right: 5px; font-weight: bold;"
+                onclick="showInvoiceIdModal()"></button>
+            <button type="button" class="btn btn-secondary interface-button"
+                style="float: right; margin-right: 5px; font-weight: bold;"
+                onclick="addProductModal();">AGREGAR</button>
         </div>
 
         <div class="row" style="margin-bottom: 15px">
@@ -78,7 +95,8 @@
             </div>
             <!-- life search box -->
             <div class="col-md-11">
-                <input type="d" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"></input>
+                <input type="d" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()"
+                    placeholder="CLAVE O DESCRIPCION"></input>
             </div>
         </div>
 
@@ -90,7 +108,8 @@
     </div>
 
     <!-- edit / add new product modal -->
-    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
 
@@ -110,22 +129,22 @@
                                 <!-- description -->
                                 <div class="col-sm-8">
                                     <label for="descriptionInput">DESCRIPCION</label>
-                                    <input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" maxlength="38" placeholder="DESCRIPCION"
-                                        required>
+                                    <input oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" maxlength="38" placeholder="DESCRIPCION" required>
                                 </div>
                                 <!-- id -->
                                 <div class="col-sm-4">
                                     <label for="IDInput">CLAVE</label>
-                                    <input id="inputID" oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="CLAVE"
-                                        required>
+                                    <input id="inputID" oninput="this.value = this.value.toUpperCase()"
+                                        class="form-control" type="text" placeholder="CLAVE" required>
                                 </div>
                             </div>
                             <div class="row">
                                 <!-- unit -->
                                 <div class="col-sm-3">
                                     <label for="unitInput">UNIDAD</label>
-                                    <input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="PIEZA, CAJA, KILO..."
-                                        required>
+                                    <input oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" placeholder="PIEZA, CAJA, KILO..." required>
                                 </div>
                                 <!-- cost -->
                                 <div class="col-sm-2">
@@ -152,7 +171,8 @@
                                             <option value="yaPesadoCamara">CAMARA - YA VIENE PESADO</option>
                                             <option value="porPesarAfuera">AFUERA - SE NECESITA PESAR</option>
                                             <option value="yaPesadoAfuera">AFUERA - YA VIENE PESADO</option>
-                                            <option value="yaPesadoAfueraTrino">AFUERA - YA VIENE PESADO - TRINO</option>
+                                            <option value="yaPesadoAfueraTrino">AFUERA - YA VIENE PESADO - TRINO
+                                            </option>
                                             <option value="aJamones">AREA DE JAMONES</option>
                                             <option value="aCremas">AREA DE CREMAS</option>
                                             <option value="aBodega">AREA DE BODEGA</option>
@@ -166,8 +186,220 @@
                 <!-- modal interface buttons (delete is hidden when "add new product" view is active) -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
-                    <button type="button" id="deleteButton" class="btn btn-danger" data-dismiss="modal" onclick="deleteProductDB();" style="display: none">ELIMINAR</button>
-                    <button type="button" class="btn btn-danger" id="saveButton" data-type="newProduct" onclick="verificateNewProduct();">GUARDAR</button>
+                    <button type="button" id="deleteButton" class="btn btn-danger" data-dismiss="modal"
+                        onclick="deleteProductDB();" style="display: none">ELIMINAR</button>
+                    <button type="button" class="btn btn-danger" id="saveButton" data-type="newProduct"
+                        onclick="verificateNewProduct();">GUARDAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="invoiceIdModal" tabindex="-1" role="dialog" aria-labelledby="invoiceIdModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <!-- modal title -->
+                <div class="modal-header">
+                    <h4 class="modal-title" id="invoiceIdModalLabel">BUSCAR NOTA</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="searchOrderForm">
+                        <!-- form -->
+                        <div class="form-group">
+                            <!-- error message div -->
+                            <label id="verificationMessageId" style="color: red;"></label>
+                            <div class="row" style="margin-bottom: 15px;">
+                                <!-- QR code -->
+                                <div class="col-sm-4">
+                                    <label for="idInput">CODIGO DE NOTA</label>
+                                    <input id="invoiceCode" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" maxlength="38" placeholder="ESCANEA EL CODIGO">
+                                </div>
+                                <div class="col-sm-1" style="padding-top: 40px; text-align: center;">
+                                    <label>-Ó-</label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <label for="nameInput">NOMBRE</label>
+                                    <input oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" placeholder="NOMBRE EN NOTA">
+                                </div>
+                                <!-- cost -->
+                                <div class="col-sm-2">
+                                    <label for="totalInput">SUBTOTAL</label>
+                                    <input class="form-control" type="number" min="0" placeholder="TOTAL">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
+                    <button type="button" class="btn btn-danger" id="searchIdButton"
+                        onclick="verificateOrderSearch();">BUSCAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addClientModal" tabindex="-1" role="dialog" aria-labelledby="addClientModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <!-- modal title -->
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addClientModalLabel">NUEVO CLIENTE</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="addClientForm" onsubmit="return verificateNewClient(event)">
+                        <!-- form -->
+                        <div class="form-group">
+                            <!-- error message div -->
+                            <label id="addClientMessage" style="color: red;"></label>
+                            <div class="row" style="margin-bottom: 5px;">
+                                <div class="col-sm-8">
+                                    <label for="nameInput">NOMBRE / RAZÓN SOCIAL</label>
+                                    <input id="nameNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" placeholder="" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="rfcInput">RFC</label>
+                                    <input id="rfcNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" minlength="12" maxlength="13" placeholder="" required>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom: 20px;">
+                                <div class="col-sm-8">
+                                    <label for="emailInput">EMAIL</label>
+                                    <input id="emailNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" placeholder="" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="cfdiUseSelect">USO CFDI</label>
+                                        <select class="form-control" id="cfdiUseNC">
+                                            <option value="G01">G01 - ADQUISICIÓN DE MERCANCIAS</option>
+                                            <option value="G02">G02 - DEVOLUCIONES, DESCUENTOS O BONIFICACIONES</option>
+                                            <option value="G03">G03 - GASTOS EN GENERAL</option>
+                                            <option value="P01">P01 - POR DEFINIR</option>
+                                            <option value="I01">I01 - CONSTRUCCIONES</option>
+                                            <option value="I02">I02 - MOBILARIO Y EQUIPO DE OFICINA</option>
+                                            <option value="I03">I03 - EQUIPO DE TRANSPORTE</option>
+                                            <option value="I04">I04 - EQUIPO DE COMPUTO Y ACCESORIOS</option>
+                                            <option value="I05">I05 - DADOS, TROQUELES, MOLDES Y HERRAMENTAL</option>
+                                            <option value="I06">I06 - COMUNICACIONES TELEFÓNICAS</option>
+                                            <option value="I07">I07 - COMUNICACIONES SATELITALES</option>
+                                            <option value="I08">I08 - OTRA MAQUINARIA Y EQUIPO</option>
+                                            <option value="D01">D01 - HONORARIOS MÉDICOS Y GASTOS HOSPITALARIOS</option>
+                                            <option value="D02">D02 - GASTOS MÉDICOS POR INCAPACIDAD</option>
+                                            <option value="D03">D03 - GASTOS FUNERALES</option>
+                                            <option value="D04">D04 - DONATIVOS</option>
+                                            <option value="D05">D05 - INTERESES REALES</option>
+                                            <option value="D06">D06 - APORTACIONES VOLUNTARIAS AL SAR</option>
+                                            <option value="D07">D07 - PRIMAS POR SEGUROS DE GASTOS MÉDICOS</option>
+                                            <option value="D08">D08 - GASTOS DE TRANSPORTACIÓN ESCOLAR</option>
+                                            <option value="D09">D09 - DEPÓSITOS EN CUENTAS PARA EL AHORRO</option>
+                                            <option value="D10">D10 - PAGOS POR SERVICIOS EDUCATIVOS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom: 5px;">
+                                <div class="col-sm-6">
+                                    <label for="streetInput">CALLE</label>
+                                    <input id="streetNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" placeholder="" required>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="exteriorNumberInput">NUM. EXTERIOR</label>
+                                    <input id="exteriorNumberNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" minlength="12" maxlength="13" placeholder="" required>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="interiorNumberInput">NUM. INTERIOR</label>
+                                    <input id="interiorNumberNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" minlength="12" maxlength="13" placeholder="">
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom: 5px;">
+                                <div class="col-sm-5">
+                                    <label for="neighborhoodInput">COLONIA</label>
+                                    <input id="neighborhoodNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" placeholder="" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="localityInput">LOCALIDAD</label>
+                                    <input id="localityNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" placeholder="">
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="zipcodeInput">CÓDIGO POSTAL</label>
+                                    <input id="zipcodeNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="number" placeholder="" size="5" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <label for="streetInput">MUNICIPIO</label>
+                                    <input id="streetNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                        type="text" placeholder="" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="stateSelect">ESTADO</label>
+                                        <select class="form-control" id="stateNC">
+                                            <option value="JALISCO">JALISCO</option>
+                                            <option value="AGUASCALIENTES">AGUASCALIENTES</option>
+                                            <option value="BAJA CALIFORNIA">BAJA CALIFORNIA</option>
+                                            <option value="BAJA CALIFORNIA SUR">BAJA CALIFORNIA SUR</option>
+                                            <option value="CAMPECHE">CAMPECHE</option>
+                                            <option value="CHIAPAS">CHIAPAS</option>
+                                            <option value="CHIHUAHUA">CHIHUAHUA</option>
+                                            <option value="COAHUILA">COAHUILA</option>
+                                            <option value="COLIMA">COLIMA</option>
+                                            <option value="DISTRITO FEDERAL">DISTRITO FEDERAL</option>
+                                            <option value="CIUDAD DE MEXICO">CIUDAD DE MEXICO</option>
+                                            <option value="DURANGO">DURANGO</option>
+                                            <option value="GUANAJUATO">GUANAJUATO</option>
+                                            <option value="GUERRERO">GUERRERO</option>
+                                            <option value="HIDALGO">HIDALGO</option>
+                                            <option value="MICHOACAN DE OCAMPO">MICHOACAN</option>
+                                            <option value="MORELOS">MORELOS</option>
+                                            <option value="NAYARIT">NAYARIT</option>
+                                            <option value="NUEVO LEON">NUEVO LEON</option>
+                                            <option value="OAXACA">OAXACA</option>
+                                            <option value="PUEBLA">PUEBLA</option>
+                                            <option value="QUERETARO">QUERETARO</option>
+                                            <option value="QUINTANA ROO">QUINTANA ROO</option>
+                                            <option value="SAN LUIS POTOSI">SAN LUIS POTOSI</option>
+                                            <option value="SINALOA">SINALOA</option>
+                                            <option value="SONORA">SONORA</option>
+                                            <option value="TABASCO">TABASCO</option>
+                                            <option value="TAMAULIPAS">TAMAULIPAS</option>
+                                            <option value="TLAXCALA">TLAXCALA</option>
+                                            <option value="VERACRUZ DE IGNACIO DE LA LLAVE">VERACRUZ</option>
+                                            <option value="YUCATAN">YUCATAN</option>
+                                            <option value="ZACATECAS">ZACATECAS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="countrySelect">PAÍS</label>
+                                        <select class="form-control" id="countryNC">
+                                            <option value="MEX">MÉXICO</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
+                    <button type="submit" class="btn btn-danger" id="addClientButton" form="addClientForm">GUARDAR</button>
                 </div>
             </div>
         </div>
@@ -183,12 +415,19 @@
                 $("#quantityInput").focus();
         });
 
+        $("#invoiceCode").on('keyup', function (e) {
+            if (e.keyCode == 13)
+                $("#searchIdButton").click();
+        });
+
+        
+
         //update live view
         $("#inputName").focusout(function () {
             updateName($("#inputName").val());
             updateEmployee($("#inputEmployeeName").val());
         });
-        $("#inputEmployeeName").on('change', function() {updateEmployee($("#inputEmployeeName").val())});
+        $("#inputEmployeeName").on('change', function () { updateEmployee($("#inputEmployeeName").val()) });
 
         //inputQuantity enter sequence
         $("#quantityInput").on('keyup', function (e) {
@@ -264,17 +503,17 @@
 
         function populateEmployees() {
             var empleadosDB;
-			firebase.database().ref("empleados").once('value', function(snapshot) {
-				empleadosDB = snapshot.val();
-			}).then(function(){
-				$.each(empleadosDB, function(key, value) {
+            firebase.database().ref("empleados").once('value', function (snapshot) {
+                empleadosDB = snapshot.val();
+            }).then(function () {
+                $.each(empleadosDB, function (key, value) {
                     var sel = document.getElementById('inputEmployeeName');
                     var opt = document.createElement('option');
                     opt.appendChild(document.createTextNode(key.toUpperCase()));
-                    opt.value = key.toUpperCase(); 
+                    opt.value = key.toUpperCase();
                     sel.appendChild(opt);
-				});
-			});
+                });
+            });
         }
 
         //populates life search list after the result has been processed
@@ -285,15 +524,15 @@
             var searchItem = "";
             //up to 51 results in search bar
             for (var i = 0; i < searchResult.length && i < 51; i++) {
-                if(searchResult[i].existencia == "siHay") {
+                if (searchResult[i].existencia == "siHay") {
                     backgroundColor = "white";
                     color = "#434343";
                     buttonColor = "gray";
-                } else if(searchResult[i].existencia == "noHay") {
+                } else if (searchResult[i].existencia == "noHay") {
                     backgroundColor = "rgba(216, 61, 52, 88%)";
                     color = "white";
                     buttonColor = "#f6f6f6";
-                } else if(searchResult[i].existencia == "pedido") {
+                } else if (searchResult[i].existencia == "pedido") {
                     backgroundColor = "rgba(253, 181, 13, 85%)";
                     color = "#434343";
                     buttonColor = "gray";
@@ -349,11 +588,173 @@
             $('#addProductModal').modal('show');
         }
 
+        $('#invoiceIdModal').on('shown.bs.modal', function() {
+            $('#invoiceCode').focus();
+        });
+
+        $('#invoiceIdModal').on('hidden.bs.modal', function() {
+            $('#invoiceCode').blur();
+        });
+
         //deletes an existing product from the db
         function deleteProductDB() {
             $('#dynamic-list li:first-child').remove();
             var id = document.getElementById("addNewProductDBForm").elements[1].value;
             database.child(id).remove();
+        }
+
+        //shows search ID view
+        function showInvoiceIdModal() {
+            document.getElementById("verificationMessageId").innerHTML = "";
+            emptyForm(document.getElementById("searchOrderForm"), 3);
+            $('#invoiceIdModal').modal('show');
+        }
+
+        //shows search ID view
+        function showAddClientModal() {
+            document.getElementById("addClientMessage").innerHTML = "";
+            document.getElementById("addClientForm").reset();
+            $('#addClientModal').modal('show');
+        }
+
+        //adds the item to the list from a saved order
+        function addProductFromInvoice(product) {
+            var date = (new Date()).getTime();
+
+            var productListItem =
+                '<li class="list-group-item row product-row" data-id="' + product[0] + '" + data-date="' + date + '">' +
+                '<div class="col-sm-1 product-quantity">' +
+                '<input type="number" min="0" class="form-control" value="' + product[1] + '"></input>' +
+                '</div>' +
+                '<div class="col-sm-1 product-info">' + product[2] + '</div>' +
+                '<div class="col-sm-5 product-info">' + product[3] + '</div>' +
+                '<div class="col-sm-4 product-notes-container">' +
+                '<input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control product-notes" maxlength="48" placeholder="NOTAS" value=' + product[4] + '></input>' +
+                '</div>' +
+                '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button cross">' +
+                '<span class="glyphicon glyphicon-remove cross" style="color:grey; padding-top: 3px;"></span>' +
+                '</button>' +
+                '</li>';
+
+            //add list element
+            $('#dynamic-list').append(productListItem);            
+
+            //deleteButton action
+            $("#dynamic-list").on("click", "button", function (e) {
+                e.preventDefault();
+                removeOrderProduct($(this).parent().data("date"));
+                $("#dynamic-list").find("[data-date='" + $(this).parent().data("date") + "']").remove();
+            });
+        }
+
+        function populateOrder(order) {
+            eraseOrder();
+            $("#inputName").val("");
+            $("#inputName").attr("placeholder", order.nombre);
+
+            (function iterateOverProductsWithDelay (i) {          
+                setTimeout(function () {   
+                    addProductFromInvoice(order.productos[order.productos.length - i]);
+                    if (--i) iterateOverProductsWithDelay(i);
+                }, 1)
+            })(order.productos.length);
+           
+        }  
+
+        function searchOrderById(id) {
+            firebase.database().ref("invoice/" + id).once('value', function (snapshot) {
+                if(snapshot.val() != null) {
+                    $('#invoiceIdModal').modal('toggle');
+                    populateOrder(snapshot.val());
+                } else {
+                    emptyForm(document.getElementById("searchOrderForm"), 3);
+                    document.getElementById("verificationMessageId").innerHTML = "NO SE GUARDÓ NINGUNA NOTA CON ESE CODIGO.";
+                }
+            });
+        }
+
+        function searchOrderByName(name, total) {
+            console.log("PENDIENTE");
+            console.log("busco el nombre y total en fb " + name + " " + total);
+
+            console.log("si encontré, cierro el modal y populo mi lista");
+            console.log("si no, borro los inputs y aviso que no encontré el nombre");
+        }
+
+        function addNewClientToFacturama(newClient) {
+            try {
+                Facturama.Clients.Create(newClient), function(result){ 
+                    client = result;
+                });
+            }
+            catch(err) {
+                console.log(err);
+            }
+            
+        };
+
+        function verificateNewClient(e) {
+            e.preventDefault();
+
+            var messageLabel = document.getElementById("addClientMessage");
+            var form = document.getElementById("addClientForm");
+
+            messageLabel.innerHTML = "";
+            var verificated = true;
+
+            //ANY FURTHER VERIFICATION
+
+
+            if(verificated) {
+                var inputs = new Array(13);
+                for (var i = 0; i < inputs.length; i++)
+                    inputs[i] = form.elements[i].value;
+                
+                var newClient = {
+                    "Email": inputs[2],
+                    "Address": {
+                        "Street": inputs[4],
+                        "ExteriorNumber": inputs[5],
+                        "InteriorNumber": inputs[6],
+                        "Neighborhood": inputs[7],
+                        "ZipCode": inputs[9],
+                        "Locality": inputs[8],
+                        "Municipality": inputs[10],
+                        "State": inputs[11],
+                        "Country": inputs[12]
+                    },
+                    "Rfc": inputs[1],
+                    "Name": inputs[0],
+                    "CfdiUse": inputs[3],
+                };
+                
+                addNewClientToFacturama(newClient);
+            }
+            
+            return false;
+        }
+
+        function verificateOrderSearch() {
+            var messageLabel = document.getElementById("verificationMessageId");
+            var form = document.getElementById("searchOrderForm");
+
+            messageLabel.innerHTML = "";
+            var verificated = true;
+
+            var inputs = new Array(3);
+            //{qrcode:0, name:1, total:2}
+            for (var i = 0; i < inputs.length; i++)
+                inputs[i] = form.elements[i].value;
+            
+            if(inputs[0] != "")
+                searchOrderById(inputs[0]);
+            else {
+                if(inputs[1] == "" || inputs[2] == "")
+                    messageLabel.innerHTML = "ESCANEA EL CODIGO O INTRODUCE EL NOMBRE Y EL TOTAL.";
+                else
+                    searchOrderByName(inputs[1], inputs[2]);
+            }
+            
         }
 
         //verificates input of modal form
@@ -472,26 +873,26 @@
 
             var date = (new Date()).getTime();
             var color;
-            if(product.existencia == "siHay")
+            if (product.existencia == "siHay")
                 color = "#434343";
-            else if(product.existencia == "noHay")
+            else if (product.existencia == "noHay")
                 color = "rgba(216, 61, 52, 95%)";
-            else if(product.existencia == "pedido")
+            else if (product.existencia == "pedido")
                 color = "rgba(253, 181, 13, 100%)";
 
             var productListItem =
                 '<li class="list-group-item row product-row" style= "color: ' + color + ';" data-id="' + product.clave + '" + data-date="' + date + '">' +
-                    '<div class="col-sm-1 product-quantity">' +
-                        '<input type="number" min="0" class="form-control" style= "color: ' + color + ';"></input>' +
-                    '</div>' +
-                    '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
-                    '<div class="col-sm-5 product-info">' + product.descripcion + '</div>' +
-                    '<div class="col-sm-4 product-notes-container">' +
-                        '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + ';" class="form-control product-notes" maxlength="48" placeholder="NOTAS"> </input>' +
-                    '</div>' +
-                    '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button cross">' +
-                        '<span class="glyphicon glyphicon-remove cross" style="color:grey; padding-top: 3px;"></span>' +
-                    '</button>' +
+                '<div class="col-sm-1 product-quantity">' +
+                '<input type="number" min="0" class="form-control" style= "color: ' + color + ';"></input>' +
+                '</div>' +
+                '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
+                '<div class="col-sm-5 product-info">' + product.descripcion + '</div>' +
+                '<div class="col-sm-4 product-notes-container">' +
+                '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + ';" class="form-control product-notes" maxlength="48" placeholder="NOTAS"> </input>' +
+                '</div>' +
+                '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button cross">' +
+                '<span class="glyphicon glyphicon-remove cross" style="color:grey; padding-top: 3px;"></span>' +
+                '</button>' +
                 '</li>';
 
             //add list element
@@ -540,8 +941,8 @@
 
             //upload or update order item
             uploadOrderProduct(date, outterQuantity, product.unidad, product.descripcion, "", product.costo, product.existencia, product.tipo);
-            inputQuantity.focusout(function () {updateOrderProductQuantity(date, inputQuantity.val())});
-            inputNotes.focusout(function () {updateOrderProductNotes(date, inputNotes.val())});
+            inputQuantity.focusout(function () { updateOrderProductQuantity(date, inputQuantity.val()) });
+            inputNotes.focusout(function () { updateOrderProductNotes(date, inputNotes.val()) });
 
             //deleteButton action
             $("#dynamic-list").on("click", "button", function (e) {
@@ -555,7 +956,7 @@
         function getOrderProducts() {
             verificatedOrder = true;
             var typesSequence = ["porPesarCamara", "yaPesadoCamara", "porPesarAfuera", "yaPesadoAfuera", "yaPesadoAfueraTrino", "aCremas", "aJamones", "aBodega"];
-            
+
             var newOrder = [];
 
             //iterates over order types to divide them
@@ -583,12 +984,12 @@
                         }
                     }
                 });
-                
+
                 orderTypeSection.sort(compareOrders);
-                if(orderTypeSection.length > 0)
-                    for(var i in orderTypeSection)
+                if (orderTypeSection.length > 0)
+                    for (var i in orderTypeSection)
                         newOrder.push(orderTypeSection[i]);
-                
+
             }
 
             return newOrder;
@@ -702,7 +1103,7 @@
                     doc.setPage(pagesQuantity * 2 - 1);
                     doc.text(13 + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "center");
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(13  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "center");
+                    doc.text(13 + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "center");
 
                     //if product is being supplied by suppliers then draw cirlce
                     if (order[i][5] == "porPesarCamara" || order[i][5] == "yaPesadoCamara") {
@@ -730,7 +1131,7 @@
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .3, totalProduct.toLocaleString('en-US'));
                         doc.setDrawColor(255, 0, 0);
-                        doc.line(128 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8, 135  + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8);
+                        doc.line(128 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8, 135 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8);
                         doc.setDrawColor(0, 0, 0);
 
                         doc.setPage(pagesQuantity * 2);
@@ -739,7 +1140,7 @@
                         doc.line(128 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8, 135 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8);
                         doc.setDrawColor(0, 0, 0);
                     }
-                    
+
                     //calculating current total
                     if (order[i][1] < 0)
                         total += product[0].costo * order[i][1] * (-1);
@@ -753,7 +1154,7 @@
                     //FIX huge if
                     var aJamonesSpecialProducts = ["RET", "SA", "JAI", "TOI", "JAAA", "JAAN", "JAAR", "JAI", "JAYI", "JAPF", "JAHV"];
                     if (order[i][5] == "aCremas" || order[i][5] == "aJamones" || aJamonesSpecialProducts.includes(order[i][0]) && order[i][4] != "" || aJamonesSpecialProducts.includes(order[i][0]) && order[i][1] % 1 != 0)
-                        if(document.getElementById("noConnectionAlert").style.display == "block")
+                        if (document.getElementById("noConnectionAlert").style.display == "block")
                             order[i][4] = "-ANOTAR- " + order[i][4];
                     if (order[i][4] != "") {
                         //notes and description
@@ -797,7 +1198,7 @@
                         withPendingProducts = aJamonesOrder(order[i], i);
                     else if (order[i][5] == "aBodega")
                         withPendingProducts = aBodegaOrder(order[i], i);
-                    else if (aJamonesSpecialProducts.includes(order[i][0]) && order[i][4] != "") 
+                    else if (aJamonesSpecialProducts.includes(order[i][0]) && order[i][4] != "")
                         withPendingProducts = aJamonesOrder(order[i], i);
                     else if (aJamonesSpecialProducts.includes(order[i][0]) && order[i][1] % 1 != 0) {
                         var tempProduct = order[i];
@@ -809,7 +1210,7 @@
                 }
 
                 //POSIBLE FEATURE analytics
-                    //firebase.database().ref('pendingOrders/' + orderRefID + '/total').set(total);
+                //firebase.database().ref('pendingOrders/' + orderRefID + '/total').set(total);
 
                 //if calculable then total
                 doc.setFont("Gill Sans MT Condensed Negrita");
@@ -822,43 +1223,46 @@
 
                 if (calculable) {
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(119 + xOffset, 207.5  + yOffset, total.toLocaleString('en-US'), "center");
+                    doc.text(119 + xOffset, 207.5 + yOffset, total.toLocaleString('en-US'), "center");
                     doc.setDrawColor(0, 0, 0);
-                    doc.line(102 + xOffset, 194.5  + yOffset, 135 + xOffset, 194.5  + yOffset);
+                    doc.line(102 + xOffset, 194.5 + yOffset, 135 + xOffset, 194.5 + yOffset);
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(119 + xOffset, 207.5  + yOffset, total.toLocaleString('en-US'), "center");
-                    doc.line(102 + xOffset, 194.5  + yOffset, 135 + xOffset, 194.5  + yOffset);
+                    doc.text(119 + xOffset, 207.5 + yOffset, total.toLocaleString('en-US'), "center");
+                    doc.line(102 + xOffset, 194.5 + yOffset, 135 + xOffset, 194.5 + yOffset);
 
                     //generates QR code with total embeded in
-                    for(var i = 1; i <= pagesQuantity * 2; i++) {
+                    for (var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
                         productsRefID = randomLetter1 + $("#inputName").val().trim() + " " + total.replace(/,/g, '') + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 6 + xOffset, 194  + yOffset, 15, 15);
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 6 + xOffset, 194 + yOffset, 15, 15);
                     }
                 } else {
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(119 + xOffset, 197.5  + yOffset, total.toLocaleString('en-US'), "center");
+                    doc.text(119 + xOffset, 197.5 + yOffset, total.toLocaleString('en-US'), "center");
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(119 + xOffset, 197.5  + yOffset, total.toLocaleString('en-US'), "center");
+                    doc.text(119 + xOffset, 197.5 + yOffset, total.toLocaleString('en-US'), "center");
 
                     //generates QR code with total embeded in
-                    for(var i = 1; i <= pagesQuantity * 2; i++) {
+                    for (var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
                         productsRefID = randomLetter1 + $("#inputName").val().trim() + " " + total.replace(/,/g, '') + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 6 + xOffset, 194  + yOffset, 15, 15);
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 6 + xOffset, 194 + yOffset, 15, 15);
                     }
                 }
 
                 //set pending products id (the one embeded in the qr code)
-                if(withPendingProducts)
+                if (withPendingProducts)
                     firebase.database().ref('pendingOrders/' + orderRefID + '/id').set(productsRefID);
                 else
                     firebase.database().ref('pendingOrders/' + orderRefID).remove();
 
+                if (event.srcElement.id == "printWithInvoiceButton")
+                    uploadCompleteOrder(replaceAEIOUN($("#inputName").val().trim()), order, total, productsRefID);
+
                 //autoprints PDF in a new tab
                 doc.autoPrint();
                 window.open(doc.output('bloburl'), '_blank');
- 
+
                 //survey values
                 increaseEmployeeCounter($("#inputEmployeeName").val());
                 uploadSurvey(surveyValues);
@@ -869,9 +1273,17 @@
             }
         }
 
+        function uploadCompleteOrder(name, products, total, id) {
+            firebase.database().ref("invoice/" + id).set({
+                nombre: name,
+                productos: products,
+                subtotal: total
+            });
+        }
+
         function increaseEmployeeCounter(employee) {
-            firebase.database().ref("registro/" + employee + "/pedidos").once('value', function(snapshot) {
-                if(snapshot.val() == null)
+            firebase.database().ref("registro/" + employee + "/pedidos").once('value', function (snapshot) {
+                if (snapshot.val() == null)
                     firebase.database().ref("registro/" + employee + "/pedidos").set(1);
                 else
                     firebase.database().ref("registro/" + employee + "/pedidos").set(snapshot.val() + 1);
@@ -879,8 +1291,8 @@
         }
 
         function increaseEmployeeCounterPhone(employee) {
-            firebase.database().ref("registro/" + employee + "/pedidosTelefonicos").once('value', function(snapshot) {
-                if(snapshot.val() == null)
+            firebase.database().ref("registro/" + employee + "/pedidosTelefonicos").once('value', function (snapshot) {
+                if (snapshot.val() == null)
                     firebase.database().ref("registro/" + employee + "/pedidosTelefonicos").set(1);
                 else
                     firebase.database().ref("registro/" + employee + "/pedidosTelefonicos").set(snapshot.val() + 1);
@@ -910,7 +1322,7 @@
             doc.text(19.9 + xOffset, 38.5 + yOffset, fullDate, 'center');
 
             var hourWithMinutes = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-            doc.text(53.5  + xOffset, 38.5  + yOffset, hourWithMinutes, 'center');
+            doc.text(53.5 + xOffset, 38.5 + yOffset, hourWithMinutes, 'center');
         }
 
         function addMethodPDF(doc) {
@@ -920,19 +1332,25 @@
             //special mark if the order is for the next day
             if ($("#tomorrowCheckbox").is(':checked')) {
                 doc.setTextColor(255, 0, 0);
-                doc.text(87 + xOffset, 38.5  + yOffset, "MANANA", 'center');
+                doc.text(87 + xOffset, 38.5 + yOffset, "MANANA", 'center');
                 doc.setTextColor(0, 0, 0);
-            } else if(event.srcElement.id == "printByPhoneButton")
-                doc.text(87 + xOffset, 38.5  + yOffset, "TELEFONO", 'center');
-            else if(event.srcElement.id == "printByWhatsButton")
-                doc.text(87 + xOffset, 38.5  + yOffset, "WHATSAPP", 'center');
+            } else if (event.srcElement.id == "printByPhoneButton")
+                doc.text(87 + xOffset, 38.5 + yOffset, "TELEFONO", 'center');
+            else if (event.srcElement.id == "printByWhatsButton")
+                doc.text(87 + xOffset, 38.5 + yOffset, "WHATSAPP", 'center');
             else
-                doc.text(87 + xOffset, 38.5  + yOffset, "MOSTRADOR", 'center');
+                doc.text(87 + xOffset, 38.5 + yOffset, "MOSTRADOR", 'center');
 
             //special counter if the order was made by phone
-            if(event.srcElement.id == "printByPhoneButton") {
+            if (event.srcElement.id == "printByPhoneButton") {
                 increaseEmployeeCounterPhone($("#inputEmployeeName").val());
                 firebase.database().ref(globalComputer + '/phoneOrder').set(true);
+            }
+
+            if (event.srcElement.id == "printWithInvoiceButton") {
+                doc.setFontSize(29);
+                doc.setFont("Gill Sans MT Condensed Negrita");
+                doc.text(130 + xOffset, 28 + yOffset, "F", "center");
             }
 
         }
@@ -943,11 +1361,11 @@
 
             doc.setFontSize(29);
             doc.setFont("Gill Sans MT Condensed Negrita");
-            doc.text(70 + xOffset, 28  + yOffset, replaceAEIOUN(name), "center");
+            doc.text(70 + xOffset, 28 + yOffset, replaceAEIOUN(name), "center");
 
             doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
-            doc.text(43 + xOffset, 195.5  + yOffset, replaceAEIOUN($("#inputEmployeeName").val()));
+            doc.text(43 + xOffset, 195.5 + yOffset, replaceAEIOUN($("#inputEmployeeName").val()));
         }
 
         //draws circle besides the description
@@ -957,7 +1375,7 @@
             else if (validColor == "red")
                 doc.setFillColor(255, 0, 0);
 
-            doc.circle(5  + xOffset, YCoordinate - 1.7, .8, 'F');
+            doc.circle(5 + xOffset, YCoordinate - 1.7, .8, 'F');
         }
 
         //replaces special characters (current jspdf doesn´t support them)
@@ -1017,11 +1435,11 @@
             for (var i = 0; i < surveyValues.length; i++) {
                 let key = toAES(surveyValues[i][0]);
                 let sale = surveyValues[i][1];
-                firebase.database().ref('survey/' + key).once('value', function(snapshot) {
+                firebase.database().ref('survey/' + key).once('value', function (snapshot) {
                     var aes = snapshot.key;
                     var current = snapshot.val();
                     var num = parseInt(current, 16) + sale;
-                    
+
                     firebase.database().ref('survey/' + aes).set(num.toString(16));
                 });
             }
@@ -1074,7 +1492,7 @@
             var time = new Date();
             if ($("#tomorrowCheckbox").is(':checked'))
                 productOrder[4] = "MAÑANA " + productOrder[4];
-            
+
             var productJSON = {
                 id: productOrder[0],
                 quantity: productOrder[1],
@@ -1084,7 +1502,7 @@
                 hour: time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
             };
             var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aCremas').push(productJSON);
-            firebase.database().ref('aCremas/pendientes/' + productRef.key ).set(productJSON);
+            firebase.database().ref('aCremas/pendientes/' + productRef.key).set(productJSON);
             return true;
         }
 
@@ -1093,7 +1511,7 @@
             var time = new Date();
             if ($("#tomorrowCheckbox").is(':checked'))
                 productOrder[4] = "MAÑANA " + productOrder[4];
-            
+
             var productJSON = {
                 id: productOrder[0],
                 quantity: productOrder[1],
@@ -1103,7 +1521,7 @@
                 hour: time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
             };
             var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aJamones').push(productJSON);
-            firebase.database().ref('aJamones/pendientes/' + productRef.key ).set(productJSON);
+            firebase.database().ref('aJamones/pendientes/' + productRef.key).set(productJSON);
             return true;
         }
 
@@ -1112,7 +1530,7 @@
             var time = new Date();
             if ($("#tomorrowCheckbox").is(':checked'))
                 productOrder[4] = "MAÑANA " + productOrder[4];
-            
+
             var productJSON = {
                 id: productOrder[0],
                 quantity: productOrder[1],
@@ -1122,14 +1540,18 @@
                 hour: time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
             };
             var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aBodega').push(productJSON);
-            firebase.database().ref('aBodega/pendientes/' + productRef.key ).set(productJSON);
+            firebase.database().ref('aBodega/pendientes/' + productRef.key).set(productJSON);
             return true;
         }
 
         //leaves the page ready for a new order
         function eraseOrder() {
             $("#inputName").val("");
+            $("#quantityInput").val("");
+            $("#inputSearch").val("");
+            $("#searchOptions").empty();
             $("#dynamic-list").html("");
+            $("#dynamic-list").css("opacity", "1");
             $('#tomorrowCheckbox').prop('checked', false);
         }
 

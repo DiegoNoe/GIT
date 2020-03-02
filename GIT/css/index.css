@@ -10,6 +10,12 @@
     src: url(GillSansStd-Condensed.otf);
 }
 
+@font-face {
+    font-family: fontawesome-webfont;
+    font-style: normal;
+    src: url(fontawesome-webfont.ttf);
+}
+
 .container-fluid {
     margin-top: 1%;
     margin-left: 10%;
@@ -19,11 +25,11 @@
     font-family: GillSansMTCondensedBold;
 }
 
-#addProductModal {
+#addProductModal, #invoiceIdModal, #addClientModal{
     font-family: GillSansMTCondensedBold;
 }
 
-#addProductModalLabel {
+#addProductModalLabel, #invoiceIdModalLabel, #addClientModalLabel {
     font-size: 25px !important;
     line-height: 25px;
 }

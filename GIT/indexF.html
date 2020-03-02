@@ -8,7 +8,6 @@
 
     <!-- local style resources -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
 
     <!-- local js resources -->
@@ -21,6 +20,8 @@
     <script language="javascript" type="text/javascript" src="js/qrcode.js"></script>
     <script language="javascript" type="text/javascript" src="js/index.js"></script>
     <script language="javascript" type="text/javascript" src="js/aes.js"></script>
+    <script language="javascript" type="text/javascript" src="js/facturama.api.js"></script>
+
 
     <script>
         var products;
@@ -65,9 +66,9 @@
             </select>
 
             <!-- interface buttons-->
-            <button type="button" class="btn btn-danger interface-button" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF()"><span class="glyphicon glyphicon-user"></span></button>
-            <button type="button" class="btn btn-danger interface-button" id="printByWhatsButton" style="float: right; margin-right: 5px; font-weight: bold; -webkit-text-stroke: 1px;" onclick="generatePDF()"><i class="fa fa-whatsapp" style="font-size: 28px; line-height: 22.5px;" aria-hidden="true"></i></button>
-            <button type="button" class="btn btn-danger interface-button" id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold;" onclick="generatePDF()"><span class="glyphicon glyphicon-phone-alt"></span></button>
+            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-user" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF()"></button>
+            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-phone-alt" id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold;" onclick="generatePDF()"></button>
+            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-list-alt" id="printWithInvoiceButton" style="float: right; margin-right: 5px; font-weight: bold;" onclick="generatePDF()"></button>
             <button type="button" class="btn btn-secondary interface-button" style="float: right; margin-right: 5px; font-weight: bold;" onclick="addProductModal();">AGREGAR</button>
         </div>
 
@@ -855,6 +856,9 @@
                 else
                     firebase.database().ref('pendingOrders/' + orderRefID).remove();
 
+                if(event.srcElement.id == "printWithInvoiceButton")
+                    uploadCompleteOrder(replaceAEIOUN($("#inputName").val().trim()), order, total, productsRefID);
+
                 //autoprints PDF in a new tab
                 doc.autoPrint();
                 window.open(doc.output('bloburl'), '_blank');
@@ -867,6 +871,14 @@
                 eraseOrder();
                 finishOrderProducts(true);
             }
+        }
+
+        function uploadCompleteOrder(name, products, total, id) {
+            firebase.database().ref("invoice/" + id).set({
+                nombre: name,
+                productos: products,
+                subtotal: total
+            });
         }
 
         function increaseEmployeeCounter(employee) {
@@ -933,6 +945,12 @@
             if(event.srcElement.id == "printByPhoneButton") {
                 increaseEmployeeCounterPhone($("#inputEmployeeName").val());
                 firebase.database().ref(globalComputer + '/phoneOrder').set(true);
+            }
+
+            if(event.srcElement.id == "printWithInvoiceButton") {
+                doc.setFontSize(29);
+                doc.setFont("Gill Sans MT Condensed Negrita");
+                doc.text(130 + xOffset, 28  + yOffset, "F", "center");
             }
 
         }

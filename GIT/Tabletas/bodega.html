@@ -229,9 +229,13 @@
                     e.preventDefault();
                     $(this).remove();
                 });
+
+                playSound();
                 
-                if(!snapshot.child("porSurtir").val())
-                    justSpeak(formatProductToSpeech(snapshot));
+                if(snapshot.child("porSurtir").val()) {
+                    console.log("siempre no, desde por surtir");
+                    speakOnce("siempre no");
+                }
             });
 
             database.child("pendientes").on('child_removed', function(snapshot) {
@@ -240,8 +244,10 @@
             });
 
             database.child("hechas").on('child_added', function(snapshot) {
-                if(snapshot.child("porSurtir").exists())
+                if(snapshot.child("porSurtir").exists()){
+                    console.log("siempre no, pero desde un surtidas");
                     speakOnce("siempre no");
+                }
             });
         }
 
@@ -312,6 +318,8 @@
                     e.preventDefault();
                     $(this).remove();
                 });
+
+                justSpeak(formatProductToSpeech(snapshot));
             });
 
             database.child("porEntregar").on('child_removed', function(snapshot) {
@@ -475,7 +483,7 @@
             msg.rate = .95;
             //msg.voice = window.speechSynthesis.getVoices()[36]; //15
             msg.text = message;
-            window.speechSynthesis.speak(msg);
+            setTimeout(window.speechSynthesis.speak(msg), 2000);
         }
 
         var globalSpeaking = false;
