@@ -104,6 +104,33 @@ input, button:not(.cross), label, span:not(.cross) {
     padding-bottom: 5px;
 }
 
+.client-options {
+    position: absolute;
+    z-index: 2;
+    left: 0px;
+    right: -1px;
+    top: 50px;
+    overflow-y: scroll;
+    max-height: 550px;
+    padding-left: 15px;
+}
+
+#greenCheck {
+    color: #5cb85c;
+    z-index: 1;
+    position: absolute;
+    right: 80px;
+    top: 7px;
+    visibility: hidden;
+}
+
+.client-options-item {
+    padding-top: 4px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 .product-row {
     margin-left: 0px;
     margin-right: 0px;

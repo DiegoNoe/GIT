@@ -24,13 +24,20 @@
     <script language="javascript" type="text/javascript" src="js/invoice.js"></script>
 
     <script>
-        var products;
-        var orderRefID = "";
+        var products,
+            defiantClients;
+        var orderRefID = "",
+            clientName = "",
+            clientRFC = "",
+            clientCfdiUse = "",
+            clientEmail = "";
+        
         firebase.initializeApp(connectFB());
         var database = firebase.database().ref('productos/');
         database.on('value', function (snapshot) {
             products = Defiant.getSnapshot(snapshot.val());
         });
+
         var globalComputer = "liveView0";
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
 
@@ -39,7 +46,30 @@
             url: "https://apisandbox.facturama.mx/"
         };
 
-        //VFERNANDO 479F
+        Facturama.Clients.List(function(result) { 
+            defiantClients = Defiant.getSnapshot(result);
+        });
+
+        var taxedProducts;
+        var iepsProducts = [],
+            ivaProducts = [];
+
+        firebase.database().ref('impuestos/ieps').once('value', function (snapshot) {
+            taxedProducts = snapshot.val();
+        }).then(function () {
+            $.each(taxedProducts, function (key, value) {
+                iepsProducts.push(key);
+            });
+        });
+
+        firebase.database().ref('impuestos/iva').once('value', function (snapshot) {
+            taxedProducts = snapshot.val();
+        }).then(function () {
+            $.each(taxedProducts, function (key, value) {
+                ivaProducts.push(key);
+            });
+        });
+
 
     </script>
 
@@ -60,27 +90,25 @@
     <div class="container-fluid">
         <div class="form-group row first-row" style="padding: 5px 15px">
             <!-- name input -->
-            <div id="inputNameContainer" class="col-md-5" style="padding-left: 0">
-                <input style="float: left; width: 88%; margin-top: 1px;" type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" id="inputName"
-                    maxlength="20" placeholder="NOMBRE"> 
+            <div id="inputNameContainer" class="col-md-7" style="padding-left: 0">
+                <input style="float: left; width: 91.5%; margin-top: 1px; padding-right: 36px;" type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" id="inputName" 
+                    placeholder="NOMBRE"> 
                 </input>
                 <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-plus-sign"
                     id="addClientButton" style="float:right; font-weight: bold; height: 34px;"
-                    onclick="showAddClientModal()"></button>
+                    onclick="showAddClientModal()">
+                </button>
+                <ul class="list-group client-options" id="clientOptions"></ul>
+                <span id="greenCheck" class="glyphicon glyphicon-ok"></span>
             </div>
-            
-            <!-- employee name input -->
-            <select class="col-sm-2 form-control" id="inputEmployeeName">
-                <option disabled selected>ANOTADOR</option>
-            </select>
 
             <!-- interface buttons-->
-            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-user" id="printButton"
-                style="float: right; font-weight: bold;" onclick="generatePDF()"></button>
-            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-phone-alt"
-                id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold;"
-                onclick="generatePDF()"></button>
-            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-circle-arrow-down"
+            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-send" id="sendInvoiceButton"
+                style="float: right; font-weight: bold;" onclick="generateInvoice()"></button>
+            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-print"
+                id="printInvoiceButton" style="float: right; margin-right: 5px; font-weight: bold;"
+                onclick="generateInvoice()"></button>
+            <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-circle-arrow-down"
                 id="showInvoiceIdModalButton" style="float: right; margin-right: 5px; font-weight: bold;"
                 onclick="showInvoiceIdModal()"></button>
             <button type="button" class="btn btn-secondary interface-button"
@@ -93,7 +121,7 @@
             <div class="col-md-1" style="padding-right: 0px">
                 <input type="number" min="0" id="quantityInput" class="form-control"></input>
             </div>
-            <!-- life search box -->
+            <!-- live search box -->
             <div class="col-md-11">
                 <input type="d" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()"
                     placeholder="CLAVE O DESCRIPCION"></input>
@@ -133,24 +161,37 @@
                                         type="text" maxlength="38" placeholder="DESCRIPCION" required>
                                 </div>
                                 <!-- id -->
-                                <div class="col-sm-4">
+                                <div class="col-sm-2">
                                     <label for="IDInput">CLAVE</label>
                                     <input id="inputID" oninput="this.value = this.value.toUpperCase()"
                                         class="form-control" type="text" placeholder="CLAVE" required>
                                 </div>
+                                <!-- SAT id -->
+                                <div class="col-sm-2">
+                                    <label for="SATInput">SAT</label>
+                                    <input id="inputID" oninput="this.value = this.value.toUpperCase()"
+                                        class="form-control" type="text" placeholder="CODIGO" required>
+                                </div>
                             </div>
                             <div class="row">
-                                <!-- unit -->
-                                <div class="col-sm-3">
-                                    <label for="unitInput">UNIDAD</label>
-                                    <input oninput="this.value = this.value.toUpperCase()" class="form-control"
-                                        type="text" placeholder="PIEZA, CAJA, KILO..." required>
-                                </div>
                                 <!-- cost -->
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <label for="priceInput">COSTO</label>
                                     <input class="form-control" type="number" min="0" placeholder="8.50" required>
                                 </div>
+                                <!-- unit -->
+                                <div class="col-sm-2">
+                                   <div class="form-group">
+                                       <label for="unitSelect">UNIDAD</label>
+                                       <select class="form-control" id="unitSelect">
+                                           <option value="PIEZA" selected>PIEZA</option>
+                                           <option value="KILO">KILO</option>
+                                           <option value="CAJA">CAJA</option>
+                                           <option value="PROMO">PROMO</option>
+                                           <option value="CUB">CUB</option>
+                                       </select>
+                                   </div>
+                               </div>
                                 <!-- stock -->
                                 <div class="col-sm-3">
                                     <div class="form-group">
@@ -315,12 +356,12 @@
                                 <div class="col-sm-3">
                                     <label for="exteriorNumberInput">NUM. EXTERIOR</label>
                                     <input id="exteriorNumberNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
-                                        type="text" minlength="12" maxlength="13" placeholder="" required>
+                                        type="text" placeholder="" required>
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="interiorNumberInput">NUM. INTERIOR</label>
                                     <input id="interiorNumberNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
-                                        type="text" minlength="12" maxlength="13" placeholder="">
+                                        type="text" placeholder="">
                                 </div>
                             </div>
                             <div class="row" style="margin-bottom: 5px;">
@@ -399,7 +440,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
-                    <button type="submit" class="btn btn-danger" id="addClientButton" form="addClientForm">GUARDAR</button>
+                    <button type="button" id="deleteClientButton" class="btn btn-danger" onclick="deleteClient();" style="display: none">ELIMINAR</button>
+                    <button type="submit" class="btn btn-danger" id="addClientButton" data-type="newClient" form="addClientForm">GUARDAR</button>
+
                 </div>
             </div>
         </div>
@@ -407,7 +450,12 @@
 
     <script>
 
-        populateEmployees();
+        //populateEmployees();
+
+        $(document).on('click', function(e) {
+            if (e.target.id != 'inputName' && e.target.id != 'clientOptions')
+                $("#clientOptions").empty();
+        });
 
         //inputName on enter sequence
         $("#inputName").on('keyup', function (e) {
@@ -420,14 +468,12 @@
                 $("#searchIdButton").click();
         });
 
-        
-
         //update live view
         $("#inputName").focusout(function () {
             updateName($("#inputName").val());
-            updateEmployee($("#inputEmployeeName").val());
+            //updateEmployee($("#inputEmployeeName").val());
         });
-        $("#inputEmployeeName").on('change', function () { updateEmployee($("#inputEmployeeName").val()) });
+        //$("#inputEmployeeName").on('change', function () { updateEmployee($("#inputEmployeeName").val()) });
 
         //inputQuantity enter sequence
         $("#quantityInput").on('keyup', function (e) {
@@ -477,6 +523,7 @@
                         }
                     }
                 }
+                
                 //search just one word (posible id)
                 else {
                     if ($('#inputSearch').val() != "") {
@@ -491,14 +538,57 @@
                 $("#searchOptions").empty();
                 if ($('#inputSearch').val() != "") {
                     $("#dynamic-list").css("opacity", "0.25");
-                    populateLifeSearchList(searchResult);
+                    populateLiveSearchList(searchResult);
 
                     //on enter the first search item is selected
                     if (e.keyCode == 13 && searchResult.length > 0)
                         addProduct(searchResult[0]);
                 } else
                     $("#dynamic-list").css("opacity", "1");
+                
             }
+        });
+        
+        //inputName search onkeyup (life search action) SEARCH CLIENTS
+        $("#inputName").on('keyup', function (e) {
+            clientName = "";
+            clientRFC = "";
+            clientCfdiUse = "";
+            clientEmail = "";
+
+            $("#greenCheck").css("visibility", "hidden");
+            var searchResult;
+            var inputSearchValue = $('#inputName').val();
+            //search two or more words (imposible rfc)
+            if (inputSearchValue.includes(" ")) {
+                inputSearchValue = inputSearchValue.split(" ");
+                for (i = 0; i < inputSearchValue.length; i++) {
+                    if (inputSearchValue[i] != "") {
+                        if (searchResult == null)
+                            searchResult = JSON.search(defiantClients, '//*[contains(Name, "' + inputSearchValue[i] + '")]' + '|//*[contains(Rfc, "' + inputSearchValue[i] + '")]');
+                        else
+                            searchResult = JSON.search(searchResult, '//*[contains(Name, "' + inputSearchValue[i] + '")]' + '|//*[contains(Rfc, "' + inputSearchValue[i] + '")]');
+                    }
+                }
+            }
+            //search just one word (posible rfc)
+            else {
+                if ($('#inputName').val() != "")
+                    searchResult = JSON.search(defiantClients, '//*[contains(Name, "' + inputSearchValue + '")]' + '|//*[contains(Rfc, "' + inputSearchValue + '")]');
+            }
+
+            //loads the results into the list
+            $("#clientOptions").empty();
+            if ($('#inputName').val() != "") {
+                //$("#dynamic-list").css("opacity", "0.25");
+                populateLiveClientList(searchResult);
+
+                //on enter the first search item is selected
+                if (e.keyCode == 13 && searchResult.length > 0)
+                    addClientObjectGetter(searchResult[0].Id);
+            }// else
+                //$("#dynamic-list").css("opacity", "1");
+    
         });
 
         function populateEmployees() {
@@ -516,8 +606,25 @@
             });
         }
 
+        //populates client search list after the result has been processed
+        function populateLiveClientList(searchResult) {
+            var clientItem = "";
+            //up to 51 results in search bar
+            for (var i = 0; i < searchResult.length && i < 51; i++) {
+                clientItem =
+                    '<button class="list-group-item row btn-default client-options-item" onclick="addClientObjectGetter(&#39;' + searchResult[i].Id + '&#39;)">' +
+                    '<div class="col-sm-3" style="padding-left: 12px;">' + searchResult[i].Rfc + '</div>' +
+                    '<div class="col-sm-8" style="padding-left: 20px; padding-right: 0px;">' + searchResult[i].Name + '</div>' +
+                    '<div type="button" class="btn btn-sm col-sm-1" onclick="editClientModal(&#39;' + searchResult[i].Id + '&#39;)"> ' + 
+                        '<span style="color:grey;font-size:20px; line-height:96%;">&nbsp;&nbsp;&#9998;</span>' +
+                    '</div>' +
+                    '</button>';
+                $("#clientOptions").append(clientItem);
+            }
+        }
+
         //populates life search list after the result has been processed
-        function populateLifeSearchList(searchResult) {
+        function populateLiveSearchList(searchResult) {
             var backgroundColor,
                 color,
                 buttonColor;
@@ -553,6 +660,42 @@
         }
 
         //edit or delete product modal values
+        function editClientModal(id) {
+            document.getElementById("addClientModalLabel").innerHTML = "EDITAR CLIENTE";
+            document.getElementById("verificationMessage").innerHTML = "";
+            document.getElementById("addClientForm").reset();
+            document.getElementById("deleteClientButton").style.display = "inline";
+
+            var clientToEdit = JSON.search(defiantClients, '//*[contains(Id, "' + id + '")]')[0];
+            var form = document.getElementById("addClientForm");
+
+            form.elements[0].value = clientToEdit.Name;
+            form.elements[1].value = clientToEdit.Rfc;
+            form.elements[2].value = clientToEdit.Email;
+            $("#cfdiUseNC").val(clientToEdit.CfdiUse);
+            form.elements[4].value = clientToEdit.Address.Street;
+            form.elements[5].value = clientToEdit.Address.ExteriorNumber;
+            form.elements[6].value = clientToEdit.Address.InteriorNumber;
+            form.elements[7].value = clientToEdit.Address.Neighborhood;
+            form.elements[8].value = clientToEdit.Address.Locality;
+            form.elements[9].value = clientToEdit.Address.ZipCode;
+            form.elements[10].value = clientToEdit.Address.Municipality;
+            $("#stateNC").val(clientToEdit.Address.State);
+            if($("#countryNC").val() == "MEXICO")
+                $("#countryNC").val("MEX");
+
+            for(var i = 0; i < form.elements.length; i++) {
+                if(form.elements[i].value == undefined || form.elements[i].value == "undefined")
+                    form.elements[i].value = "";
+            } 
+
+            $('#addClientButton').data("type", "editClient");
+            $('#addClientButton').data("id", id);
+
+            $('#addClientModal').modal('show');
+        }
+
+        //edit or delete product modal values
         function editProductModal(id) {
             document.getElementById("addProductModalLabel").innerHTML = "EDITAR PRODUCTO";
             document.getElementById("inputID").disabled = true;
@@ -561,11 +704,12 @@
 
             var productToEdit = JSON.search(products, '//*[clave="' + id + '"]')[0];
             var form = document.getElementById("addNewProductDBForm");
-            //{description:0, id:1, unit:2, cost:3, stock:4, type:5}
+            //{description:0, id:1, SAT:2, cost:3, unit:4, stock:5, type:6}
             form.elements[0].value = productToEdit.descripcion;
             form.elements[1].value = productToEdit.clave;
-            form.elements[2].value = productToEdit.unidad;
+            form.elements[2].value = productToEdit.xpcode;
             form.elements[3].value = productToEdit.costo;
+            $("#unitSelect").val(productToEdit.unidad);
             $("#stockSelect").val(productToEdit.existencia);
             $("#typeSelect").val(productToEdit.tipo);
 
@@ -582,7 +726,7 @@
             document.getElementById("inputID").disabled = false;
             document.getElementById("deleteButton").style.display = "none";
             document.getElementById("verificationMessage").innerHTML = "";
-            emptyForm(document.getElementById("addNewProductDBForm"), 5);
+            emptyForm(document.getElementById("addNewProductDBForm"), 7);
 
             $('#saveButton').data("type", "newProduct");
             $('#addProductModal').modal('show');
@@ -603,6 +747,25 @@
             database.child(id).remove();
         }
 
+        function deleteClient() {
+			Facturama.Clients.Remove($('#addClientButton').data("id"), function(result){ 
+                $('#inputName').val("");
+                $('#addClientModal').modal('toggle');
+                $("#greenCheck").css("visibility", "hidden");
+                updateDefiantClients();
+			});            
+        }
+        
+        function editClient(id, client) {
+            client.Id = id;
+			Facturama.Clients.Update(id, client, function(result) { 
+                $('#inputName').val("");
+                $('#addClientModal').modal('toggle');
+                $("#greenCheck").css("visibility", "hidden");
+                updateDefiantClients(); 
+            });
+        }
+
         //shows search ID view
         function showInvoiceIdModal() {
             document.getElementById("verificationMessageId").innerHTML = "";
@@ -612,22 +775,31 @@
 
         //shows search ID view
         function showAddClientModal() {
+            document.getElementById("addClientModalLabel").innerHTML = "NUEVO CLIENTE";
             document.getElementById("addClientMessage").innerHTML = "";
+            document.getElementById("deleteClientButton").style.display = "none";
             document.getElementById("addClientForm").reset();
+            $('#addClientButton').data("type", "newClient");
+
             $('#addClientModal').modal('show');
         }
 
         //adds the item to the list from a saved order
         function addProductFromInvoice(product) {
             var date = (new Date()).getTime();
+            
+            console.log("descripcion " + product[3]);
 
+            //aqui1
             var productListItem =
-                '<li class="list-group-item row product-row" data-id="' + product[0] + '" + data-date="' + date + '">' +
+                '<li class="list-group-item row product-row" data-sat="' + product[6] + '" data-costo="' + product[7] + '" data-id="' + product[0] + '" data-date="' + date + '">' +
                 '<div class="col-sm-1 product-quantity">' +
                 '<input type="number" min="0" class="form-control" value="' + product[1] + '"></input>' +
                 '</div>' +
                 '<div class="col-sm-1 product-info">' + product[2] + '</div>' +
-                '<div class="col-sm-5 product-info">' + product[3] + '</div>' +
+                '<div class="col-sm-5 product-notes-container">' + 
+                    '<input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control product-notes" maxlength="48" value= "' + product[3] + '"></input>' +
+                '</div>' +
                 '<div class="col-sm-4 product-notes-container">' +
                 '<input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control product-notes" maxlength="48" placeholder="NOTAS" value=' + product[4] + '></input>' +
                 '</div>' +
@@ -673,24 +845,31 @@
             });
         }
 
+        //PENDIENTE POSIBLE
+        //busco el nombre y total en fb " + name + " " + total
+        //si encontré, cierro el modal y populo mi lista
+        //si no, borro los inputs y aviso que no encontré el nombre
         function searchOrderByName(name, total) {
-            console.log("PENDIENTE");
-            console.log("busco el nombre y total en fb " + name + " " + total);
-
-            console.log("si encontré, cierro el modal y populo mi lista");
-            console.log("si no, borro los inputs y aviso que no encontré el nombre");
+            
         }
 
+        //FACTURACION
+
+        function updateDefiantClients() {
+            Facturama.Clients.List(function(result) { 
+                defiantClients = Defiant.getSnapshot(result);
+            });
+        }
+
+        //PENDIENTE
         function addNewClientToFacturama(newClient) {
-            try {
-                Facturama.Clients.Create(newClient), function(result){ 
-                    client = result;
-                });
-            }
-            catch(err) {
-                console.log(err);
-            }
-            
+            Facturama.Clients.Create(newClient, function(result) {
+                if(result) { 
+                    $('#addClientModal').modal('toggle');
+                } else {
+                    //error
+                }
+            });
         };
 
         function verificateNewClient(e) {
@@ -703,7 +882,6 @@
             var verificated = true;
 
             //ANY FURTHER VERIFICATION
-
 
             if(verificated) {
                 var inputs = new Array(13);
@@ -727,8 +905,13 @@
                     "Name": inputs[0],
                     "CfdiUse": inputs[3],
                 };
+
                 
-                addNewClientToFacturama(newClient);
+                if($('#addClientButton').data("type") == "newClient")
+                    addNewClientToFacturama(newClient);
+                else if($('#addClientButton').data("type") == "editClient")
+                    editClient($('#addClientButton').data("id"), newClient);
+                
             }
             
             return false;
@@ -764,8 +947,8 @@
             var verificated = true;
 
             //checks for blanks
-            var inputs = new Array(6);
-            //{description:0, id:1, unit:2, cost:3, stock:4, type:5}
+            var inputs = new Array(7);
+            //{description:0, id:1, SAT:2, cost:3, unit:4, stock:5, type:6}
             for (var i = 0; i < inputs.length; i++) {
                 inputs[i] = form.elements[i].value;
                 if (inputs[i] == "") {
@@ -775,19 +958,15 @@
                 }
             }
 
-            //checks for valid units
-            var validUnits = ["KILO", "PIEZA", "CAJA", "CUB", "PROMO"];
-            if (form.elements[2].value != "" && !validUnits.includes(form.elements[2].value)) {
-                messageLabel.innerHTML = "LA UNIDAD UNICAMENTE PUEDE SER: ";
-                for (var i = 0; i < validUnits.length - 1; i++)
-                    messageLabel.innerHTML += validUnits[i] + ", ";
-                messageLabel.innerHTML += validUnits[validUnits.length - 1] + ".";
+            //checks for spaces in id
+            if (form.elements[1].value.indexOf(" ") >= 0) {
+                messageLabel.innerHTML = "LA CLAVE NO PUEDE TENER ESPACIOS.";
                 verificated = false;
             }
 
-            //checks for spaces in id
-            if (form.elements[1].value.indexOf(" ") >= 0) {
-                messageLabel.innerHTML = "LA CLAVE NO PUEDE TENER ESPACIOS";
+            //checks for 8 digit format in SAT
+            if (isNaN(form.elements[2].value) || form.elements[2].value.length != 8) {
+                messageLabel.innerHTML = "EL CODIGO DEL SAT DEBE DE SER DE 8 DIGITOS.";
                 verificated = false;
             }
 
@@ -820,6 +999,12 @@
             }
 
             //checks for stock status
+            if ($('#unitSelect').val() == "undefined") {
+                messageLabel.innerHTML = "FALTA DEFINIR UNIDAD.";
+                verificated = false;
+            }
+
+            //checks for stock status
             if ($('#stockSelect').val() == "undefined") {
                 messageLabel.innerHTML = "FALTA DEFINIR EXISTENCIA.";
                 verificated = false;
@@ -841,8 +1026,10 @@
 
         //clears modal form values
         function emptyForm(form, length) {
-            for (var i = 0; i < length; i++)
-                form.elements[i].value = "";
+            form.reset();
+
+            //for (var i = 0; i < length; i++)
+                //form.elements[i].value = "";
         }
 
         //adds or updates a product to firebase
@@ -851,9 +1038,10 @@
                 clave: inputs[1],
                 costo: inputs[3],
                 descripcion: inputs[0],
-                existencia: inputs[4],
-                tipo: inputs[5],
-                unidad: inputs[2]
+                existencia: inputs[5],
+                tipo: inputs[6],
+                unidad: inputs[4],
+                xpcode: inputs[2]
             }).then(function () {
                 $('#addProductModal').modal('toggle');
             });
@@ -863,6 +1051,22 @@
         function addProductObjectGetter(ID) {
             var searchResult = JSON.search(products, '//*[clave="' + ID + '"]');
             addProduct(searchResult[0]);
+        }
+
+        function addClientObjectGetter(ID) {
+            searchResult = JSON.search(defiantClients, '//*[contains(Id, "' + ID + '")]');
+            setClient(searchResult[0]);
+        }
+
+        function setClient(client) {
+            $("#clientOptions").empty();
+            $("#dynamic-list").css("opacity", "1");
+            $("#inputName").val(client.Name);
+            clientName = client.Name;
+            clientRFC = client.Rfc;
+            clientCfdiUse = client.CfdiUse;
+            clientEmail = client.Email;
+            $("#greenCheck").css("visibility", "visible");
         }
 
         //adds the item to the list
@@ -881,12 +1085,14 @@
                 color = "rgba(253, 181, 13, 100%)";
 
             var productListItem =
-                '<li class="list-group-item row product-row" style= "color: ' + color + ';" data-id="' + product.clave + '" + data-date="' + date + '">' +
+                '<li class="list-group-item row product-row" style= "color: ' + color + ';" data-sat="' + product.xpcode + '" data-id="' + product.clave + '" data-date="' + date + '">' +
                 '<div class="col-sm-1 product-quantity">' +
                 '<input type="number" min="0" class="form-control" style= "color: ' + color + ';"></input>' +
                 '</div>' +
                 '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
-                '<div class="col-sm-5 product-info">' + product.descripcion + '</div>' +
+                '<div class="col-sm-5 product-notes-container">' + 
+                    '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + ';" class="form-control product-notes" maxlength="48" value= "' + product.descripcion + '"></input>' +
+                '</div>' +
                 '<div class="col-sm-4 product-notes-container">' +
                 '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + ';" class="form-control product-notes" maxlength="48" placeholder="NOTAS"> </input>' +
                 '</div>' +
@@ -948,7 +1154,8 @@
             $("#dynamic-list").on("click", "button", function (e) {
                 e.preventDefault();
                 removeOrderProduct($(this).parent().data("date"));
-                $("#dynamic-list").find("[data-date='" + $(this).parent().data("date") + "']").remove();
+                $("#dynamic-list").find("[data-date='" + $(this).parent(
+                ).data("date") + "']").remove();
             });
         }
 
@@ -971,15 +1178,22 @@
                         orderTypeUnit.push($(this).data("id"));
                         orderTypeUnit.push(productItem.eq(0).children().val());
                         orderTypeUnit.push(productItem.eq(1).text());
-                        orderTypeUnit.push(productItem.eq(2).text());
+                        orderTypeUnit.push(productItem.eq(2).children().val());
                         orderTypeUnit.push(productItem.eq(3).children().val());
                         orderTypeUnit.push(JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo);
-
+                        orderTypeUnit.push(JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].xpcode);
+                        if($(this).data("costo"))
+                            orderTypeUnit.push($(this).data("costo"));
+                        else
+                            orderTypeUnit.push(JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].costo);
                         orderTypeSection.push(orderTypeUnit);
 
                         //verificating quantity
                         if (orderTypeUnit[1] == "" || orderTypeUnit[1] == "0") {
                             alert("Un producto no tiene cantidad, ingresa todas las cantidades.");
+                            verificatedOrder = false;
+                        } else if (orderTypeUnit[3] == "") {
+                            alert("Un producto no tiene descripcion, ingresa todas las nombres.");
                             verificatedOrder = false;
                         }
                     }
@@ -989,7 +1203,6 @@
                 if (orderTypeSection.length > 0)
                     for (var i in orderTypeSection)
                         newOrder.push(orderTypeSection[i]);
-
             }
 
             return newOrder;
@@ -1001,6 +1214,168 @@
             if (a[3] > b[3])
                 return 1;
             return 0;
+        }
+
+        function round(number) {
+            return Math.round((number * 1 + Number.EPSILON) * 100) / 100;
+        }
+
+        function generateInvoice() {
+            var order = getOrderProducts();
+
+            if ($("#greenCheck").css("visibility") == "hidden") {
+                alert("FALTA EL NOMBRE FISCAL DEL CLIENTE.");
+                verificatedOrder = false;
+            } else if (order.length == 0) {
+                alert("NO HAY PRODUCTOS POR FACTURAR.");
+                verificatedOrder = false;
+            }
+            
+            if (verificatedOrder) {
+                var items = [];
+                var satUnitCodes = {
+                    KILO: "KGM",
+                    PIEZA: "H87",
+                    CAJA: "XBX",
+                    CUB: "H87",
+                    EXB: "EXB",
+                    PROMO: "H87"
+                };
+
+                for (var i = 0; i < order.length; i++) {
+                    var item = {};
+                    var taxes = 1;
+                    if(iepsProducts.includes(order[i][0]))
+                        taxes = 1.08;
+                    else if(ivaProducts.includes(order[i][0]))
+                        taxes = 1.16;
+
+                    if(taxes != 1) {
+                        order[i][7] = order[i][7] / taxes;
+                        var taxesArray = [];
+                        var taxObject = {};
+                        taxObject.Total = round(order[i][7] * order[i][1] * (taxes - 1)) + "";
+                        taxObject.Base = round(order[i][7] * order[i][1]) + "";
+                        taxObject.Rate = round(taxes - 1) + "";
+                        taxObject.IsRetention = false;
+                        if(taxes == 1.08)
+                            taxObject.Name = "IEPS";
+                        else if(taxes == 1.16)
+                            taxObject.Name = "IVA";
+                        taxesArray.push(taxObject);
+                        item.Taxes = taxesArray;
+                    }
+
+                    item.Quantity = order[i][1];
+                    item.ProductCode = order[i][6];
+                    item.UnitCode = satUnitCodes[order[i][2]];
+                    item.Unit = order[i][2];
+                    item.Description = order[i][3];
+                    item.IdentificationNumber = order[i][0];
+                    item.UnitPrice = round(order[i][7]) + "";
+                    item.Subtotal = round(order[i][7] * order[i][1]) + "";
+                    item.Total = round(item.Subtotal * taxes) + "";
+                    
+                    if(order[i][0] == "YAMT" || order[i][0] == "YAT")
+                        item.UnitCode = "XPK";
+
+                    items.push(item);
+                }
+
+                var newCfdi = {};
+                
+                newCfdi.Receiver = {};
+                newCfdi.Receiver.Name = clientName;
+                newCfdi.Receiver.CfdiUse = clientCfdiUse;
+                newCfdi.Receiver.Rfc = clientRFC;
+
+                newCfdi.CfdiType = "I";
+                newCfdi.ExpeditionPlace = "44530";
+                newCfdi.PaymentForm = "01";
+                newCfdi.PaymentMethod = "PUE";
+                newCfdi.Decimals = "2";
+                newCfdi.Currency = "MXN";
+
+                var today = new Date();
+                var formattedDate = today.getFullYear() + "-" + ("0" + (today.getMonth() + 1)).slice(-2) + "-" + ("0" + today.getDate()).slice(-2);
+                formattedDate = formattedDate + "T" + ("0" + today.getHours()).slice(-2) + ":" + ("0" + today.getMinutes()).slice(-2) + ":" + ("0" + today.getSeconds()).slice(-2);
+                newCfdi.Date = formattedDate;
+
+                newCfdi.Items = items;
+                console.log(newCfdi);
+
+                disableUX();
+                if (event.srcElement.id == "sendInvoiceButton") {
+                    Facturama.Cfdi.Create(newCfdi, function(result){ 
+                        var email = clientEmail;
+                        var type = "issued";
+                        Facturama.Cfdi.Send("?cfdiType=" + type + "&cfdiId=" + result.Id + "&email=" + email, function(result){ 
+                            enableUX();
+                            eraseOrder();
+                        });
+                    }, function(error) {
+                        enableUX();
+                        if (error && error.responseJSON) {
+                            console.log(error.responseJSON);
+                            alert(error.responseJSON.ModelState[Object.keys(error.responseJSON.ModelState)[0]][0]);
+                        }		
+                    });
+                } else if (event.srcElement.id == "printInvoiceButton") {
+                    Facturama.Cfdi.Create(newCfdi, function(result){ 
+                        Facturama.Cfdi.Download("pdf", "issued", result.Id, function(resultPDF){
+                            blob = converBase64toBlob(resultPDF.Content, 'application/pdf');
+                            var blobURL = URL.createObjectURL(blob);
+                            enableUX();
+                            eraseOrder();
+                            window.open(blobURL);
+                        });
+                    }, function(error) {
+                        enableUX();
+                        if (error && error.responseJSON) {
+                            console.log("errores", error.responseJSON);
+                            alert(error.responseJSON.ModelState[Object.keys(error.responseJSON.ModelState)[0]][0]);
+                        }		
+                    });
+                }
+            }
+        }
+
+        function disableUX() {
+            var allButtons = document.getElementsByTagName('button');
+            for (var i = 0; i < allButtons.length; i++)
+                allButtons[i].disabled = true;
+            var allInputs = document.getElementsByTagName('input');
+            for (var i = 0; i < allInputs.length; i++)
+                allInputs[i].disabled = true;
+        }
+
+        function enableUX() {
+            var allButtons = document.getElementsByTagName('button');
+            for (var i = 0; i < allButtons.length; i++)
+                allButtons[i].disabled = false;
+            var allInputs = document.getElementsByTagName('input');
+            for (var i = 0; i < allInputs.length; i++)
+                allInputs[i].disabled = false;
+        }
+
+        function converBase64toBlob(content, contentType) {
+            contentType = contentType || '';
+            var sliceSize = 512;
+            var byteCharacters = window.atob(content); //method which converts base64 to binary
+            var byteArrays = [];
+
+            for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                var slice = byteCharacters.slice(offset, offset + sliceSize);
+                var byteNumbers = new Array(slice.length);
+                for (var i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+
+            var blob = new Blob(byteArrays, {type: contentType}); //statement which creates the blob
+            return blob;
         }
 
         var xOffset = 35;
@@ -1016,8 +1391,8 @@
                 alert("El NOMBRE DEL CLIENTE NO PUEDE SER UN NUMERO");
                 verificatedOrder = false;
             } else if ($("#inputEmployeeName").val() == null) {
-                alert("FALTA EL NOMBRE DEL ANOTADOR");
-                verificatedOrder = false;
+                //alert("FALTA EL NOMBRE DEL ANOTADOR");
+                //verificatedOrder = false;
             }
 
             if (verificatedOrder) {
@@ -1264,7 +1639,7 @@
                 window.open(doc.output('bloburl'), '_blank');
 
                 //survey values
-                increaseEmployeeCounter($("#inputEmployeeName").val());
+                //increaseEmployeeCounter($("#inputEmployeeName").val());
                 uploadSurvey(surveyValues);
 
                 //erase current order
@@ -1342,10 +1717,10 @@
                 doc.text(87 + xOffset, 38.5 + yOffset, "MOSTRADOR", 'center');
 
             //special counter if the order was made by phone
-            if (event.srcElement.id == "printByPhoneButton") {
-                increaseEmployeeCounterPhone($("#inputEmployeeName").val());
-                firebase.database().ref(globalComputer + '/phoneOrder').set(true);
-            }
+            //if (event.srcElement.id == "printByPhoneButton") {
+                //increaseEmployeeCounterPhone($("#inputEmployeeName").val());
+                //firebase.database().ref(globalComputer + '/phoneOrder').set(true);
+            //}
 
             if (event.srcElement.id == "printWithInvoiceButton") {
                 doc.setFontSize(29);
@@ -1365,7 +1740,7 @@
 
             doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
-            doc.text(43 + xOffset, 195.5 + yOffset, replaceAEIOUN($("#inputEmployeeName").val()));
+            //doc.text(43 + xOffset, 195.5 + yOffset, replaceAEIOUN($("#inputEmployeeName").val()));
         }
 
         //draws circle besides the description
@@ -1547,12 +1922,13 @@
         //leaves the page ready for a new order
         function eraseOrder() {
             $("#inputName").val("");
+            document.getElementById("inputName").placeholder = "NOMBRE";
             $("#quantityInput").val("");
             $("#inputSearch").val("");
             $("#searchOptions").empty();
             $("#dynamic-list").html("");
             $("#dynamic-list").css("opacity", "1");
-            $('#tomorrowCheckbox').prop('checked', false);
+            $("#greenCheck").css("visibility", "hidden");
         }
 
         //checks current connection status
@@ -1560,11 +1936,13 @@
             var printButton = document.getElementById("printButton");
             var connectedRef = firebase.database().ref(".info/connected");
             connectedRef.on("value", function (snap) {
-                if (snap.val() === true)
+                if (snap.val() === true) {
                     document.getElementById("noConnectionAlert").style.display = "none";
-                else
+                    enableUX();
+                } else {
                     document.getElementById("noConnectionAlert").style.display = "block";
-
+                    disableUX();
+                }
             });
         }
 
