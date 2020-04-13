@@ -31,9 +31,10 @@
             clientRFC = "",
             clientCfdiUse = "",
             clientEmail = "";
+        var invoiceID = "";
         
         firebase.initializeApp(connectFB());
-        var database = firebase.database().ref('productos/');
+        var database = firebase.database().ref('productitos/');
         database.on('value', function (snapshot) {
             products = Defiant.getSnapshot(snapshot.val());
         });
@@ -42,15 +43,16 @@
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
 
         var valuesFacturama = {
-            token: "Y3JlbWVyaWFpbXBlcmlvOnh1dnFvUy16YWpzbzUtbWlyd2Vy",
-            url: "https://apisandbox.facturama.mx/"
+            token: "Y3JlbWVyaWFpbXBlcmlvOnhhenRZdC1qdXpjaWMtMnhldGp5",
+            url: "https://api.facturama.mx/"
         };
 
         Facturama.Clients.List(function(result) { 
             defiantClients = Defiant.getSnapshot(result);
         });
 
-        var taxedProducts;
+        var taxedProducts,
+            ieps2Products;
         var iepsProducts = [],
             ivaProducts = [];
 
@@ -69,7 +71,10 @@
                 ivaProducts.push(key);
             });
         });
-
+        
+        firebase.database().ref('impuestos/ieps2').once('value', function (snapshot) {
+            ieps2Products = snapshot.val();
+        });
 
     </script>
 
@@ -101,7 +106,22 @@
                 <ul class="list-group client-options" id="clientOptions"></ul>
                 <span id="greenCheck" class="glyphicon glyphicon-ok"></span>
             </div>
-
+            <div class="col-md-3 row" style="padding-right: 20px;">
+                <div class="col-sm-6 form-group" style="top:1.5px; padding-left: 30px; padding-right: 5px;">
+                    <select class="form-control" id="paymentMethodSelect">
+                        <option value="PUE" selected>UN PAGO</option>
+                        <option value="PPD">EN PAGOS</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 form-group" style="top:1.5px; padding-left: 5px; padding-right: 30px;">
+                    <select class="form-control" id="paymentFormSelect">
+                        <option value="01" selected>EFECTIVO</option>
+                        <option value="02">CHEQUE</option>
+                        <option value="03">TRANSFE.</option>
+                    </select>
+                </div>
+            </div>
+            
             <!-- interface buttons-->
             <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-send" id="sendInvoiceButton"
                 style="float: right; font-weight: bold;" onclick="generateInvoice()"></button>
@@ -111,9 +131,10 @@
             <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-circle-arrow-down"
                 id="showInvoiceIdModalButton" style="float: right; margin-right: 5px; font-weight: bold;"
                 onclick="showInvoiceIdModal()"></button>
-            <button type="button" class="btn btn-secondary interface-button"
+            <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-plus-sign"
                 style="float: right; margin-right: 5px; font-weight: bold;"
-                onclick="addProductModal();">AGREGAR</button>
+                onclick="addProductModal();"></button>            
+            <span id="totalTextField"></span>
         </div>
 
         <div class="row" style="margin-bottom: 15px">
@@ -168,8 +189,8 @@
                                 </div>
                                 <!-- SAT id -->
                                 <div class="col-sm-2">
-                                    <label for="SATInput">SAT</label>
-                                    <input id="inputID" oninput="this.value = this.value.toUpperCase()"
+                                    <label for="SATLabel">SAT</label>
+                                    <input id="SATInput" oninput="this.value = this.value.toUpperCase()"
                                         class="form-control" type="text" placeholder="CODIGO" required>
                                 </div>
                             </div>
@@ -269,7 +290,7 @@
                                 <!-- cost -->
                                 <div class="col-sm-2">
                                     <label for="totalInput">SUBTOTAL</label>
-                                    <input class="form-control" type="number" min="0" placeholder="TOTAL">
+                                    <input id="invoiceTotal" class="form-control" type="number" min="0" placeholder="TOTAL">
                                 </div>
                             </div>
                         </div>
@@ -457,6 +478,19 @@
                 $("#clientOptions").empty();
         });
 
+        //shortcuts
+        $(document).on('keyup', function (e) {
+            //console.log(e.keyCode);
+            if(e.keyCode == 192)
+                $("#inputName").focus();
+            else if(e.keyCode == 222)
+                $("#printInvoiceButton").click();
+            else if(e.keyCode == 187)
+                $("#sendInvoiceButton").click();
+            else if(e.keyCode == 219)
+                $("#showInvoiceIdModalButton").click();
+        });
+
         //inputName on enter sequence
         $("#inputName").on('keyup', function (e) {
             if (e.keyCode == 13)
@@ -464,6 +498,11 @@
         });
 
         $("#invoiceCode").on('keyup', function (e) {
+            if (e.keyCode == 13)
+                $("#searchIdButton").click();
+        });
+
+        $("#invoiceTotal").on('keyup', function (e) {
             if (e.keyCode == 13)
                 $("#searchIdButton").click();
         });
@@ -527,10 +566,9 @@
                 //search just one word (posible id)
                 else {
                     if ($('#inputSearch').val() != "") {
-                        searchResult = JSON.search(products, '//*[contains(clave, "' + $('#inputSearch').val() + '")]');
-                        searchResultSecond = JSON.search(products, '//*[contains(descripcion, "' + $('#inputSearch').val() + '")]' +
-                            '|//*[contains(unidad, "' + $('#inputSearch').val() + '")]');
-                        Array.prototype.push.apply(searchResult, searchResultSecond);
+                        searchResult = JSON.search(products, '//*[contains(clave, "' + $('#inputSearch').val() + '")]' +
+                                    '|//*[contains(descripcion, "' + $('#inputSearch').val() + '")]' + 
+                                    '|//*[contains(unidad, "' + $('#inputSearch').val() + '")]');
                     }
                 }
 
@@ -747,25 +785,6 @@
             database.child(id).remove();
         }
 
-        function deleteClient() {
-			Facturama.Clients.Remove($('#addClientButton').data("id"), function(result){ 
-                $('#inputName').val("");
-                $('#addClientModal').modal('toggle');
-                $("#greenCheck").css("visibility", "hidden");
-                updateDefiantClients();
-			});            
-        }
-        
-        function editClient(id, client) {
-            client.Id = id;
-			Facturama.Clients.Update(id, client, function(result) { 
-                $('#inputName').val("");
-                $('#addClientModal').modal('toggle');
-                $("#greenCheck").css("visibility", "hidden");
-                updateDefiantClients(); 
-            });
-        }
-
         //shows search ID view
         function showInvoiceIdModal() {
             document.getElementById("verificationMessageId").innerHTML = "";
@@ -784,24 +803,36 @@
             $('#addClientModal').modal('show');
         }
 
+        function updateTotal() {
+            var total = 0;
+            $(".product-total").each(function(index) {
+                total = total + round($(this).val());
+            });
+            $("#totalTextField").text("$" + round(total));
+        }
+
         //adds the item to the list from a saved order
         function addProductFromInvoice(product) {
             var date = (new Date()).getTime();
             
-            console.log("descripcion " + product[3]);
-
-            //aqui1
+            var description = product[3];
+            if(product[0] in ieps2Products)
+                description = ieps2Products[product[0]] + " *";
+            
             var productListItem =
                 '<li class="list-group-item row product-row" data-sat="' + product[6] + '" data-costo="' + product[7] + '" data-id="' + product[0] + '" data-date="' + date + '">' +
                 '<div class="col-sm-1 product-quantity">' +
                 '<input type="number" min="0" class="form-control" value="' + product[1] + '"></input>' +
                 '</div>' +
-                '<div class="col-sm-1 product-info">' + product[2] + '</div>' +
+                '<div class="col-sm-1 product-info" style="color: #585858;">' + product[2] + '</div>' +
                 '<div class="col-sm-5 product-notes-container">' + 
-                    '<input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control product-notes" maxlength="48" value= "' + product[3] + '"></input>' +
+                    '<input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control product-notes" maxlength="48" value= "' + description + '"></input>' +
                 '</div>' +
-                '<div class="col-sm-4 product-notes-container">' +
-                '<input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control product-notes" maxlength="48" placeholder="NOTAS" value=' + product[4] + '></input>' +
+                '<div class="col-sm-2 product-notes-container">' +
+                '<input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control product-notes" maxlength="48" placeholder="NOTAS" value="' + product[4] + '"></input>' +
+                '</div>' +
+                '<div class="col-sm-2 product-total-container">' +
+                '<input type="number" class="form-control product-total" placeholder="TOTAL" value=' + round(product[7] * product[1]) + '></input>' +
                 '</div>' +
                 '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button cross">' +
                 '<span class="glyphicon glyphicon-remove cross" style="color:grey; padding-top: 3px;"></span>' +
@@ -809,13 +840,38 @@
                 '</li>';
 
             //add list element
-            $('#dynamic-list').append(productListItem);            
+            $('#dynamic-list').append(productListItem);
+            updateTotal();
 
-            //deleteButton action
+            $('#dynamic-list').find('input').eq(3).focus();
+
+            $('#dynamic-list').find('input').eq(-4).on('keyup', function (e) {
+                if (e.keyCode == 13) {
+                    let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
+                    thisRowInputs.last().val(round(thisRowInputs.first().val() * product[7]));
+                    thisRowInputs.last().focus();
+                    updateTotal();
+                }
+            });
+
+            $('#dynamic-list').find('input').eq(-1).on('keyup', function (e) {
+                if (e.keyCode == 13) {
+                    let thisRow = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']");
+                    thisRow.find('input').first().val(round($(this).val() / product[7]));
+
+                    if(thisRow.next()[0])
+                        thisRow.next().find('input').last().focus();
+                    else
+                        $("#quantityInput").focus();
+                    updateTotal();
+                }
+            });
+
             $("#dynamic-list").on("click", "button", function (e) {
                 e.preventDefault();
                 removeOrderProduct($(this).parent().data("date"));
                 $("#dynamic-list").find("[data-date='" + $(this).parent().data("date") + "']").remove();
+                updateTotal();
             });
         }
 
@@ -831,13 +887,18 @@
                 }, 1)
             })(order.productos.length);
            
-        }  
+        }
+
+        function deleteOrderById(id) {
+            firebase.database().ref("invoice/" + id).remove();
+        }
 
         function searchOrderById(id) {
             firebase.database().ref("invoice/" + id).once('value', function (snapshot) {
                 if(snapshot.val() != null) {
                     $('#invoiceIdModal').modal('toggle');
                     populateOrder(snapshot.val());
+                    invoiceID = id;
                 } else {
                     emptyForm(document.getElementById("searchOrderForm"), 3);
                     document.getElementById("verificationMessageId").innerHTML = "NO SE GUARDÓ NINGUNA NOTA CON ESE CODIGO.";
@@ -845,15 +906,23 @@
             });
         }
 
-        //PENDIENTE POSIBLE
-        //busco el nombre y total en fb " + name + " " + total
-        //si encontré, cierro el modal y populo mi lista
-        //si no, borro los inputs y aviso que no encontré el nombre
         function searchOrderByName(name, total) {
-            
+            var found = false;
+            firebase.database().ref("invoice").orderByChild('nombre').equalTo(name).once("value", function(snapshot) {
+                snapshot.forEach(function(data) {
+                    if(data.val().subtotal == total && !found) {
+                        $('#invoiceIdModal').modal('toggle');
+                        populateOrder(data.val());
+                        invoiceID = data.key;
+                        found = true;
+                    }
+                });
+                if(!found) {
+                    emptyForm(document.getElementById("searchOrderForm"), 3);
+                    document.getElementById("verificationMessageId").innerHTML = "NO SE GUARDÓ NINGUNA NOTA CON ESE NOMBRE Y TOTAL.";
+                }
+            });
         }
-
-        //FACTURACION
 
         function updateDefiantClients() {
             Facturama.Clients.List(function(result) { 
@@ -861,16 +930,46 @@
             });
         }
 
-        //PENDIENTE
         function addNewClientToFacturama(newClient) {
             Facturama.Clients.Create(newClient, function(result) {
-                if(result) { 
+                if(result)
                     $('#addClientModal').modal('toggle');
-                } else {
-                    //error
+            }, function(error) {
+                if (error && error.responseJSON) {
+                    alert(error.responseJSON.ModelState[Object.keys(error.responseJSON.ModelState)[0]][0]);	
+                    console.log(error.responseJSON);
                 }
             });
         };
+
+        function deleteClient() {
+			Facturama.Clients.Remove($('#addClientButton').data("id"), function(result){ 
+                $('#inputName').val("");
+                $('#addClientModal').modal('toggle');
+                $("#greenCheck").css("visibility", "hidden");
+                updateDefiantClients();
+			}, function(error) {
+                if (error && error.responseJSON) {
+                    alert(error.responseJSON.ModelState[Object.keys(error.responseJSON.ModelState)[0]][0]);	
+                    console.log(error.responseJSON);
+                }
+            });            
+        }
+        
+        function editClient(id, client) {
+            client.Id = id;
+			Facturama.Clients.Update(id, client, function(result) { 
+                $('#inputName').val("");
+                $('#addClientModal').modal('toggle');
+                $("#greenCheck").css("visibility", "hidden");
+                updateDefiantClients(); 
+            }, function(error) {
+                if (error && error.responseJSON) {
+                    alert(error.responseJSON.ModelState[Object.keys(error.responseJSON.ModelState)[0]][0]);	
+                    console.log(error.responseJSON);
+                }
+            });
+        }
 
         function verificateNewClient(e) {
             e.preventDefault();
@@ -1034,7 +1133,7 @@
 
         //adds or updates a product to firebase
         function addNewProductDB(inputs) {
-            firebase.database().ref('productos/' + inputs[1]).set({
+            firebase.database().ref('productitos/' + inputs[1]).set({
                 clave: inputs[1],
                 costo: inputs[3],
                 descripcion: inputs[0],
@@ -1071,6 +1170,7 @@
 
         //adds the item to the list
         function addProduct(product) {
+
             $("#searchOptions").empty();
             $("#dynamic-list").css("opacity", "1");
             $("#inputSearch").val("");
@@ -1084,6 +1184,10 @@
             else if (product.existencia == "pedido")
                 color = "rgba(253, 181, 13, 100%)";
 
+            var description = product.descripcion;
+            if(product.clave in ieps2Products)
+                description = ieps2Products[product.clave] + " *";
+
             var productListItem =
                 '<li class="list-group-item row product-row" style= "color: ' + color + ';" data-sat="' + product.xpcode + '" data-id="' + product.clave + '" data-date="' + date + '">' +
                 '<div class="col-sm-1 product-quantity">' +
@@ -1091,10 +1195,13 @@
                 '</div>' +
                 '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
                 '<div class="col-sm-5 product-notes-container">' + 
-                    '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + ';" class="form-control product-notes" maxlength="48" value= "' + product.descripcion + '"></input>' +
+                    '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + ';" class="form-control product-notes" maxlength="48" value= "' + description + '"></input>' +
                 '</div>' +
-                '<div class="col-sm-4 product-notes-container">' +
+                '<div class="col-sm-2 product-notes-container">' +
                 '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + ';" class="form-control product-notes" maxlength="48" placeholder="NOTAS"> </input>' +
+                '</div>' +
+                '<div class="col-sm-2 product-total-container">' +
+                '<input type="number" class="form-control product-total" placeholder="TOTAL" value=' + round($("#quantityInput").val() * product.costo) + '></input>' +
                 '</div>' +
                 '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button cross">' +
                 '<span class="glyphicon glyphicon-remove cross" style="color:grey; padding-top: 3px;"></span>' +
@@ -1102,25 +1209,48 @@
                 '</li>';
 
             //add list element
-            $('#dynamic-list').prepend(productListItem);
+            $('#dynamic-list').append(productListItem);
+            updateTotal();
 
             //populate quantity and clean original (outter) input
             var outterQuantity = $("#quantityInput").val();
-            var inputQuantity = $('#dynamic-list').find('input').first();
+            var inputQuantity = $('#dynamic-list').find('input').eq(-4);
             inputQuantity.val(outterQuantity);
             $("#quantityInput").val("");
 
             //inputSearch sequence
-            $('#dynamic-list').find('input').eq(1).focus();
+            if(inputQuantity.val() == "")
+                $('#dynamic-list').find('input').eq(-4).focus();
+            else
+                $('#dynamic-list').find('input').eq(-1).focus();
 
-            //inputQuantity enter sequence (to notes)
-            $('#dynamic-list').find('input').first().on('keyup', function (e) {
-                if (e.keyCode == 13)
-                    $(this).parent().nextAll().eq(2).children().focus();
+            $('#dynamic-list').find('input').eq(-4).on('keyup', function (e) {
+                if (e.keyCode == 13) {
+                    let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
+                    thisRowInputs.last().val(round(thisRowInputs.first().val() * product.costo));
+                    thisRowInputs.last().focus();
+                    updateTotal();
+                }
+            });
+
+            $('#dynamic-list').find('input').eq(-1).on('keyup', function (e) {
+                if (e.keyCode == 13) {
+                    let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
+                    thisRowInputs.first().val(round($(this).val() / product.costo));
+                    $("#quantityInput").focus();
+                    updateTotal();
+                }
+            });
+
+            $("#dynamic-list").on("click", "button", function (e) {
+                e.preventDefault();
+                removeOrderProduct($(this).parent().data("date"));
+                $("#dynamic-list").find("[data-date='" + $(this).parent().data("date") + "']").remove();
+                updateTotal();
             });
 
             //inputNotes enter sequence with shortcuts (to outter quantity)
-            var inputNotes = $('#dynamic-list').find('input').eq(1);
+            var inputNotes = $('#dynamic-list').find('input').eq(-2);
             inputNotes.on('keyup', function (e) {
                 if (e.keyCode == 13) {
                     if (inputNotes.val() == "S")
@@ -1150,13 +1280,6 @@
             inputQuantity.focusout(function () { updateOrderProductQuantity(date, inputQuantity.val()) });
             inputNotes.focusout(function () { updateOrderProductNotes(date, inputNotes.val()) });
 
-            //deleteButton action
-            $("#dynamic-list").on("click", "button", function (e) {
-                e.preventDefault();
-                removeOrderProduct($(this).parent().data("date"));
-                $("#dynamic-list").find("[data-date='" + $(this).parent(
-                ).data("date") + "']").remove();
-            });
         }
 
         //populates an array with all the order product values
@@ -1266,11 +1389,14 @@
                         item.Taxes = taxesArray;
                     }
 
+                    if(order[i][4] != "")
+                        order[i][4] = " - " + order[i][4];
+
                     item.Quantity = order[i][1];
                     item.ProductCode = order[i][6];
                     item.UnitCode = satUnitCodes[order[i][2]];
                     item.Unit = order[i][2];
-                    item.Description = order[i][3];
+                    item.Description = order[i][3].replace(' *','') + order[i][4];
                     item.IdentificationNumber = order[i][0];
                     item.UnitPrice = round(order[i][7]) + "";
                     item.Subtotal = round(order[i][7] * order[i][1]) + "";
@@ -1291,8 +1417,8 @@
 
                 newCfdi.CfdiType = "I";
                 newCfdi.ExpeditionPlace = "44530";
-                newCfdi.PaymentForm = "01";
-                newCfdi.PaymentMethod = "PUE";
+                newCfdi.PaymentForm = document.getElementById('paymentFormSelect').value;
+                newCfdi.PaymentMethod = document.getElementById('paymentMethodSelect').value;
                 newCfdi.Decimals = "2";
                 newCfdi.Currency = "MXN";
 
@@ -1302,41 +1428,48 @@
                 newCfdi.Date = formattedDate;
 
                 newCfdi.Items = items;
-                console.log(newCfdi);
 
+                console.log(newCfdi);
+                
                 disableUX();
                 if (event.srcElement.id == "sendInvoiceButton") {
                     Facturama.Cfdi.Create(newCfdi, function(result){ 
-                        var email = clientEmail;
-                        var type = "issued";
-                        Facturama.Cfdi.Send("?cfdiType=" + type + "&cfdiId=" + result.Id + "&email=" + email, function(result){ 
+                        Facturama.Cfdi.Send("?cfdiType=" + "issued" + "&cfdiId=" + result.Id + "&email=" + clientEmail, function(result){ 
                             enableUX();
+                            if(invoiceID != "")
+                                deleteOrderById(invoiceID);
                             eraseOrder();
-                        });
-                    }, function(error) {
-                        enableUX();
-                        if (error && error.responseJSON) {
-                            console.log(error.responseJSON);
-                            alert(error.responseJSON.ModelState[Object.keys(error.responseJSON.ModelState)[0]][0]);
-                        }		
-                    });
+                        }, function(error) { manageError(error) });
+                    }, function(error) { manageError(error) });
+
                 } else if (event.srcElement.id == "printInvoiceButton") {
                     Facturama.Cfdi.Create(newCfdi, function(result){ 
                         Facturama.Cfdi.Download("pdf", "issued", result.Id, function(resultPDF){
                             blob = converBase64toBlob(resultPDF.Content, 'application/pdf');
                             var blobURL = URL.createObjectURL(blob);
                             enableUX();
+                            if(invoiceID != "")
+                                deleteOrderById(invoiceID);
                             eraseOrder();
                             window.open(blobURL);
-                        });
-                    }, function(error) {
-                        enableUX();
-                        if (error && error.responseJSON) {
-                            console.log("errores", error.responseJSON);
-                            alert(error.responseJSON.ModelState[Object.keys(error.responseJSON.ModelState)[0]][0]);
-                        }		
-                    });
+                        }, function(error) { manageError(error) });
+
+                        Facturama.Cfdi.Send("?cfdiType=" + "issued" + "&cfdiId=" + result.Id + "&email=" + clientEmail, function(result){ 
+                            enableUX();
+                            if(invoiceID != "")
+                                deleteOrderById(invoiceID);
+                            eraseOrder();
+                        }, function(error) { manageError(error) });
+                    }, function(error) { manageError(error) });
                 }
+            }
+        }
+
+        function manageError(error) {
+            enableUX();
+            if (error && error.responseJSON) {
+                alert(error.responseJSON.ModelState[Object.keys(error.responseJSON.ModelState)[0]][0]);	
+                console.log(error.responseJSON);
             }
         }
 
@@ -1929,6 +2062,10 @@
             $("#dynamic-list").html("");
             $("#dynamic-list").css("opacity", "1");
             $("#greenCheck").css("visibility", "hidden");
+            document.getElementById('paymentFormSelect').value = "01";
+            document.getElementById('paymentMethodSelect').value = "PUE";
+            $("#totalTextField").text("");
+            invoiceID = "";
         }
 
         //checks current connection status

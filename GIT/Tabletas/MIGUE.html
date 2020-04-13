@@ -33,6 +33,9 @@
 		firebase.database().ref('productos/').on('value', function (snapshot) {
 			products = Defiant.getSnapshot(snapshot.val());
 		});
+
+		var database = firebase.database().ref('productos/');
+
 	</script>
 
 	<style>
@@ -241,59 +244,73 @@
 							<label id="verificationMessage" style="color: red;"></label>
 							<div class="row" style="margin-bottom: 0px;">
 								<!-- description -->
-								<div class="col-xs-9">
+								<div class="col-xs-8">
 									<label for="descriptionInput">DESCRIPCION</label>
 									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" maxlength="38" placeholder="DESCRIPCION"
 										required>
 								</div>
 								<!-- id -->
-								<div class="col-xs-3" style="padding-left: 0;">
-									<label for="IDInput">CLAVE</label>
-									<input id="inputID" oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="CLAVE"
-										required>
-								</div>
+                                <div class="col-sm-2">
+                                    <label for="IDInput">CLAVE</label>
+                                    <input id="inputID" oninput="this.value = this.value.toUpperCase()"
+                                        class="form-control" type="text" placeholder="CLAVE" required>
+                                </div>
+                                <!-- SAT id -->
+                                <div class="col-sm-2">
+                                    <label for="SATLabel">SAT</label>
+                                    <input id="SATInput" oninput="this.value = this.value.toUpperCase()"
+                                        class="form-control" type="text" placeholder="CODIGO" required>
+                                </div>
 							</div>
 
 							<div class="row">
-								<!-- unit -->
-								<div class="col-xs-3">
-									<label for="unitInput">UNIDAD</label>
-									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="PIEZA, CAJA, KILO..."
-										required>
-								</div>
-								<!-- cost -->
-								<div class="col-xs-2" style="padding: 0;">
-									<label for="priceInput">COSTO</label>
-									<input class="form-control" type="number" min="0" placeholder="8.50" required>
-								</div>
-								<!-- stock -->
-								<div class="col-xs-3" style="padding-right: 0px;">
-									<div class="form-group">
-										<label for="stockSelect">EXIST.</label>
-										<select class="form-control" id="stockSelect">
-											<option value="siHay">SÍ HAY</option>
-											<option value="noHay">NO HAY</option>
-											<option value="pedido">NO HAY / YA SE PIDIÓ</option>
-										</select>
-									</div>
-								</div>
-								<!-- type -->
-								<div class="col-xs-4">
-									<div class="form-group">
-										<label for="typeSelect">TIPO</label>
-										<select class="form-control" id="typeSelect">
-											<option value="porPesarCamara">CAMARA - SE NECESITA PESAR</option>
-											<option value="yaPesadoCamara">CAMARA - YA VIENE PESADO</option>
-											<option value="porPesarAfuera">AFUERA - SE NECESITA PESAR</option>
-											<option value="yaPesadoAfuera">AFUERA - YA VIENE PESADO</option>
-											<option value="yaPesadoAfueraTrino">AFUERA - YA VIENE PESADO - TRINO</option>
-											<option value="aJamones">AREA DE JAMONES</option>
-											<option value="aCremas">AREA DE CREMAS</option>
-											<option value="aBodega">AREA DE BODEGA</option>
-										</select>
-									</div>
-								</div>
-							</div>
+                                <!-- cost -->
+                                <div class="col-sm-3">
+                                    <label for="priceInput">COSTO</label>
+                                    <input class="form-control" type="number" min="0" placeholder="8.50" required>
+                                </div>
+                                <!-- unit -->
+                                <div class="col-sm-2">
+                                   <div class="form-group">
+                                       <label for="unitSelect">UNIDAD</label>
+                                       <select class="form-control" id="unitSelect">
+                                           <option value="PIEZA" selected>PIEZA</option>
+                                           <option value="KILO">KILO</option>
+                                           <option value="CAJA">CAJA</option>
+                                           <option value="PROMO">PROMO</option>
+                                           <option value="CUB">CUB</option>
+                                       </select>
+                                   </div>
+                               </div>
+                                <!-- stock -->
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="stockSelect">EXISTENCIA</label>
+                                        <select class="form-control" id="stockSelect">
+                                            <option value="siHay">SÍ HAY</option>
+                                            <option value="noHay">NO HAY</option>
+                                            <option value="pedido">NO HAY / YA SE PIDIÓ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- type -->
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="typeSelect">TIPO</label>
+                                        <select class="form-control" id="typeSelect">
+                                            <option value="porPesarCamara">CAMARA - SE NECESITA PESAR</option>
+                                            <option value="yaPesadoCamara">CAMARA - YA VIENE PESADO</option>
+                                            <option value="porPesarAfuera">AFUERA - SE NECESITA PESAR</option>
+                                            <option value="yaPesadoAfuera">AFUERA - YA VIENE PESADO</option>
+                                            <option value="yaPesadoAfueraTrino">AFUERA - YA VIENE PESADO - TRINO
+                                            </option>
+                                            <option value="aJamones">AREA DE JAMONES</option>
+                                            <option value="aCremas">AREA DE CREMAS</option>
+                                            <option value="aBodega">AREA DE BODEGA</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 						</div>
 					</form>
 				</div>
@@ -547,7 +564,7 @@
 			}
 		}
 
-		//edit or delete product modal values
+        //edit or delete product modal values
         function editProductModal(id) {
             document.getElementById("addProductModalLabel").innerHTML = "EDITAR PRODUCTO";
             document.getElementById("inputID").disabled = true;
@@ -556,12 +573,13 @@
 
             var productToEdit = JSON.search(products, '//*[clave="' + id + '"]')[0];
             var form = document.getElementById("addNewProductDBForm");
-            //{description:0, id:1, unit:2, cost:3, type:4}
+            //{description:0, id:1, SAT:2, cost:3, unit:4, stock:5, type:6}
             form.elements[0].value = productToEdit.descripcion;
             form.elements[1].value = productToEdit.clave;
-            form.elements[2].value = productToEdit.unidad;
+            form.elements[2].value = productToEdit.xpcode;
             form.elements[3].value = productToEdit.costo;
-			$("#stockSelect").val(productToEdit.existencia);
+            $("#unitSelect").val(productToEdit.unidad);
+            $("#stockSelect").val(productToEdit.existencia);
             $("#typeSelect").val(productToEdit.tipo);
 
             //sets buttons inner values
@@ -569,30 +587,31 @@
             $('#saveButton').data("id", form.elements[1].value);
 
             $('#addProductModal').modal('show');
-		}
+        }
 
-		//sets modal to add product view
+        //sets modal to add product view
         function addProductModal() {
             document.getElementById("addProductModalLabel").innerHTML = "AGREGAR PRODUCTO";
             document.getElementById("inputID").disabled = false;
             document.getElementById("deleteButton").style.display = "none";
             document.getElementById("verificationMessage").innerHTML = "";
-            emptyForm(document.getElementById("addNewProductDBForm"), 5);
+            emptyForm(document.getElementById("addNewProductDBForm"), 7);
 
             $('#saveButton').data("type", "newProduct");
             $('#addProductModal').modal('show');
         }
 
-        //verificates input of modal form
+         //verificates input of modal form
         function verificateNewProduct() {
             var messageLabel = document.getElementById("verificationMessage");
             var form = document.getElementById("addNewProductDBForm");
             var verificated = true;
 
             //checks for blanks
-            var inputs = new Array(6);
-            //{description:0, id:1, unit:2, cost:3, type:4}
+            var inputs = new Array(7);
+            //{description:0, id:1, SAT:2, cost:3, unit:4, stock:5, type:6}
             for (var i = 0; i < inputs.length; i++) {
+				console.log(i + " " + form.elements[i].value);
                 inputs[i] = form.elements[i].value;
                 if (inputs[i] == "") {
                     messageLabel.innerHTML = "LLENA TODOS LOS CAMPOS.";
@@ -601,13 +620,15 @@
                 }
             }
 
-            //checks for valid units
-            var validUnits = ["KILO", "PIEZA", "CAJA", "CUB", "PROMO"];
-            if (form.elements[2].value != "" && !validUnits.includes(form.elements[2].value)) {
-                messageLabel.innerHTML = "LA UNIDAD UNICAMENTE PUEDE SER: ";
-                for (var i = 0; i < validUnits.length - 1; i++)
-                    messageLabel.innerHTML += validUnits[i] + ", ";
-                messageLabel.innerHTML += validUnits[validUnits.length - 1] + ".";
+            //checks for spaces in id
+            if (form.elements[1].value.indexOf(" ") >= 0) {
+                messageLabel.innerHTML = "LA CLAVE NO PUEDE TENER ESPACIOS.";
+                verificated = false;
+            }
+
+            //checks for 8 digit format in SAT
+            if (isNaN(form.elements[2].value) || form.elements[2].value.length != 8) {
+                messageLabel.innerHTML = "EL CODIGO DEL SAT DEBE DE SER DE 8 DIGITOS.";
                 verificated = false;
             }
 
@@ -617,40 +638,81 @@
                 verificated = false;
             }
 
+            //checks for existing ids
+            if (form.elements[1].value != "") {
+                database.child(form.elements[1].value).once('value', function (snapshot) {
+                    //when in "add product" view, the id needs to be always a new one
+                    if ($('#saveButton').data("type") == "newProduct") {
+                        if (snapshot.val() !== null) {
+                            messageLabel.innerHTML = "LA CLAVE YA EXISTE, INTENTA UNA DIFERENTE.";
+                            verificated = false;
+                        }
+                    }
+                    //OUTDATED when in edit product, the id can be either the same or a new one, but not an existing one
+                    else if ($('#saveButton').data("type") == "editProduct") {
+                        if ($('#saveButton').data("id") != form.elements[1].value) {
+                            if (snapshot.val() !== null) {
+                                messageLabel.innerHTML = "LA CLAVE YA EXISTE, INTENTA UNA DIFERENTE.";
+                                verificated = false;
+                            }
+                        }
+                    }
+                });
+            }
+
+            //checks for stock status
+            if ($('#unitSelect').val() == "undefined") {
+                messageLabel.innerHTML = "FALTA DEFINIR UNIDAD.";
+                verificated = false;
+            }
+
+            //checks for stock status
+            if ($('#stockSelect').val() == "undefined") {
+                messageLabel.innerHTML = "FALTA DEFINIR EXISTENCIA.";
+                verificated = false;
+            }
+
             //if everything is checked, upload form
             if (verificated) {
-                editProductDB(inputs);
-				messageLabel.innerHTML = "";
-				//$("#inputSearch").val("");
-				//$("#searchOptions").empty();
-				searchProduct();
+                addNewProductDB(inputs);
+                messageLabel.innerHTML = "";
+
+                //OUTDATED if at edit product the id changes, deletes the old ids instance
+                if ($('#saveButton').data("type") == "editProduct")
+                    if ($('#saveButton').data("id") != form.elements[1].value)
+                        database.child($('#saveButton').data("id")).remove();
+
+                emptyForm(form, inputs.length);
             }
-		}
+        }
+
+        //clears modal form values
+        function emptyForm(form, length) {
+            form.reset();
+
+            //for (var i = 0; i < length; i++)
+                //form.elements[i].value = "";
+        }
 
 		//adds or updates a product to firebase
-        function editProductDB(inputs) {
+        function addNewProductDB(inputs) {
             firebase.database().ref('productos/' + inputs[1]).set({
                 clave: inputs[1],
                 costo: inputs[3],
                 descripcion: inputs[0],
-				existencia: inputs[4],
-                tipo: inputs[5],
-                unidad: inputs[2]
+                existencia: inputs[5],
+                tipo: inputs[6],
+                unidad: inputs[4],
+                xpcode: inputs[2]
             }).then(function () {
                 $('#addProductModal').modal('toggle');
+				searchProduct();
             });
-		}
-		
-		//clears modal form values
-        function emptyForm(form, length) {
-            for (var i = 0; i < length; i++)
-                form.elements[i].value = "";
         }
+		
 		
 		//deletes an existing product from the db
 		function deleteProductDB() {
-			//$("#searchOptions").empty();
-			//$("#inputSearch").val("");
             var id = document.getElementById("addNewProductDBForm").elements[1].value;
             firebase.database().ref('productos/').child(id).remove();
 			searchProduct();

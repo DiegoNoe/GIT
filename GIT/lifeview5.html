@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es" style="zoom: 100%; background-color: white;">
+
+<head>
+    <title>Jamones view</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- js resources -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+
+    <style>
+        @font-face {
+            font-family: GillSansMTCondBold;
+            src: url(GillSansMTCondensedBold.ttf);
+        }
+
+        @font-face {
+            font-family: GillSansMTCond;
+            src: url(GillSansStd-Condensed.otf);
+        }
+        .container-fluid {
+            margin-top: 3%;
+            margin-left: 1%;
+            margin-right: 1%;
+            position: relative;
+        }
+
+        #dynamic-list {
+            height: 900px;
+            overflow: hidden;
+            overflow-y: scroll;
+            font-family: GillSansMTCondBold;
+            font-size: 40px;
+        }
+
+        .product-row {
+            margin-left: 0px;
+            margin-right: 0px;
+            padding-bottom: 9px;
+        }
+
+        .product-quantity {
+            padding: 0px;
+        }
+
+        .product-notes {
+            border: 0;
+            box-shadow: none;
+        }
+
+        .product-notes-container {
+            padding: 0px;
+        }
+
+        #nameLabel {
+            font-family: GillSansMTCondBold;
+            font-size: 50px;
+        }
+
+        #pleaseLabel {
+            font-family: GillSansMTCondBold;
+            font-size: 30px;
+            margin-bottom: 5%;
+        }
+
+        #totalTitleLabel {
+            position: fixed;
+            bottom: 5%;
+            left: 55%;
+            font-family: GillSansMTCondBold;
+            font-size: 50px;
+        }
+
+        #totalTitle {
+            position: fixed;
+            bottom: 5%;
+            left: 73%;
+            font-family: GillSansMTCondBold;
+            font-size: 50px;
+        }
+ 
+        #thankyouMessage {
+            background-color: white;
+            color: black;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            z-index: 1;
+            text-align: center;
+            padding-top: 10%;
+            display: none;
+            font-family: GillSansMTCondBold;
+            font-size: 70px;
+        }
+
+        #welcomeMessage {
+            background-color: white;
+            color: black;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            z-index: 1;
+            text-align: center;
+            padding-top: 50%;
+            font-family: GillSansMTCondBold;
+            font-size: 85px;
+        }
+
+        #survey {
+            background-color: white;
+            color: black;
+            position: absolute;
+            top: 69%;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            z-index: 10;
+            text-align: center;
+            display: none;
+            font-family: GillSansMTCondBold;
+            font-size: 70px;
+        }
+
+        #surveyMessage {
+            background-color: white;
+            color: black;
+            position: absolute;
+            top: 66%;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            z-index: 1;
+            text-align: center;
+            display: none;
+            font-family: GillSansMTCondBold;
+            font-size: 70px;
+        }
+
+        .survey-image {
+            width: 220px;
+        }
+
+        #splashScreen {
+            background-color: white;
+            color: black;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            z-index: 100;
+            text-align: center;
+			font-size: 70px;
+			font-family: GillSansMTCondensedBold;
+			font-size: 30px;
+		}
+
+		#logo-image {
+			width: 80%;
+			padding-top: 20%;
+            padding-right: 15px;
+            z-index: 101;
+        }
+
+        #welcomeSpalshMessage{
+            color: black;
+            text-align: center;
+            font-family: GillSansMTCondBold;
+            font-size: 85px;
+        }
+
+    </style>
+
+    <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
+            authDomain: "cremeria-imperial.firebaseapp.com",
+            databaseURL: "https://cremeria-imperial.firebaseio.com",
+            projectId: "cremeria-imperial",
+            storageBucket: "cremeria-imperial.appspot.com",
+            messagingSenderId: "445465872507"
+        };
+
+        firebase.initializeApp(config);
+        var database = firebase.database().ref('liveView5/order');
+        var globalName,
+            globalEmployee,
+            globalOrderByPhone;
+        var shortenedUnits = {
+            KILO: "KG",
+            PIEZA: "PZ",
+            CAJA: "CJ",
+            CUB: "CUB",
+            EXB: "EXB"
+        };
+
+    </script>
+
+    <!-- android interface -->
+    <script type="text/javascript">
+        function playSound() {
+            //Android.playSound();
+        }
+    </script>
+
+</head>
+
+<body style="zoom: 100%; background-color: white;">
+    <div id="splashScreen">
+        <input id="logo-image" type="image" onclick="userFullscreen();" src="logo.png"/>
+        <span id="welcomeSpalshMessage">PRESIONA PARA INICIAR</span>
+    </div>
+    <h2 id="thankyouMessage"></h2>
+    <h2 id="surveyMessage">GRACIAS POR TU<br>RETROALIMENTACIÓN</h2>
+    <div id="survey">
+        <input class="survey-image" type="image" onclick="surveyHappy();" src="happy.png"/>
+        <input class="survey-image" type="image" onclick="surveyMeh();" src="meh.png"/>
+        <input class="survey-image" type="image" onclick="surveySad();" src="sad.png"/>
+    </div>
+    
+    <h1 id="welcomeMessage">
+        <img src="logo.png" width="400px" style="position: absolute; top: 100px" alt="Logo">
+        BIENVENIDO
+    </h1>
+    <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
+        <strong>No hay conexión.</strong>
+    </div>
+    <div class="container-fluid">
+        <h2 class="modal-title" id="nameLabel">BIENVENIDO</h2>
+        <h2 class="modal-title" id="pleaseLabel">POR FAVOR REVISA TU PEDIDO</h2>
+        <ul class="list-group" id="dynamic-list"> </ul>
+        <h2 class="modal-title" id="totalTitleLabel"></h2>
+        <h2 class="modal-title" id="totalTitle"></h2>
+    </div>
+
+    <script>
+
+        $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
+			if (document.fullscreen)
+				$("#splashScreen").hide();
+			else
+				$("#splashScreen").show();
+        });
+
+        function userFullscreen() {
+			document.body.requestFullscreen();
+		}
+
+        function surveyHappy() {
+            uploadSurvey("feliz");
+            $("#survey").hide();
+            $("#surveyMessage").show();
+            $("#thankyouMessage").html($("#thankyouMessage").html().substring(0, $("#thankyouMessage").html().length - 16));
+        }
+
+        function surveyMeh() {
+            uploadSurvey("normal");
+            $("#survey").hide();
+            $("#surveyMessage").show();
+            $("#thankyouMessage").html($("#thankyouMessage").html().substring(0, $("#thankyouMessage").html().length - 16));
+        }
+
+        function surveySad() {
+            uploadSurvey("triste");
+            $("#survey").hide();
+            $("#surveyMessage").show();
+            $("#thankyouMessage").html($("#thankyouMessage").html().substring(0, $("#thankyouMessage").html().length - 16));
+        }
+
+        function uploadSurvey(answer) {
+            firebase.database().ref('registro/' + globalEmployee + '/' + answer).once('value', function(snapshot) {
+                if(snapshot.val() == null)
+                    firebase.database().ref('registro/' + globalEmployee + '/' + answer).set(1);
+                else
+                    firebase.database().ref('registro/' + globalEmployee + '/' + answer).set(snapshot.val() + 1);
+            });
+        }
+
+        function populateName() {
+            firebase.database().ref('liveView5/name').on('value', function (snapshot) {
+                if(snapshot.val() != null) {
+                    $('#nameLabel').text("BIENVENIDO " + snapshot.val());
+                    globalName = snapshot.val();
+                    $("#welcomeMessage").hide();
+                } else {
+                    $('#nameLabel').text("BIENVENIDO");
+                }
+            });
+        }
+
+        function populateEmployee() {
+            firebase.database().ref('liveView5/employee').on('value', function (snapshot) {
+                if(snapshot.val() != null)
+                    globalEmployee = snapshot.val();
+            });
+        }
+
+        //loads orders and remains listening
+        function populateOrder()  {
+            database.on('value', function (snapshot) {
+                var total = 0;
+                var isExact = true;
+                var calculable = true;
+                $('#dynamic-list').empty();
+                snapshot.forEach(function (childSnapshot) {
+                    //get values
+                    var description = childSnapshot.child("descripcion").val();
+                    var notes = childSnapshot.child("notas").val();
+                    var quantity = childSnapshot.child("cantidad").val();
+                    var tipo = childSnapshot.child("tipo").val();
+                                        
+                    if(quantity == "") {
+                        calculable = false
+                        var quantityAndUnit = "";
+                        var cost = "";
+                    } else {
+                        var quantityAndUnit = quantity + shortenedUnits[childSnapshot.child("unidad").val()];
+
+                        if (description == "CAJA DE HUEVO")
+                            var cost = quantity * childSnapshot.child("precio").val() * 24;
+                        else if (description == "1/2 CAJA DE HUEVO ")
+                            var cost = quantity * childSnapshot.child("precio").val() * 12;
+                        else if (description == "QUESO PANELA IMPERIAL")
+                            var cost = quantity * childSnapshot.child("precio").val() * .6;    
+                        else if (quantity < 0)
+                            var cost = quantity * childSnapshot.child("precio").val() * (-1);
+                        else
+                            var cost =  quantity * childSnapshot.child("precio").val();
+
+                        total += cost;
+                        cost = "" + Math.round(cost * 10) / 10;
+
+                        if(tipo == "porPesarCamara" || tipo == "porPesarAfuera")
+                            isExact = false;
+                    }
+
+                    //enhance quantities
+                    if (quantityAndUnit.includes(".500"))
+                        quantityAndUnit = quantityAndUnit.replace(".500", "½");
+                    if (quantityAndUnit.includes(".50"))
+                        quantityAndUnit = quantityAndUnit.replace(".50", "½");
+                    if (quantityAndUnit.includes(".5"))
+                        quantityAndUnit = quantityAndUnit.replace(".5", "½");
+
+                    if (quantityAndUnit.includes(".250"))
+                        quantityAndUnit = quantityAndUnit.replace(".250", "¼");
+                    if (quantityAndUnit.includes(".25"))
+                        quantityAndUnit = quantityAndUnit.replace(".25", "¼");
+
+                    if(notes == "") {
+                        var productListItem =
+                            '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px;" data-id="' + childSnapshot.key + '"">' +
+                                '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
+                                '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '</h2>' +
+                                '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left: 20px; margin: 0px;">' + cost + '</h2>' +
+                            '</li>';
+                    } else {
+                        var productListItem =
+                            '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px;" data-id="' + childSnapshot.key + '"">' +
+                                '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
+                                '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '<br>' + notes + '</h2>' +
+                                '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left:20px; margin: 0px;">' + cost + '</h2>' +
+                            '</li>';
+                    }
+                    //Add list element
+                    $('#dynamic-list').append(productListItem);
+                });
+
+                if(snapshot.numChildren() == 0)
+                    calculable = false;
+                else
+                    $("#welcomeMessage").hide();
+
+                
+                if(calculable) {
+                    total = Math.round(total * 10) / 10;
+                    if ((total / 1000) >= 1)
+                        total = total.toLocaleString('en-US');
+
+                    $('#totalTitle').text("$" + total);
+                    if(isExact) {
+                        $('#totalTitleLabel').css("left", "55%");
+                        $('#totalTitleLabel').text("TOTAL");
+                    }
+                    else {
+                        $('#totalTitleLabel').css("left", "35%");
+                        $('#totalTitleLabel').text("TOTAL APROX");
+                    }
+                } else {
+                    $('#totalTitleLabel').text("");
+                    $('#totalTitle').text("");
+                }
+            });
+        }
+
+        function checkOrderByPhone() {
+            firebase.database().ref('liveView5/phoneOrder').on('value', function (snapshot) {
+                globalOrderByPhone = snapshot.val();
+            });
+        }
+
+        function checkDoneOrder() {
+            firebase.database().ref('liveView5/done').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    if(!globalOrderByPhone) {
+                        var totalMessage = $('#totalTitleLabel').text() + " " + $('#totalTitle').text();
+                        $("#thankyouMessage").html("GRACIAS<br>" + globalName + "<br><br><br>" + totalMessage + "<br><br><br>¿CÓMO TE ATENDÍ?");
+                        $("#thankyouMessage").show();
+                        $("#survey").show();
+                        speak("Gracias " + globalName + ", en un momento te nombramos en caja.");
+                        firebase.database().ref('liveView5').remove();
+                        setTimeout(function(){
+                            $("#survey").hide();
+                            $("#surveyMessage").hide();
+                            $("#thankyouMessage").hide();
+                            $("#thankyouMessage").html("GRACIAS POR SU VISITA");
+                            $("#welcomeMessage").show();
+                            globalName = "";
+                        }, 10000);
+                    } else {
+                        firebase.database().ref('liveView5').remove();
+                        $("#survey").hide();
+                        $("#surveyMessage").hide();
+                        $("#thankyouMessage").hide();
+                        $("#thankyouMessage").html("GRACIAS POR SU VISITA");
+                        $("#welcomeMessage").show();
+                        globalName = "";
+                    }
+                }
+            });
+        }
+
+        function speak(text) {
+			var msg = new SpeechSynthesisUtterance();
+			msg.rate = 1;
+			//msg.lang = "es-US";
+			//msg.voice = window.speechSynthesis.getVoices()[39]; //15
+			msg.text = text;
+			window.speechSynthesis.speak(msg);
+		}
+
+        function checkConnection() {
+            var connectedRef = firebase.database().ref(".info/connected");
+            connectedRef.on("value", function (snap) {
+                if (snap.val() === true)
+                    document.getElementById("noConnectionAlert").style.display = "none";
+                else
+                    document.getElementById("noConnectionAlert").style.display = "block";
+            });
+        }
+
+        //MAIN
+        populateName();
+        populateEmployee();
+        checkOrderByPhone();
+        populateOrder();
+        checkConnection();
+        checkDoneOrder();
+
+    </script>
+</body>

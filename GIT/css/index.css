@@ -147,9 +147,16 @@ input, button:not(.cross), label, span:not(.cross) {
     padding-top:7px;
 }
 
+#totalTextField {
+    z-index: 1;
+    position: absolute;
+    right: 26px;
+    top: 72.5px;
+    visibility: visible;
+}
+
 .product-quantity {
     padding: 0px;
-    padding-right: 10px;
 }
 
 .product-notes {
@@ -159,6 +166,16 @@ input, button:not(.cross), label, span:not(.cross) {
 
 .product-notes-container {
     padding: 0px;
+    padding-right: 10px;
+}
+
+.product-total-container {
+    padding: 0px;
+}
+
+.product-total {
+    border:0; 
+    box-shadow: none;
 }
 
 .remove-button {
