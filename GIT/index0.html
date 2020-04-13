@@ -259,9 +259,10 @@
                 //search just one word (posible id)
                 else {
                     if ($('#inputSearch').val() != "") {
-                        searchResult = JSON.search(products, '//*[contains(clave, "' + $('#inputSearch').val() + '")]' +
-                                    '|//*[contains(descripcion, "' + $('#inputSearch').val() + '")]' + 
-                                    '|//*[contains(unidad, "' + $('#inputSearch').val() + '")]');
+                        searchResult = JSON.search(products, '//*[contains(clave, "' + $('#inputSearch').val() + '")]');
+                        searchResultSecond = JSON.search(products, '//*[contains(descripcion, "' + $('#inputSearch').val() + '")]' +
+                            '|//*[contains(unidad, "' + $('#inputSearch').val() + '")]');
+                        Array.prototype.push.apply(searchResult, searchResultSecond);
                     }
                 }
 
