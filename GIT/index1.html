@@ -27,7 +27,7 @@
         var products;
         var orderRefID = "";
         firebase.initializeApp(connectFB());
-        var database = firebase.database().ref('productitos/');
+        var database = firebase.database().ref('productos/');
         database.on('value', function (snapshot) {
             products = Defiant.getSnapshot(snapshot.val());
         });
@@ -468,7 +468,7 @@
 
         //adds or updates a product to firebase
         function addNewProductDB(inputs) {
-            firebase.database().ref('productitos/' + inputs[1]).set({
+            firebase.database().ref('productos/' + inputs[1]).set({
                 clave: inputs[1],
                 costo: inputs[3],
                 descripcion: inputs[0],
