@@ -1,6 +1,6 @@
 var valuesFacturama = {
-    token: "cHJ1ZWJhczpwcnVlYmFzMjAxMQ==",
-    url: "https://apisandbox.facturama.mx/"
+    token: "Y3JlbWVyaWFpbXBlcmlvOnhhenRZdC1qdXpjaWMtMnhldGp5",
+    url: "https://api.facturama.mx/"
 };
 
 $.ajaxSetup({
