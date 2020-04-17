@@ -856,24 +856,22 @@
             $('#dynamic-list').find('input').eq(3).focus();
 
             $('#dynamic-list').find('input').eq(-4).on('keyup', function (e) {
-                if (e.keyCode == 13) {
-                    let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
-                    thisRowInputs.last().val(round(thisRowInputs.first().val() * product[7]));
+                let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
+                thisRowInputs.last().val(round(thisRowInputs.first().val() * product[7]));
+                updateTotal();
+                if (e.keyCode == 13)
                     thisRowInputs.last().focus();
-                    updateTotal();
-                }
             });
 
             $('#dynamic-list').find('input').eq(-1).on('keyup', function (e) {
+                let thisRow = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']");
+                thisRow.find('input').first().val(round($(this).val() / product[7]));
+                updateTotal();
                 if (e.keyCode == 13) {
-                    let thisRow = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']");
-                    thisRow.find('input').first().val(round($(this).val() / product[7]));
-
                     if(thisRow.next()[0])
                         thisRow.next().find('input').last().focus();
                     else
                         $("#quantityInput").focus();
-                    updateTotal();
                 }
             });
 
