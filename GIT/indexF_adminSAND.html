@@ -1234,21 +1234,19 @@
                 $('#dynamic-list').find('input').eq(-1).focus();
 
             $('#dynamic-list').find('input').eq(-4).on('keyup', function (e) {
-                if (e.keyCode == 13) {
-                    let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
-                    thisRowInputs.last().val(round(thisRowInputs.first().val() * product.costo));
+                let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
+                thisRowInputs.last().val(round(thisRowInputs.first().val() * product.costo));
+                updateTotal();
+                if (e.keyCode == 13)
                     thisRowInputs.last().focus();
-                    updateTotal();
-                }
             });
 
             $('#dynamic-list').find('input').eq(-1).on('keyup', function (e) {
-                if (e.keyCode == 13) {
-                    let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
-                    thisRowInputs.first().val(round($(this).val() / product.costo));
+                let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
+                thisRowInputs.first().val(round($(this).val() / product.costo));
+                updateTotal();
+                if (e.keyCode == 13)
                     $("#quantityInput").focus();
-                    updateTotal();
-                }
             });
 
             $("#dynamic-list").on("click", "button", function (e) {
