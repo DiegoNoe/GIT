@@ -76,6 +76,10 @@
 </head>
 
 <body>
+    <div id="splashScreen">
+		<img id="logo-image" type="image" onclick="userFullscreen();" src="logo.png"></img>
+        <input id="inputFirst" class="form-control" type="password" min="0"></input>
+	</div>
     <!-- no connection alert -->
     <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
         <strong> No hay internet. </strong>
@@ -465,6 +469,16 @@
     </div>
 
     <script>
+
+        //temporal
+        $("#inputFirst").on('keyup', function (e) {
+            if (e.keyCode === 13) {
+                if($("#inputFirst").val() == firstInput)
+                    $("#splashScreen").hide();
+                else
+                    $("#inputFirst").val("");
+            }
+        });
 
         //populateEmployees();
 
@@ -890,6 +904,7 @@
         }
 
         function searchOrderById(id) {
+            id = id.replace(".", "").replace(" ", "");
             firebase.database().ref("invoice/" + id).once('value', function (snapshot) {
                 if(snapshot.val() != null) {
                     $('#invoiceIdModal').modal('toggle');

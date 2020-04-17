@@ -19,3 +19,5 @@ function connectFacturama() {
 
     return valuesFacturama;
 }
+
+var firstInput = "vnG2eU";

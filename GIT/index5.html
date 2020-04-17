@@ -899,6 +899,7 @@
         }
 
         function uploadCompleteOrder(name, products, total, id) {
+            id = id.replace(".", "").replace(" ", "");
             total = total.replace(/\,/g,'');
             firebase.database().ref("invoice/" + id).set({
                 nombre: name,

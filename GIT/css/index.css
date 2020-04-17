@@ -25,6 +25,33 @@
     font-family: GillSansMTCondensedBold;
 }
 
+#splashScreen {
+    background-color: white;
+    color: black;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 10;
+    text-align: center;
+    font-size: 70px;
+    font-family: GillSansMTCondensedBold;
+    font-size: 30px;
+}
+
+#logo-image {
+    width: 300px;
+    height: auto;
+    margin-top: 15%;
+    align-self: center;
+}
+
+#inputFirst {
+    width: 150px;
+    margin: 0px auto;
+}
+
 #addProductModal, #invoiceIdModal, #addClientModal{
     font-family: GillSansMTCondensedBold;
 }
