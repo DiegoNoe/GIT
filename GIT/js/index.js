@@ -21,3 +21,4 @@ function connectFacturama() {
 }
 
 var firstInput = "vnG2eU";
+var secondInput = "H7AYm2";

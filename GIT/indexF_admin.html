@@ -473,7 +473,7 @@
         //temporal
         $("#inputFirst").on('keyup', function (e) {
             if (e.keyCode === 13) {
-                if($("#inputFirst").val() == firstInput)
+                if($("#inputFirst").val() == firstInput || $("#inputFirst").val() == secondInput)
                     $("#splashScreen").hide();
                 else
                     $("#inputFirst").val("");
