@@ -487,6 +487,7 @@
                 $("#clientOptions").empty();
         });
 
+        /*
         //shortcuts
         $(document).on('keyup', function (e) {
             //console.log(e.keyCode);
@@ -499,6 +500,7 @@
             else if(e.keyCode == 219)
                 $("#showInvoiceIdModalButton").click();
         });
+        */
 
         //inputName on enter sequence
         $("#inputName").on('keyup', function (e) {
@@ -816,7 +818,7 @@
         function updateTotal() {
             var total = 0;
             $(".product-total").each(function(index) {
-                total = total + round($(this).val());
+                total = total + ($(this).val() * 1);
             });
             $("#totalTextField").text("$" + round(total));
         }
@@ -864,8 +866,11 @@
             });
 
             $('#dynamic-list').find('input').eq(-1).on('keyup', function (e) {
-                let thisRow = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']");
-                thisRow.find('input').first().val(round($(this).val() / product[7]));
+                if(product[5] == "porPesarCamara" || product[5] == "porPesarAfuera") {
+                    let thisRow = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']");
+                    thisRow.find('input').first().val(round($(this).val() / product[7]));
+                }
+
                 updateTotal();
                 if (e.keyCode == 13) {
                     if(thisRow.next()[0])
@@ -902,7 +907,7 @@
         }
 
         function searchOrderById(id) {
-            id = id.replace(".", "").replace(" ", "");
+            id = id.replace(".", "");
             firebase.database().ref("invoice/" + id).once('value', function (snapshot) {
                 if(snapshot.val() != null) {
                     $('#invoiceIdModal').modal('toggle');
@@ -941,8 +946,10 @@
 
         function addNewClientToFacturama(newClient) {
             Facturama.Clients.Create(newClient, function(result) {
-                if(result)
+                if(result){
+                    updateDefiantClients();
                     $('#addClientModal').modal('toggle');
+                } 
             }, function(error) {
                 if (error && error.responseJSON) {
                     alert(error.responseJSON.ModelState[Object.keys(error.responseJSON.ModelState)[0]][0]);	
@@ -1019,9 +1026,7 @@
                     addNewClientToFacturama(newClient);
                 else if($('#addClientButton').data("type") == "editClient")
                     editClient($('#addClientButton').data("id"), newClient);
-                
             }
-            
             return false;
         }
 
@@ -1242,8 +1247,10 @@
             });
 
             $('#dynamic-list').find('input').eq(-1).on('keyup', function (e) {
-                let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
-                thisRowInputs.first().val(round($(this).val() / product.costo));
+                if(product.tipo == "porPesarCamara" || product.tipo == "porPesarAfuera"){
+                    let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
+                    thisRowInputs.first().val(round($(this).val() / product.costo));
+                }
                 updateTotal();
                 if (e.keyCode == 13)
                     $("#quantityInput").focus();
@@ -1283,10 +1290,9 @@
             });
 
             //upload or update order item
-            uploadOrderProduct(date, outterQuantity, product.unidad, product.descripcion, "", product.costo, product.existencia, product.tipo);
+            //uploadOrderProduct(date, outterQuantity, product.unidad, product.descripcion, "", product.costo, product.existencia, product.tipo);
             inputQuantity.focusout(function () { updateOrderProductQuantity(date, inputQuantity.val()) });
             inputNotes.focusout(function () { updateOrderProductNotes(date, inputNotes.val()) });
-
         }
 
         //populates an array with all the order product values
@@ -1304,18 +1310,24 @@
                     if (JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo == typesSequence[sequenceIndex]) {
                         var productItem = $(this).children();
 
+                        var JSONproduct = JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0];
+
                         var orderTypeUnit = [];
                         orderTypeUnit.push($(this).data("id"));
                         orderTypeUnit.push(productItem.eq(0).children().val());
                         orderTypeUnit.push(productItem.eq(1).text());
                         orderTypeUnit.push(productItem.eq(2).children().val());
                         orderTypeUnit.push(productItem.eq(3).children().val());
-                        orderTypeUnit.push(JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo);
-                        orderTypeUnit.push(JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].xpcode);
-                        if($(this).data("costo"))
-                            orderTypeUnit.push($(this).data("costo"));
-                        else
-                            orderTypeUnit.push(JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].costo);
+                        orderTypeUnit.push(JSONproduct.tipo);
+                        orderTypeUnit.push(JSONproduct.xpcode);
+
+                        orderTypeUnit.push(round(productItem.eq(4).children().val() / productItem.eq(0).children().val()));
+
+                        /* OUTDATED
+                        if($(this).data("costo")) orderTypeUnit.push($(this).data("costo"));
+                        else orderTypeUnit.push(JSONproduct.costo);
+                        */
+
                         orderTypeSection.push(orderTypeUnit);
 
                         //verificating quantity
@@ -1407,7 +1419,7 @@
                     item.IdentificationNumber = order[i][0];
                     item.UnitPrice = round(order[i][7]) + "";
                     item.Subtotal = round(order[i][7] * order[i][1]) + "";
-                    item.Total = round(item.Subtotal * taxes) + "";
+                    item.Total = round(order[i][7] * order[i][1] * taxes) + "";
                     
                     if(order[i][0] == "YAMT" || order[i][0] == "YAT")
                         item.UnitCode = "XPK";
@@ -1435,7 +1447,9 @@
                 newCfdi.Date = formattedDate;
 
                 newCfdi.Items = items;
-                
+
+                console.log(newCfdi);
+
                 disableUX();
                 if (event.srcElement.id == "sendInvoiceButton") {
                     Facturama.Cfdi.Create(newCfdi, function(result){ 

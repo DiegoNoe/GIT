@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" style="zoom: 100%; background-color: white;">
+<html lang="es">
 
 <head>
     <title>Jamones view</title>
@@ -93,7 +93,7 @@
             right: 0px;
             z-index: 1;
             text-align: center;
-            padding-top: 10%;
+            padding-top: 50%;
             display: none;
             font-family: GillSansMTCondBold;
             font-size: 70px;
@@ -114,69 +114,6 @@
             font-size: 85px;
         }
 
-        #survey {
-            background-color: white;
-            color: black;
-            position: absolute;
-            top: 69%;
-            bottom: 0px;
-            left: 0px;
-            right: 0px;
-            z-index: 10;
-            text-align: center;
-            display: none;
-            font-family: GillSansMTCondBold;
-            font-size: 70px;
-        }
-
-        #surveyMessage {
-            background-color: white;
-            color: black;
-            position: absolute;
-            top: 66%;
-            bottom: 0px;
-            left: 0px;
-            right: 0px;
-            z-index: 1;
-            text-align: center;
-            display: none;
-            font-family: GillSansMTCondBold;
-            font-size: 70px;
-        }
-
-        .survey-image {
-            width: 220px;
-        }
-
-        #splashScreen {
-            background-color: white;
-            color: black;
-            position: absolute;
-            top: 0px;
-            bottom: 0px;
-            left: 0px;
-            right: 0px;
-            z-index: 100;
-            text-align: center;
-			font-size: 70px;
-			font-family: GillSansMTCondensedBold;
-			font-size: 30px;
-		}
-
-		#logo-image {
-			width: 80%;
-			padding-top: 20%;
-            padding-right: 15px;
-            z-index: 101;
-        }
-
-        #welcomeSpalshMessage{
-            color: black;
-            text-align: center;
-            font-family: GillSansMTCondBold;
-            font-size: 85px;
-        }
-
     </style>
 
     <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
@@ -193,9 +130,7 @@
 
         firebase.initializeApp(config);
         var database = firebase.database().ref('liveView5/order');
-        var globalName,
-            globalEmployee,
-            globalOrderByPhone;
+        var globalName;
         var shortenedUnits = {
             KILO: "KG",
             PIEZA: "PZ",
@@ -215,19 +150,8 @@
 
 </head>
 
-<body style="zoom: 100%; background-color: white;">
-    <div id="splashScreen">
-        <input id="logo-image" type="image" onclick="userFullscreen();" src="logo.png"/>
-        <span id="welcomeSpalshMessage">PRESIONA PARA INICIAR</span>
-    </div>
-    <h2 id="thankyouMessage"></h2>
-    <h2 id="surveyMessage">GRACIAS POR TU<br>RETROALIMENTACIÓN</h2>
-    <div id="survey">
-        <input class="survey-image" type="image" onclick="surveyHappy();" src="happy.png"/>
-        <input class="survey-image" type="image" onclick="surveyMeh();" src="meh.png"/>
-        <input class="survey-image" type="image" onclick="surveySad();" src="sad.png"/>
-    </div>
-    
+<body>
+    <h1 id="thankyouMessage"></h1>
     <h1 id="welcomeMessage">
         <img src="logo.png" width="400px" style="position: absolute; top: 100px" alt="Logo">
         BIENVENIDO
@@ -245,47 +169,6 @@
 
     <script>
 
-        $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
-			if (document.fullscreen)
-				$("#splashScreen").hide();
-			else
-				$("#splashScreen").show();
-        });
-
-        function userFullscreen() {
-			document.body.requestFullscreen();
-		}
-
-        function surveyHappy() {
-            uploadSurvey("feliz");
-            $("#survey").hide();
-            $("#surveyMessage").show();
-            $("#thankyouMessage").html($("#thankyouMessage").html().substring(0, $("#thankyouMessage").html().length - 16));
-        }
-
-        function surveyMeh() {
-            uploadSurvey("normal");
-            $("#survey").hide();
-            $("#surveyMessage").show();
-            $("#thankyouMessage").html($("#thankyouMessage").html().substring(0, $("#thankyouMessage").html().length - 16));
-        }
-
-        function surveySad() {
-            uploadSurvey("triste");
-            $("#survey").hide();
-            $("#surveyMessage").show();
-            $("#thankyouMessage").html($("#thankyouMessage").html().substring(0, $("#thankyouMessage").html().length - 16));
-        }
-
-        function uploadSurvey(answer) {
-            firebase.database().ref('registro/' + globalEmployee + '/' + answer).once('value', function(snapshot) {
-                if(snapshot.val() == null)
-                    firebase.database().ref('registro/' + globalEmployee + '/' + answer).set(1);
-                else
-                    firebase.database().ref('registro/' + globalEmployee + '/' + answer).set(snapshot.val() + 1);
-            });
-        }
-
         function populateName() {
             firebase.database().ref('liveView5/name').on('value', function (snapshot) {
                 if(snapshot.val() != null) {
@@ -298,15 +181,8 @@
             });
         }
 
-        function populateEmployee() {
-            firebase.database().ref('liveView5/employee').on('value', function (snapshot) {
-                if(snapshot.val() != null)
-                    globalEmployee = snapshot.val();
-            });
-        }
-
         //loads orders and remains listening
-        function populateOrder()  {
+        function populateOrder()  {
             database.on('value', function (snapshot) {
                 var total = 0;
                 var isExact = true;
@@ -403,51 +279,23 @@
             });
         }
 
-        function checkOrderByPhone() {
-            firebase.database().ref('liveView5/phoneOrder').on('value', function (snapshot) {
-                globalOrderByPhone = snapshot.val();
-            });
-        }
-
         function checkDoneOrder() {
             firebase.database().ref('liveView5/done').on('value', function (snapshot) {
                 if(snapshot.val()) {
-                    if(!globalOrderByPhone) {
-                        var totalMessage = $('#totalTitleLabel').text() + " " + $('#totalTitle').text();
-                        $("#thankyouMessage").html("GRACIAS<br>" + globalName + "<br><br><br>" + totalMessage + "<br><br><br>¿CÓMO TE ATENDÍ?");
-                        $("#thankyouMessage").show();
-                        $("#survey").show();
-                        speak("Gracias " + globalName + ", en un momento te nombramos en caja.");
-                        firebase.database().ref('liveView5').remove();
-                        setTimeout(function(){
-                            $("#survey").hide();
-                            $("#surveyMessage").hide();
-                            $("#thankyouMessage").hide();
-                            $("#thankyouMessage").html("GRACIAS POR SU VISITA");
-                            $("#welcomeMessage").show();
-                            globalName = "";
-                        }, 10000);
-                    } else {
-                        firebase.database().ref('liveView5').remove();
-                        $("#survey").hide();
-                        $("#surveyMessage").hide();
+                    var totalMessage = $('#totalTitleLabel').text() + " " + $('#totalTitle').text();
+                    console.log("total" + totalMessage);
+                    $("#thankyouMessage").html("GRACIAS POR TU VISITA<br>" + globalName + "<br><br>" + totalMessage + "<br><br><br><br>EN UN MOMENTO TE<br>NOMBRARÁN EN CAJA");
+                    $("#thankyouMessage").show();
+                    firebase.database().ref('liveView5').remove();
+                    setTimeout(function(){
                         $("#thankyouMessage").hide();
                         $("#thankyouMessage").html("GRACIAS POR SU VISITA");
                         $("#welcomeMessage").show();
                         globalName = "";
-                    }
+                    }, 5000);
                 }
             });
         }
-
-        function speak(text) {
-			var msg = new SpeechSynthesisUtterance();
-			msg.rate = 1;
-			//msg.lang = "es-US";
-			//msg.voice = window.speechSynthesis.getVoices()[39]; //15
-			msg.text = text;
-			window.speechSynthesis.speak(msg);
-		}
 
         function checkConnection() {
             var connectedRef = firebase.database().ref(".info/connected");
@@ -461,8 +309,6 @@
 
         //MAIN
         populateName();
-        populateEmployee();
-        checkOrderByPhone();
         populateOrder();
         checkConnection();
         checkDoneOrder();
