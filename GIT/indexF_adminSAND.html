@@ -858,20 +858,23 @@
             $('#dynamic-list').find('input').eq(3).focus();
 
             $('#dynamic-list').find('input').eq(-4).on('keyup', function (e) {
-                let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
-                thisRowInputs.last().val(round(thisRowInputs.first().val() * product[7]));
-                updateTotal();
+                if (e.keyCode != 9) {
+                    let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
+                    thisRowInputs.last().val(round(thisRowInputs.first().val() * product[7]));
+                    updateTotal();
+                }
                 if (e.keyCode == 13)
                     thisRowInputs.last().focus();
             });
 
             $('#dynamic-list').find('input').eq(-1).on('keyup', function (e) {
-                if(product[5] == "porPesarCamara" || product[5] == "porPesarAfuera") {
-                    let thisRow = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']");
-                    thisRow.find('input').first().val(round($(this).val() / product[7]));
+                if (e.keyCode != 9) {
+                    if(product[5] == "porPesarCamara" || product[5] == "porPesarAfuera") {
+                        let thisRow = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']");
+                        thisRow.find('input').first().val(round($(this).val() / product[7]));
+                    }
+                    updateTotal();
                 }
-
-                updateTotal();
                 if (e.keyCode == 13) {
                     if(thisRow.next()[0])
                         thisRow.next().find('input').last().focus();
@@ -889,8 +892,12 @@
         }
 
         function populateOrder(order) {
-            eraseOrder();
-            $("#inputName").val("");
+            $("#quantityInput").val("");
+            $("#inputSearch").val("");
+            $("#searchOptions").empty();
+            $("#dynamic-list").css("opacity", "1");
+            invoiceID = "";
+
             $("#inputName").attr("placeholder", order.nombre);
 
             (function iterateOverProductsWithDelay (i) {          
@@ -899,7 +906,6 @@
                     if (--i) iterateOverProductsWithDelay(i);
                 }, 1)
             })(order.productos.length);
-           
         }
 
         function deleteOrderById(id) {
@@ -1239,19 +1245,23 @@
                 $('#dynamic-list').find('input').eq(-1).focus();
 
             $('#dynamic-list').find('input').eq(-4).on('keyup', function (e) {
-                let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
-                thisRowInputs.last().val(round(thisRowInputs.first().val() * product.costo));
-                updateTotal();
+                if (e.keyCode != 9) {
+                    let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
+                    thisRowInputs.last().val(round(thisRowInputs.first().val() * product.costo));
+                    updateTotal();
+                }
                 if (e.keyCode == 13)
                     thisRowInputs.last().focus();
             });
 
             $('#dynamic-list').find('input').eq(-1).on('keyup', function (e) {
-                if(product.tipo == "porPesarCamara" || product.tipo == "porPesarAfuera"){
-                    let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
-                    thisRowInputs.first().val(round($(this).val() / product.costo));
+                if (e.keyCode != 9) {
+                    if(product.tipo == "porPesarCamara" || product.tipo == "porPesarAfuera") {
+                        let thisRowInputs = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']").find('input');
+                        thisRowInputs.first().val(round($(this).val() / product.costo));
+                    }
+                    updateTotal();
                 }
-                updateTotal();
                 if (e.keyCode == 13)
                     $("#quantityInput").focus();
             });
