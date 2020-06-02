@@ -916,6 +916,7 @@
 
         function searchOrderById(id) {
             id = id.replace(".", "");
+            id = id.replace(" ", "");
             firebase.database().ref("invoice/" + id).once('value', function (snapshot) {
                 if(snapshot.val() != null) {
                     $('#invoiceIdModal').modal('toggle');
