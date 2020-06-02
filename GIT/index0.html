@@ -57,21 +57,22 @@
                 <input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" id="inputName" maxlength="20" placeholder="NOMBRE"> </input>
             </div>
             <!-- tomorrow checkbox -->
-            <div class="col-md-2" style="padding-top: 5px; padding-left: 5px;">
-                <input type="checkbox" style="vertical-align: top; margin-top: 4.5px;" class="form-check-input" id="tomorrowCheckbox">
+            <div class="col-md-4" style="padding-top: 5px; padding-left: 5px;">
+                <input type="checkbox" style="vertical-align: top; margin-top: 4.5px; margin-left: 35px;" class="form-check-input" id="tomorrowCheckbox">
                 <label style="color: gray; margin-bottom: 0px; opacity: .4; line-height: 23px;" class="form-check-label" for="tomorrowCheckbox">&nbsp;MAÑANA</label>
+                <input type="checkbox" style="vertical-align: top; margin-top: 4.5px; margin-left: 40px;" class="form-check-input" id="invoiceCheckbox">
+                <label style="color: gray; margin-bottom: 0px; opacity: .4; line-height: 23px;" class="form-check-label" for="invoiceCheckbox">&nbsp;FACTURA</label>
             </div>
             <!-- employee name input -->
-            <select class="col-sm-2 form-control" id="inputEmployeeName">
+            <select class="col-sm-2 form-control" style="margin-top: 2px;" id="inputEmployeeName">
                 <option disabled selected>ANOTADOR</option>
             </select>
 
             <!-- interface buttons-->
-            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-user" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF()"></button>
-            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-phone-alt" id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold;" onclick="generatePDF()"></button>
-            <button type="button" class="btn btn-danger interface-button" id="printByWhatsButton" style="float: right; margin-top: 1px; margin-right: 5px; font-weight: bold; -webkit-text-stroke: 1px;" onclick="generatePDF()"><i class="fa fa-whatsapp" style="font-size: 28px; line-height: 22.5px;" aria-hidden="true"></i></button>
-            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-list-alt" id="printWithInvoiceButton" style="float: right; margin-right: 5px; font-weight: bold;" onclick="generatePDF()"></button>
-            <button type="button" class="btn btn-secondary interface-button" style="float: right; margin-right: 5px; font-weight: bold;" onclick="addProductModal();">AGREGAR</button>
+            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-user" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF('MOSTRADOR')"></button>
+            <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-phone-alt" id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold;" onclick="generatePDF('TELEFONO')"></button>
+            <button type="button" class="btn btn-danger interface-button" id="printByWhatsButton" style="float: right; margin-top: 1px; margin-right: 5px; font-weight: bold; -webkit-text-stroke: 1px;" onclick="generatePDF('WHATSAPP')"><i class="fa fa-whatsapp" style="font-size: 28px; line-height: 22.5px;" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-plus-sign" style="float: right; margin-right: 5px; font-weight: bold;" onclick="addProductModal()"></button>
         </div>
 
         <div class="row" style="margin-bottom: 15px">
@@ -238,7 +239,7 @@
                 //unblur
             } else if (e.keyCode == 221 || e.keyCode == 106) {
                 $("#dynamic-list").css("opacity", "1");
-                generatePDF();
+                generatePDF("");
             }
             //search action
             else {
@@ -633,7 +634,7 @@
         var xOffset = 35;
         var yOffset = 2.5;
         //FUTURE FIX (HUGE FUNCTION) - generates a PDF with autoprint
-        function generatePDF() {
+        function generatePDF(orderMethod) {
             //set PDF defaults
             var order = getOrderProducts();
             if ($("#inputName").val() == "") {
@@ -661,7 +662,7 @@
 
                 //add defaults values
                 addTimePDF(doc);
-                addMethodPDF(doc);
+                addMethodPDF(doc, orderMethod);
                 addNamePDF(doc);
 
                 //creates the database instance
@@ -675,7 +676,7 @@
                 var randomLetter2 = possible.charAt(Math.floor(Math.random() * possible.length));
 
                 //add copy
-                addPagePDF(doc);
+                addPagePDF(doc, orderMethod);
                 doc.setPage(1);
 
                 var shortenedUnits = {
@@ -699,8 +700,8 @@
                     //adds new page if necessary
                     if (currentLine == 17 || (currentLine == 16 && order[i][4] != "")) {
                         pagesQuantity++;
-                        addPagePDF(doc);
-                        addPagePDF(doc);
+                        addPagePDF(doc, orderMethod);
+                        addPagePDF(doc, orderMethod);
                         doc.setPage(pagesQuantity * 2 - 1);
                         currentLine = 0;
                     }
@@ -883,7 +884,7 @@
                 else
                     firebase.database().ref('pendingOrders/' + orderRefID).remove();
 
-                if(event.srcElement.id == "printWithInvoiceButton")
+                if ($("#invoiceCheckbox").is(':checked'))
                     uploadCompleteOrder(replaceAEIOUN($("#inputName").val().trim()), order, total, productsRefID);
 
                 //autoprints PDF in a new tab
@@ -933,11 +934,11 @@
         }
 
         //adds a new page with all the values
-        function addPagePDF(doc) {
+        function addPagePDF(doc, orderMethod) {
             doc.addPage();
             addTimePDF(doc);
             addNamePDF(doc);
-            addMethodPDF(doc);
+            addMethodPDF(doc, orderMethod);
         }
 
         //adds date and time to the top right corner
@@ -954,22 +955,21 @@
             doc.text(53.5  + xOffset, 38.5  + yOffset, hourWithMinutes, 'center');
         }
 
-        function addMethodPDF(doc) {
+        function addMethodPDF(doc, orderMethod) {
             doc.setFontSize(13);
             doc.setFont("Gill Sans MT Condensed Negrita");
 
+            //aqui1
             //special mark if the order is for the next day
             if ($("#tomorrowCheckbox").is(':checked')) {
                 doc.setFontSize(29);
                 doc.text(9 + xOffset, 28  + yOffset, "M", "center");
+                doc.setFontSize(12);
+                doc.text(63 + xOffset, 195.5  + yOffset, "MANANA");
                 doc.setFontSize(13);
             } 
-            if(event.srcElement.id == "printByPhoneButton")
-                doc.text(87 + xOffset, 38.5  + yOffset, "TELEFONO", 'center');
-            else if(event.srcElement.id == "printByWhatsButton")
-                doc.text(87 + xOffset, 38.5  + yOffset, "WHATSAPP", 'center');
-            else
-                doc.text(87 + xOffset, 38.5  + yOffset, "MOSTRADOR", 'center');
+
+            doc.text(87 + xOffset, 38.5  + yOffset, orderMethod, 'center');
 
             //special counter if the order was made by phone
             if(event.srcElement.id == "printByPhoneButton") {
@@ -977,7 +977,7 @@
                 firebase.database().ref(globalComputer + '/phoneOrder').set(true);
             }
 
-            if(event.srcElement.id == "printWithInvoiceButton") {
+            if ($("#invoiceCheckbox").is(':checked')) {
                 doc.setFontSize(29);
                 doc.setFont("Gill Sans MT Condensed Negrita");
                 doc.text(130 + xOffset, 28  + yOffset, "F", "center");
@@ -998,14 +998,14 @@
             doc.text(43 + xOffset, 195.5  + yOffset, replaceAEIOUN($("#inputEmployeeName").val()));
         }
 
-        //draws circle besides the description
+        //draws circle besides the description        
         function drawCricle(doc, YCoordinate, validColor) {
             if (validColor == "blue")
-                doc.setFillColor(0, 0, 255);
+                doc.text(5 + xOffset, YCoordinate - 1.5, "+", "center");
             else if (validColor == "red")
-                doc.setFillColor(255, 0, 0);
+                doc.text(5 + xOffset, YCoordinate - .7, "-", "center");
 
-            doc.circle(5  + xOffset, YCoordinate - 1.7, .8, 'F');
+            //doc.circle(5 + xOffset, YCoordinate - 1.7, .8, 'F');
         }
 
         function drawAsterisk(doc, YCoordinate, validColor) {
@@ -1188,6 +1188,7 @@
             $("#inputName").val("");
             $("#dynamic-list").html("");
             $('#tomorrowCheckbox').prop('checked', false);
+            $('#invoiceCheckbox').prop('checked', false);
         }
 
         //checks current connection status
@@ -1212,7 +1213,7 @@
         //some shortcuts. get the keycodes from here http://keycode.info
         $(document).keydown(function (e) {
             if (e.keyCode == 221 || e.keyCode == 106)
-                generatePDF();
+                generatePDF("");
             else if (e.keyCode == 219 || e.keyCode == 111) {
                 $("#inputName").focus();
                 setTimeout(function () {

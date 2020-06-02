@@ -117,6 +117,8 @@
                         <option value="01" selected>EFECTIVO</option>
                         <option value="02">CHEQUE</option>
                         <option value="03">TRANSFE.</option>
+                        <option value="99">P/DEFINIR</option>
+
                     </select>
                 </div>
             </div>
@@ -553,7 +555,7 @@
                 //unblur
             } else if (e.keyCode == 221 || e.keyCode == 106) {
                 $("#dynamic-list").css("opacity", "1");
-                generatePDF();
+                //generatePDF();
             }
             //search action
             else {
@@ -1908,11 +1910,12 @@
         //draws circle besides the description
         function drawCricle(doc, YCoordinate, validColor) {
             if (validColor == "blue")
-                doc.setFillColor(0, 0, 255);
+                doc.text(5 + xOffset, YCoordinate - 1.7, "+", "center");
             else if (validColor == "red")
-                doc.setFillColor(255, 0, 0);
+                doc.text(5 + xOffset, YCoordinate - 1.7, "-", "center");
 
-            doc.circle(5 + xOffset, YCoordinate - 1.7, .8, 'F');
+
+            //doc.circle(5 + xOffset, YCoordinate - 1.7, .8, 'F');
         }
 
         //replaces special characters (current jspdf doesn´t support them)
@@ -2120,9 +2123,9 @@
 
         //some shortcuts. get the keycodes from here http://keycode.info
         $(document).keydown(function (e) {
-            if (e.keyCode == 221 || e.keyCode == 106)
-                generatePDF();
-            else if (e.keyCode == 219 || e.keyCode == 111) {
+            //if (e.keyCode == 221 || e.keyCode == 106)
+                //generatePDF();
+            if (e.keyCode == 219 || e.keyCode == 111) {
                 $("#inputName").focus();
                 setTimeout(function () {
                     $("#inputName").val($("#inputName").val().substring(0, $("#inputName").val().length - 1));
