@@ -73,6 +73,7 @@
             <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-phone-alt" id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold;" onclick="generatePDF('TELEFONO')"></button>
             <button type="button" class="btn btn-danger interface-button" id="printByWhatsButton" style="float: right; margin-top: 1px; margin-right: 5px; font-weight: bold; -webkit-text-stroke: 1px;" onclick="generatePDF('WHATSAPP')"><i class="fa fa-whatsapp" style="font-size: 28px; line-height: 22.5px;" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-plus-sign" style="float: right; margin-right: 5px; font-weight: bold;" onclick="addProductModal()"></button>
+            <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon glyphicon-bullhorn" style="float: right; margin-right: 5px; font-weight: bold;" onclick="callClient()"></button>
         </div>
 
         <div class="row" style="margin-bottom: 15px">
@@ -282,6 +283,13 @@
                     $("#dynamic-list").css("opacity", "1");
             }
         });
+
+        function callClient() {
+            var localComputer = globalComputer.slice(globalComputer.length - 1, globalComputer.length);
+            firebase.database().ref('service/' + localComputer + 'isReady').set(false).then(function() {
+                firebase.database().ref('service/' + localComputer + 'isReady').set(true);
+            });
+        }
 
         function populateEmployees() {
             var empleadosDB;
