@@ -298,7 +298,7 @@
         function callWhenReady(localComputer) {
             firebase.database().ref('service/' + localComputer + 'isReady').on('value', function(snapshot) {
                 if(snapshot.val()) {
-                    speakOnce("pase el sigueinte a la " + localComputer);
+                    speakOnce("pase el siguiente a la " + localComputer);
                     firebase.database().ref('service/' + localComputer + 'isReady').set(false);
                 }
             });
