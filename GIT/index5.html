@@ -64,7 +64,7 @@
                 <label style="color: gray; margin-bottom: 0px; opacity: .4; line-height: 23px;" class="form-check-label" for="invoiceCheckbox">&nbsp;FACTURA</label>
             </div>
             <!-- employee name input -->
-            <select class="col-sm-2 form-control" style="margin-top: 2px; width: 170px;" id="inputEmployeeName">
+            <select class="col-sm-2 form-control" style="margin-top: 2px;" id="inputEmployeeName">
                 <option disabled selected>ANOTADOR</option>
             </select>
 
@@ -199,9 +199,6 @@
 
         populateEmployees();
 
-        //listen for ready computers
-        for (var i = 0; i <= 6; i++)
-            callWhenReady(i); 
         //inputName on enter sequence
         $("#inputName").on('keyup', function (e) {
             if (e.keyCode == 13)
@@ -287,28 +284,11 @@
             }
         });
 
-        //aqui1
         function callClient() {
             var localComputer = globalComputer.slice(globalComputer.length - 1, globalComputer.length);
             firebase.database().ref('service/' + localComputer + 'isReady').set(false).then(function() {
                 firebase.database().ref('service/' + localComputer + 'isReady').set(true);
             });
-        }
-
-        function callWhenReady(localComputer) {
-            firebase.database().ref('service/' + localComputer + 'isReady').on('value', function(snapshot) {
-                if(snapshot.val()) {
-                    speakOnce("pase el siguiente a la " + ((localComputer - 6) * (-1)));
-                    firebase.database().ref('service/' + localComputer + 'isReady').set(false);
-                }
-            });
-        }
-
-        function speakOnce(message) {
-            var msg = new SpeechSynthesisUtterance();
-            msg.rate = .95;
-            msg.text = message;
-            window.speechSynthesis.speak(msg);
         }
 
         function populateEmployees() {
@@ -987,6 +967,7 @@
             doc.setFontSize(13);
             doc.setFont("Gill Sans MT Condensed Negrita");
 
+            //aqui1
             //special mark if the order is for the next day
             if ($("#tomorrowCheckbox").is(':checked')) {
                 doc.setFontSize(29);
