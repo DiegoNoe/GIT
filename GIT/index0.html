@@ -639,7 +639,7 @@
             return 0;
         }
 
-        var xOffset = 35;
+        var xOffset = 2.5;
         var yOffset = 2.5;
         //FUTURE FIX (HUGE FUNCTION) - generates a PDF with autoprint
         function generatePDF(orderMethod) {
@@ -660,7 +660,7 @@
                 var doc = new jsPDF({
                     orientation: 'p',
                     unit: 'mm',
-                    format: [297, 210]
+                    format: [210, 148]
                 });
 
                 //add custom fonts

@@ -71,7 +71,7 @@
         }
 
         .group2 {
-            height: 260px;
+            height: 264px;
         }
 
         .product-row {
@@ -173,13 +173,23 @@
 
     <script>
 
-        getUserToFullscreen();
         populatePorSurtir();
         populatePorEntregar();
         startClockTime();
         setTimeout(function () {
             checkUpdatedStatus();
         }, 60000);
+
+        document.addEventListener("webkitfullscreenchange", exitHandler); 
+		function exitHandler() {
+			if (!document.webkitIsFullScreen) {
+				$("#splashScreen").show();
+			} else{
+				$("#splashScreen").hide();
+                $('body').height(962);
+                $('body').width(602);
+			}
+		} 
 
         ///Activates tabs
 		var i, tabcontent, tablinks;
@@ -190,22 +200,13 @@
         document.getElementById("thirdTab").click();
 
         checkConnection();
-
         function playSound() {
             document.getElementById("linkAudio").play();
         }
 
-        function getUserToFullscreen() {
-            $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
-                if (document.fullscreen)
-                    $("#splashScreen").hide();
-                else
-                    $("#splashScreen").show();
-            });
-        }
-
         function userFullscreen() {
-			document.body.requestFullscreen();
+			if (document.body.webkitRequestFullscreen)
+				document.body.webkitRequestFullscreen();
 		}
 
         function populatePorSurtir() {
@@ -233,9 +234,11 @@
                 playSound();
                 
                 if(snapshot.child("porSurtir").val()) {
-                    console.log("siempre no, desde por surtir");
                     speakOnce("siempre no");
                 }
+
+                //justSpeak(formatProductToSpeech(snapshot));
+
             });
 
             database.child("pendientes").on('child_removed', function(snapshot) {
@@ -245,7 +248,6 @@
 
             database.child("hechas").on('child_added', function(snapshot) {
                 if(snapshot.child("porSurtir").exists()){
-                    console.log("siempre no, pero desde un surtidas");
                     speakOnce("siempre no");
                 }
             });
@@ -449,6 +451,26 @@
             if(description.includes("PZ)")) {
                 description = description.replace("(", "DE ");
                 description = description.replace("PZ)", " PIEZAS");
+            }
+
+            if(description.includes("ML")) {
+                description = description.replace("ML", " MILILITROS");
+            }
+
+            if(description.includes(".")) {
+                description = description.replace(".", " PUNTO ");
+            }
+
+            if(description.includes("TAPAROSCA")) {
+                description = description.replace("TAPAROSCA", "TAPA ROSCA");
+            }
+
+            if(description.includes("GR")) {
+                description = description.replace("GR", " GRAMOS");
+            }
+
+            if(description.includes("HELLMANS")) {
+                description = description.replace("HELLMANS", "GEL MANS");
             }
 
             //accents
