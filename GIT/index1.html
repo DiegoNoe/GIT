@@ -663,8 +663,14 @@
             return 0;
         }
 
-        var xOffset = 35;
-        var yOffset = 2.5;
+        if(globalComputer == "liveView1" || globalComputer == "liveView2") {
+            var xOffset = 32;
+            var yOffset = -2.5;
+        } else {
+            var xOffset = 35;
+            var yOffset = 2.5;
+        }
+
         //FUTURE FIX (HUGE FUNCTION) - generates a PDF with autoprint
         function generatePDF(orderMethod) {
             //set PDF defaults
