@@ -299,9 +299,9 @@
             firebase.database().ref('service/' + localComputer + 'isReady').on('value', function(snapshot) {
                 if(snapshot.val()) {
                     if(((localComputer - 6) * (-1)) == "1")
-                        speakOnce("buenas tardes pase el siguiente a la uno");
+                        speakOnce("buenas tardes, pase el siguiente a la uno");
                     else
-                        speakOnce("buena tardes pase el siguiente a la " + ((localComputer - 6) * (-1)));
+                        speakOnce("buena tardes, pase el siguiente a la " + ((localComputer - 6) * (-1)));
 
                     firebase.database().ref('service/' + localComputer + 'isReady').set(false);
                 }
