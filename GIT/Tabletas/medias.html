@@ -389,7 +389,7 @@
 				var employeesPronunciation = [];
 				$.each(empleadosDB, function(key, value) {
 					employeesNames.push(key);
-					employeesPronunciation.push(value);
+					employeesPronunciation.push(value.substring(0, value.length - 2));
 				});
 				populateEmployeesList(employeesNames, employeesPronunciation);
 			});
@@ -412,7 +412,7 @@
 					var sigmaEmployee = false;
 					if(pronunciations[i].charAt(0) == 0) {
 						var sigmaEmployee = true;
-						pronunciations[i] = pronunciations[i].substring(1, name.length);
+						pronunciations[i] = pronunciations[i].substring(1, pronunciations[i].length);
 					}
 
 					var employeeListItem =
@@ -429,7 +429,7 @@
 					var sigmaEmployee = false;
 					if(pronunciations[i].charAt(0) == 0) {
 						var sigmaEmployee = true;
-						pronunciations[i] = pronunciations[i].substring(1, name.length);
+						pronunciations[i] = pronunciations[i].substring(1, pronunciations[i].length);
 					}
 
 					var employeeListItem =

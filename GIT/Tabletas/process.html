@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: white;">
+<head>
+	<title>PEDIDOS</title>
+
+	<meta charset="utf-8">
+    <meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+	<!-- local js resources -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+	<script language="javascript" type="text/javascript" src="defiant.min.js"></script>
+	
+	<script>
+		var config = {
+			apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
+			authDomain: "cremeria-imperial.firebaseapp.com",
+			databaseURL: "https://cremeria-imperial.firebaseio.com",
+			projectId: "cremeria-imperial",
+			storageBucket: "cremeria-imperial.appspot.com",
+			messagingSenderId: "445465872507"
+		};
+
+		firebase.initializeApp(config);
+
+		var firstsCounter = 0;
+		var secondsCounter = 0;
+
+		var databaseFirsts = firebase.database().ref('process/firsts/');
+		databaseFirsts.on('child_added', function (snapshot) {
+			$('#dynamic-list-firsts').append(formatFirstsListItem(snapshot.val()));
+			$('#dynamic-list-firsts').children().last().data("hour", snapshot.val().hour);
+			updateElapsedTime($('#dynamic-list-firsts').children().last(), "elapsed-time");
+			
+			firstsCounter++;
+			updateCounter("firsts-counter-label", firstsCounter);
+		});
+		databaseFirsts.on('child_removed', function (snapshot) {
+			var removedOrder = $('#dynamic-list-firsts').children().filter(function() {
+				return $(this).data("hour") == snapshot.val().hour;
+			});
+			removedOrder.remove();
+
+			firstsCounter--;
+			updateCounter("firsts-counter-label", firstsCounter);
+		});
+		
+		var databaseSeconds = firebase.database().ref('process/seconds/');
+		databaseSeconds.on('child_added', function (snapshot) {
+			$('#dynamic-list-seconds').append(formatSecondsListItem(snapshot.val()));
+			$('#dynamic-list-seconds').children().last().data("hour", snapshot.val().hour);
+			updateElapsedTime($('#dynamic-list-seconds').children().last(), "elapsed-time");
+			updateElapsedTime($('#dynamic-list-seconds').children().last(), "seconds-elapsed-time");
+			
+			secondsCounter++;
+			updateCounter("seconds-counter-label", secondsCounter);
+		});
+
+		databaseSeconds.on('child_removed', function (snapshot) {
+			var removedOrder = $('#dynamic-list-seconds').children().filter(function() {
+				return $(this).data("hour") == snapshot.val().hour;
+			});
+			removedOrder.remove();
+
+			secondsCounter--;
+			updateCounter("seconds-counter-label", secondsCounter);
+		});
+
+
+		var employeesSnapshot = {};
+		var databaseEmployees = firebase.database().ref('empleados/');
+		databaseEmployees.on('value', function (snapshot) {
+			employeesSnapshot = snapshot.val();
+		});
+
+		//scanner input productsRefID.split('.').join("")
+
+	</script>
+
+	<style>
+
+		@font-face {
+            font-family: GillSansMTCondensedBold;
+            font-style: normal;
+            src: url(GillSansMTCondensedBold.ttf);
+        }
+
+		.container-fluid {
+			font-family: GillSansMTCondensedBold;
+			margin-left: 1%;
+			margin-right: 1%;
+			margin-top: 1.5%;
+			position: relative;
+		}
+
+		#verificationMessage {
+			font-size: 16px;
+		}
+
+		#dynamic-list-firsts {
+			height: 240px;
+			overflow: hidden;
+			overflow-y: scroll;
+		}
+
+		#dynamic-list-seconds {
+			height: 340px;
+			overflow: hidden;
+			overflow-y: scroll;
+		}
+
+		.order-row {
+			margin-left: 0px;
+			margin-right: 0px;
+			padding-left: 12px; 
+			padding-right: 12px;
+		}
+
+		.client-name {
+			font-size: 26px;
+			line-height: 32px;
+		}
+
+		.order-id {
+			font-size: 26px;
+			line-height: 32px;
+		}
+
+		.list-group-item {
+			padding-top: 4px;
+			padding-bottom: 4px;
+			padding-left: 12px;
+			color: #444444;
+		}
+
+		.headTitle {
+			border: none;
+		}
+
+	</style>
+</head>
+
+<body style="zoom: 100%; background-color: white; overflow: hidden;">
+	<input id="inputScanner" onblur="focusOnBlur()" style="position: absolute; left: -9999px;" autofocus></input>
+	<div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
+		<strong>No hay conexión.</strong> Verifica la conexión a internet.
+	</div>
+	<div class="container-fluid" style="background-color: white;">
+		<div class="row"> 
+			<div class="modal-title col-xs-10" style="margin-bottom:1.5%; margin-top:.5px;">
+				<h1 class="modal-title" id="firsts-counter-label" style="border-radius: 5px; float: left; width: 50px; text-align: center; background-color: rgba(50, 205, 50, 88%); color: white;">0</h1>
+				<h1 class="modal-title">&nbsp;PEDIDOS POR SURTIR</h1>
+			</div>
+			<div class="modal-title col-xs-2" style="margin-bottom:1.5%; margin-top:.5px;">
+				<h1 class="modal-title" id="firsts-max-label" style="float: right; text-align: right;"></h1>
+			</div>
+
+		</div>
+		<div class="list-group-item row order-row headTitle">
+			<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
+			<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">TOTAL</h2>
+			<h2 class="col-xs-2 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">#PRODS.</h2>
+			<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">ANOTÓ</h2>
+			<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">METODO</h2>
+			<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOMADO</h2>
+			<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TIEMPO</h2>
+		</div>
+		<ul id="dynamic-list-firsts" class="list-group" style="display:block;"> </ul>
+
+
+		<div class="row"> 
+			<div class="modal-title col-xs-10" style="margin-bottom:1.5%; margin-top:.5px;">
+				<h1 class="modal-title" id="seconds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px;">0</h1>
+				<h1 class="modal-title">&nbsp;PEDIDOS SURTIENDO</h1>
+			</div>
+			<div class="modal-title col-xs-2" style="margin-bottom:1.5%; margin-top:.5px;">
+				<h1 class="modal-title" id="seconds-max-label" style="float: right; text-align: right;"></h1>
+			</div>
+		</div>
+		<div class="list-group-item row order-row headTitle">
+			<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
+			<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">TOTAL</h2>
+			<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">#PRODS.</h2>
+			<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">ANOTÓ</h2>
+			<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">METODO</h2>
+			<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOMADO</h2>
+			<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">ESPERÓ</h2>
+			<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">SURTE</h2>
+			<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">SURTIENDO</h2>
+			<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
+		</div>
+		<ul id="dynamic-list-seconds" class="list-group" style="display:block;"> </ul>
+	</div>
+
+	<script>
+
+		checkConnection();
+
+		checkDayChange();
+        window.setInterval(checkDayChange, 5*60*1000);
+
+		$("#inputScanner").on('keyup', function (e) {
+            if (e.keyCode == 13 && $("#inputScanner").val() != "")
+                manageScannerInput();
+        });
+
+		function updateCounter(id, counter) {
+			$("#" + id).text(counter);
+			if(id == "firsts-counter-label") {
+				if(counter >= 7){
+					$("#" + id).css("background-color", "rgba(216, 61, 52, 88%)");
+					$("#" + id).css("color", "white");
+				} else if(counter >= 5 && counter <= 6){
+					$("#" + id).css("background-color", "rgba(255, 140, 0, 88%)");
+					$("#" + id).css("color", "white");
+				} else if(counter >= 3 && counter <= 4){
+					$("#" + id).css("background-color", "rgba(255, 215, 0, 88%)");
+					$("#" + id).css("color", "black");
+				} else if(counter >= 0 && counter <= 2){
+					$("#" + id).css("background-color", "rgba(50, 205, 50, 88%)");
+					$("#" + id).css("color", "white");
+				} 
+			}
+		}
+
+        function focusOnBlur() {
+            setTimeout(function() { $("#inputScanner").focus(); }, 0);
+		}
+		
+		function isLetter(char) {
+			return (/[a-zA-Z]/).test(char)		
+		}
+
+        function manageScannerInput() {
+            var input = $("#inputScanner").val();
+			$("#inputScanner").val("");
+			
+			input = input.replace(/[^A-Z0-9]/g,'');
+
+			
+			if(isLetter(input.charAt(0))) {
+				//sino hubo clave, busco en seconds, si existe seteo thirds. borro seconds
+				var orderid = input;
+				firebase.database().ref('process/seconds/' + orderid).once("value", function(snapshot) {
+					if(snapshot.val()) {
+						console.log("está en seconds");
+						var localsnapshot = snapshot.val();
+						localsnapshot.thour = Date.now();
+						
+						firebase.database().ref('process/thirds/' + orderid).set(localsnapshot).then(function () {
+							firebase.database().ref('process/seconds/' + orderid).remove();
+						});
+					} else {
+						//sino está en seconds, busco en firsts y seteo seconds. borro en firsts
+						firebase.database().ref('process/firsts/' + orderid).once("value", function(snapshot) {
+							if(snapshot.val()) {
+								console.log("está en firsts");
+								var localsnapshot = snapshot.val();
+								localsnapshot.semployee = "-";
+								localsnapshot.shour = Date.now();
+								
+								firebase.database().ref('process/seconds/' + orderid).set(localsnapshot).then(function () {
+									firebase.database().ref('process/firsts/' + orderid).remove();
+								});
+							}
+						});
+					}
+				});	
+			} else {
+				if(isLetter(input.charAt(1)))
+					input = "0" + input;
+				if(isLetter(input.charAt(2))) {
+					var employeeid = input.slice(0, 2);
+					var orderid = input.slice(2, input.length);	
+
+					var semployeeName = getEmployeeNameByID(employeesSnapshot, employeeid);
+					if(semployeeName != undefined) {
+						//si el empleado existe y está en first, seteo seconds. borro en firsts
+						firebase.database().ref('process/firsts/' + orderid).once("value", function(snapshot) {
+							if(snapshot.val()) {
+								console.log("está en firsts");
+								var localsnapshot = snapshot.val();
+								localsnapshot.semployee = semployeeName;
+								localsnapshot.shour = Date.now();
+								console.log(localsnapshot)
+								
+								firebase.database().ref('process/seconds/' + orderid).set(localsnapshot).then(function () {
+									firebase.database().ref('process/firsts/' + orderid).remove();
+								});
+							}
+						});	
+					} else if(employeeid == 99) {
+						//si está en firsts, seteo thirds. borro firsts
+						firebase.database().ref('process/firsts/' + orderid).once("value", function(snapshot) {
+							if(snapshot.val()) {
+								console.log("está en firsts");
+								var localsnapshot = snapshot.val();
+								firebase.database().ref('process/thirds/' + orderid).set(localsnapshot).then(function () {
+									firebase.database().ref('process/firsts/' + orderid).remove();
+								});
+							} else {
+								//si está en seconds, seteo first s. borro seconds
+								firebase.database().ref('process/seconds/' + orderid).once("value", function(snapshot) {
+									if(snapshot.val()) {
+										console.log("está en seconds");
+										var localsnapshot = snapshot.val();
+										firebase.database().ref('process/firsts/' + orderid).set(localsnapshot).then(function () {
+											firebase.database().ref('process/seconds/' + orderid).remove();
+										});
+									} else {
+										//si está en thirds, seteo first s. borro seconds
+										firebase.database().ref('process/thirds/' + orderid).once("value", function(snapshot) {
+											if(snapshot.val()) {
+												console.log("está en thirds");
+												var localsnapshot = snapshot.val();
+												firebase.database().ref('process/firsts/' + orderid).set(localsnapshot).then(function () {
+													firebase.database().ref('process/thirds/' + orderid).remove();
+												});
+											} 
+										});	
+									}
+								});	
+							}
+						});
+					}
+				}
+			}
+        }
+
+		function formatFirstsListItem(order) {
+			var orderHour = new Date(order.hour);
+			var diffMinutes = Math.trunc((new Date() - orderHour) / 60000);
+			var backgroundColor = "white",
+                color = "#444444";
+
+			if(!order.ftotal)
+				order.total = order.total + "~";
+			
+			if(order.ndiversity == "0") {
+				backgroundColor = "rgba(216, 61, 52, 88%)";
+                color = "white";
+			} else if(order.ndiversity == "1" && !order.haspanela) {
+				if((order.onlyafuera && order.nproducts <= 10) || (!order.onlyafuera && order.nproducts <= 2)) {
+					backgroundColor = "rgba(255, 140, 0, 88%)";
+                	color = "white";
+				}
+			}
+
+			if(order.ordertype == "MOSTRADOR")
+				order.ordertype = "MOST.";
+			else if (order.ordertype == "TELEFONO")
+				order.ordertype = "TEL.";
+			else if (order.ordertype == "WHATSAPP")
+				order.ordertype = "WHA.";
+
+			var returnStatement = 
+				'<li class="list-group-item row order-row" style="background-color: ' + backgroundColor + '; color: ' + color + ';">' +
+					'<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">' + order.name + '</h2>' +
+					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">$' + order.total + '</h2>' +
+					'<h2 class="col-xs-2 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + order.nproducts + '</h2>' +
+					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">' + order.femployee + '</h2>' +
+					'<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">#'+ order.ncomputer + " " + order.ordertype + '</h2>' +
+					'<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + orderHour.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}) + '</h2>' +
+					'<h2 class="col-xs-1 order-id elapsed-time" style="padding: 0px; margin: 0px; padding-left: 5px;">' + diffMinutes + '</h2>' +
+				'</li>';
+			return returnStatement;
+			//'<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + getEstimatedTime(order.nproducts) + '</h2>' +
+		}
+		
+		function formatSecondsListItem(order) {
+			var orderHour = new Date(order.hour);
+			var diffMinutes = Math.trunc((new Date() - orderHour) / 60000);
+			var diffMinutesSeconds = Math.trunc((new Date() - new Date(order.shour)) / 60000);
+
+			var backgroundColor = "white",
+                color = "#444444";
+
+			if(!order.ftotal)
+				order.total = order.total + "~";
+
+			if(order.ordertype == "MOSTRADOR")
+				order.ordertype = "MOST.";
+			else if (order.ordertype == "TELEFONO")
+				order.ordertype = "TEL.";
+			else if (order.ordertype == "WHATSAPP")
+				order.ordertype = "WHA.";
+			
+			var returnStatement = 
+				'<li class="list-group-item row order-row" style="background-color: ' + backgroundColor + '; color: ' + color + ';">' +
+					'<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">' + order.name + '</h2>' +
+					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">$' + order.total + '</h2>' +
+					'<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + order.nproducts + '</h2>' +
+					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">' + order.femployee + '</h2>' +
+					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">#' + order.ncomputer + " " + order.ordertype + '</h2>' +
+					'<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + orderHour.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}) + '</h2>' +
+					'<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + (diffMinutes - diffMinutesSeconds) + '</h2>' +
+					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">' + order.semployee + '</h2>' +
+					'<h2 class="col-xs-1 order-id seconds-elapsed-time" style="padding: 0px; margin: 0px; padding-left: 5px;">' + diffMinutesSeconds + '</h2>' +
+					'<h2 class="col-xs-1 order-id elapsed-time" style="padding: 0px; margin: 0px; padding-left: 5px;">' + diffMinutes + '</h2>' +
+				'</li>';
+			return returnStatement;
+			//'<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + getEstimatedTime(order.nproducts) + '</h2>' +
+		}
+
+		function getEmployeeNameByID(object, value) {
+			return Object.keys(object).find(key => object[key].slice(-2) === value);
+		}
+
+		function updateElapsedTime(orderListItem, className) {
+			var etField = orderListItem.find("." + className);
+			var interval = setInterval(function() {
+				if(etField.css('display') != "block")
+					clearInterval(interval);
+				//FUTURE change minutes to hours:minutes when > 60
+				etField.text(parseInt(etField.text()) + 1);				
+			}, 60000);
+		}
+
+		function getEstimatedTime(nproducts) {
+			//FUTURE calculate estimated order time
+			return Math.trunc(nproducts / 2);
+		}
+
+
+		function updateMaxTimeFirsts() {			
+			if($("#dynamic-list-firsts").children().first().children().eq(6).text())
+				$("#firsts-max-label").text($("#dynamic-list-firsts").children().first().children().eq(6).text() + " MINS");
+			else
+				$("#firsts-max-label").text("");
+		} 
+		
+		function updateMaxTimeSeconds() {			
+			if($("#dynamic-list-seconds").children().first().children().eq(8).text())
+				$("#seconds-max-label").text($("#dynamic-list-seconds").children().first().children().eq(7).text() + " " + $("#dynamic-list-seconds").children().first().children().eq(8).text() + " MINS");
+			else
+				$("#seconds-max-label").text("");
+		} 
+
+		function sortList(ulname){
+			ul = document.getElementById(ulname);
+			var new_ul = ul.cloneNode(false);
+			var lis = [];
+			for(var i = ul.childNodes.length; i--;){
+				if(ul.childNodes[i].nodeName === 'LI')
+					lis.push(ul.childNodes[i]);
+			}
+
+			lis.sort(function(a, b){
+				if(ulname == "dynamic-list-firsts") {
+					return parseInt(b.childNodes[5].textContent , 10) - 
+						parseInt(a.childNodes[5].textContent , 10);
+				} else if(ulname == "dynamic-list-seconds") {
+					return parseInt(b.childNodes[6].textContent , 10) - 
+						parseInt(a.childNodes[6].textContent , 10);
+				}
+			});
+
+			for(var i = 0; i < lis.length; i++)
+				new_ul.appendChild(lis[i]);
+			ul.parentNode.replaceChild(new_ul, ul);
+		}
+
+		function checkDayChange() {
+            var now = new Date();
+            var millisTill7pm = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 00, 0, 0) - now;
+
+            if (millisTill7pm < 0)
+                firebase.database().ref('process').remove();
+        }
+
+		var justOrdered = false;
+		function checkConnection() {
+			var connectedRef = firebase.database().ref(".info/connected");
+			connectedRef.on("value", function(snap) {
+				if (snap.val() === true) {
+					document.getElementById("noConnectionAlert").style.display = "none";
+					if(!justOrdered) {
+						justOrdered = true;
+						setTimeout(function() {
+							sortList('dynamic-list-firsts');
+							sortList('dynamic-list-seconds');
+
+							updateMaxTimeFirsts();
+							updateMaxTimeSeconds();
+							var interval = setInterval(function() {
+								updateMaxTimeFirsts();
+								updateMaxTimeSeconds();
+							}, 1000);
+							
+						}, 500);
+					}
+				} else 
+					document.getElementById("noConnectionAlert").style.display = "block";
+			});
+		}
+
+	</script>
+</body>
