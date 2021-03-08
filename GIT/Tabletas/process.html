@@ -137,13 +137,13 @@
 		}
 
 		.client-name {
-			font-size: 26px;
-			line-height: 32px;
+			font-size: 24px;
+			line-height: 30px;
 		}
 
 		.order-id {
-			font-size: 26px;
-			line-height: 32px;
+			font-size: 24px;
+			line-height: 30px;
 		}
 
 		.list-group-item {
@@ -235,8 +235,8 @@
 				<h1 class="modal-title">&nbsp;PEDIDOS POR COBRAR</h1>
 			</div>
 			<div class="list-group-item row order-row headTitle">
-				<h2 class="col-xs-10 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
-				<h2 class="col-xs-2 order-name" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
+				<h2 class="col-xs-9 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
+				<h2 class="col-xs-3 order-name" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
 			</div>
 			<ul id="dynamic-list-thirds" class="list-group" style="display:block;"> </ul>
 		</div>
@@ -474,8 +474,8 @@
 			
 			var returnStatement = 
 				'<li class="list-group-item row order-row">' +
-					'<h2 class="col-xs-10 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">' + order.name + '</h2>' +
-					'<h2 class="col-xs-2 client-name" style="padding: 0px; margin: 0px; padding-left: 5px;">$' + order.total + '</h2>' +
+					'<h2 class="col-xs-9 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">' + order.name + '</h2>' +
+					'<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 5px;">$' + order.total + '</h2>' +
 				'</li>';
 			return returnStatement;
 		}
@@ -570,7 +570,7 @@
             if (millisTill7pm < 0)
                 firebase.database().ref('process').remove();
         }
-		
+
 		var justOrdered = false;
 		function checkConnection() {
 			var connectedRef = firebase.database().ref(".info/connected");
