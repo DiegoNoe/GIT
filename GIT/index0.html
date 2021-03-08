@@ -1077,6 +1077,7 @@
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.L
             });
+            console.log("qr " + name);
             var canvas = document.getElementById('qrcode').querySelector('canvas');
             return canvas.toDataURL();
         }

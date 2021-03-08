@@ -72,7 +72,9 @@
 		var thirdsCounter = 0;
 		var databaseThirds = firebase.database().ref('process/thirds/');
 		databaseThirds.on('child_added', function (snapshot) {
-			$('#dynamic-list-thirds').append(formatThirdsListItem(snapshot.val()));
+			$('#dynamic-list-thirds').append(formatThirdsListItem(snapshot.val(), snapshot.key));
+			$('#dynamic-list-thirds').children().last().data("hour", snapshot.val().hour);
+
 			sortList('dynamic-list-thirds');
 
 			thirdsCounter++;
@@ -144,12 +146,12 @@
 		}
 
 		.client-name {
-			font-size: 24px;
+			font-size: 22px;
 			line-height: 30px;
 		}
 
 		.order-id {
-			font-size: 24px;
+			font-size: 22px;
 			line-height: 30px;
 		}
 
@@ -439,7 +441,7 @@
 				}
 			});
 		}
-		
+
 		function formatSecondsListItem(order) {
 			var orderHour = new Date(order.hour);
 			var diffMinutes = Math.trunc((new Date() - orderHour) / 60000);
@@ -475,16 +477,32 @@
 			//'<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + getEstimatedTime(order.nproducts) + '</h2>' +
 		}
 
-		function formatThirdsListItem(order) {
+		function formatThirdsListItem(order, id) {
 			if(!order.ftotal)
 				order.total = order.total + "~";
 			
 			var returnStatement = 
-				'<li class="list-group-item row order-row">' +
+				'<li class="list-group-item row order-row" style="padding-right: 0px;">' +
 					'<h2 class="col-xs-9 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">' + order.name + '</h2>' +
-					'<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 5px;">$' + order.total + '</h2>' +
+					'<div class="col-xs-3" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
+						'<h2 class="order-id elapsed-time" style="width: 60px; margin: 0px 0px; float: left; clear: both;">' + order.total + '</h2>' + 						
+						'<div type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px;" onclick="sendToFourths(&quot;' + id + '&quot;)">' +
+							'<h4 class="glyphicon glyphicon-remove" style="margin-top: .75px;"></h4>' +
+						'</div>' +
+					'</div>' +
 				'</li>';
 			return returnStatement;
+		}
+
+		function sendToFourths(orderid) {
+			firebase.database().ref('process/thirds/' + orderid).once("value", function(snapshot) {
+				if(snapshot.val()) {
+					var localsnapshot = snapshot.val();
+					firebase.database().ref('process/fourths/' + orderid).set(localsnapshot).then(function () {
+						firebase.database().ref('process/thirds/' + orderid).remove();
+					});
+				}
+			});
 		}
 
 		function getEmployeeNameByID(object, value) {
@@ -559,9 +577,9 @@
 				} else if(ulname == "dynamic-list-seconds") {
 					return parseInt(b.childNodes[6].textContent , 10) - 
 						parseInt(a.childNodes[6].textContent , 10);
-				} else if(ulname == "dynamic-list-seconds") {
-					return b.childNodes[0].textContent - 
-						a.childNodes[0].textContent;
+				} else if(ulname == "dynamic-list-thirds") {
+					return a.childNodes[0].textContent > 
+						b.childNodes[0].textContent;
 				}
 			});
 
