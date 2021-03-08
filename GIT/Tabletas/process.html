@@ -136,6 +136,13 @@
 			padding-right: 12px;
 		}
 
+		.order-row-title {
+			margin-left: 0px;
+			margin-right: 0px;
+			padding-left: 12px; 
+			padding-right: 12px;
+		}
+
 		.client-name {
 			font-size: 24px;
 			line-height: 30px;
@@ -147,8 +154,8 @@
 		}
 
 		.list-group-item {
-			padding-top: 4px;
-			padding-bottom: 4px;
+			padding-top: 2px;
+			padding-bottom: 2px;
 			padding-left: 12px;
 			color: #444444;
 		}
@@ -194,7 +201,7 @@
 				</div>
 				
 			</div>
-			<div class="list-group-item row order-row headTitle">
+			<div class="list-group-item row order-row-title headTitle">
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">TOTAL</h2>
 				<h2 class="col-xs-2 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">#PRODS.</h2>
@@ -214,7 +221,7 @@
 					<h1 class="modal-title" id="seconds-max-label" style="float: right; text-align: right;"></h1>
 				</div>
 			</div>
-			<div class="list-group-item row order-row headTitle">
+			<div class="list-group-item row order-row-title headTitle">
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">TOTAL</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">#PRODS.</h2>
@@ -234,9 +241,9 @@
 				<h1 class="modal-title" id="thirds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px;">0</h1>
 				<h1 class="modal-title">&nbsp;PEDIDOS POR COBRAR</h1>
 			</div>
-			<div class="list-group-item row order-row headTitle">
+			<div class="list-group-item row order-row-title headTitle">
 				<h2 class="col-xs-9 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
-				<h2 class="col-xs-3 order-name" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
+				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
 			</div>
 			<ul id="dynamic-list-thirds" class="list-group" style="display:block;"> </ul>
 		</div>
@@ -413,7 +420,7 @@
 					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
 						'<h2 class="order-id elapsed-time" style="width: 60px; margin: 0px 0px; float: left; clear: both;">' + diffMinutes + '</h2>' + 						
 						'<div type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px;" onclick="sendToThirds(&quot;' + id + '&quot;)">' +
-							'<h4 class="glyphicon glyphicon-remove" style="margin-top: 2px;"></h4>' +
+							'<h4 class="glyphicon glyphicon-remove" style="margin-top: .75px;"></h4>' +
 						'</div>' +
 					'</div>' +
 				'</li>';
