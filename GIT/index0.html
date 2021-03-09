@@ -760,7 +760,7 @@
                         drawAsterisk(doc, firstLineYPosition + (currentLine * lineHeight), "blue");
                         doc.setPage(pagesQuantity * 2);
                         drawAsterisk(doc, firstLineYPosition + (currentLine * lineHeight), "blue");
-                        nproducts = nproducts + parseInt(order[i][1]);
+                        nproducts = nproducts + Math.ceil(parseFloat(order[i][1]));
                         ndiversity++;
                         onlyafuera = false;
                     } else if (order[i][5] == "porPesarAfuera" || order[i][5] == "yaPesadoAfuera") {
@@ -768,7 +768,7 @@
                         drawCricle(doc, firstLineYPosition + (currentLine * lineHeight), "red");
                         doc.setPage(pagesQuantity * 2);
                         drawCricle(doc, firstLineYPosition + (currentLine * lineHeight), "red");
-                        nproducts = nproducts + parseInt(order[i][1]);
+                        nproducts = nproducts + Math.ceil(parseFloat(order[i][1]));
                         ndiversity++;
                     }
 
