@@ -639,8 +639,14 @@
             return 0;
         }
 
-        var xOffset = 2.5;
-        var yOffset = 2.5;
+        if(globalComputer == "liveView1" || globalComputer == "liveView2") {
+            var xOffset = 31;
+            var yOffset = -4.5;
+        } else {
+            var xOffset = 35;
+            var yOffset = 2.5;
+        }
+
         //FUTURE FIX (HUGE FUNCTION) - generates a PDF with autoprint
         function generatePDF(orderMethod) {
             //set PDF defaults
@@ -660,7 +666,7 @@
                 var doc = new jsPDF({
                     orientation: 'p',
                     unit: 'mm',
-                    format: [220, 148]
+                    format: [297, 210]
                 });
 
                 //add custom fonts

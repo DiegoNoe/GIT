@@ -64,7 +64,7 @@
                 <label style="color: gray; margin-bottom: 0px; opacity: .4; line-height: 23px;" class="form-check-label" for="invoiceCheckbox">&nbsp;FACTURA</label>
             </div>
             <!-- employee name input -->
-            <select class="col-sm-2 form-control" style="margin-top: 2px; width: 170px;" id="inputEmployeeName">
+            <select class="col-sm-2 form-control" style="margin-top: 2px;" id="inputEmployeeName">
                 <option disabled selected>ANOTADOR</option>
             </select>
 
@@ -199,9 +199,6 @@
 
         populateEmployees();
 
-        //listen for ready computers
-        for (var i = 0; i <= 6; i++)
-            callWhenReady(i); 
         //inputName on enter sequence
         $("#inputName").on('keyup', function (e) {
             if (e.keyCode == 13)
@@ -287,32 +284,11 @@
             }
         });
 
-        //aqui1
         function callClient() {
             var localComputer = globalComputer.slice(globalComputer.length - 1, globalComputer.length);
             firebase.database().ref('service/' + localComputer + 'isReady').set(false).then(function() {
                 firebase.database().ref('service/' + localComputer + 'isReady').set(true);
             });
-        }
-
-        function callWhenReady(localComputer) {
-            firebase.database().ref('service/' + localComputer + 'isReady').on('value', function(snapshot) {
-                if(snapshot.val()) {
-                    if(((localComputer - 6) * (-1)) == "1")
-                        speakOnce("buena tarde, pase el siguiente a la uno");
-                    else
-                        speakOnce("buena tarde, pase el siguiente a la " + ((localComputer - 6) * (-1)));
-
-                    firebase.database().ref('service/' + localComputer + 'isReady').set(false);
-                }
-            });
-        }
-
-        function speakOnce(message) {
-            var msg = new SpeechSynthesisUtterance();
-            msg.rate = .95;
-            msg.text = message;
-            window.speechSynthesis.speak(msg);
         }
 
         function populateEmployees() {
@@ -698,6 +674,9 @@
                 doc.addFont('GillSansMTCondensedBold.ttf', "Gill Sans MT Condensed Negrita", "normal");
                 doc.setFont("Gill Sans MT Condensed Negrita");
 
+                var iftomorrow = $("#tomorrowCheckbox").is(':checked');
+                var ordertype = orderMethod;
+                
                 //add defaults values
                 addTimePDF(doc);
                 addMethodPDF(doc, orderMethod);
@@ -734,6 +713,10 @@
                 var currentLine = 0;
                 var pagesQuantity = 1;
                 var surveyValues = order;
+                var nproducts = 0;
+                var ndiversity = 0;
+                var haspanela = false;
+                var onlyafuera = true;
                 for (var i = 0; i < order.length; i++) {
                     //adds new page if necessary
                     if (currentLine == 17 || (currentLine == 16 && order[i][4] != "")) {
@@ -777,12 +760,20 @@
                         drawAsterisk(doc, firstLineYPosition + (currentLine * lineHeight), "blue");
                         doc.setPage(pagesQuantity * 2);
                         drawAsterisk(doc, firstLineYPosition + (currentLine * lineHeight), "blue");
+                        nproducts = nproducts + parseInt(order[i][1]);
+                        ndiversity++;
+                        onlyafuera = false;
                     } else if (order[i][5] == "porPesarAfuera" || order[i][5] == "yaPesadoAfuera") {
                         doc.setPage(pagesQuantity * 2 - 1);
                         drawCricle(doc, firstLineYPosition + (currentLine * lineHeight), "red");
                         doc.setPage(pagesQuantity * 2);
                         drawCricle(doc, firstLineYPosition + (currentLine * lineHeight), "red");
+                        nproducts = nproducts + parseInt(order[i][1]);
+                        ndiversity++;
                     }
+
+                    if(order[i][0] == "QU")
+                        haspanela = true;
 
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
@@ -875,9 +866,6 @@
                     currentLine++;
                 }
 
-                //POSIBLE FEATURE analytics
-                    //firebase.database().ref('pendingOrders/' + orderRefID + '/total').set(total);
-
                 //if calculable then total
                 doc.setFont("Gill Sans MT Condensed Negrita");
                 doc.setFontSize(25);
@@ -928,7 +916,25 @@
                 //autoprints PDF in a new tab
                 doc.autoPrint();
                 window.open(doc.output('bloburl'), '_blank');
- 
+
+                var ncomputer = globalComputer.slice(-1);
+
+                //aqui
+                firebase.database().ref('process/firsts/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
+                    name: replaceAEIOUN($("#inputName").val().trim()),
+                    total: total,
+                    hour: Date.now(),
+                    nproducts: nproducts,
+                    ndiversity: ndiversity,
+                    haspanela: haspanela,
+                    onlyafuera: onlyafuera,
+                    femployee: replaceAEIOUN($("#inputEmployeeName").val()),
+                    iftomorrow: iftomorrow,
+                    ordertype: ordertype,
+                    ftotal: calculable,
+                    ncomputer: ncomputer
+                });
+  
                 //survey values
                 increaseEmployeeCounter($("#inputEmployeeName").val());
                 uploadSurvey(surveyValues);
@@ -1004,7 +1010,7 @@
                 doc.setFontSize(12);
                 doc.text(63 + xOffset, 195.5  + yOffset, "MANANA");
                 doc.setFontSize(13);
-            } 
+            }
 
             doc.text(87 + xOffset, 38.5  + yOffset, orderMethod, 'center');
 
@@ -1077,6 +1083,7 @@
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.L
             });
+            console.log("qr " + name);
             var canvas = document.getElementById('qrcode').querySelector('canvas');
             return canvas.toDataURL();
         }
