@@ -126,7 +126,13 @@
 		}
 
 		#dynamic-list-seconds {
-			height: 400px;
+			height: 440px;
+			overflow: hidden;
+			overflow-y: scroll;
+		}
+
+		#dynamic-list-thirds {
+			height: 970px;
 			overflow: hidden;
 			overflow-y: scroll;
 		}
@@ -254,6 +260,12 @@
 	<script>
 		
 		checkConnection();
+
+		const link = document.getElementById('dynamic-list-thirds')
+			link.addEventListener('touchstart', event => {
+				console.log("me están tocando");
+			}
+		);
 
 		//checkDayChange();
         //window.setInterval(checkDayChange, 5*60*1000);
@@ -572,8 +584,8 @@
 
 			lis.sort(function(a, b){
 				if(ulname == "dynamic-list-firsts") {
-					return parseInt(b.childNodes[5].textContent , 10) - 
-						parseInt(a.childNodes[5].textContent , 10);
+					return parseInt(b.childNodes[6].textContent , 10) - 
+						parseInt(a.childNodes[6].textContent , 10);
 				} else if(ulname == "dynamic-list-seconds") {
 					return parseInt(b.childNodes[6].textContent , 10) - 
 						parseInt(a.childNodes[6].textContent , 10);
