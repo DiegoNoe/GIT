@@ -132,7 +132,7 @@
 		}
 
 		#dynamic-list-thirds {
-			height: 970px;
+			height: 960px;
 			overflow: hidden;
 			overflow-y: scroll;
 		}
@@ -189,7 +189,7 @@
 		}
 
 		.scroll-button {
-			background: transparent;
+			background: red;
 			border: none;
 			position: absolute;
 			z-index: 1000;
@@ -225,6 +225,8 @@
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOMADO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TIEMPO</h2>
 			</div>
+			<button class="scroll-button" type="button" style="width: 1400px; height: 200px; left: 10px; top: 600px;" onclick="scrollbPressed('dynamic-list-firsts', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 1400px; height: 200px; left: 10px; top: 882px" onclick="scrollbPressed('dynamic-list-firsts', 'down')"></button>
 			<ul id="dynamic-list-firsts" class="list-group" style="display:block;"> </ul>
 			
 			<div class="row"> 
@@ -248,6 +250,8 @@
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">SURTIENDO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
 			</div>
+			<button class="scroll-button" type="button" style="width: 1400px; height: 200px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-seconds', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 1400px; height: 200px; left: 10px; top: 330px" onclick="scrollbPressed('dynamic-list-seconds', 'down')"></button>
 			<ul id="dynamic-list-seconds" class="list-group" style="display:block;"> </ul>
 		</div>
 		
@@ -260,8 +264,8 @@
 				<h2 class="col-xs-9 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
 			</div>
-			<button id="thirds-scroll-up" class="scroll-button" type="button" style="width: 400px; height: 300px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-thirds', 'up')"></button>			
-			<button id="thirds-scroll-down" class="scroll-button" type="button" style="width: 400px; height: 300px; left: 10px; top: 800px;" onclick="scrollbPressed('dynamic-list-thirds', 'down')"></button>
+			<button class="scroll-button" type="button" style="width: 400px; height: 300px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-thirds', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 400px; height: 300px; left: 10px; top: 780px;" onclick="scrollbPressed('dynamic-list-thirds', 'down')"></button>
 			<ul id="dynamic-list-thirds" class="list-group" style="display:block;"> </ul>
 		</div>
 	</div>
