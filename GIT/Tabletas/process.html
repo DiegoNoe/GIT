@@ -112,7 +112,7 @@
 
 		.container-fluid {
 			font-family: GillSansMTCondensedBold;
-			padding-top: 1%;
+			padding-top: .5%;
 		}
 
 		#verificationMessage {
@@ -120,13 +120,13 @@
 		}
 
 		#dynamic-list-firsts {
-			height: 400px;
+			height: 500px;
 			overflow: hidden;
 			overflow-y: scroll;
 		}
 
 		#dynamic-list-seconds {
-			height: 440px;
+			height: 363px;
 			overflow: hidden;
 			overflow-y: scroll;
 		}
@@ -208,9 +208,9 @@
 	</div>
 	
 	<div class="row">
-		<div class="container-fluid col-sm-9" style="background-color: white; padding-left: 1.5%; padding-right: .5%;">
-			<div class="row"> 
-				<div class="modal-title col-xs-10" style="margin-bottom: 10px; margin-top:.5px;">
+		<div class="container-fluid col-sm-9" style="background-color: white; padding-left: 1.5%; padding-right: .25%;">
+			<div class="row" style="height: 52px;"> 
+				<div class="modal-title col-xs-10" style="margin-bottom: 10px; margin-top:.5px; height: 20px;">
 					<h1 class="modal-title" id="firsts-counter-label" style="border-radius: 5px; float: left; width: 50px; text-align: center; background-color: rgba(50, 205, 50, 88%); color: white;">0</h1>
 					<h1 class="modal-title">&nbsp;PEDIDOS POR SURTIR</h1>
 				</div>
@@ -228,16 +228,16 @@
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOMADO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TIEMPO</h2>
 			</div>
-			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-firsts', 'up')"></button>			
-			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 330px" onclick="scrollbPressed('dynamic-list-firsts', 'down')"></button>
-			<ul id="dynamic-list-firsts" class="list-group" style="display:block;"> </ul>
+			<button class="scroll-button" type="button" style="width: 1370px; height: 220px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-firsts', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 1370px; height: 220px; left: 10px; top: 370px" onclick="scrollbPressed('dynamic-list-firsts', 'down')"></button>
+			<ul id="dynamic-list-firsts" class="list-group" style="display:block; margin-bottom: 12px;"> </ul>
 			
-			<div class="row"> 
-				<div class="modal-title col-xs-10" style="margin-bottom:.5%; margin-top:.5px;">
+			<div class="row" style="height: 52px;"> 
+				<div class="modal-title col-xs-10" style="margin-bottom:0%; margin-top:0px; height: 20px;">
 					<h1 class="modal-title" id="seconds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px;">0</h1>
 					<h1 class="modal-title">&nbsp;PEDIDOS SURTIENDO</h1>
 				</div>
-				<div class="modal-title col-xs-2" style="margin-bottom:1.5%; margin-top:.5px;">
+				<div class="modal-title col-xs-2" style="margin-bottom:0%; margin-top:0px;">
 					<h1 class="modal-title" id="seconds-max-label" style="float: right; text-align: right;"></h1>
 				</div>
 			</div>
@@ -253,13 +253,13 @@
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">SURTIENDO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
 			</div>
-			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 600px;" onclick="scrollbPressed('dynamic-list-seconds', 'up')"></button>			
-			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 882px" onclick="scrollbPressed('dynamic-list-seconds', 'down')"></button>
+			<button class="scroll-button" type="button" style="width: 1370px; height: 180px; left: 10px; top: 670px;" onclick="scrollbPressed('dynamic-list-seconds', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 1370px; height: 180px; left: 10px; top: 900px" onclick="scrollbPressed('dynamic-list-seconds', 'down')"></button>
 			<ul id="dynamic-list-seconds" class="list-group" style="display:block;"> </ul>
 		</div>
 		
 		<div class="container-fluid col-sm-3" style="background-color: white; height: 1280px; padding-left: .5%; padding-right: 1.6%;">
-			<div class="modal-title" style="margin-bottom: 1.5%; margin-top: .5px;">
+			<div class="modal-title" style="margin-bottom: 0%; margin-top: 0px;">
 				<h1 class="modal-title" id="thirds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px;">0</h1>
 				<h1 class="modal-title">&nbsp;PEDIDOS POR COBRAR</h1>
 			</div>
@@ -276,6 +276,7 @@
 	<script>
 		
 		checkConnection();
+		idleTimer();
 		
 		//checkDayChange();
 		//window.setInterval(checkDayChange, 5*60*1000);
@@ -284,6 +285,24 @@
 			if (e.keyCode == 13 && $("#inputScanner").val() != "")
 				manageScannerInput();
 		});
+
+		function idleTimer() {
+			var idleTime = 0;
+			$(document).ready(function () {
+				var idleInterval = setInterval(timerIncrement, 5000);
+				$(this).mousemove(function (e) {
+					idleTime = 0;
+				});
+			});
+
+			function timerIncrement() {
+				idleTime = idleTime + 1;
+				if (idleTime > 5) {
+					scrollbPressed("dynamic-list-firsts", "up");
+					scrollbPressed("dynamic-list-seconds", "up");
+				}
+			}
+		}
 
 		function scrollbPressed(elementid, direction) {
 			var element = document.getElementById(elementid);
