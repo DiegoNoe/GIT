@@ -189,7 +189,7 @@
 		}
 
 		.scroll-button {
-			background: red;
+			background: transparent;
 			border: none;
 			position: absolute;
 			z-index: 1000;
@@ -222,14 +222,14 @@
 			<div class="list-group-item row order-row-title headTitle">
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">TOTAL</h2>
-				<h2 class="col-xs-2 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">#PRODS.</h2>
+				<h2 class="col-xs-2 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">PRODUCTOS</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">ANOTÓ</h2>
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">METODO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOMADO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TIEMPO</h2>
 			</div>
-			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 600px;" onclick="scrollbPressed('dynamic-list-firsts', 'up')"></button>			
-			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 882px" onclick="scrollbPressed('dynamic-list-firsts', 'down')"></button>
+			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-firsts', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 330px" onclick="scrollbPressed('dynamic-list-firsts', 'down')"></button>
 			<ul id="dynamic-list-firsts" class="list-group" style="display:block;"> </ul>
 			
 			<div class="row"> 
@@ -244,7 +244,7 @@
 			<div class="list-group-item row order-row-title headTitle">
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">TOTAL</h2>
-				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">#PRODS.</h2>
+				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">PRODUCTOS</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">ANOTÓ</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">METODO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOMADO</h2>
@@ -253,8 +253,8 @@
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">SURTIENDO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
 			</div>
-			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-seconds', 'up')"></button>			
-			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 330px" onclick="scrollbPressed('dynamic-list-seconds', 'down')"></button>
+			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 600px;" onclick="scrollbPressed('dynamic-list-seconds', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 1370px; height: 200px; left: 10px; top: 882px" onclick="scrollbPressed('dynamic-list-seconds', 'down')"></button>
 			<ul id="dynamic-list-seconds" class="list-group" style="display:block;"> </ul>
 		</div>
 		
@@ -277,16 +277,24 @@
 		
 		checkConnection();
 		
+		//checkDayChange();
+		//window.setInterval(checkDayChange, 5*60*1000);
+
+		$("#inputScanner").on('keyup', function (e) {
+			if (e.keyCode == 13 && $("#inputScanner").val() != "")
+				manageScannerInput();
+		});
+
 		function scrollbPressed(elementid, direction) {
 			var element = document.getElementById(elementid);
 			var step = 10;
 			var speed = 5;
-			var distance;
+			var distance = 200;
 
-			if(elementid == "dynamic-list-thirds")
-				distance = 400;
-			else
-				distance = 200;
+			if(elementid == "dynamic-list-thirds") {
+				distance = 600;
+				speed = 2;
+			}
 
 			var scrollAmount = 0;
 			var slideTimer = setInterval(function() {
@@ -301,13 +309,6 @@
 			}, speed);
 		}
 
-		//checkDayChange();
-        //window.setInterval(checkDayChange, 5*60*1000);
-
-		$("#inputScanner").on('keyup', function (e) {
-            if (e.keyCode == 13 && $("#inputScanner").val() != "")
-                manageScannerInput();
-        });
 
 		function updateCounter(id, counter) {
 			$("#" + id).text(counter);
