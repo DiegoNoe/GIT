@@ -238,7 +238,7 @@
 					<h1 class="modal-title">&nbsp;PEDIDOS SURTIENDO</h1>
 				</div>
 				<div class="modal-title col-xs-2" style="margin-bottom:0%; margin-top:0px;">
-					<h1 class="modal-title" id="seconds-max-label" style="float: right; text-align: right;"></h1>
+					<h1 class="modal-title" id="seconds-max-label" style="float: right; text-align: right; height: 40px;"></h1>
 				</div>
 			</div>
 			<div class="list-group-item row order-row-title headTitle">
@@ -263,7 +263,7 @@
 				<h1 class="modal-title" id="thirds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px;">0</h1>
 				<h1 class="modal-title">&nbsp;PEDIDOS POR COBRAR</h1>
 			</div>
-			<div class="list-group-item row order-row-title headTitle">
+			<div class="list-group-item row order-row-title headTitle" style="padding-bottom: 1px;">
 				<h2 class="col-xs-9 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
 			</div>
@@ -430,15 +430,28 @@
 											firebase.database().ref('process/seconds/' + orderid).remove();
 										});
 									} else {
-										//si está en thirds, seteo first s. borro seconds
+										//si está en thirds, seteo first s. borro thirds
 										firebase.database().ref('process/thirds/' + orderid).once("value", function(snapshot) {
 											if(snapshot.val()) {
 												console.log("está en thirds");
 												var localsnapshot = snapshot.val();
+												localsnapshot.checked = false;
 												firebase.database().ref('process/firsts/' + orderid).set(localsnapshot).then(function () {
 													firebase.database().ref('process/thirds/' + orderid).remove();
 												});
-											} 
+											} else {
+												//si está en fourths, seteo first s. borro fourths
+												firebase.database().ref('process/fourths/' + orderid).once("value", function(snapshot) {
+													if(snapshot.val()) {
+														console.log("está en fourths");
+														var localsnapshot = snapshot.val();
+														localsnapshot.checked = false;
+														firebase.database().ref('process/firsts/' + orderid).set(localsnapshot).then(function () {
+															firebase.database().ref('process/fourths/' + orderid).remove();
+														});
+													} 
+												});	
+											}
 										});	
 									}
 								});
@@ -547,11 +560,19 @@
 			if(!order.ftotal)
 				order.total = order.total + "~";
 			
+			var backgroundColor = "rgba(216, 61, 52, 88%)",
+				color = "white";
+			
+			if(order.checked) {
+				backgroundColor = "white";
+				color = "#444444";
+			}
+			
 			var returnStatement = 
-				'<li class="list-group-item row order-row" style="padding-right: 0px;">' +
-					'<h2 class="col-xs-9 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">' + order.name + '</h2>' +
-					'<div class="col-xs-3" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
-						'<h2 class="order-id elapsed-time" style="width: 60px; margin: 0px 0px; float: left; clear: both;">' + order.total + '</h2>' + 						
+				'<li class="list-group-item row order-row" style="padding-right: 0px; background-color: ' + backgroundColor + '; color: ' + color + ';">' +
+					'<h2 class="col-xs-8 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">' + order.name + '</h2>' +
+					'<div class="col-xs-4" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
+						'<h2 class="order-id elapsed-time" style="width: 100px; margin: 0px 0px; float: left; clear: both;">' + order.total + '</h2>' + 						
 						'<div type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px;" onclick="sendToFourths(&quot;' + id + '&quot;)">' +
 							'<h4 class="glyphicon glyphicon-remove" style="margin-top: .75px;"></h4>' +
 						'</div>' +
