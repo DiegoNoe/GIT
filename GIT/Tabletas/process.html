@@ -188,6 +188,13 @@
 			border: none;
 		}
 
+		.scroll-button {
+			background: transparent;
+			border: none;
+			position: absolute;
+			z-index: 1000;
+		}
+
 	</style>
 </head>
 
@@ -253,6 +260,8 @@
 				<h2 class="col-xs-9 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
 			</div>
+			<button id="thirds-scroll-up" class="scroll-button" type="button" style="width: 400px; height: 300px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-thirds', 'up')"></button>			
+			<button id="thirds-scroll-down" class="scroll-button" type="button" style="width: 400px; height: 300px; left: 10px; top: 800px;" onclick="scrollbPressed('dynamic-list-thirds', 'down')"></button>
 			<ul id="dynamic-list-thirds" class="list-group" style="display:block;"> </ul>
 		</div>
 	</div>
@@ -260,12 +269,30 @@
 	<script>
 		
 		checkConnection();
+		
+		function scrollbPressed(elementid, direction) {
+			var element = document.getElementById(elementid);
+			var step = 10;
+			var speed = 5;
+			var distance;
 
-		const link = document.getElementById('dynamic-list-thirds')
-			link.addEventListener('touchstart', event => {
-				console.log("me están tocando");
-			}
-		);
+			if(elementid == "dynamic-list-thirds")
+				distance = 400;
+			else
+				distance = 200;
+
+			var scrollAmount = 0;
+			var slideTimer = setInterval(function() {
+				if(direction == 'down')
+					element.scrollBy(0, step);
+				else 
+					element.scrollBy(0, -step);
+				scrollAmount += step;
+				if(scrollAmount >= distance){
+					window.clearInterval(slideTimer);
+				}
+			}, speed);
+		}
 
 		//checkDayChange();
         //window.setInterval(checkDayChange, 5*60*1000);
