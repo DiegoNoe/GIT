@@ -278,8 +278,8 @@
 		checkConnection();
 		idleTimer();
 		
-		//checkDayChange();
-		//window.setInterval(checkDayChange, 5*60*1000);
+		checkDayChange();
+		window.setInterval(checkDayChange, 5*60*1000);
 
 		$("#inputScanner").on('keyup', function (e) {
 			if (e.keyCode == 13 && $("#inputScanner").val() != "")
@@ -677,7 +677,7 @@
 
 		function checkDayChange() {
             var now = new Date();
-            var millisTill7pm = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 00, 0, 0) - now;
+            var millisTill7pm = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 10, 0, 0) - now;
 
             if (millisTill7pm < 0)
                 firebase.database().ref('process').remove();
