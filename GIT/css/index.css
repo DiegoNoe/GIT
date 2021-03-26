@@ -174,12 +174,32 @@ input, button:not(.cross), label, span:not(.cross) {
     padding-top:7px;
 }
 
-#totalTextField {
+#totalTextFieldA {
     z-index: 1;
     position: absolute;
     right: 26px;
     top: 72.5px;
     visibility: visible;
+}
+
+#wtTextField {
+    z-index: 1;
+    position: absolute;
+    right: 126px;
+    top: 2px;
+    visibility: visible;
+    width: 250px;
+    text-align: right;
+}
+
+#totalTextField {
+    z-index: 1;
+    position: absolute;
+    right: 26px;
+    top: 2px;
+    visibility: visible;
+    width: 100px;
+    text-align: right;
 }
 
 .product-quantity {
@@ -200,7 +220,7 @@ input, button:not(.cross), label, span:not(.cross) {
     padding: 0px;
 }
 
-.product-total {
+.product-totalA {
     border:0; 
     box-shadow: none;
 }

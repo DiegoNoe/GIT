@@ -33,6 +33,8 @@
             products = Defiant.getSnapshot(snapshot.val());
         });
         var globalComputer = "liveView2";
+        var globalWaitingOrders,
+            globalTPP = [];
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
 
     </script>
@@ -84,6 +86,8 @@
             <!-- life search box -->
             <div class="col-md-11">
                 <input type="d" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"></input>
+                <span id="wtTextField"></span>
+                <span id="totalTextField">$0</span>
             </div>
         </div>
 
@@ -515,7 +519,7 @@
                 color = "rgba(253, 181, 13, 100%)";
 
             var productListItem =
-                '<li class="list-group-item row product-row" style= "color: ' + color + ';" data-id="' + product.clave + '" + data-date="' + date + '">' +
+                '<li class="list-group-item row product-row product-total" style= "color: ' + color + ';" data-id="' + product.clave + '" data-date="' + date + '" data-total="' + round($("#quantityInput").val() * product.costo) + '">' +
                     '<div class="col-sm-1 product-quantity">' +
                         '<input type="number" min="0" class="form-control" style= "color: ' + color + ';"></input>' +
                     '</div>' +
@@ -531,18 +535,32 @@
 
             //add list element
             $('#dynamic-list').prepend(productListItem);
-
+            updateTotal();
+            
             //populate quantity and clean original (outter) input
             var outterQuantity = $("#quantityInput").val();
             var inputQuantity = $('#dynamic-list').find('input').first();
             inputQuantity.val(outterQuantity);
             $("#quantityInput").val("");
+            
+            updateWT();
 
             //inputSearch sequence
             $('#dynamic-list').find('input').eq(1).focus();
 
+            $('#dynamic-list').find('input').first().on('change', function (e) {
+                let thisRow = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']");
+                thisRow.data("total", (round($(this).val() * product.costo)));
+                updateTotal();
+                updateWT();
+            })
+
             //inputQuantity enter sequence (to notes)
             $('#dynamic-list').find('input').first().on('keyup', function (e) {
+                let thisRow = $("#dynamic-list").find("[data-date='" + $(this).parent().parent().data("date") + "']");
+                thisRow.data("total", (round($(this).val() * product.costo)));
+                updateTotal();
+                updateWT();
                 if (e.keyCode == 13)
                     $(this).parent().nextAll().eq(2).children().focus();
             });
@@ -583,6 +601,7 @@
                 e.preventDefault();
                 removeOrderProduct($(this).parent().data("date"));
                 $("#dynamic-list").find("[data-date='" + $(this).parent().data("date") + "']").remove();
+                updateTotal();
             });
         }
 
@@ -639,6 +658,31 @@
             return 0;
         }
 
+        function updateTotal() {
+            var total = 0;
+            $(".product-total").each(function(index) {
+                total = total + ($(this).data("total") * 1);
+            });
+            $("#totalTextField").text("$" + round(total));
+        }
+        
+        function updateWT() {
+            var nproducts = 0;
+            $("#dynamic-list").children().each(function (index) {
+                var type = JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo;
+                var quantity = $(this).children().eq(0).children().val();
+                if (type == "porPesarCamara" || type == "yaPesadoCamara" || type == "porPesarAfuera" || type == "yaPesadoAfuera")
+                    if(quantity != "")
+                        nproducts = nproducts + parseFloat(quantity);
+            });
+
+            if(nproducts == 0) 
+                $("#wtTextField").text("TIEMPO ESTIMADO: 0M");
+            else
+                $("#wtTextField").text("TIEMPO ESTIMADO: " + calculateWTime(Math.ceil(nproducts)) + "M");
+        }
+
+        //FIX
         if(globalComputer == "liveView1" || globalComputer == "liveView2") {
             var xOffset = 31;
             var yOffset = -4.5;
@@ -919,7 +963,7 @@
 
                 var ncomputer = globalComputer.slice(-1);
 
-                //aqui
+                //process
                 firebase.database().ref('process/firsts/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
                     name: replaceAEIOUN($("#inputName").val().trim()),
                     total: total,
@@ -936,13 +980,43 @@
                 });
   
                 //survey values
-                increaseEmployeeCounter($("#inputEmployeeName").val());
-                uploadSurvey(surveyValues);
+                //increaseEmployeeCounter($("#inputEmployeeName").val());
+                //uploadSurvey(surveyValues);
 
                 //erase current order
                 eraseOrder();
+
+                
+                firebase.database().ref(globalComputer + '/wtime').set(calculateWTime(nproducts));
                 finishOrderProducts(true);
             }
+        }
+        
+        function calculateWTime(nproducts) {
+            var wtime;
+            if(nproducts <= 10)
+                wtime = nproducts * globalTPP[0];
+            else if(nproducts <= 30)
+                wtime = nproducts * globalTPP[1];
+            else
+                wtime = nproducts * globalTPP[2];
+
+            wtime = wtime + (globalWaitingOrders * 1.5);
+
+            if(!wtime)
+                return "-";
+
+            return Math.ceil(wtime);
+        }
+
+        function populateWaitingTimes() {
+            firebase.database().ref('process/timing').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    globalWaitingOrders = snapshot.val().worders;
+                    globalTPP = [snapshot.val().tpp10, snapshot.val().tpp30, snapshot.val().tpp50];
+                    updateWT();
+                }
+            });
         }
 
         function uploadCompleteOrder(name, products, total, id) {
@@ -975,6 +1049,10 @@
 
         function roundDecimals(number) {
             return Math.round(number * 2) / 2;
+        }
+
+        function round(number) {
+            return Math.round((number * 1 + Number.EPSILON) * 100) / 100;
         }
 
         //adds a new page with all the values
@@ -1016,7 +1094,7 @@
 
             //special counter if the order was made by phone
             if(event.srcElement.id == "printByPhoneButton") {
-                increaseEmployeeCounterPhone($("#inputEmployeeName").val());
+                //increaseEmployeeCounterPhone($("#inputEmployeeName").val());
                 firebase.database().ref(globalComputer + '/phoneOrder').set(true);
             }
 
@@ -1083,7 +1161,7 @@
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.L
             });
-            console.log("qr " + name);
+            console.log(name);
             var canvas = document.getElementById('qrcode').querySelector('canvas');
             return canvas.toDataURL();
         }
@@ -1233,6 +1311,8 @@
             $("#dynamic-list").html("");
             $('#tomorrowCheckbox').prop('checked', false);
             $('#invoiceCheckbox').prop('checked', false);
+            $("#totalTextField").text("$0");
+            updateWT();
         }
 
         //checks current connection status
@@ -1250,6 +1330,7 @@
 
         //starts listening to connection stauts
         checkConnection();
+        populateWaitingTimes();
 
         //removes any products from the life view
         removeOrderProducts();
