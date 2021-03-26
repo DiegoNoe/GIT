@@ -93,7 +93,7 @@
             right: 0px;
             z-index: 1;
             text-align: center;
-            padding-top: 40%;
+            padding-top: 20%;
             display: none;
             font-family: GillSansMTCondBold;
             font-size: 70px;
@@ -153,7 +153,7 @@
 <body>
     <h1 id="thankyouMessage"></h1>
     <h1 id="welcomeMessage">
-        <img src="logo.png" width="400px" style="position: absolute; top: 100px" alt="Logo">
+        <img src="logo_rojo.png" width="400px" style="position: absolute; top: 100px; padding-left: 25px;" alt="Logo">
         BIENVENIDO
     </h1>
     <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
@@ -284,9 +284,9 @@
                 if(snapshot.val()) {
                     firebase.database().ref('liveView5/wtime').on('value', function (snapshotWT) {
                         if(snapshotWT.val()) {
-                            var totalMessage = $('#totalTitleLabel').text() + " " + $('#totalTitle').text();
+                            var totalMessage = $('#totalTitleLabel').text() + ": " + $('#totalTitle').text();
                             var minutesMessage = snapshotWT.val();
-                            $("#thankyouMessage").html("GRACIAS POR TU VISITA<br>" + globalName + "<br><br>" + totalMessage + "<br><br><br>EN " + minutesMessage + "M TE<br>NOMBRARÁN EN CAJA");
+                            $("#thankyouMessage").html("GRACIAS POR TU VISITA<br>" + globalName + "<br><br><br><br>" + totalMessage + "<br><br>TIEMPO ESTIMADO:<br>" + minutesMessage + " MINUTOS");
                             $("#thankyouMessage").show();
                             firebase.database().ref('liveView5').remove();
                             setTimeout(function(){
@@ -294,7 +294,7 @@
                                 $("#thankyouMessage").html("GRACIAS POR SU VISITA");
                                 $("#welcomeMessage").show();
                                 globalName = "";
-                            }, 5000);
+                            }, 8000);
                         }
                     });
                 }
@@ -311,11 +311,22 @@
             });
         }
 
+        function reloadOnUpdate() {
+            firebase.database().ref("updates/liveView5").on('value', function(snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref("updates/liveView5").set(false).then(function() {
+                        location.reload();
+                    });
+                }
+            });
+        }
+
         //MAIN
         populateName();
         populateOrder();
         checkConnection();
         checkDoneOrder();
+        reloadOnUpdate();
 
     </script>
 </body>

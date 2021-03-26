@@ -309,7 +309,7 @@
 		<div class="container-fluid col-sm-9" style="background-color: white; padding-left: 1.5%; padding-right: .25%;">
 			<div class="row" style="height: 52px;"> 
 				<div class="modal-title col-xs-5" style="margin-bottom: 10px; margin-top:.5px; height: 20px;">
-					<h1 class="modal-title" id="firsts-counter-label" style="border-radius: 5px; float: left; width: 50px; text-align: center; background-color: rgba(50, 205, 50, 88%); color: white;">0</h1>
+					<h1 class="modal-title" id="firsts-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 51px; text-align: center; background-color: white; color: #444444; border-style: solid; border-width: 2px;">0</h1>
 					<h1 class="modal-title">&nbsp;PEDIDOS POR SURTIR</h1>
 				</div>
 				<div class="modal-title col-xs-4" style="margin-bottom: 10px; margin-top:.5px; height: 20px; padding-left: 100px;">
@@ -448,7 +448,7 @@
 			if(averageTime == 0)
 				$("#s-waiting-times-label").text("");
 			else
-				$("#s-waiting-times-label").text("PROMEDIO: " + parseFloat(averageTime).toFixed(1) + "M N " + parseFloat(averageTimePP).toFixed(1) + "M P");
+				$("#s-waiting-times-label").text("PROMEDIO: " + parseFloat(averageTime).toFixed(1) + "N " + parseFloat(averageTimePP).toFixed(1) + "P");
 			
 			firebase.database().ref('process/timing/tpp10').set(parseFloat(getAverage(spWaitingTimes10)).toFixed(2));
 			firebase.database().ref('process/timing/tpp30').set(parseFloat(getAverage(spWaitingTimes30)).toFixed(2));
@@ -473,18 +473,18 @@
 		function updateCounter(id, counter) {
 			$("#" + id).text(counter);
 			if(id == "firsts-counter-label") {
-				if(counter >= 7){
+				if(counter >= 5){
 					$("#" + id).css("background-color", "rgba(216, 61, 52, 88%)");
 					$("#" + id).css("color", "white");
-				} else if(counter >= 5 && counter <= 6){
-					$("#" + id).css("background-color", "rgba(255, 140, 0, 88%)");
-					$("#" + id).css("color", "white");
+					$("#" + id).css("border-style", "hidden");
 				} else if(counter >= 3 && counter <= 4){
 					$("#" + id).css("background-color", "rgba(255, 215, 0, 88%)");
-					$("#" + id).css("color", "black");
+					$("#" + id).css("color", "#444444");
+					$("#" + id).css("border-style", "hidden");
 				} else if(counter >= 0 && counter <= 2){
-					$("#" + id).css("background-color", "rgba(50, 205, 50, 88%)");
+					$("#" + id).css("background-color", "#444444");
 					$("#" + id).css("color", "white");
+					$("#" + id).css("border-style", "solid");
 				}
 				
 				uploadWOrders();
@@ -631,12 +631,12 @@
 			
 			if(order.ndiversity == "0") {
 				order.nproducts = order.nproducts + " &#10003;"
-				//backgroundColor = "rgba(216, 61, 52, 88%)";
-                //color = "white";
+				backgroundColor = "#00B74AEE";
+                color = "white";
 			} else if(order.ndiversity == "1" && !order.haspanela) {
 				if((order.onlyafuera && order.nproducts <= 10) || (!order.onlyafuera && order.nproducts <= 2)) {
 					order.nproducts = order.nproducts + " &#x21;"
-					//backgroundColor = "rgba(255, 140, 0, 88%)";
+					//backgroundColor = "#00B74AEE";
                 	//color = "white";
 				}
 			}
@@ -672,6 +672,7 @@
 			firebase.database().ref('process/firsts/' + orderid).once("value", function(snapshot) {
 				if(snapshot.val()) {
 					var localsnapshot = snapshot.val();
+					localsnapshot.checked = true;
 					firebase.database().ref('process/thirds/' + orderid).set(localsnapshot).then(function () {
 						firebase.database().ref('process/firsts/' + orderid).remove();
 					});
@@ -679,6 +680,7 @@
 					firebase.database().ref('process/seconds/' + orderid).once("value", function(snapshot) {
 						if(snapshot.val()) {
 							var localsnapshot = snapshot.val();
+							localsnapshot.checked = true;
 							firebase.database().ref('process/thirds/' + orderid).set(localsnapshot).then(function () {
 								firebase.database().ref('process/seconds/' + orderid).remove();
 							});
@@ -787,16 +789,14 @@
 		function updateFElapsedTime(orderListItem) {
 			var etField = orderListItem.find(".elapsed-time");
 			
-			//change color based on time
-			if(etField.text() > 15) {
-				orderListItem.css("background-color", "rgba(216, 61, 52, 88%)");
-				orderListItem.css("color", "white");				
-			} else if(etField.text() > 10 && etField.text() <= 15) {
-				orderListItem.css("background-color", "rgba(255, 140, 0, 88%)");
-				orderListItem.css("color", "white");				
-			} else if(etField.text() > 5 && etField.text() <= 10) {
-				orderListItem.css("background-color", "rgba(255, 215, 0, 88%)");
-				orderListItem.css("color", "#444444");				
+			if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.933)") {
+				if(etField.text() > 4) {
+					orderListItem.css("background-color", "rgba(216, 61, 52, 88%)");
+					orderListItem.css("color", "white");						
+				} else if(etField.text() > 2 && etField.text() <= 4) {
+					orderListItem.css("background-color", "rgba(255, 215, 0, 88%)");
+					orderListItem.css("color", "#444444");				
+				}
 			}
 				
 			var interval = setInterval(function() {
@@ -804,15 +804,11 @@
 					clearInterval(interval);
 				etField.text(parseInt(etField.text()) + 1);
 				
-				//change color based on time, repeated, future fix
 				if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.933)") {
-					if(etField.text() > 15) {
-						orderListItem.css("background-color", "rgba(216, 61, 52, 88%)");
-						orderListItem.css("color", "white");				
-					} else if(etField.text() > 10 && etField.text() <= 15) {
-						orderListItem.css("background-color", "rgba(255, 140, 0, 88%)");
-						orderListItem.css("color", "white");				
-					} else if(etField.text() > 5 && etField.text() <= 10) {
+					if(etField.text() > 4) {
+					orderListItem.css("background-color", "rgba(216, 61, 52, 88%)");
+					orderListItem.css("color", "white");						
+					} else if(etField.text() > 2 && etField.text() <= 4) {
 						orderListItem.css("background-color", "rgba(255, 215, 0, 88%)");
 						orderListItem.css("color", "#444444");				
 					}
@@ -832,11 +828,8 @@
 
 			//coloreada
 			if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.933)") {
-				if(etField.text() > (expectedTime + oneThirdET)) {
+				if(etField.text() > expectedTime) {
 					orderListItem.css("background-color", "rgba(216, 61, 52, 88%)");
-					orderListItem.css("color", "white");				
-				} else if(etField.text() > expectedTime && etField.text() <= (expectedTime + oneThirdET)) {
-					orderListItem.css("background-color", "rgba(255, 140, 0, 88%)");
 					orderListItem.css("color", "white");				
 				} else if(etField.text() > (expectedTime - oneThirdET) && etField.text() <= expectedTime) {
 					orderListItem.css("background-color", "rgba(255, 215, 0, 88%)");
@@ -851,11 +844,10 @@
 				if(etField.css('display') != "block")
 					clearInterval(interval);
 				
-				etField.text(parseInt(etField.text()) + 1);
-				etSField.text(parseInt(etSField.text()) + 1);
-				
-				//coloreada
 				if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.933)") {
+					etField.text(parseInt(etField.text()) + 1);
+					etSField.text(parseInt(etSField.text()) + 1);
+				
 					if(etField.text() > (expectedTime + oneThirdET)) {
 						orderListItem.css("background-color", "rgba(216, 61, 52, 88%)");
 						orderListItem.css("color", "white");				

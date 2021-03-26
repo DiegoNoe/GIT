@@ -602,6 +602,7 @@
                 removeOrderProduct($(this).parent().data("date"));
                 $("#dynamic-list").find("[data-date='" + $(this).parent().data("date") + "']").remove();
                 updateTotal();
+                updateWT();
             });
         }
 
