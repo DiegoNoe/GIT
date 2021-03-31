@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <title>Search view</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,7 +24,6 @@
     <script language="javascript" type="text/javascript" src="js/aes.js"></script>
     <script language="javascript" type="text/javascript" src="js/facturama.api.js"></script>
 
-
     <script>
         var products;
         var orderRefID = "";
@@ -36,12 +36,12 @@
         var globalWaitingOrders,
             globalTPP = [];
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
-
     </script>
 
 </head>
 
-<body>        
+<body>
+
     <!-- no connection alert -->
     <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
         <strong> No hay internet. </strong> 
@@ -69,7 +69,6 @@
             <select class="col-sm-2 form-control" style="margin-top: 2px;" id="inputEmployeeName">
                 <option disabled selected>ANOTADOR</option>
             </select>
-
             <!-- interface buttons-->
             <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-user" id="printButton" style="float: right; font-weight: bold;" onclick="generatePDF('MOSTRADOR')"></button>
             <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-phone-alt" id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold;" onclick="generatePDF('TELEFONO')"></button>
@@ -136,6 +135,7 @@
                                         class="form-control" type="text" placeholder="CODIGO" required>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <!-- cost -->
                                 <div class="col-sm-3">
@@ -602,7 +602,7 @@
                 removeOrderProduct($(this).parent().data("date"));
                 $("#dynamic-list").find("[data-date='" + $(this).parent().data("date") + "']").remove();
                 updateTotal();
-                updateWT();
+                //updateWT();
             });
         }
 

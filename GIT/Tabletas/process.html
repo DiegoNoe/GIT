@@ -72,6 +72,20 @@
 				});
 				finishedOrder.css("background-color", "#00B74AEE");
 				finishedOrder.css("color", "white");
+
+				if(snapshot.val().semployee != "-" && snapshot.val().nproducts > 0) {
+					firebase.database().ref('employees/' + snapshot.val().semployee).once("value", function(ssnapshot) {
+						if(ssnapshot.val()){
+							var localSsnapshot = ssnapshot.val();
+							localSsnapshot.norders = localSsnapshot.norders + 1;
+							localSsnapshot.nproducts = localSsnapshot.nproducts + snapshot.val().nproducts;
+							localSsnapshot.ttime = localSsnapshot.ttime +(snapshot.val().thour - snapshot.val().shour);
+							localSsnapshot.isWorking = true;
+							
+							firebase.database().ref('employees/' + snapshot.val().semployee).set(localSsnapshot);
+						}
+					});
+				}
 			}
 		});
 
@@ -482,8 +496,8 @@
 					$("#" + id).css("color", "#444444");
 					$("#" + id).css("border-style", "hidden");
 				} else if(counter >= 0 && counter <= 2){
-					$("#" + id).css("background-color", "#444444");
-					$("#" + id).css("color", "white");
+					$("#" + id).css("background-color", "white");
+					$("#" + id).css("color", "#444444");
 					$("#" + id).css("border-style", "solid");
 				}
 				
@@ -823,8 +837,8 @@
 			var expectedTime = getExpectedTime(nproducts);
 			var oneThirdET = Math.floor(expectedTime * .34);
 
-			//console.log("prods:" + nproducts + " et:" + expectedTime);
-			//console.log("et 20%" + (Math.floor(expectedTime * .34)));
+			//("prods:" + nproducts + " et:" + expectedTime);
+			//("et 20%" + (Math.floor(expectedTime * .34)));
 
 			//coloreada
 			if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.933)") {
@@ -947,6 +961,16 @@
 				firebase.database().ref('process/thirds').remove();
 				firebase.database().ref('process/fourths').remove();
 				firebase.database().ref('process/timing').remove();
+
+				firebase.database().ref('employees').once("value", function(snapshot) { 
+					if(snapshot.val()) {
+						$.each(snapshot.val(), function(key, value) {
+							firebase.database().ref('employees/' + key + '/norders').set(0);
+							firebase.database().ref('employees/' + key + '/nproducts').set(0);
+							firebase.database().ref('employees/' + key + '/ttime').set(0);
+						});
+					}
+				});
 
 				firebase.database().ref('process/tomorrow/').once("value", function(snapshot) {
 					if(snapshot.val()) {

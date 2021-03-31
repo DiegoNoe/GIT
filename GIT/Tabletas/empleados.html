@@ -402,18 +402,29 @@
 		//adds or updates a product to firebase
         function addNewEmployeeDB(inputs) {
 			var pronunciationQuery = inputs[1] + inputs[2];
-			if(inputs[3])
+			
+			var issigma = false;
+			firebase.database().ref('employees/' + inputs[0] + '/pronunciation').set(pronunciationQuery.substring(0, pronunciationQuery.length - 2));
+			firebase.database().ref('employees/' + inputs[0] + '/id').set(pronunciationQuery.substring(pronunciationQuery.length - 2, pronunciationQuery.length));
+			firebase.database().ref('employees/' + inputs[0] + '/norders').set(0);
+			firebase.database().ref('employees/' + inputs[0] + '/nproducts').set(0);
+			firebase.database().ref('employees/' + inputs[0] + '/ttime').set(0);
+			
+			if(inputs[3]) {
+				issigma = true;
 				pronunciationQuery = "0" + pronunciationQuery;
-				
+			}
+			
+			firebase.database().ref('employees/' + inputs[0] + '/issigma').set(issigma);
             firebase.database().ref('empleados/' + inputs[0]).set(pronunciationQuery).then(function () {
                 $('#addEmployeeModal').modal('toggle');
-			});
-			
+			});			
 		}
 		
 		//deletes an existing product from the db
 		function deleteEmployeeDB() {
 			var name = document.getElementById("addNewEmployeeDBForm").elements[0].value;
+			firebase.database().ref('employees/' + name).remove();
 			database.child(name).remove();
 		}
 
