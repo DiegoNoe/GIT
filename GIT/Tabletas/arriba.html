@@ -22,7 +22,7 @@
         };
 
         firebase.initializeApp(config);
-        var database = firebase.database().ref('aBodegaAbajo');
+        var database = firebase.database().ref('aBodega');
 
         var shortenedUnits = {
             KILO: "KG",
@@ -259,7 +259,7 @@
                 var doneProduct = snapshot.val();
                 doneProduct["hourDone"] = time.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}).slice(0, -3);
                 database.child("hechas/" + productID).set(doneProduct).then(function(){
-                    firebase.database().ref('aBodegaAbajo/pendientes/' + productID).remove();
+                    firebase.database().ref('aBodega/pendientes/' + productID).remove();
                 });
             });
         }
@@ -336,7 +336,7 @@
                 var doneProduct = snapshot.val();
                 doneProduct["hourDone"] = time.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}).slice(0, -3);
                 database.child("entregadas/" + productID).set(doneProduct).then(function(){
-                    firebase.database().ref('aBodegaAbajo/porEntregar/' + productID).remove();
+                    firebase.database().ref('aBodega/porEntregar/' + productID).remove();
                 });
             });
         }

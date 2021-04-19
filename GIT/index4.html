@@ -175,11 +175,11 @@
                                             <option value="yaPesadoCamara">CAMARA - YA VIENE PESADO</option>
                                             <option value="porPesarAfuera">AFUERA - SE NECESITA PESAR</option>
                                             <option value="yaPesadoAfuera">AFUERA - YA VIENE PESADO</option>
-                                            <option value="yaPesadoAfueraTrino">AFUERA - YA VIENE PESADO - TRINO
-                                            </option>
+                                            <option value="yaPesadoAfueraTrino">AFUERA - YA VIENE PESADO - TRINO</option>
                                             <option value="aJamones">AREA DE JAMONES</option>
                                             <option value="aCremas">AREA DE CREMAS</option>
-                                            <option value="aBodega">AREA DE BODEGA</option>
+                                            <option value="aBodega">AREA DE BODEGA - ARRIBA</option>
+                                            <option value="aBodegaAbajo">AREA DE BODEGA - ABAJO</option>
                                         </select>
                                     </div>
                                 </div>
@@ -609,7 +609,7 @@
         //populates an array with all the order product values
         function getOrderProducts() {
             verificatedOrder = true;
-            var typesSequence = ["porPesarCamara", "yaPesadoCamara", "porPesarAfuera", "yaPesadoAfuera", "yaPesadoAfueraTrino", "aCremas", "aJamones", "aBodega"];
+            var typesSequence = ["porPesarCamara", "yaPesadoCamara", "porPesarAfuera", "yaPesadoAfuera", "yaPesadoAfueraTrino", "aCremas", "aJamones", "aBodega", "aBodegaAbajo"];
             
             var newOrder = [];
 
@@ -900,6 +900,8 @@
                         withPendingProducts = aJamonesOrder(order[i], i);
                     else if (order[i][5] == "aBodega")
                         withPendingProducts = aBodegaOrder(order[i], i);
+                    else if (order[i][5] == "aBodegaAbajo")
+                        withPendingProducts = aBodegaAbajoOrder(order[i], i);
                     else if (aJamonesSpecialProducts.includes(order[i][0]) && order[i][4] != "") 
                         withPendingProducts = aJamonesOrder(order[i], i);
                     else if (aJamonesSpecialProducts.includes(order[i][0]) && order[i][1] % 1 != 0) {
@@ -1303,6 +1305,25 @@
             };
             var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aBodega').push(productJSON);
             firebase.database().ref('aBodega/pendientes/' + productRef.key ).set(productJSON);
+            return true;
+        }
+
+        //uploads the arriba product
+        function aBodegaAbajoOrder(productOrder, i) {
+            var time = new Date();
+            if ($("#tomorrowCheckbox").is(':checked'))
+                productOrder[4] = "MAÑANA " + productOrder[4];
+            
+            var productJSON = {
+                id: productOrder[0],
+                quantity: productOrder[1],
+                unit: productOrder[2],
+                description: productOrder[3],
+                notes: productOrder[4],
+                hour: time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+            };
+            var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aBodegaAbajo').push(productJSON);
+            firebase.database().ref('aBodegaAbajo/pendientes/' + productRef.key ).set(productJSON);
             return true;
         }
 
