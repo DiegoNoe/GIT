@@ -79,8 +79,9 @@
 							var localSsnapshot = ssnapshot.val();
 							localSsnapshot.norders = localSsnapshot.norders + 1;
 							localSsnapshot.nproducts = localSsnapshot.nproducts + snapshot.val().nproducts;
-							localSsnapshot.ttime = localSsnapshot.ttime +(snapshot.val().thour - snapshot.val().shour);
-							localSsnapshot.isWorking = true;
+							localSsnapshot.ttime = localSsnapshot.ttime + (snapshot.val().thour - snapshot.val().shour);
+							localSsnapshot.lastFinished = snapshot.val().thour;
+							localSsnapshot.hasOrder = false;
 							
 							firebase.database().ref('employees/' + snapshot.val().semployee).set(localSsnapshot);
 						}
@@ -518,8 +519,10 @@
 				if($(this).children().eq(6).text() <= 20)
 					realCounter++;
 			});
-			
 			firebase.database().ref('process/timing/worders').set(realCounter);
+			
+			var rawCouter = $("#firsts-counter-label").text();
+			firebase.database().ref('process/timing/rworders').set(rawCouter);
 		}
 
         function focusOnBlur() {
@@ -575,7 +578,11 @@
 							if(snapshot.val()) {
 								var localsnapshot = snapshot.val();
 								localsnapshot.semployee = semployeeName;
-								localsnapshot.shour = Date.now();								
+								localsnapshot.shour = Date.now();	
+								
+								//aqui
+								firebase.database().ref('employees/' + semployeeName + "/hasOrder").set(true); 
+
 								firebase.database().ref('process/seconds/' + orderid).set(localsnapshot).then(function () {
 									firebase.database().ref('process/firsts/' + orderid).remove();
 								});
@@ -951,6 +958,16 @@
 			ul.parentNode.replaceChild(new_ul, ul);
 		}
 
+		//global employees loop
+		firebase.database().ref('employees').once("value", function(snapshot) { 
+			if(snapshot.val()) {
+				$.each(snapshot.val(), function(key, value) {
+					firebase.database().ref('employees/' + key + '/resting').set(false);
+				});
+			}
+		}); 
+		
+
 		function checkDayChange() {
             var now = new Date();
             var millisTill7pm = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 10, 0, 0) - now;
@@ -968,6 +985,13 @@
 							firebase.database().ref('employees/' + key + '/norders').set(0);
 							firebase.database().ref('employees/' + key + '/nproducts').set(0);
 							firebase.database().ref('employees/' + key + '/ttime').set(0);
+							firebase.database().ref('employees/' + key + '/lastFinished').set(0);
+							firebase.database().ref('employees/' + key + '/ttBeingLazy').set(0);
+							firebase.database().ref('employees/' + key + '/hasOrder').set(false);
+							firebase.database().ref('employees/' + key + '/resting').set(false);
+							firebase.database().ref('employees/' + key + '/nordersT').set(0);
+							firebase.database().ref('employees/' + key + '/lastFinishedT').set(0);
+							firebase.database().ref('employees/' + key + '/ttimeT').set(0);
 						});
 					}
 				});
@@ -999,8 +1023,7 @@
 							var interval = setInterval(function() {
 								updateMaxTimeFirsts();
 								updateMaxTimeSeconds();
-							}, 1000);
-							
+							}, 1000);	
 						}, 500);
 					}
 				} else 

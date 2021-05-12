@@ -409,6 +409,7 @@
 			firebase.database().ref('employees/' + inputs[0] + '/norders').set(0);
 			firebase.database().ref('employees/' + inputs[0] + '/nproducts').set(0);
 			firebase.database().ref('employees/' + inputs[0] + '/ttime').set(0);
+			firebase.database().ref('employees/' + inputs[0] + '/lastFinished').set(0);
 			
 			if(inputs[3]) {
 				issigma = true;
@@ -425,6 +426,7 @@
 		function deleteEmployeeDB() {
 			var name = document.getElementById("addNewEmployeeDBForm").elements[0].value;
 			firebase.database().ref('employees/' + name).remove();
+			firebase.database().ref('empleados/' + name).remove();
 			database.child(name).remove();
 		}
 

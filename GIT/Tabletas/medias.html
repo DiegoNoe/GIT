@@ -192,6 +192,8 @@
 			font-size: 70px;
 			font-family: GillSansMTCondensedBold;
 			font-size: 30px;
+
+			display: none;
 		}
 
 		#logo-image {
@@ -475,6 +477,8 @@
 		}
 		
 		function startBreak(breakButton) {
+			firebase.database().ref('employees/' + breakButton.getAttribute("data-name") + '/resting').set(true);
+
 			var counter = globalCounter;
 			if(counter == 40 && breakButton.getAttribute("data-sigma") == "true")
 				counter = 30;
@@ -489,9 +493,9 @@
 				if (counter > 0) {
 					breakButton.innerText = counter;
 				} else {
+					firebase.database().ref('employees/' + breakButton.getAttribute("data-name") + '/resting').set(false);
 					employeesOnBreak--;
 					document.getElementById('mediasTitle').innerText = "M: " + employeesOnBreak;
-					
 					speakName(breakButton.getAttribute("data-name"));
 					breakButton.style.backgroundColor = "#e53935";
 					breakButton.style.color = "white";
@@ -499,7 +503,7 @@
 					breakButton.classList.add("pulse");
 					clearInterval(interval);
 				}
-			}, 60000);
+			}, 60 * 1000);
 		} 
 		
 		function speakName(name) {
