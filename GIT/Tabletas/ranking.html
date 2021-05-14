@@ -31,8 +31,8 @@
 		});
 
 		var worders = 0;
-		firebase.database().ref('process/timing/rworders').on('value', function (snapshot) {
-			if(typeof snapshot.val() !== 'undefined') {
+		firebase.database().ref('process/timing/worders').on('value', function (snapshot) {
+			if(typeof snapshot.val() != 'undefined') {
 				worders = snapshot.val();
 				$("#wordersLabel").text("NOTAS POR SURTIR: " + worders);
 			}
@@ -41,7 +41,7 @@
 		database.on('child_changed', function (snapshot) {
 			if(snapshot.val()) {
 				if($('#dynamic-list').find('#' + snapshot.key).length == 0) {
-					if(snapshot.val().nproducts != 0) {
+					if(typeof snapshot.val().nproducts == "number" && snapshot.val().nproducts != 0) {
 						$('#dynamic-list').append(formatListItem(snapshot.val(), snapshot.key));				
 						updateElapsedTime($('#dynamic-list').children().last());
 						sortList("dynamic-list");
@@ -49,12 +49,12 @@
 				}
 				var listItemT = $('#dynamic-list-thirds').find('#' + snapshot.key);
 				if(listItemT.length == 0) {
-					if(snapshot.val().nordersT != 0) {
+					if(typeof snapshot.val().nordersT == "number" && snapshot.val().nordersT != 0) {
 						$('#dynamic-list-thirds').append(formatListItemThirds(snapshot.val(), snapshot.key));				
 						updateElapsedTimeT($('#dynamic-list-thirds').children().last());
 						sortList("dynamic-list-thirds");
 					}	
-				} else if(snapshot.val().nordersT != 0) {
+				} else if(typeof snapshot.val().nordersT == "number" && snapshot.val().nordersT != 0) {
 					if(snapshot.val().resting) listItemT.children().eq(0).css("text-decoration", "line-through");
 					else listItemT.children().eq(0).css("text-decoration", "none");
 					
@@ -80,7 +80,7 @@
 
 				var listItem = $('#dynamic-list').find('#' + snapshot.key);
 				var ppaverage = 0;
-				if(snapshot.val().nproducts != 0)
+				if(typeof snapshot.val().nproducts == "number" && snapshot.val().nproducts != 0)
 					ppaverage = ((snapshot.val().ttime / 1000) / snapshot.val().nproducts).toFixed(1);
 				listItem.children().eq(1).text(ppaverage);
 				listItem.children().eq(2).text(snapshot.val().norders);
@@ -150,13 +150,13 @@
 		}
 
 		#dynamic-list {
-			height: 340px;
+			height: 440px;
 			overflow: hidden;
 			overflow-y: scroll;
 		}
 
 		#dynamic-list-thirds {
-			height: 240px;
+			height: 306px;
 			overflow: hidden;
 			overflow-y: scroll;
 		}
@@ -211,10 +211,35 @@
 			border: none;
 		}
 
+		#splashScreen {
+            background-color: white;
+            color: black;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            z-index: 10;
+            text-align: center;
+			font-size: 70px;
+			font-family: GillSansMTCondensedBold;
+			font-size: 30px;
+		}
+
+		#logo-image {
+			width: 80%;
+			padding-top: 20%;
+			padding-right: 15px;
+		}
+
 	</style>
 </head>
 
 <body style="zoom: 100%; background-color: white; overflow: hidden;">
+	<div id="splashScreen">
+		<input id="logo-image" type="image" onclick="userFullscreen();" src="logo.png"/>
+		<span id="welcomeMessage">PRESIONA PARA INICIAR</span>
+	</div>
 	<div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
 		<strong>No hay conexión.</strong> Verifica la conexión wifi.
 	</div>
@@ -304,14 +329,25 @@
 
 		checkConnection();
 
+		$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
+			if (document.fullscreen)
+				$("#splashScreen").hide();
+			else
+				$("#splashScreen").show();
+		});
+
+		function userFullscreen() {
+			document.body.requestFullscreen();
+		}
+
 		//agregar empleados despues
 		function loadEmployees(employeesSnapshot) {
 			$.each(employeesSnapshot, function(index, value) {
-				if(value.nproducts != 0) {
+				if(typeof value.nproducts == "number" && value.nproducts != 0) {
 					$('#dynamic-list').append(formatListItem(value, index));				
 					updateElapsedTime($('#dynamic-list').children().last());
 				}
-				if(value.nordersT != 0) {
+				if(typeof value.nordersT == "number" &&  value.nordersT != 0) {
 					$('#dynamic-list-thirds').append(formatListItemThirds(value, index));				
 					updateElapsedTimeT($('#dynamic-list-thirds').children().last());
 				}
@@ -357,7 +393,7 @@
 
 		function formatListItem(employee, id) {
 			var ppaverage = 0;
-			if(employee.nproducts != 0)
+			if(typeof employee.nproducts == "number" && employee.nproducts != 0)
 				ppaverage = ((employee.ttime / 1000) / employee.nproducts).toFixed(1);
 
 			var backgroundColor = "white",
@@ -408,7 +444,7 @@
 				offset = 1;
 
 			var averageTime = 0;
-			if(employee.nordersT != 0)
+			if(typeof employee.nordersT && employee.nordersT != 0)
 				averageTime = Math.trunc(employee.ttimeT / (employee.nordersT - offset));
 
 			var ltStyle = "none";

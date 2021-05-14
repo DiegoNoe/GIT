@@ -82,6 +82,8 @@
 							localSsnapshot.ttime = localSsnapshot.ttime + (snapshot.val().thour - snapshot.val().shour);
 							localSsnapshot.lastFinished = snapshot.val().thour;
 							localSsnapshot.hasOrder = false;
+
+							console.log("se supone que aqui cambio el employee");
 							
 							firebase.database().ref('employees/' + snapshot.val().semployee).set(localSsnapshot);
 						}
