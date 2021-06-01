@@ -965,6 +965,7 @@
                 window.open(doc.output('bloburl'), '_blank');
 
                 var ncomputer = globalComputer.slice(-1);
+                var etime = calculateWTime(Math.ceil(nproducts));
 
                 //process
                 firebase.database().ref('process/firsts/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
@@ -979,7 +980,8 @@
                     iftomorrow: iftomorrow,
                     ordertype: ordertype,
                     ftotal: calculable,
-                    ncomputer: ncomputer
+                    ncomputer: ncomputer,
+                    etime: etime,
                 });
   
                 //survey values
@@ -988,9 +990,8 @@
 
                 //erase current order
                 eraseOrder();
-
                 
-                firebase.database().ref(globalComputer + '/wtime').set(calculateWTime(nproducts));
+                firebase.database().ref(globalComputer + '/wtime').set(etime);
                 finishOrderProducts(true);
             }
         }
