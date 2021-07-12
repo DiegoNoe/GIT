@@ -15,7 +15,6 @@
 	<script language="javascript" type="text/javascript" src="defiant.min.js"></script>
 	
 	<script>
-		console.log("nuevo");
 		var config = {
 			apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
 			authDomain: "cremeria-imperial.firebaseapp.com",
@@ -389,8 +388,8 @@
 				<h2 class="col-xs-9 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
 			</div>
-			<button class="scroll-button" type="button" style="width: 385px; height: 400px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-thirds', 'up')"></button>			
-			<button class="scroll-button" type="button" style="width: 385px; height: 400px; left: 10px; top: 680px;" onclick="scrollbPressed('dynamic-list-thirds', 'down')"></button>
+			<button class="scroll-button" type="button" style="width: 365px; height: 400px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-thirds', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 365px; height: 400px; left: 10px; top: 680px;" onclick="scrollbPressed('dynamic-list-thirds', 'down')"></button>
 			<ul id="dynamic-list-thirds" class="list-group" style="display:block;"> </ul>
 		</div>
 	</div>
@@ -583,7 +582,6 @@
 								localsnapshot.semployee = semployeeName;
 								localsnapshot.shour = Date.now();	
 								
-								//aqui
 								firebase.database().ref('employees/' + semployeeName + "/hasOrder").set(true); 
 
 								firebase.database().ref('process/seconds/' + orderid).set(localsnapshot).then(function () {
@@ -779,18 +777,28 @@
 			
 			var returnStatement = 
 				'<li class="list-group-item row order-row" style="padding-right: 0px; background-color: ' + backgroundColor + '; color: ' + color + ';">' +
-					'<div class="col-xs-8" style="padding: 0px; margin: 0px;">' + 
+					'<div class="col-xs-7" style="padding: 0px; margin: 0px;">' + 
 						'<h3 class="glyphicon ' + tomorrowIcon + '" style="padding: 0px; margin: 0px; float: left; width:30px; display: ' + iconVisibility + '"></h3>' + 
 						'<h2 class="client-name" style="padding: 0px; margin: 0px; padding-left: 0px; float: left;">' + order.name + '</h2>' + 
 					'</div>' +
-					'<div class="col-xs-4" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
-						'<h2 class="order-id elapsed-time" style="width: 90px; margin: 0px 0px; float: left; clear: both;">' + order.total + '</h2>' + 						
-						'<div type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px;" onclick="sendToFourths(&quot;' + id + '&quot;)">' +
+					'<div class="col-xs-5" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
+						'<h2 class="order-id elapsed-time" style="width: 90px; margin: 0px 0px; float: left; clear: both;">' + order.total + '</h2>' +
+						'<span type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px;" onclick="sendToFourths(&quot;' + id + '&quot;)">' +
 							'<h4 class="glyphicon glyphicon-remove" style="margin-top: .75px;"></h4>' +
-						'</div>' +
+						'</span>' + 						
+						'<span type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px;" onclick="getInfoFourths(&quot;' + order.ncomputer + '&quot; , &quot;' + order.hour + '&quot; , &quot;' + order.femployee + '&quot;)">' +
+							'<h4 class="glyphicon glyphicon-time" style="margin-top: .75px;"></h4>' +
+						'</span>' +
 					'</div>' +
 				'</li>';
 			return returnStatement;
+		}
+
+		function getInfoFourths(computer, orderHour, employee) {
+			var date = new Date(parseInt(orderHour));
+			var dateString = date.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true});
+			
+			alert("ANOTÓ " + employee + "\n" + dateString + "\n#C" + computer);
 		}
 
 		function sendToFourths(orderid) {
@@ -970,11 +978,68 @@
 			}
 		}); 
 		
+		function saveWReport() {
+			firebase.database().ref('employees').once("value", function(snapshot) { 
+				if(snapshot.val()) {
+					firebase.database().ref('employeesW').once("value", function(snapshotW) { 
+						$.each(snapshot.val(), function(key, value) {
+							if(typeof snapshotW.val()[key] == "undefined") {
+								createEmployee(key);
+							} else {
+								firebase.database().ref('employeesW/' + key + '/norders').set(snapshotW.val()[key].norders + value.norders);
+								firebase.database().ref('employeesW/' + key + '/nproducts').set(snapshotW.val()[key].nproducts + value.nproducts);
+								firebase.database().ref('employeesW/' + key + '/ttime').set(snapshotW.val()[key].ttime + value.ttime);
+								firebase.database().ref('employeesW/' + key + '/ttBeingLazy').set(snapshotW.val()[key].ttBeingLazy + value.ttBeingLazy);
+								firebase.database().ref('employeesW/' + key + '/nordersT').set(snapshotW.val()[key].nordersT + value.nordersT);
+								firebase.database().ref('employeesW/' + key + '/ttimeT').set(snapshotW.val()[key].ttimeT + value.ttimeT);
+							}
+						});
+					});
+				}
+			});
+		}
+
+		function deleteWReport() {
+			firebase.database().ref('employeesW').once("value", function(snapshot) { 
+				if(snapshot.val()) {
+					$.each(snapshot.val(), function(key, value) {
+						firebase.database().ref('employeesW/' + key + '/norders').set(0);
+						firebase.database().ref('employeesW/' + key + '/nproducts').set(0);
+						firebase.database().ref('employeesW/' + key + '/ttime').set(0);
+						firebase.database().ref('employeesW/' + key + '/lastFinished').set(0);
+						firebase.database().ref('employeesW/' + key + '/ttBeingLazy').set(0);
+						firebase.database().ref('employeesW/' + key + '/hasOrder').set(false);
+						firebase.database().ref('employeesW/' + key + '/resting').set(false);
+						firebase.database().ref('employeesW/' + key + '/nordersT').set(0);
+						firebase.database().ref('employeesW/' + key + '/lastFinishedT').set(0);
+						firebase.database().ref('employeesW/' + key + '/ttimeT').set(0);
+					});
+				}
+			});
+		}
+
+		function createEmployee(key) {
+			firebase.database().ref('employeesW/' + key + '/norders').set(0);
+			firebase.database().ref('employeesW/' + key + '/nproducts').set(0);
+			firebase.database().ref('employeesW/' + key + '/ttime').set(0);
+			firebase.database().ref('employeesW/' + key + '/lastFinished').set(0);
+			firebase.database().ref('employeesW/' + key + '/ttBeingLazy').set(0);
+			firebase.database().ref('employeesW/' + key + '/hasOrder').set(false);
+			firebase.database().ref('employeesW/' + key + '/resting').set(false);
+			firebase.database().ref('employeesW/' + key + '/nordersT').set(0);
+			firebase.database().ref('employeesW/' + key + '/lastFinishedT').set(0);
+			firebase.database().ref('employeesW/' + key + '/ttimeT').set(0);
+		}
 
 		function checkDayChange() {
             var now = new Date();
-            var millisTill7pm = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 10, 0, 0) - now;
+            var millisTill7pm = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 20, 0, 0) - now;
+            var millisTill7pmW = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 10, 0, 0) - now;
 			
+			if (millisTill7pmW < 0) {
+				saveWReport();
+			}
+
 			if (millisTill7pm < 0) {
 				firebase.database().ref('process/firsts').remove();
 				firebase.database().ref('process/seconds').remove();

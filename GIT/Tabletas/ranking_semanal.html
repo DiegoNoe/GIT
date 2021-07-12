@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: white;">
+<head>
+	<title>Registro</title>
+
+	<meta charset="utf-8">
+    <meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+	<script language="javascript" type="text/javascript" src="defiant.min.js"></script>
+	
+	<script>
+		var config = {
+			apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
+			authDomain: "cremeria-imperial.firebaseapp.com",
+			databaseURL: "https://cremeria-imperial.firebaseio.com",
+			projectId: "cremeria-imperial",
+			storageBucket: "cremeria-imperial.appspot.com",
+			messagingSenderId: "445465872507"
+		};
+
+		firebase.initializeApp(config);
+		var timeouts = {};
+		var database = firebase.database().ref('employeesW/');
+		database.once('value', function (snapshot) {
+			loadEmployees(snapshot.val());
+		});
+
+		var worders = 0;
+		firebase.database().ref('process/timing/worders').on('value', function (snapshot) {
+			if(typeof snapshot.val() != 'undefined') {
+				worders = snapshot.val();
+				$("#wordersLabel").text("NOTAS POR SURTIR: " + worders);
+			}
+		});
+
+		database.on('child_changed', function (snapshot) {
+			if(snapshot.val()) {
+				if($('#dynamic-list').find('#' + snapshot.key).length == 0) {
+					if(typeof snapshot.val().nproducts == "number" && snapshot.val().nproducts != 0) {
+						$('#dynamic-list').append(formatListItem(snapshot.val(), snapshot.key));				
+						updateElapsedTime($('#dynamic-list').children().last());
+						sortList("dynamic-list");
+					}	
+				}
+				var listItemT = $('#dynamic-list-thirds').find('#' + snapshot.key);
+				if(listItemT.length == 0) {
+					if(typeof snapshot.val().nordersT == "number" && snapshot.val().nordersT != 0) {
+						$('#dynamic-list-thirds').append(formatListItemThirds(snapshot.val(), snapshot.key));				
+						updateElapsedTimeT($('#dynamic-list-thirds').children().last());
+						sortList("dynamic-list-thirds");
+					}	
+				} else if(typeof snapshot.val().nordersT == "number" && snapshot.val().nordersT != 0) {
+					if(snapshot.val().resting) listItemT.children().eq(0).css("text-decoration", "line-through");
+					else listItemT.children().eq(0).css("text-decoration", "none");
+					
+					if(listItemT.data("thour") != snapshot.val().lastFinishedT) {
+						listItemT.data("thour", snapshot.val().lastFinishedT);
+						listItemT.children().eq(1).text(snapshot.val().nordersT);
+						
+						var timeBeigLazy = parseInt(listItemT.children().eq(2).text());
+						listItemT.children().eq(2).text(0);
+
+						var offset = 0;
+						if(snapshot.val().nordersT > 1)
+							offset = 1;
+
+						listItemT.children().eq(3).text(Math.trunc((snapshot.val().ttimeT + timeBeigLazy) / (snapshot.val().nordersT - offset)));
+						firebase.database().ref('employeesW/' + snapshot.key + '/ttimeT').set(snapshot.val().ttimeT + timeBeigLazy);
+
+						listItemT.css("background-color", "white");
+						listItemT.css("color", "#444444");
+						sortList("dynamic-list-thirds");
+					}
+				}		
+
+				var listItem = $('#dynamic-list').find('#' + snapshot.key);
+				var ppaverage = 0;
+				if(typeof snapshot.val().nproducts == "number" && snapshot.val().nproducts != 0)
+					ppaverage = ((snapshot.val().ttime / 1000) / snapshot.val().nproducts).toFixed(1);
+				listItem.children().eq(1).text(ppaverage);
+				listItem.children().eq(2).text(snapshot.val().norders);
+				listItem.data("thour", snapshot.val().lastFinished);
+				
+				if(listItem.children().eq(4).text() != "")
+					firebase.database().ref('employeesW/' + snapshot.key + '/ttBeingLazy').set(parseInt(listItem.children().eq(4).text()));
+				
+				if(snapshot.val().hasOrder) {
+					listItem.css("background-color", "rgba(0, 183, 74, 0.933)");
+					listItem.css("color", "white");
+					listItem.find(".elapsed-time").text(0);
+				} else {
+					var now = new Date();
+					var timeBeingLazy = Math.trunc((now - snapshot.val().lastFinished) / (60 * 1000));
+					if(timeBeingLazy < 5 ) {
+						listItem.css("background-color", "white");
+						listItem.css("color", "#444444");
+					} else if(timeBeingLazy >= 5) {
+						listItem.css("background-color", "rgba(216, 61, 52, 0.88)");
+						listItem.css("color", "#white");
+					}
+				}
+
+				if(snapshot.val().resting)
+					listItem.children().eq(0).css("text-decoration", "line-through");
+				else
+					listItem.children().eq(0).css("text-decoration", "none");
+				
+				sortList("dynamic-list");
+			}
+		});
+
+	</script>
+
+	<style>
+
+		@font-face {
+            font-family: GillSansMTCondensedBold;
+            font-style: normal;
+            src: url(GillSansMTCondensedBold.ttf);
+        }
+
+		.container-fluid {
+			font-family: GillSansMTCondensedBold;
+			margin-left: 1%;
+			margin-right: 1%;
+			margin-top: 1.5%;
+			position: relative;
+		}
+
+		#addEmployeeModal {
+			font-family: GillSansMTCondensedBold;
+			font-size: 25px;
+		}
+		
+		#addEmployeeModalLabel {
+			font-size: 27px;
+		}
+
+		.modal-body {
+			padding-top: 5px;
+		}
+
+		#verificationMessage {
+			font-size: 16px;
+		}
+
+		#dynamic-list {
+			height: 440px;
+			overflow: hidden;
+			overflow-y: scroll;
+		}
+
+		#dynamic-list-thirds {
+			height: 306px;
+			overflow: hidden;
+			overflow-y: scroll;
+		}
+
+		#addNewEmployeeDBForm input{
+			font-size: 17px;
+		}
+
+		#addNewEmployeeDBForm select{
+			font-size: 17px;
+		}
+
+		#addNewEmployeeDBForm label{
+			font-size: 18px;
+		}
+
+		.employee-row {
+			margin-left: 0px;
+			margin-right: 0px;
+			padding-left: 12px; 
+			padding-right: 12px;
+		}
+
+		.employee-name {
+			font-size: 26px;
+			line-height: 32px;
+		}
+
+		.employee-id {
+			font-size: 26px;
+			line-height: 32px;
+		}
+
+		.btn-modal {
+			font-size: 20px;
+			line-height: 18px;
+		}
+
+		.form-control:focus {
+			border-color: rgb(239, 154, 154);
+			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
+		}
+
+		.list-group-item {
+			padding-top: 4px;
+			padding-bottom: 4px;
+			padding-left: 12px;
+			color: #444444;
+		}
+
+		.headTitle {
+			border: none;
+		}
+
+		#splashScreen {
+            background-color: white;
+            color: black;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            z-index: 10;
+            text-align: center;
+			font-size: 70px;
+			font-family: GillSansMTCondensedBold;
+			font-size: 30px;
+		}
+
+		#logo-image {
+			width: 80%;
+			padding-top: 20%;
+			padding-right: 15px;
+		}
+
+	</style>
+</head>
+
+<body style="zoom: 100%; background-color: white; overflow: hidden;">
+	<div id="splashScreen">
+		<input id="logo-image" type="image" onclick="userFullscreen();" src="logo.png"/>
+		<span id="welcomeMessage">PRESIONA PARA INICIAR</span>
+	</div>
+	<div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
+		<strong>No hay conexión.</strong> Verifica la conexión wifi.
+	</div>
+	<div class="container-fluid" style="background-color: white;">
+		<div class="row"> 
+			<h1 class="modal-title col-xs-8" style="margin-bottom:1.5%; margin-top:.5px" id="wordersLabel">NOTAS POR SURTIR: </h1>
+			<div class="col-xs-4">
+				<!-- <button onclick="addEmployeeModal();" class="btn btn-success" style="float: right; margin-top: 8px; margin-left: 10px; padding-left: 8.4px; padding-top: 7px; height: 34px; width: 34px; font-size: 25px; line-height: 10px;">+</button> -->
+				<!-- <button onclick="sortEmployees(event);" class="btn btn-success" id="orderButton" style="float: right; margin-top: 8px; margin-left: 10px; padding-left: 10px; padding-top: 2.5px; height: 34px; width: 34px; font-size: 20px;">#</button> -->
+			</div>
+		</div>
+		<div class="list-group-item row employee-row headTitle">
+			<h2 class="col-xs-3 employee-name" style="padding: 0px; margin: 0px; padding-left: 0px;"> SURTIENDO </h2>
+			<h2 class="col-xs-3 employee-name" style="padding: 0px; margin: 0px; padding-left: 10px;"> PS</h2>
+			<h2 class="col-xs-3 employee-name" style="padding: 0px; margin: 0px; padding-left: 10px;"> NS </h2>
+			<h2 class="col-xs-3 employee-name" style="padding: 0px; margin: 0px; padding-left: 10px;"> TP </h2>
+		</div>
+		<ul id="dynamic-list" class="list-group" style="display:block;"> </ul>
+
+		<div class="list-group-item row employee-row headTitle">
+			<h2 class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 0px;"> ENTREGANDO </h2>
+			<h2 class="col-xs-2 employee-name" style="padding: 0px; margin: 0px; padding-left: 10px;"> N </h2>
+			<h2 class="col-xs-2 employee-name" style="padding: 0px; margin: 0px; padding-left: 10px;"> PE </h2>
+			<h2 class="col-xs-2 employee-name" style="padding: 0px; margin: 0px; padding-left: 10px;"> TP </h2>
+			<h2 class="col-xs-2 employee-name" style="padding: 0px; margin: 0px; padding-left: 10px;"> PTP </h2>
+		</div>
+		<ul id="dynamic-list-thirds" class="list-group" style="display:block;"> </ul>
+
+	</div>
+
+	<div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+
+				<!-- modal title -->
+				<div class="modal-header">
+					<h4 class="modal-title" id="addEmployeeModalLabel">AGREGAR EMPLEADO</h4>
+				</div>
+				<div class="modal-body">
+					<form id="addNewEmployeeDBForm">
+						<!-- form -->
+						<div class="form-group">
+							<!-- error message div -->
+							<label id="verificationMessage" style="color: red;"></label>
+							<div class="row" style="margin-bottom: 0px;">
+								<!-- name -->
+								<div class="col-xs-6">
+									<label for="nameInput">NOMBRE</label>
+									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" maxlength="9" placeholder="NOMBRE"
+										required>
+								</div>
+                                <!-- pronunciation -->
+                                <div class="col-xs-6">
+									<label for="pronunciationInput">PRONUNCIACIÓN</label>
+									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" maxlength="9" placeholder="PRONUNCIACIÓN"
+									required>
+                                </div>
+							</div>
+							
+							<div class="row">
+								<!-- id -->
+								<div class="col-xs-3">
+									<label for="IDInput">CLAVE</label>
+									<input id="inputID" oninput="this.value = this.value.toUpperCase()"
+										class="form-control" type="number" placeholder="CLAVE" required>
+								</div>
+                                <!-- sigma -->
+                                <div class="col-xs-2">
+                                    <label for="priceInput">SIGMA</label>
+                                    <input class="form-control" style="width: 24px; margin-top: 0px;" type="checkbox" style="margin-top: 0px;">
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<!-- modal interface buttons (delete is hidden when "add new product" view is active) -->
+				<div class="modal-footer" style="text-align: center">
+					<button type="button" style="font-size: 17px" class="btn btn-secondary btn-modal" data-dismiss="modal">CANCELAR</button>
+					<button type="button" style="font-size: 17px" id="deleteButton" class="btn btn-danger btn-modal" data-dismiss="modal" onclick="deleteEmployeeDB();" style="display: none">ELIMINAR</button>
+					<button type="button" style="font-size: 17px" class="btn btn-success btn-modal" id="saveButton" data-type="newEmployee" onclick="verificateNewEmployee();">GUARDAR</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+
+		checkConnection();
+
+		$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
+			if (document.fullscreen)
+				$("#splashScreen").hide();
+			else
+				$("#splashScreen").show();
+		});
+
+		function userFullscreen() {
+			document.body.requestFullscreen();
+		}
+
+		//agregar empleados despues
+		function loadEmployees(employeesSnapshot) {
+			$.each(employeesSnapshot, function(index, value) {
+				if(typeof value.nproducts == "number" && value.nproducts != 0) {
+					$('#dynamic-list').append(formatListItem(value, index));				
+					updateElapsedTime($('#dynamic-list').children().last());
+				}
+				if(typeof value.nordersT == "number" &&  value.nordersT != 0) {
+					$('#dynamic-list-thirds').append(formatListItemThirds(value, index));				
+					updateElapsedTimeT($('#dynamic-list-thirds').children().last());
+				}
+			});
+			sortList("dynamic-list");
+			sortList("dynamic-list-thirds");
+		}
+
+		function sortList(ulname){
+			ul = document.getElementById(ulname);
+			var new_ul = ul.cloneNode(false);
+			var lis = [];
+			for(var i = ul.childNodes.length; i--;)
+				if(ul.childNodes[i].nodeName === 'LI')
+					lis.push(ul.childNodes[i]);
+
+			var aValue,
+				bValue;
+			if(ulname == "dynamic-list") {
+				lis.sort(function(a, b){
+					aValue = parseInt(a.childNodes[1].textContent , 10);
+					bValue = parseInt(b.childNodes[1].textContent , 10);
+
+					if(aValue == 0) aValue = 999;
+					if(bValue == 0) bValue = 999;
+
+					return aValue - bValue;
+				});
+			} else {
+				lis.sort(function(a, b){
+					aValue = parseInt(a.childNodes[1].textContent , 10);
+					bValue = parseInt(b.childNodes[1].textContent , 10);
+
+					return bValue - aValue;
+				});
+			}
+				
+			for(var i = 0; i < lis.length; i++)
+				new_ul.appendChild(lis[i]);
+
+			ul.parentNode.replaceChild(new_ul, ul);
+		}
+
+		function deleteWReport() {
+			firebase.database().ref('employeesW').once("value", function(snapshot) { 
+				if(snapshot.val()) {
+					$.each(snapshot.val(), function(key, value) {
+						firebase.database().ref('employeesW/' + key + '/norders').set(0);
+						firebase.database().ref('employeesW/' + key + '/nproducts').set(0);
+						firebase.database().ref('employeesW/' + key + '/ttime').set(0);
+						firebase.database().ref('employeesW/' + key + '/lastFinished').set(0);
+						firebase.database().ref('employeesW/' + key + '/ttBeingLazy').set(0);
+						firebase.database().ref('employeesW/' + key + '/hasOrder').set(false);
+						firebase.database().ref('employeesW/' + key + '/resting').set(false);
+						firebase.database().ref('employeesW/' + key + '/nordersT').set(0);
+						firebase.database().ref('employeesW/' + key + '/lastFinishedT').set(0);
+						firebase.database().ref('employeesW/' + key + '/ttimeT').set(0);
+					});
+				}
+			});
+		}
+
+		function formatListItem(employee, id) {
+			var ppaverage = 0;
+			if(typeof employee.nproducts == "number" && employee.nproducts != 0)
+				ppaverage = ((employee.ttime / 1000) / employee.nproducts).toFixed(1);
+
+			var backgroundColor = "white",
+				textColor = "#444444";
+
+			var now = new Date();
+			var timeBeingLazy = Math.trunc((now - employee.lastFinished) / (60 * 1000))
+			if(employee.hasOrder) {
+				backgroundColor = "rgba(0, 183, 74, 0.933)";
+				textColor = "white";
+				timeBeingLazy = 0;
+			} else {
+				if(timeBeingLazy >= 5) {
+					backgroundColor = "rgba(216, 61, 52, 0.88)";
+					textColor = "white";
+				}
+			}
+
+			var ltStyle = "none";
+			if(employee.resting)
+				ltStyle = "line-through";
+
+			var employeeListItem =
+				'<li class="list-group-item row employee-row" id="' + id + '" data-thour="' + employee.lastFinished + '" style="background-color: ' + backgroundColor + '; color: ' + textColor + ';">' +
+					'<h2 class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 0px; text-decoration:' + ltStyle + '; text-decoration-thickness: 3px;">' + id + '</h2>' +
+					'<h2 class="col-xs-2 employee-name" style="padding: 0px; margin: 0px; padding-left: 10px;">' + ppaverage + '</h2>' +
+					'<h2 class="col-xs-2 employee-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + employee.norders + '</h2>' +
+					'<h2 class="col-xs-2 employee-id elapsed-time" style="padding: 0px; margin: 0px; padding-left: 5px;">' + timeBeingLazy + '</h2>' +
+					'<h2 class="col-xs-2 employee-id elapsed-total-time" style="padding: 0px; margin: 0px; padding-left: 5px;">' + employee.ttBeingLazy + '</h2>' +
+				'</li>';
+
+			return employeeListItem;
+		}
+
+		function formatListItemThirds(employee, id) {
+			var backgroundColor = "white",
+				textColor = "#444444";
+
+			var now = new Date();
+			var timeBeingLazy = Math.trunc((now - employee.lastFinishedT) / (60 * 1000))
+			if(timeBeingLazy >= 10) {
+				backgroundColor = "rgba(216, 61, 52, 0.88)";
+				textColor = "white";
+			}
+
+			var offset = 0;
+			if(employee.nordersT > 1)
+				offset = 1;
+
+			var averageTime = 0;
+			if(typeof employee.nordersT && employee.nordersT != 0)
+				averageTime = Math.trunc(employee.ttimeT / (employee.nordersT - offset));
+
+			var ltStyle = "none";
+			if(employee.resting) 
+				ltStyle = "line-through";
+
+			var employeeListItem =
+				'<li class="list-group-item row employee-row" id="' + id + '" data-thour="' + employee.lastFinishedT + '" style="background-color: ' + backgroundColor + '; color: ' + textColor + ';">' +
+					'<h2 class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 0px; text-decoration:' + ltStyle + '; text-decoration-thickness: 3px;">' + id + '</h2>' +
+					'<h2 class="col-xs-4 employee-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + employee.nordersT + '</h2>' +
+					'<h2 class="col-xs-2 employee-id elapsed-time" style="padding: 0px; margin: 0px; padding-left: 5px;">' + timeBeingLazy + '</h2>' +
+					'<h2 class="col-xs-2 employee-id elapsed-average-time" style="padding: 0px; margin: 0px; padding-left: 5px;">' + averageTime + '</h2>' +
+				'</li>';
+
+			return employeeListItem;
+		}
+
+		function updateElapsedTime(orderListItem) {
+			var etField = orderListItem.find(".elapsed-time");
+			var ettField = orderListItem.find(".elapsed-total-time");
+							
+			var interval = setInterval(function() {
+				if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.933)" && orderListItem.children().eq(0).css("text-decoration") != "line-through") {
+					if($("#wordersLabel").text().slice(17) != 0) {
+						etField.text(parseInt(etField.text()) + 1);
+						ettField.text(parseInt(ettField.text()) + 1);
+						
+						if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.933)") {
+							if(etField.text() >= 5) {
+								orderListItem.css("background-color", "rgba(216, 61, 52, .88)");
+								orderListItem.css("color", "white");						
+							} else if(etField.text() < 5) {
+								orderListItem.css("background-color", "white");
+								orderListItem.css("color", "#444444");				
+							}
+						}
+					}
+				}
+			}, 60 * 1000);
+		}
+
+		function updateElapsedTimeT(orderListItem) {
+			var etField = orderListItem.find(".elapsed-time");
+			
+			var interval = setInterval(function() {
+				if(orderListItem.children().eq(0).css("text-decoration") != "line-through") {
+					etField.text(parseInt(etField.text()) + 1);
+					if(etField.text() >= 10) {
+						orderListItem.css("background-color", "rgba(216, 61, 52, .88)");
+						orderListItem.css("color", "white");						
+					} else if(etField.text() < 10) {
+						orderListItem.css("background-color", "white");
+						orderListItem.css("color", "#444444");				
+					}
+				}
+			}, 60 * 1000);
+		}
+		
+		//No connections alert
+		function checkConnection() {
+			var connectedRef = firebase.database().ref(".info/connected");
+			connectedRef.on("value", function(snap) {
+				if (snap.val() === true) document.getElementById("noConnectionAlert").style.display = "none";
+				else document.getElementById("noConnectionAlert").style.display = "block";
+			});
+		}
+
+		//resetStats();
+		function resetStats(){
+			//reset employees
+			firebase.database().ref('employees').once("value", function(snapshot) { 
+				if(snapshot.val()) {
+					$.each(snapshot.val(), function(key, value) {
+						firebase.database().ref('employees/' + key + '/norders').set(0);
+						firebase.database().ref('employees/' + key + '/nproducts').set(0);
+						firebase.database().ref('employees/' + key + '/ttime').set(0);
+						firebase.database().ref('employees/' + key + '/lastFinished').set(0);
+						firebase.database().ref('employees/' + key + '/ttBeingLazy').set(0);
+						firebase.database().ref('employees/' + key + '/hasOrder').set(false);
+						firebase.database().ref('employees/' + key + '/resting').set(false);
+						firebase.database().ref('employees/' + key + '/nordersT').set(0);
+						firebase.database().ref('employees/' + key + '/lastFinishedT').set(0);
+						firebase.database().ref('employees/' + key + '/ttimeT').set(0);
+					});
+				}
+			});
+		} 
+			
+	</script>
+</body>

@@ -725,7 +725,7 @@
                 //add defaults values
                 addTimePDF(doc);
                 addMethodPDF(doc, orderMethod);
-                addNamePDF(doc);
+                addNamePDF(doc, order.length);
 
                 //creates the database instance
                 createNameDB($("#inputName").val());
@@ -738,15 +738,15 @@
                 var randomLetter2 = possible.charAt(Math.floor(Math.random() * possible.length));
 
                 //add copy
-                addPagePDF(doc, orderMethod);
+                addPagePDF(doc, orderMethod, order.length);
                 doc.setPage(1);
 
                 var shortenedUnits = {
                     KILO: "KG",
                     PIEZA: "PZ",
                     CAJA: "CJ",
-                    CUB: "CUB",
-                    EXB: "EXB",
+                    CUB: "CB",
+                    EXB: "EX",
                     PROMO: "PR"
                 };
 
@@ -766,14 +766,14 @@
                     //adds new page if necessary
                     if (currentLine == 17 || (currentLine == 16 && order[i][4] != "")) {
                         pagesQuantity++;
-                        addPagePDF(doc, orderMethod);
-                        addPagePDF(doc, orderMethod);
+                        addPagePDF(doc, orderMethod, order.length);
+                        addPagePDF(doc, orderMethod, order.length);
                         doc.setPage(pagesQuantity * 2 - 1);
                         currentLine = 0;
                     }
 
                     //quantity and unit
-                    doc.setFont("Gill Sans Std Condensed");
+                    doc.setFont("Gill Sans MT Condensed Negrita");
                     doc.setFontSize(16);
                     var quantityAndUnit = order[i][1] + shortenedUnits[order[i][2]];
 
@@ -798,6 +798,7 @@
                     doc.text(13 + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "center");
                     doc.setPage(pagesQuantity * 2);
                     doc.text(13  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "center");
+                    doc.setFont("Gill Sans Std Condensed");
 
                     //if product is being supplied by suppliers then draw cirlce
                     if (order[i][5] == "porPesarCamara" || order[i][5] == "yaPesadoCamara") {
@@ -826,9 +827,9 @@
                     var totalProduct = roundDecimals(Math.round(product[0].costo * order[i][1] * 10) / 10);
                     if (order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(124.5 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .3, totalProduct.toLocaleString('en-US'), null, null, "center");
+                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .3, totalProduct.toLocaleString('en-US'), null, null, "left");
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(124.5 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .3, totalProduct.toLocaleString('en-US'), null, null, "center");
+                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .3, totalProduct.toLocaleString('en-US'), null, null, "left");
                     } else {
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .3, totalProduct.toLocaleString('en-US'));
@@ -1060,10 +1061,10 @@
         }
 
         //adds a new page with all the values
-        function addPagePDF(doc, orderMethod) {
+        function addPagePDF(doc, orderMethod, length) {
             doc.addPage();
             addTimePDF(doc);
-            addNamePDF(doc);
+            addNamePDF(doc, length);
             addMethodPDF(doc, orderMethod);
         }
 
@@ -1111,16 +1112,17 @@
         }
 
         //adds the name
-        function addNamePDF(doc) {
+        function addNamePDF(doc, length) {
             var name = $("#inputName").val().trim();
 
             doc.setFontSize(29);
             doc.setFont("Gill Sans MT Condensed Negrita");
             doc.text(70 + xOffset, 28  + yOffset, replaceAEIOUN(name), "center");
 
+            //aqui
             doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
-            doc.text(43 + xOffset, 195.5  + yOffset, replaceAEIOUN($("#inputEmployeeName").val()));
+            doc.text(43 + xOffset, 195.5  + yOffset, replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1) + " #" + length);
         }
 
         //draws circle besides the description        
