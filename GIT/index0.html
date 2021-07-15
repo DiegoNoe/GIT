@@ -56,17 +56,17 @@
         <div class="form-group row first-row" style="padding: 5px 15px">
             <!-- name input -->
             <div id="inputNameContainer" class="col-md-3" style="padding-left: 0">
-                <input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" id="inputName" maxlength="20" placeholder="NOMBRE"> </input>
+                <input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" style="margin-top: 2px;" id="inputName" maxlength="20" placeholder="NOMBRE"> </input>
             </div>
             <!-- tomorrow checkbox -->
             <div class="col-md-4" style="padding-top: 5px; padding-left: 5px;">
-                <input type="checkbox" style="vertical-align: top; margin-top: 4.5px; margin-left: 35px;" class="form-check-input" id="tomorrowCheckbox">
-                <label style="color: gray; margin-bottom: 0px; opacity: .4; line-height: 23px;" class="form-check-label" for="tomorrowCheckbox">&nbsp;MAÑANA</label>
-                <input type="checkbox" style="vertical-align: top; margin-top: 4.5px; margin-left: 40px;" class="form-check-input" id="invoiceCheckbox">
-                <label style="color: gray; margin-bottom: 0px; opacity: .4; line-height: 23px;" class="form-check-label" for="invoiceCheckbox">&nbsp;FACTURA</label>
+                <input type="checkbox" style="vertical-align: top; margin-top: 6.5px; margin-left: 32px;" class="form-check-input" id="tomorrowCheckbox">
+                <label style="color: gray; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px;" class="form-check-label" for="tomorrowCheckbox">&nbsp;MAÑANA</label>
+                <input type="checkbox" style="vertical-align: top; margin-top: 6.5px; margin-left: 15px;" class="form-check-input" id="invoiceCheckbox">
+                <label style="color: gray; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px;" class="form-check-label" for="invoiceCheckbox">&nbsp;FACTURA</label>
             </div>
             <!-- employee name input -->
-            <select class="col-sm-2 form-control" style="margin-top: 2px;" id="inputEmployeeName">
+            <select class="col-sm-1 form-control" style="margin-top: 2px; width: 162px;" id="inputEmployeeName">
                 <option disabled selected>ANOTADOR</option>
             </select>
             <!-- interface buttons-->
@@ -85,8 +85,8 @@
             <!-- life search box -->
             <div class="col-md-11">
                 <input type="d" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"></input>
-                <span id="wtTextField"></span>
-                <span id="totalTextField">$0</span>
+                <span id="wtTextField" style="color: #555555;"></span>
+                <span id="totalTextField" style="color: #555555;">$0</span>
             </div>
         </div>
 
@@ -203,6 +203,10 @@
 
         populateEmployees();
 
+        if(globalComputer == "liveView0") {
+            hearForCallClient();
+        }
+
         //inputName on enter sequence
         $("#inputName").on('keyup', function (e) {
             if (e.keyCode == 13)
@@ -292,8 +296,61 @@
             var localComputer = globalComputer.slice(globalComputer.length - 1, globalComputer.length);
             firebase.database().ref('service/' + localComputer + 'isReady').set(false).then(function() {
                 firebase.database().ref('service/' + localComputer + 'isReady').set(true);
+            }); 
+        }
+
+        function hearForCallClient() {
+            firebase.database().ref('service/0isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/0isReady').set(false);
+                    speak("pase el siguiente a la 0");
+                }
+            });
+            firebase.database().ref('service/1isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/1isReady').set(false);
+                    speak("pase el siguiente a la 1");
+                }
+            });
+            firebase.database().ref('service/2isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/2isReady').set(false);
+                    speak("pase el siguiente a la 2");
+                }
+            });
+            firebase.database().ref('service/3isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/3isReady').set(false);
+                    speak("pase el siguiente a la 3");
+                }
+            });
+            firebase.database().ref('service/4isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/4isReady').set(false);
+                    speak("pase el siguiente a la 4");
+                }
+            });
+            firebase.database().ref('service/5isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/5isReady').set(false);
+                    speak("pase el siguiente a la 5");
+                }
+            });
+            firebase.database().ref('service/6isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/6isReady').set(false);
+                    speak("pase el siguiente a la 6");
+                }
             });
         }
+
+        function speak(message) {
+			var msg = new SpeechSynthesisUtterance();
+			msg.rate = 1;
+            msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Juan')];
+			msg.text = message;
+			window.speechSynthesis.speak(msg);
+		}
 
         function populateEmployees() {
             var empleadosDB;
@@ -683,6 +740,7 @@
                 $("#wtTextField").text("TIEMPO ESTIMADO: " + calculateWTime(Math.ceil(nproducts)) + "M");
         }
 
+        /*
         //FIX
         if(globalComputer == "liveView1" || globalComputer == "liveView2") {
             var xOffset = 31;
@@ -691,6 +749,7 @@
             var xOffset = 35;
             var yOffset = 2.5;
         }
+        */
 
         //FUTURE FIX (HUGE FUNCTION) - generates a PDF with autoprint
         function generatePDF(orderMethod) {
@@ -963,37 +1022,37 @@
 
                 //autoprints PDF in a new tab
                 doc.autoPrint();
-                window.open(doc.output('bloburl'), '_blank');
 
-                var ncomputer = globalComputer.slice(-1);
-                var etime = calculateWTime(Math.ceil(nproducts));
-
-                //process
-                firebase.database().ref('process/firsts/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
-                    name: replaceAEIOUN($("#inputName").val().trim()),
-                    total: total,
-                    hour: Date.now(),
-                    nproducts: nproducts,
-                    ndiversity: ndiversity,
-                    haspanela: haspanela,
-                    onlyafuera: onlyafuera,
-                    femployee: replaceAEIOUN($("#inputEmployeeName").val()),
-                    iftomorrow: iftomorrow,
-                    ordertype: ordertype,
-                    ftotal: calculable,
-                    ncomputer: ncomputer,
-                    etime: etime,
-                });
-  
-                //survey values
-                //increaseEmployeeCounter($("#inputEmployeeName").val());
-                //uploadSurvey(surveyValues);
-
-                //erase current order
-                eraseOrder();
-                
-                firebase.database().ref(globalComputer + '/wtime').set(etime);
-                finishOrderProducts(true);
+                if(window.open(doc.output('bloburl'), '_blank') != null) {  
+                    var ncomputer = globalComputer.slice(-1);
+                    var etime = calculateWTime(Math.ceil(nproducts));
+                    
+                    //process
+                    firebase.database().ref('process/firsts/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
+                        name: replaceAEIOUN($("#inputName").val().trim()),
+                        total: total,
+                        hour: Date.now(),
+                        nproducts: nproducts,
+                        ndiversity: ndiversity,
+                        haspanela: haspanela,
+                        onlyafuera: onlyafuera,
+                        femployee: replaceAEIOUN($("#inputEmployeeName").val()),
+                        iftomorrow: iftomorrow,
+                        ordertype: ordertype,
+                        ftotal: calculable,
+                        ncomputer: ncomputer,
+                        etime: etime,
+                    });
+                    
+                    //survey values
+                    //increaseEmployeeCounter($("#inputEmployeeName").val());
+                    //uploadSurvey(surveyValues);
+                    
+                    eraseOrder();
+                    
+                    firebase.database().ref(globalComputer + '/wtime').set(etime);
+                    finishOrderProducts(true);
+                }
             }
         }
         
@@ -1119,7 +1178,6 @@
             doc.setFont("Gill Sans MT Condensed Negrita");
             doc.text(70 + xOffset, 28  + yOffset, replaceAEIOUN(name), "center");
 
-            //aqui
             doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
             doc.text(43 + xOffset, 195.5  + yOffset, replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1) + " #" + length);

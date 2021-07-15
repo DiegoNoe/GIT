@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="background-color: #111111;">
+<html lang="en" style="background-color: white;">
 <head>
 	<title>PEDIDOS</title>
 
@@ -70,7 +70,7 @@
 				var finishedOrder = $('#dynamic-list-seconds').children().filter(function() {
 					return $(this).data("hour") == snapshot.val().hour;
 				});
-				finishedOrder.css("background-color", "#rgba(0, 183, 74, 0.8)");
+				finishedOrder.css("background-color", "#00B74AEE");
 				finishedOrder.css("color", "white");
 
 				if(snapshot.val().semployee != "-" && snapshot.val().nproducts > 0) {
@@ -282,8 +282,7 @@
 			padding-top: 2px;
 			padding-bottom: 2px;
 			padding-left: 12px;
-			color: white;
-			background-color:#111111;
+			color: #444444;
 		}
 
 		.order-circle::before {
@@ -317,24 +316,24 @@
 	</style>
 </head>
 
-<body style="zoom: 100%; background-color: #111111; overflow: hidden;">
+<body style="zoom: 100%; background-color: white; overflow: hidden;">
 	<input id="inputScanner" onblur="focusOnBlur()" style="position: absolute; left: -9999px;" autofocus></input>
 	<div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
 		<strong>No hay conexión.</strong> Verifica la conexión a internet.
 	</div>
 	
 	<div class="row" style="margin-top: 4px;">
-		<div class="container-fluid col-sm-9" style="background-color: #111111; padding-left: 1.5%; padding-right: .25%;">
+		<div class="container-fluid col-sm-9" style="background-color: white; padding-left: 1.5%; padding-right: .25%;">
 			<div class="row" style="height: 52px;"> 
 				<div class="modal-title col-xs-5" style="margin-bottom: 10px; margin-top:.5px; height: 20px;">
-					<h1 class="modal-title" id="firsts-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 51px; text-align: center; background-color: #111111; color: white; border-style: solid; border-width: 2px;">0</h1>
-					<h1 class="modal-title" style="color: white">&nbsp;PEDIDOS POR SURTIR</h1>
+					<h1 class="modal-title" id="firsts-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 51px; text-align: center; background-color: white; color: #444444; border-style: solid; border-width: 2px;">0</h1>
+					<h1 class="modal-title">&nbsp;PEDIDOS POR SURTIR</h1>
 				</div>
 				<div class="modal-title col-xs-4" style="margin-bottom: 10px; margin-top:.5px; height: 20px; padding-left: 100px;">
-					<h1 class="modal-title" id="waiting-times-label" style="color: white"></h1>
+					<h1 class="modal-title" id="waiting-times-label"></h1>
 				</div>
 				<div class="modal-title col-xs-3">
-					<h1 class="modal-title" id="firsts-max-label" style="float: right; text-align: right; color: white"></h1>
+					<h1 class="modal-title" id="firsts-max-label" style="float: right; text-align: right;"></h1>
 				</div>
 				
 			</div>
@@ -353,14 +352,14 @@
 			
 			<div class="row" style="height: 52px;"> 
 				<div class="modal-title col-xs-4" style="margin-bottom:0%; margin-top:0px; height: 20px;">
-					<h1 class="modal-title" id="seconds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px; color: white">0</h1>
-					<h1 class="modal-title" style="color: white">&nbsp;PEDIDOS SURTIENDO</h1>
+					<h1 class="modal-title" id="seconds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px;">0</h1>
+					<h1 class="modal-title">&nbsp;PEDIDOS SURTIENDO</h1>
 				</div>
 				<div class="modal-title col-xs-5" style="margin-bottom: 0px; margin-top:0px; height: 20px; padding-left: 60px;">
-					<h1 class="modal-title" id="s-waiting-times-label" style="color: white"></h1>
+					<h1 class="modal-title" id="s-waiting-times-label"></h1>
 				</div>
 				<div class="modal-title col-xs-3" style="margin-bottom:0%; margin-top:0px;">
-					<h1 class="modal-title" id="seconds-max-label" style="float: right; text-align: right; height: 40px; color: white"></h1>
+					<h1 class="modal-title" id="seconds-max-label" style="float: right; text-align: right; height: 40px;"></h1>
 				</div>
 			</div>
 			<div class="list-group-item row order-row-title headTitle">
@@ -380,10 +379,10 @@
 			<ul id="dynamic-list-seconds" class="list-group" style="display:block;"> </ul>
 		</div>
 		
-		<div class="container-fluid col-sm-3" style="background-color: #111111; height: 1280px; padding-left: .5%; padding-right: 1.6%;">
+		<div class="container-fluid col-sm-3" style="background-color: white; height: 1280px; padding-left: .5%; padding-right: 1.6%;">
 			<div class="modal-title" style="margin-bottom: 0%; margin-top: 0px;">
-				<h1 class="modal-title" id="thirds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px; color: white;">0</h1>
-				<h1 class="modal-title" style="color: white">&nbsp;PEDIDOS POR COBRAR</h1>
+				<h1 class="modal-title" id="thirds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px;">0</h1>
+				<h1 class="modal-title">&nbsp;PEDIDOS POR COBRAR</h1>
 			</div>
 			<div class="list-group-item row order-row-title headTitle" style="padding-bottom: 1px;">
 				<h2 class="col-xs-9 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
@@ -492,22 +491,22 @@
 			$("#" + id).text(counter);
 			if(id == "firsts-counter-label") {
 				if(counter >= 5){
-					$("#" + id).css("background-color", "rgba(216, 61, 52, 70%)");
+					$("#" + id).css("background-color", "rgba(216, 61, 52, 88%)");
 					$("#" + id).css("color", "white");
 					$("#" + id).css("border-style", "hidden");
-				} 
-				else if(counter >= 3 && counter <= 4){
-					$("#" + id).css("background-color", "rgba(255, 215, 0, 80%)");
-					$("#" + id).css("color", "white");
+				} else if(counter >= 3 && counter <= 4){
+					$("#" + id).css("background-color", "rgba(255, 215, 0, 88%)");
+					$("#" + id).css("color", "#444444");
 					$("#" + id).css("border-style", "hidden");
 				} else if(counter >= 0 && counter <= 2){
-					$("#" + id).css("background-color", "#111111");
-					$("#" + id).css("color", "white");
+					$("#" + id).css("background-color", "white");
+					$("#" + id).css("color", "#444444");
 					$("#" + id).css("border-style", "solid");
 				}
 				
 				uploadWOrders();
 			}
+			
 			if(id == "thirds-counter-label") {
 				if(counter.toString().length == 3)
 				$("#thirds-counter-label").css("width", "65px");
@@ -646,16 +645,15 @@
 		function formatFirstsListItem(order, id) {
 			var orderHour = new Date(order.hour);
 			var diffMinutes = Math.trunc((new Date() - orderHour) / 60000);
-			var backgroundColor = "#111111",
-                color = "white";
+			var backgroundColor = "white",
+                color = "#444444";
 			
 			if(!order.ftotal)
 				order.total = order.total + "~";
 			
 			if(order.ndiversity == "0") {
 				order.nproducts = order.nproducts + " &#10003;"
-				//verde oscuro
-				backgroundColor = "rgba(0, 183, 74, 0.8)";
+				backgroundColor = "#00B74AEE";
                 color = "white";
 			} else if(order.ndiversity == "1" && !order.haspanela) {
 				if((order.onlyafuera && order.nproducts <= 10) || (!order.onlyafuera && order.nproducts <= 2)) {
@@ -719,8 +717,8 @@
 			var diffMinutes = Math.trunc((new Date() - orderHour) / 60000);
 			var diffMinutesSeconds = Math.trunc((new Date() - new Date(order.shour)) / 60000);
 
-			var backgroundColor = "#111111",
-                color = "white";
+			var backgroundColor = "white",
+                color = "#444444";
 
 			if(!order.ftotal)
 				order.total = order.total + "~";
@@ -758,13 +756,12 @@
 			if(!order.ftotal)
 				order.total = order.total + "~";
 			
-			//rojo oscuro
 			var backgroundColor = "rgba(216, 61, 52, 88%)",
 				color = "white";
 			
 			if(order.checked) {
-				backgroundColor = "#111111";
-				color = "white";
+				backgroundColor = "white";
+				color = "#444444";
 			}
 
 			var iconVisibility = "none";
@@ -824,14 +821,13 @@
 		function updateFElapsedTime(orderListItem) {
 			var etField = orderListItem.find(".elapsed-time");
 			
-			console.log(orderListItem.css("background-color"));
-			if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.8)") {
+			if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.933)") {
 				if(etField.text() > 4) {
-					orderListItem.css("background-color", "rgba(216, 61, 52, 70%)");
+					orderListItem.css("background-color", "rgba(216, 61, 52, 88%)");
 					orderListItem.css("color", "white");						
 				} else if(etField.text() > 2 && etField.text() <= 4) {
-					orderListItem.css("background-color", "rgba(255, 215, 0, 80%)");
-					orderListItem.css("color", "#white");				
+					orderListItem.css("background-color", "rgba(255, 215, 0, 88%)");
+					orderListItem.css("color", "#444444");				
 				}
 			}
 				
@@ -840,13 +836,13 @@
 					clearInterval(interval);
 				etField.text(parseInt(etField.text()) + 1);
 				
-				if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.8)") {
+				if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.933)") {
 					if(etField.text() > 4) {
-						orderListItem.css("background-color", "rgba(216, 61, 52, 70%)");
-						orderListItem.css("color", "white");						
+					orderListItem.css("background-color", "rgba(216, 61, 52, 88%)");
+					orderListItem.css("color", "white");						
 					} else if(etField.text() > 2 && etField.text() <= 4) {
-						orderListItem.css("background-color", "rgba(255, 215, 0, 80%)");
-						orderListItem.css("color", "#white");				
+						orderListItem.css("background-color", "rgba(255, 215, 0, 88%)");
+						orderListItem.css("color", "#444444");				
 					}
 				}
 			}, 60000);
@@ -863,17 +859,16 @@
 			//("et 20%" + (Math.floor(expectedTime * .34)));
 
 			//coloreada
-			//aqui
-			if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.8)") {
+			if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.933)") {
 				if(etField.text() > expectedTime) {
-					orderListItem.css("background-color", "rgba(216, 61, 52, 70%)");
+					orderListItem.css("background-color", "rgba(216, 61, 52, 88%)");
 					orderListItem.css("color", "white");				
 				} else if(etField.text() > (expectedTime - oneThirdET) && etField.text() <= expectedTime) {
-					orderListItem.css("background-color", "rgba(255, 215, 0, 80%)");
-					orderListItem.css("color", "white");				
+					orderListItem.css("background-color", "rgba(255, 215, 0, 88%)");
+					orderListItem.css("color", "#444444");				
 				} else if(etField.text() >= 0 && etField.text() <= (expectedTime - oneThirdET)) {
-					orderListItem.css("background-color", "#111111");
-					orderListItem.css("color", "white");				
+					orderListItem.css("background-color", "white");
+					orderListItem.css("color", "#444444");				
 				}
 			}
 				
@@ -881,22 +876,22 @@
 				if(etField.css('display') != "block")
 					clearInterval(interval);
 				
-				if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.8)") {
+				if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.933)") {
 					etField.text(parseInt(etField.text()) + 1);
 					etSField.text(parseInt(etSField.text()) + 1);
 				
 					if(etField.text() > (expectedTime + oneThirdET)) {
-						orderListItem.css("background-color", "rgba(216, 61, 52, 70%)");
+						orderListItem.css("background-color", "rgba(216, 61, 52, 88%)");
 						orderListItem.css("color", "white");				
 					} else if(etField.text() > expectedTime && etField.text() <= (expectedTime + oneThirdET)) {
-						orderListItem.css("background-color", "rgba(255, 140, 0, 75%)");
+						orderListItem.css("background-color", "rgba(255, 140, 0, 88%)");
 						orderListItem.css("color", "white");				
 					} else if(etField.text() > (expectedTime - oneThirdET) && etField.text() <= expectedTime) {
-						orderListItem.css("background-color", "rgba(255, 215, 0, 80%)");
-						orderListItem.css("color", "white");				
+						orderListItem.css("background-color", "rgba(255, 215, 0, 88%)");
+						orderListItem.css("color", "#444444");				
 					} else if(etField.text() >= 0 && etField.text() <= (expectedTime - oneThirdET)) {
-						orderListItem.css("background-color", "#111111");
-						orderListItem.css("color", "white");				
+						orderListItem.css("background-color", "white");
+						orderListItem.css("color", "#444444");				
 					}
 				}
 			}, 60000);
