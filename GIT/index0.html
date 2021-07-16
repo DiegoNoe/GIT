@@ -750,8 +750,8 @@
             var yOffset = 2.5;
         }
         */
-        var xOffset = 35;
-        var yOffset = 2.5;
+        var xOffset = 42;
+        var yOffset = -4;
 
         //FUTURE FIX (HUGE FUNCTION) - generates a PDF with autoprint
         function generatePDF(orderMethod) {
@@ -835,7 +835,7 @@
 
                     //quantity and unit
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(13);
+                    doc.setFontSize(15);
                     var quantityAndUnit = order[i][1] + shortenedUnits[order[i][2]];
 
                     //enhance quantity if necessary
