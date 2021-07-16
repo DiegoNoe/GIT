@@ -203,7 +203,7 @@
 
         populateEmployees();
 
-        if(globalComputer == "liveView0") {
+        if(globalComputer == "liveView1" || globalComputer == "liveView0") {
             hearForCallClient();
         }
 
@@ -835,7 +835,7 @@
 
                     //quantity and unit
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(16);
+                    doc.setFontSize(13);
                     var quantityAndUnit = order[i][1] + shortenedUnits[order[i][2]];
 
                     //enhance quantity if necessary
@@ -888,18 +888,18 @@
                     var totalProduct = roundDecimals(Math.round(product[0].costo * order[i][1] * 10) / 10);
                     if (order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .3, totalProduct.toLocaleString('en-US'), null, null, "left");
+                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'), null, null, "left");
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .3, totalProduct.toLocaleString('en-US'), null, null, "left");
+                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'), null, null, "left");
                     } else {
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .3, totalProduct.toLocaleString('en-US'));
+                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'));
                         doc.setDrawColor(255, 0, 0);
                         doc.line(128 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8, 135  + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8);
                         doc.setDrawColor(0, 0, 0);
 
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .3, totalProduct.toLocaleString('en-US'));
+                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'));
                         doc.setDrawColor(255, 0, 0);
                         doc.line(128 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8, 135 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8);
                         doc.setDrawColor(0, 0, 0);
@@ -924,6 +924,7 @@
                         //notes and description
                         doc.setFontSize(10);
                         doc.setPage(pagesQuantity * 2 - 1);
+
                         doc.text(24 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
                         doc.setPage(pagesQuantity * 2);
                         doc.text(24 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
