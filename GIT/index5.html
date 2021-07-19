@@ -740,18 +740,17 @@
                 $("#wtTextField").text("TIEMPO ESTIMADO: " + calculateWTime(Math.ceil(nproducts)) + "M");
         }
 
-        /*
+        
         //FIX
-        if(globalComputer == "liveView1" || globalComputer == "liveView2") {
-            var xOffset = 31;
-            var yOffset = -4.5;
+        if(globalComputer == "liveView1" || globalComputer == "liveView2" || globalComputer == "liveView3") {
+            var xOffset = 41;
+            var yOffset = 1;
         } else {
-            var xOffset = 35;
-            var yOffset = 2.5;
+            var xOffset = 37;
+            var yOffset = -4;
         }
-        */
-        var xOffset = 39;
-        var yOffset = -4;
+        
+
 
         //FUTURE FIX (HUGE FUNCTION) - generates a PDF with autoprint
         function generatePDF(orderMethod) {
@@ -835,7 +834,7 @@
 
                     //quantity and unit
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(15);
+                    doc.setFontSize(14.5);
                     var quantityAndUnit = order[i][1] + shortenedUnits[order[i][2]];
 
                     //enhance quantity if necessary
@@ -884,7 +883,7 @@
 
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(15.75);
+                    doc.setFontSize(16);
                     product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
                     var totalProduct = roundDecimals(Math.round(product[0].costo * order[i][1] * 10) / 10);
                     if (order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
