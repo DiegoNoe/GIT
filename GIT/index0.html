@@ -740,18 +740,17 @@
                 $("#wtTextField").text("TIEMPO ESTIMADO: " + calculateWTime(Math.ceil(nproducts)) + "M");
         }
 
-        /*
+        
         //FIX
-        if(globalComputer == "liveView1" || globalComputer == "liveView2") {
-            var xOffset = 31;
-            var yOffset = -4.5;
+        if(globalComputer == "liveView1" || globalComputer == "liveView2" || globalComputer == "liveView3") {
+            var xOffset = 37;
+            var yOffset = 1;
         } else {
-            var xOffset = 35;
-            var yOffset = 2.5;
+            var xOffset = 37;
+            var yOffset = -4;
         }
-        */
-        var xOffset = 39;
-        var yOffset = -4;
+        
+
 
         //FUTURE FIX (HUGE FUNCTION) - generates a PDF with autoprint
         function generatePDF(orderMethod) {
