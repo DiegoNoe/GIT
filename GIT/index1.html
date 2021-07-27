@@ -347,9 +347,20 @@
         function speak(message) {
 			var msg = new SpeechSynthesisUtterance();
 			msg.rate = 1;
-            msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
 			msg.text = message;
             console.log(speechSynthesis.getVoices());
+            //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
+            
+            msg.voice = speechSynthesis.getVoices()[0];
+			window.speechSynthesis.speak(msg);
+            
+            msg.voice = speechSynthesis.getVoices()[1];
+			window.speechSynthesis.speak(msg);
+            
+            msg.voice = speechSynthesis.getVoices()[6];
+			window.speechSynthesis.speak(msg);
+            
+            msg.voice = speechSynthesis.getVoices()[7];
 			window.speechSynthesis.speak(msg);
 		}
 
