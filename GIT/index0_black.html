@@ -10,7 +10,7 @@
     <!-- local style resources -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/index_black.css">
 
     <!-- local js resources -->
     <script language="javascript" type="text/javascript" src="js/jquery.min.js"></script>
@@ -32,15 +32,19 @@
         database.on('value', function (snapshot) {
             products = Defiant.getSnapshot(snapshot.val());
         });
-        var globalComputer = "liveView1";
+        var globalComputer = "liveView0";
         var globalWaitingOrders,
             globalTPP = [];
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
     </script>
 
+    <style>
+
+    </style>
+
 </head>
 
-<body>
+<body style="background-color: #111111;">
 
     <!-- no connection alert -->
     <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
@@ -56,17 +60,17 @@
         <div class="form-group row first-row" style="padding: 5px 15px">
             <!-- name input -->
             <div id="inputNameContainer" class="col-md-3" style="padding-left: 0">
-                <input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" style="margin-top: 2px;" id="inputName" maxlength="20" placeholder="NOMBRE"> </input>
+                <input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" style="margin-top: 2px; background-color: #111111; color: #EEEEEE; border-color: #555555;" id="inputName" maxlength="20" placeholder="NOMBRE"> </input>
             </div>
             <!-- tomorrow checkbox -->
             <div class="col-md-4" style="padding-top: 5px; padding-left: 5px;">
-                <input type="checkbox" style="vertical-align: top; margin-top: 6.5px; margin-left: 32px;" class="form-check-input" id="tomorrowCheckbox">
-                <label style="color: gray; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px;" class="form-check-label" for="tomorrowCheckbox">&nbsp;MAÑANA</label>
+                <input type="checkbox" style="vertical-align: top; margin-top: 6.5px; margin-left: 32px; color: black;" class="form-check-input" id="tomorrowCheckbox">
+                <label style="color: #BABABA; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px;" class="form-check-label" for="tomorrowCheckbox">&nbsp;MAÑANA</label>
                 <input type="checkbox" style="vertical-align: top; margin-top: 6.5px; margin-left: 15px;" class="form-check-input" id="invoiceCheckbox">
-                <label style="color: gray; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px;" class="form-check-label" for="invoiceCheckbox">&nbsp;FACTURA</label>
+                <label style="color: #BABABA; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px;" class="form-check-label" for="invoiceCheckbox">&nbsp;FACTURA</label>
             </div>
             <!-- employee name input -->
-            <select class="col-sm-1 form-control" style="margin-top: 2px; width: 162px;" id="inputEmployeeName">
+            <select class="col-sm-1 form-control" style="margin-top: 2px; width: 162px; background-color: #111111; border-color: #555555; -webkit-appearance:none; padding-top:.5px;" id="inputEmployeeName">
                 <option disabled selected>ANOTADOR</option>
             </select>
             <!-- interface buttons-->
@@ -80,11 +84,11 @@
         <div class="row" style="margin-bottom: 15px">
             <!-- quantity box -->
             <div class="col-md-1" style="padding-right: 0px">
-                <input type="number" min="0" id="quantityInput" class="form-control"></input>
+                <input type="number" min="0" id="quantityInput" class="form-control" style="background-color: #111111; color: #EEEEEE; border-color: #555555;"></input>
             </div>
             <!-- life search box -->
             <div class="col-md-11">
-                <input type="d" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"></input>
+                <input type="d" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION" style="background-color: #111111; color: #EEEEEE; border-color: #555555;"></input>
                 <span id="wtTextField" style="color: #555555;"></span>
                 <span id="totalTextField" style="color: #555555;">$0</span>
             </div>
@@ -309,7 +313,7 @@
             firebase.database().ref('service/1isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/1isReady').set(false);
-                    speak("buenas tardes, pase el siguiente a la 1");
+                    speak("pase el siguiente a la 1");
                 }
             });
             firebase.database().ref('service/2isReady').on('value', function (snapshot) {
@@ -376,8 +380,8 @@
             //up to 51 results in search bar
             for (var i = 0; i < searchResult.length && i < 51; i++) {
                 if(searchResult[i].existencia == "siHay") {
-                    backgroundColor = "white";
-                    color = "#434343";
+                    backgroundColor = "#111111";
+                    color = "#EEEEEE";
                     buttonColor = "gray";
                 } else if(searchResult[i].existencia == "noHay") {
                     backgroundColor = "rgba(216, 61, 52, 88%)";
@@ -389,8 +393,9 @@
                     buttonColor = "gray";
                 }
 
+                //background-color: #111111; color: #EEEEEE; border-color: #555555;
                 searchItem =
-                    '<button class="list-group-item row btn-default search-options-item" style="background-color: ' + backgroundColor + '; color: ' + color + ';" onclick="addProductObjectGetter(&#39;' + searchResult[i].clave + '&#39;)">' +
+                    '<button class="list-group-item row btn-default search-options-item" style="background-color: ' + backgroundColor + '; color: ' + color + '; border-color: #555555;" onclick="addProductObjectGetter(&#39;' + searchResult[i].clave + '&#39;)">' +
                     '<div class="col-sm-2">' + searchResult[i].clave + '</div>' +
                     '<div class="col-sm-1">' + searchResult[i].unidad + '</div>' +
                     '<div class="col-sm-7">' + searchResult[i].descripcion + '</div>' +

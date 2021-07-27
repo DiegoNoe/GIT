@@ -1,0 +1,282 @@
+@font-face {
+    font-family: GillSansMTCondensedBold;
+    font-style: normal;
+    src: url(GillSansMTCondensedBold.ttf);
+}
+
+@font-face {
+    font-family: GillSansStd-Condensed;
+    font-style: normal;
+    src: url(GillSansStd-Condensed.otf);
+}
+
+@font-face {
+    font-family: fontawesome-webfont;
+    font-style: normal;
+    src: url(fontawesome-webfont.ttf);
+}
+
+.container-fluid {
+    margin-top: 1%;
+    margin-left: 10%;
+    margin-right: 10%;
+    position: relative;
+    font-size: 15px;
+    font-family: GillSansMTCondensedBold;
+    background-color: #111111;
+}
+
+#splashScreen {
+    background-color: white;
+    color: black;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 10;
+    text-align: center;
+    font-size: 70px;
+    font-family: GillSansMTCondensedBold;
+    font-size: 30px;
+}
+
+#logo-image {
+    width: 300px;
+    height: auto;
+    margin-top: 15%;
+    align-self: center;
+}
+
+#inputFirst {
+    width: 150px;
+    margin: 0px auto;
+}
+
+#addProductModal, #invoiceIdModal, #addClientModal{
+    font-family: GillSansMTCondensedBold;
+}
+
+#addProductModalLabel, #invoiceIdModalLabel, #addClientModalLabel {
+    font-size: 25px !important;
+    line-height: 25px;
+}
+
+input, button:not(.cross), label, span:not(.cross) {
+    font-size: 23px !important;
+}
+
+#inputEmployeeName {
+    font-family: GillSansMTCondensedBold !important;
+    font-size: 23px !important;
+    width: 200px;
+}
+
+.cross {
+    font-size: 13px !important;
+}
+
+#editar-button {
+    line-height: 28px;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    opacity: .5; /* Firefox */
+}
+
+#printByPhoneButton, #printButton, .glyphicon-user, .glyphicon-phone-alt {
+    line-height: 0px !important;
+}
+
+.interface-button {
+    height: 35px;
+    line-height: 24px !important;
+}
+
+.first-row {
+    height: 56px;
+    padding-bottom: 0px;
+    margin-bottom: 15px;
+}
+
+.product-row {
+    font-size: 23px !important;
+    line-height: 22px;
+}
+
+.glyphicon-remove {
+    padding-right: 6px;
+}
+
+#inputNameContainer {
+    margin-bottom: 2.5%;
+}
+
+#totalLabel {
+    color: gray; 
+    padding-left: 15px; 
+}
+
+.search-options {
+    position: absolute;
+    z-index: 1;
+    left: 15px;
+    right: 0px;
+    overflow-y: scroll;
+    max-height: 550px;
+    padding-left: 15px;
+}
+
+.search-options-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.client-options {
+    position: absolute;
+    z-index: 2;
+    left: 0px;
+    right: -1px;
+    top: 50px;
+    overflow-y: scroll;
+    max-height: 550px;
+    padding-left: 15px;
+}
+
+#greenCheck {
+    color: #5cb85c;
+    z-index: 1;
+    position: absolute;
+    right: 80px;
+    top: 7px;
+    visibility: hidden;
+}
+
+.client-options-item {
+    padding-top: 4px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.product-row {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.form-control:focus {
+    border-color: rgb(239, 154, 154);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
+}
+
+.product-info {
+    padding-top:7px;
+}
+
+#totalTextFieldA {
+    z-index: 1;
+    position: absolute;
+    right: 26px;
+    top: 72.5px;
+    visibility: visible;
+}
+
+#wtTextField {
+    z-index: 1;
+    position: absolute;
+    left: 513px;
+    top: 2px;
+    visibility: visible;
+    width: 250px;
+    text-align: right;
+}
+
+#totalTextField {
+    z-index: 1;
+    position: absolute;
+    right: 26px;
+    top: 2px;
+    visibility: visible;
+    width: 100px;
+    text-align: right;
+}
+
+.product-quantity {
+    padding: 0px;
+}
+
+.product-notes {
+    border:0; 
+    box-shadow: none;
+}
+
+.product-notes-container {
+    padding: 0px;
+    padding-right: 10px;
+}
+
+.product-total-container {
+    padding: 0px;
+}
+
+.product-totalA {
+    border:0; 
+    box-shadow: none;
+}
+
+.remove-button {
+    width: 32px;
+    padding-left: 9px;
+    margin-top: 1px;
+    float: right;
+}
+
+.edit-button {
+    width: 64px;
+    margin: 0px;
+    padding: 0px;
+    float: right;
+}
+
+.title {
+    font-family: GillSansMTCondBold;
+    font-size: 50px;    
+    color: red;
+    line-height: 80%;
+    padding-bottom: 5px;
+    margin-top: 5px;
+}
+
+.name {
+    font-family: GillSansMTCond;
+    font-size: 45px;   
+    color: black;
+    line-height: 0px;                  
+}
+
+.price {
+    font-family: GillSansMTCond;
+    font-size: 35px;   
+    color: rgb(185, 154, 0);
+    padding-left: 10px;
+    line-height: 0px;                      
+}
+
+#logo {
+    width: 420px;
+    height: auto;
+    display: block;    
+    margin: auto;
+    padding-right: 30px;
+}
+
+#centerColumn .title {
+    text-align: center;
+    padding-right: 20px;
+}
+
+#centerColumn .product {
+    line-height: 315%;          
+}
