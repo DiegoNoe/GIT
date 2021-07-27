@@ -309,37 +309,37 @@
             firebase.database().ref('service/1isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/1isReady').set(false);
-                    speak("buenas tardes, pase el siguiente a la 1");
+                    speak("buena tarde, pase el siguiente a la 1");
                 }
             });
             firebase.database().ref('service/2isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/2isReady').set(false);
-                    speak("pase el siguiente a la 2");
+                    speak("buena tarde, pase el siguiente a la 2");
                 }
             });
             firebase.database().ref('service/3isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/3isReady').set(false);
-                    speak("pase el siguiente a la 3");
+                    speak("buena tarde, pase el siguiente a la 3");
                 }
             });
             firebase.database().ref('service/4isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/4isReady').set(false);
-                    speak("pase el siguiente a la 4");
+                    speak("buena tarde, pase el siguiente a la 4");
                 }
             });
             firebase.database().ref('service/5isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/5isReady').set(false);
-                    speak("pase el siguiente a la 5");
+                    speak("buena tarde, pase el siguiente a la 5");
                 }
             });
             firebase.database().ref('service/6isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/6isReady').set(false);
-                    speak("pase el siguiente a la 6");
+                    speak("buena tarde, pase el siguiente a la 6");
                 }
             });
         }
@@ -349,6 +349,7 @@
 			msg.rate = 1;
             msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Juan')];
 			msg.text = message;
+            console.log(speechSynthesis.getVoices());
 			window.speechSynthesis.speak(msg);
 		}
 
