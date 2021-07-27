@@ -673,14 +673,27 @@
             inputQuantity.focusout(function () {updateOrderProductQuantity(date, inputQuantity.val())});
             inputNotes.focusout(function () {updateOrderProductNotes(date, inputNotes.val())});
 
+            $('#dynamic-list').children().first().on("click", "button", function (e) {
+                e.preventDefault();
+                removeOrderProduct($(this).parent().data("date"));
+                console.log($(this).parent());
+                $(this).parent().remove();
+                updateTotal();
+                updateWT();
+            });
+
+            /* OUTDATED
             //deleteButton action
             $("#dynamic-list").on("click", "button", function (e) {
                 e.preventDefault();
                 removeOrderProduct($(this).parent().data("date"));
+                
+                console.log($("#dynamic-list"));
                 $("#dynamic-list").find("[data-date='" + $(this).parent().data("date") + "']").remove();
                 updateTotal();
                 //updateWT();
             });
+            */
         }
 
         //populates an array with all the order product values

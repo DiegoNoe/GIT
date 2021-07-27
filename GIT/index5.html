@@ -303,53 +303,73 @@
             firebase.database().ref('service/0isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/0isReady').set(false);
-                    speak("pase el siguiente a la 0");
+                    speak(0);
                 }
             });
             firebase.database().ref('service/1isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/1isReady').set(false);
-                    speak("pase el siguiente a la 1");
+                    speak(1);
                 }
             });
             firebase.database().ref('service/2isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/2isReady').set(false);
-                    speak("pase el siguiente a la 2");
+                    speak(2);
                 }
             });
             firebase.database().ref('service/3isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/3isReady').set(false);
-                    speak("pase el siguiente a la 3");
+                    speak(3);
                 }
             });
             firebase.database().ref('service/4isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/4isReady').set(false);
-                    speak("pase el siguiente a la 4");
+                    speak(4);
                 }
             });
             firebase.database().ref('service/5isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/5isReady').set(false);
-                    speak("pase el siguiente a la 5");
+                    speak(5);
                 }
             });
             firebase.database().ref('service/6isReady').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     firebase.database().ref('service/6isReady').set(false);
-                    speak("pase el siguiente a la 6");
+                    speak(6);
                 }
             });
         }
 
-        function speak(message) {
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+
+        function speak(computer) {
 			var msg = new SpeechSynthesisUtterance();
 			msg.rate = 1;
-            msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Juan')];
-			msg.text = message;
+
+            var hours = (new Date()).getHours();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+
+            var greeting = "buenos días";
+            if(ampm = "pm")
+                greeting = "buenas tardes";
+            
+            var randomInt = getRandomInt(4);
+            if(randomInt == 1)
+			    msg.text = "buena tarde, " + greeting + ", pase el siguiente a la " + computer;
+            else
+                msg.text = "buena tarde, pase el siguiente a la " + computer;
+            console.log(speechSynthesis.getVoices());
+            //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
+
+            msg.voice = speechSynthesis.getVoices()[1];
 			window.speechSynthesis.speak(msg);
+
 		}
 
         function populateEmployees() {
@@ -653,14 +673,27 @@
             inputQuantity.focusout(function () {updateOrderProductQuantity(date, inputQuantity.val())});
             inputNotes.focusout(function () {updateOrderProductNotes(date, inputNotes.val())});
 
+            $('#dynamic-list').children().first().on("click", "button", function (e) {
+                e.preventDefault();
+                removeOrderProduct($(this).parent().data("date"));
+                console.log($(this).parent());
+                $(this).parent().remove();
+                updateTotal();
+                updateWT();
+            });
+
+            /* OUTDATED
             //deleteButton action
             $("#dynamic-list").on("click", "button", function (e) {
                 e.preventDefault();
                 removeOrderProduct($(this).parent().data("date"));
+                
+                console.log($("#dynamic-list"));
                 $("#dynamic-list").find("[data-date='" + $(this).parent().data("date") + "']").remove();
                 updateTotal();
                 //updateWT();
             });
+            */
         }
 
         //populates an array with all the order product values
