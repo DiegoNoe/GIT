@@ -347,7 +347,7 @@
         function speak(message) {
 			var msg = new SpeechSynthesisUtterance();
 			msg.rate = 1;
-            msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Juan')];
+            msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
 			msg.text = message;
             console.log(speechSynthesis.getVoices());
 			window.speechSynthesis.speak(msg);
