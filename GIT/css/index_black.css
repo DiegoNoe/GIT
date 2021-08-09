@@ -186,11 +186,21 @@ input, button:not(.cross), label, span:not(.cross) {
 #wtTextField {
     z-index: 1;
     position: absolute;
-    left: 513px;
+    left: 410px;
     top: 2px;
     visibility: visible;
     width: 250px;
-    text-align: right;
+    text-align: left;
+}
+
+#npTextField {
+    z-index: 1;
+    position: absolute;
+    left: 705px;
+    top: 2px;
+    visibility: visible;
+    width: 250px;
+    text-align: left;
 }
 
 #totalTextField {

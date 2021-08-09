@@ -127,7 +127,7 @@
         };
 
         firebase.initializeApp(config);
-        var database = firebase.database().ref('liveView3/order');
+        var database = firebase.database().ref('liveView6/order');
         var globalName;
 
         var shortenedUnits = {
@@ -167,7 +167,7 @@
     <script>
 
         function populateName() {
-            firebase.database().ref('liveView3/name').on('value', function (snapshot) {
+            firebase.database().ref('liveView6/name').on('value', function (snapshot) {
                 if(snapshot.val() != null) {
                     $('#nameLabel').text("BIENVENIDO " + snapshot.val());
                     globalName = snapshot.val();
@@ -273,9 +273,9 @@
         }
 
         function checkDoneOrder() {
-            firebase.database().ref('liveView3/done').on('value', function (snapshot) {
+            firebase.database().ref('liveView6/done').on('value', function (snapshot) {
                 if(snapshot.val()) {
-                    firebase.database().ref('liveView3/wtime').on('value', function (snapshotWT) {
+                    firebase.database().ref('liveView6/wtime').on('value', function (snapshotWT) {
                         if(snapshotWT.val()) {
                             var totalMessage = $('#totalTitleLabel').text();
                             var minutesMessage = snapshotWT.val();
@@ -286,7 +286,7 @@
                                 $("#thankyouMessage").html("GRACIAS POR TU VISITA<br>" + globalName + "<br><br><br><br>" + totalMessage);
 
                             $("#thankyouMessage").show();
-                            firebase.database().ref('liveView3').remove();
+                            firebase.database().ref('liveView6').remove();
                             setTimeout(function(){
                                 $("#thankyouMessage").hide();
                                 $("#thankyouMessage").html("GRACIAS POR SU VISITA");
@@ -310,9 +310,9 @@
         }
 
         function reloadOnUpdate() {
-            firebase.database().ref("updates/liveView3").on('value', function(snapshot) {
+            firebase.database().ref("updates/liveView6").on('value', function(snapshot) {
                 if(snapshot.val()) {
-                    firebase.database().ref("updates/liveView3").set(false).then(function() {
+                    firebase.database().ref("updates/liveView6").set(false).then(function() {
                         location.reload();
                     });
                 }

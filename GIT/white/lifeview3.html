@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-    <title>Order view</title>
+    <title>Jamones view</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -22,17 +22,11 @@
             font-family: GillSansMTCond;
             src: url(GillSansStd-Condensed.otf);
         }
-
-        body {
-            background-color: #111111;
-        }
-
         .container-fluid {
             margin-top: 3%;
             margin-left: 1%;
             margin-right: 1%;
             position: relative;
-            background-color: #111111;
         }
 
         #dynamic-list {
@@ -76,14 +70,22 @@
         #totalTitleLabel {
             position: fixed;
             bottom: 5%;
-            right: 5%;
+            left: 55%;
+            font-family: GillSansMTCondBold;
+            font-size: 50px;
+        }
+
+        #totalTitle {
+            position: fixed;
+            bottom: 5%;
+            left: 73%;
             font-family: GillSansMTCondBold;
             font-size: 50px;
         }
  
         #thankyouMessage {
-            background-color: #111111;
-            color: white;
+            background-color: white;
+            color: black;
             position: absolute;
             top: 0px;
             bottom: 0px;
@@ -150,18 +152,19 @@
 
 <body>
     <h1 id="thankyouMessage"></h1>
-    <h1 id="welcomeMessage" style="background-color: #111111; color: white;">
-        <img src="logo_fondo_rojo.png" width="400px" style="position: absolute; top: 100px; padding-left: 25px;" alt="Logo">
+    <h1 id="welcomeMessage">
+        <img src="logo_rojo.png" width="400px" style="position: absolute; top: 100px; padding-left: 25px;" alt="Logo">
         BIENVENIDO
     </h1>
     <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
         <strong>No hay conexión.</strong>
     </div>
     <div class="container-fluid">
-        <h2 class="modal-title" id="nameLabel" style="color: white;">BIENVENIDO</h2>
-        <h2 class="modal-title" id="pleaseLabel" style="color: white;">POR FAVOR REVISA TU PEDIDO</h2>
-        <ul class="list-group" id="dynamic-list" style="overflow: hidden;"> </ul>
-        <h2 class="modal-title" id="totalTitleLabel" style="color: white;"></h2>
+        <h2 class="modal-title" id="nameLabel">BIENVENIDO</h2>
+        <h2 class="modal-title" id="pleaseLabel">POR FAVOR REVISA TU PEDIDO</h2>
+        <ul class="list-group" id="dynamic-list"> </ul>
+        <h2 class="modal-title" id="totalTitleLabel"></h2>
+        <h2 class="modal-title" id="totalTitle"></h2>
     </div>
 
     <script>
@@ -232,14 +235,14 @@
 
                     if(notes == "") {
                         var productListItem =
-                            '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: white; border-color: #666666;" data-id="' + childSnapshot.key + '"">' +
+                            '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px;" data-id="' + childSnapshot.key + '"">' +
                                 '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
                                 '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '</h2>' +
                                 '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left: 20px; margin: 0px;">' + cost + '</h2>' +
                             '</li>';
                     } else {
                         var productListItem =
-                            '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: white; border-color: #666666;" data-id="' + childSnapshot.key + '"">' +
+                            '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px;" data-id="' + childSnapshot.key + '"">' +
                                 '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
                                 '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '<br>' + notes + '</h2>' +
                                 '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left:20px; margin: 0px;">' + cost + '</h2>' +
@@ -260,14 +263,18 @@
                     if ((total / 1000) >= 1)
                         total = total.toLocaleString('en-US');
 
+                    $('#totalTitle').text("$" + total);
                     if(isExact) {
-                        $('#totalTitleLabel').html("TOTAL $" + total);
+                        $('#totalTitleLabel').css("left", "55%");
+                        $('#totalTitleLabel').text("TOTAL");
                     }
                     else {
-                        $('#totalTitleLabel').html("TOTAL APROX $" + total);
+                        $('#totalTitleLabel').css("left", "35%");
+                        $('#totalTitleLabel').text("TOTAL APROX");
                     }
                 } else {
                     $('#totalTitleLabel').text("");
+                    $('#totalTitle').text("");
                 }
             });
         }
@@ -277,14 +284,9 @@
                 if(snapshot.val()) {
                     firebase.database().ref('liveView3/wtime').on('value', function (snapshotWT) {
                         if(snapshotWT.val()) {
-                            var totalMessage = $('#totalTitleLabel').text();
+                            var totalMessage = $('#totalTitleLabel').text() + ": " + $('#totalTitle').text();
                             var minutesMessage = snapshotWT.val();
-                           
-                            if(minutesMessage != "-")
-                                $("#thankyouMessage").html("GRACIAS POR TU VISITA<br>" + globalName + "<br><br><br><br>" + totalMessage + "<br><br>TIEMPO ESTIMADO:<br>" + minutesMessage + " MINUTOS");
-                            else
-                                $("#thankyouMessage").html("GRACIAS POR TU VISITA<br>" + globalName + "<br><br><br><br>" + totalMessage);
-
+                            $("#thankyouMessage").html("GRACIAS POR TU VISITA<br>" + globalName + "<br><br><br><br>" + totalMessage + "<br><br>TIEMPO ESTIMADO:<br>" + minutesMessage + " MINUTOS");
                             $("#thankyouMessage").show();
                             firebase.database().ref('liveView3').remove();
                             setTimeout(function(){

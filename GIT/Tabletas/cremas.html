@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="background-color: white;">
+<html lang="en" style="background-color: #111111;">
 <head>
     <title>Cremas view</title>
     <meta charset="utf-8">
@@ -47,6 +47,7 @@
             margin-right: 1%;
             position: relative;
             overflow: hidden;
+            background-color: #111111;
         }
 
         .container1 {
@@ -118,8 +119,7 @@
         }
 
         #splashScreen {
-            background-color: white;
-            color: black;
+            color: #111111;
             position: absolute;
             top: 0px;
             bottom: 0px;
@@ -137,13 +137,22 @@
 			padding-top: 20%;
 			padding-right: 15px;
 		}
+
+        #dynamic-list-porsurtir button, 
+        #dynamic-list-surtidas li,
+        #dynamic-list-entregadas button,
+        #dynamic-list-porentregar button{
+            background-color: #111111;
+            border-color: #555555;
+            color: #EEEEEE;
+        }
     </style>
 
 </head>
-<body style="zoom: 100%; background-color: white;">
-    <div id="splashScreen">
-        <input id="logo-image" type="image" onclick="userFullscreen();" src="logo.png"/>
-        <span id="welcomeMessage">PRESIONA PARA INICIAR</span>
+<body style="zoom: 100%; background-color: #111111;">
+    <div id="splashScreen"  style="background-color: #111111;">
+        <input id="logo-image" type="image" onclick="userFullscreen();" src="logo_fondo_rojo.png"/>
+        <span id="welcomeMessage" style="color: #EEEEEE;">PRESIONA PARA INICIAR</span>
     </div>
     <audio controls style="display: none" id="linkAudio">
         <source src="beep.mp3" type="audio/mpeg">
@@ -154,8 +163,8 @@
     <div class="container-fluid container1">
         <button type="button" id="secondTab" class="btn btn-secondary tab-button-group1" onclick="changeTab(event, 'dynamic-list-surtidas', 'group1')">SURTIDAS</button>
         <button type="button" id="firstTab" class="btn btn-primary tab-button-group1" onclick="changeTab(event, 'dynamic-list-porsurtir', 'group1')">SURTIR</button>
-        <h2 class="modal-title">CREMAS</h2>
-        <h2 class="modal-title" id="time" style="position:absolute; left:180px; top:0px"> </h2>
+        <h2 class="modal-title" style="color: #EEEEEE;">CREMAS</h2>
+        <h2 class="modal-title" id="time" style="position:absolute; left:180px; top:0px; color: #EEEEEE;"> </h2>
         <div class='wrapper'>
             <ul class="list-group tabcontent group1" id="dynamic-list-porsurtir"> </ul>
             <ul class="list-group tabcontent group1" id="dynamic-list-surtidas"> </ul>
@@ -296,7 +305,7 @@
                     
                 if(snapshot.child("porSurtir").val()){
                     productListItem =
-                        '<button class="list-group-item row product-row btn-default" style="padding-left: 12px; padding-right: 12px; background-color: #ef9a9a;" data-id="' + snapshot.key + '"">' +
+                        '<button class="list-group-item row product-row btn-default" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: rgba(226, 71, 62, 88%);" data-id="' + snapshot.key + '"">' +
                             '<h3 class="col-xs-2 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h3>' +
                             '<h3 class="col-xs-6 product-info" style="padding: 0px; margin: 0px;">' + description + '</h3>' +
                             '<h3 class="col-xs-3 product-info" style="padding: 0px; margin: 0px;">' + notes + '</h3>' +
@@ -365,13 +374,13 @@
         function changeToActiveColor(button) {
 			button.style.backgroundColor = "#e53935";
 			button.style.borderColor = "#e53935";
-			button.style.color = "#FFFFFF";
+			button.style.color = "#EEEEEE";
 		}
 
 		function changeToDeactiveColor(button) {
 			button.style.backgroundColor = "#C0C0C0";
 			button.style.borderColor = "#C0C0C0";
-			button.style.color = "#000000";
+			button.style.color = "#111111";
         }
 
         function formatProductToSpeech(product) {
