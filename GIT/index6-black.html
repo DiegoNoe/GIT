@@ -163,7 +163,7 @@
                                         <select class="form-control" id="stockSelect" style="background-color: #222222; color: #BABABA; border-color: #555555; -webkit-appearance:none;">
                                             <option value="siHay">SÍ HAY</option>
                                             <option value="noHay">NO HAY</option>
-                                            <option value="pedido">NO HAY / YA SE PIDIÓ</option>
+                                            <option value="pedido">RECOMENDADO</option>
                                         </select>
                                     </div>
                                 </div>
@@ -405,7 +405,7 @@
                     color = "#EEEEEE";
                     buttonColor = "#EEEEEE";
                 } else if(searchResult[i].existencia == "pedido") {
-                    backgroundColor = "rgba(253, 181, 13, 85%)";
+                    backgroundColor = "rgba(51, 204, 51, 80%)";
                     color = "#EEEEEE";
                     buttonColor = "#EEEEEE";
                 }
@@ -600,7 +600,7 @@
                 backgroundColor = "#111111";
             }
             else if(product.existencia == "pedido") {
-                color = "rgba(253, 181, 13, 100%)";
+                color = "rgba(51, 204, 51, 80%)";
                 backgroundColor = "#111111";
             }
 

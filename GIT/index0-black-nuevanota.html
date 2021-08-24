@@ -163,7 +163,7 @@
                                         <select class="form-control" id="stockSelect" style="background-color: #222222; color: #BABABA; border-color: #555555; -webkit-appearance:none;">
                                             <option value="siHay">SÍ HAY</option>
                                             <option value="noHay">NO HAY</option>
-                                            <option value="pedido">RECOMENDADO</option>
+                                            <option value="pedido">NO HAY / YA SE PIDIÓ</option>
                                         </select>
                                     </div>
                                 </div>
@@ -405,7 +405,7 @@
                     color = "#EEEEEE";
                     buttonColor = "#EEEEEE";
                 } else if(searchResult[i].existencia == "pedido") {
-                    backgroundColor = "rgba(51, 204, 51, 80%)";
+                    backgroundColor = "rgba(253, 181, 13, 85%)";
                     color = "#EEEEEE";
                     buttonColor = "#EEEEEE";
                 }
@@ -600,7 +600,7 @@
                 backgroundColor = "#111111";
             }
             else if(product.existencia == "pedido") {
-                color = "rgba(51, 204, 51, 80%)";
+                color = "rgba(253, 181, 13, 100%)";
                 backgroundColor = "#111111";
             }
 
@@ -887,7 +887,7 @@
 
                     //quantity and unit
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(14.5);
+                    doc.setFontSize(12);
                     var quantityAndUnit = order[i][1] + shortenedUnits[order[i][2]];
 
                     //enhance quantity if necessary
@@ -940,7 +940,7 @@
 
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(16);
+                    doc.setFontSize(12);
                     product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
                     var totalProduct = roundDecimals(Math.round(product[0].costo * order[i][1] * 10) / 10);
                     if (order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
@@ -968,8 +968,8 @@
                     else
                         total += product[0].costo * order[i][1];
 
-                    //notes and description
-                    doc.setFont("Gill Sans Std Condensed");
+                    //notes and description AQUI
+                    doc.setFont("Gill Sans MT Condensed Negrita");
 
                     //if no connection then sign aJamones and aCremas products
                     //FIX huge if
@@ -982,22 +982,22 @@
                         doc.setFontSize(10);
                         doc.setPage(pagesQuantity * 2 - 1);
 
-                        doc.text(24 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(24 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
 
-                        doc.setFontSize(16);
+                        doc.setFontSize(12);
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(24 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(24 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                     } else {
                         //just description
-                        doc.setFontSize(16);
+                        doc.setFontSize(12);
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(24 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]));
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]));
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(24 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]));
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]));
                     }
 
                     //drawline if product needs to be weighted
@@ -1044,12 +1044,12 @@
 
                 if (calculable) {
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(119 + xOffset, 207.5  + yOffset, total.toLocaleString('en-US'), "center");
-                    doc.setDrawColor(0, 0, 0);
-                    doc.line(102 + xOffset, 194.5  + yOffset, 135 + xOffset, 194.5  + yOffset);
+                    doc.text(99 + xOffset, 209  + yOffset, "TOTAL  " + total.toLocaleString('en-US'), "center");
+                    //doc.setDrawColor(0, 0, 0);
+                    //doc.line(102 + xOffset, 194.5  + yOffset, 135 + xOffset, 194.5  + yOffset);
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(119 + xOffset, 207.5  + yOffset, total.toLocaleString('en-US'), "center");
-                    doc.line(102 + xOffset, 194.5  + yOffset, 135 + xOffset, 194.5  + yOffset);
+                    doc.text(99 + xOffset, 209  + yOffset, "TOTAL  " + total.toLocaleString('en-US'), "center");
+                    //doc.line(102 + xOffset, 194.5  + yOffset, 135 + xOffset, 194.5  + yOffset);
 
                     //generates QR code with total embeded in
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
@@ -1059,9 +1059,9 @@
                     }
                 } else {
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(119 + xOffset, 197.5  + yOffset, total.toLocaleString('en-US'), "center");
+                    doc.text(99 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "center");
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(119 + xOffset, 197.5  + yOffset, total.toLocaleString('en-US'), "center");
+                    doc.text(99 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "center");
 
                     //generates QR code with total embeded in
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
@@ -1150,7 +1150,7 @@
                 nombre: name,
                 productos: products,
                 subtotal: total
-            });
+            }); 
         }
 
         function increaseEmployeeCounter(employee) {
@@ -1189,7 +1189,7 @@
 
         //adds date and time to the top right corner
         function addTimePDF(doc) {
-            doc.setFontSize(13);
+            doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
 
             var date = new Date();
@@ -1202,7 +1202,7 @@
         }
 
         function addMethodPDF(doc, orderMethod) {
-            doc.setFontSize(13);
+            doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
 
             //special mark if the order is for the next day
@@ -1211,10 +1211,10 @@
                 doc.text(9 + xOffset, 28  + yOffset, "M", "center");
                 doc.setFontSize(12);
                 doc.text(63 + xOffset, 195.5  + yOffset, "MANANA");
-                doc.setFontSize(13);
+                doc.setFontSize(12);
             }
 
-            doc.text(87 + xOffset, 38.5  + yOffset, orderMethod, 'center');
+            doc.text(84 + xOffset, 38.5  + yOffset, orderMethod, 'center');
 
             //special counter if the order was made by phone
             if(event.srcElement.id == "printByPhoneButton") {
@@ -1240,7 +1240,9 @@
 
             doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
-            doc.text(43 + xOffset, 195.5  + yOffset, replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1) + " #" + length);
+            doc.text(27 + xOffset, 196.9  + yOffset, "ANOTO: " + replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1) + " #" + length);
+            doc.text(27 + xOffset, 202.95  + yOffset, "SURTIO: ");
+            doc.text(27 + xOffset, 209  + yOffset, "ENTREGO: ");
         }
 
         //draws circle besides the description        
