@@ -1044,11 +1044,11 @@
 
                 if (calculable) {
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(99 + xOffset, 209  + yOffset, "TOTAL  " + total.toLocaleString('en-US'), "right");
+                    doc.text(92 + xOffset, 209  + yOffset, "TOTAL  " + total.toLocaleString('en-US'), "left");
                     //doc.setDrawColor(0, 0, 0);
                     //doc.line(102 + xOffset, 194.5  + yOffset, 135 + xOffset, 194.5  + yOffset);
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(99 + xOffset, 209  + yOffset, "TOTAL  " + total.toLocaleString('en-US'), "right");
+                    doc.text(92 + xOffset, 209  + yOffset, "TOTAL  " + total.toLocaleString('en-US'), "left");
                     //doc.line(102 + xOffset, 194.5  + yOffset, 135 + xOffset, 194.5  + yOffset);
 
                     //generates QR code with total embeded in
@@ -1059,9 +1059,9 @@
                     }
                 } else {
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(99 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "right");
+                    doc.text(92 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "left");
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(99 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "right");
+                    doc.text(92 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "left");
 
                     //generates QR code with total embeded in
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
