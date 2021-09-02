@@ -1044,11 +1044,11 @@
 
                 if (calculable) {
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(99 + xOffset, 209  + yOffset, "TOTAL  " + total.toLocaleString('en-US'), "center");
+                    doc.text(99 + xOffset, 209  + yOffset, "TOTAL  " + total.toLocaleString('en-US'), "right");
                     //doc.setDrawColor(0, 0, 0);
                     //doc.line(102 + xOffset, 194.5  + yOffset, 135 + xOffset, 194.5  + yOffset);
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(99 + xOffset, 209  + yOffset, "TOTAL  " + total.toLocaleString('en-US'), "center");
+                    doc.text(99 + xOffset, 209  + yOffset, "TOTAL  " + total.toLocaleString('en-US'), "right");
                     //doc.line(102 + xOffset, 194.5  + yOffset, 135 + xOffset, 194.5  + yOffset);
 
                     //generates QR code with total embeded in
@@ -1059,9 +1059,9 @@
                     }
                 } else {
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(99 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "center");
+                    doc.text(99 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "right");
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(99 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "center");
+                    doc.text(99 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "right");
 
                     //generates QR code with total embeded in
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
@@ -1208,13 +1208,13 @@
             //special mark if the order is for the next day
             if ($("#tomorrowCheckbox").is(':checked')) {
                 doc.setFontSize(29);
-                doc.text(9 + xOffset, 31  + yOffset, "M", "center");
+                doc.text(9 + xOffset, 32.5  + yOffset, "M", "center");
                 doc.setFontSize(12);
                 doc.text(63 + xOffset, 195.5  + yOffset, "MANANA");
                 doc.setFontSize(12);
             }
 
-            doc.text(84 + xOffset, 40  + yOffset, orderMethod, 'center');
+            doc.text(84 + xOffset, 39.6  + yOffset, orderMethod, 'center');
 
             //special counter if the order was made by phone
             if(event.srcElement.id == "printByPhoneButton") {
@@ -1225,7 +1225,7 @@
             if ($("#invoiceCheckbox").is(':checked')) {
                 doc.setFontSize(29);
                 doc.setFont("Gill Sans MT Condensed Negrita");
-                doc.text(130 + xOffset, 31  + yOffset, "F", "center");
+                doc.text(130 + xOffset, 32.5  + yOffset, "F", "center");
             }
 
         }
@@ -1236,7 +1236,7 @@
 
             doc.setFontSize(29);
             doc.setFont("Gill Sans MT Condensed Negrita");
-            doc.text(70 + xOffset, 31  + yOffset, replaceAEIOUN(name), "center");
+            doc.text(68.5 + xOffset, 32.5  + yOffset, replaceAEIOUN(name), "center");
 
             doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
