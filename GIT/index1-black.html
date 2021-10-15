@@ -31,7 +31,12 @@
         var database = firebase.database().ref('productos/');
         database.on('value', function (snapshot) {
             products = Defiant.getSnapshot(snapshot.val());
+
+            //new field
+            //for (const [key, value] of Object.entries(snapshot.val()))
+            //    firebase.database().ref('productos/' + `${key}` + '/categoria').set(4);
         });
+
         var globalComputer = "liveView1";
         var globalWaitingOrders,
             globalTPP = [];
@@ -97,6 +102,35 @@
 
         <!-- in order products list -->
         <ul class="list-group" id="dynamic-list"> </ul>
+    </div>
+
+    <div id="calculator-div">
+        <div id="calculator">
+            <div class="result">
+                <p></p>
+            </div>
+            <div class="clear btn-danger">C</div>
+         
+            <span class="calculator-button" style="margin-top: 27px; margin-left: 0;">7</span>
+            <span class="calculator-button" style="margin-top: 27px;">8</span>
+            <span class="calculator-button" style="margin-top: 27px;">9</span>
+            <span class="calculator-button" style="margin-top: 27px; margin-right: 0px;">+</span>
+         
+            <span class="calculator-button" style="margin-left: 0px;">4</span>
+            <span class="calculator-button">5</span>
+            <span class="calculator-button">6</span>
+            <span class="calculator-button" style="margin-right: 0px;">-</span>
+         
+            <span class="calculator-button" style="margin-left: 0px;">1</span>
+            <span class="calculator-button">2</span>
+            <span class="calculator-button">3</span>
+            <span class="calculator-button" style="margin-right: 0px;">÷</span>
+         
+            <span class="calculator-button" style="margin-left: 0px;">0</span>
+            <span class="calculator-button">.</span>
+            <span class="calculator-button">=</span>
+            <span class="calculator-button" style="margin-right: 0px;">x</span>
+          </div>
     </div>
 
     <!-- edit / add new product modal -->
@@ -293,6 +327,43 @@
             }
         });
 
+        //calculator
+        window.onload = function () {
+            var buttons = document.getElementsByClassName('calculator-button'),
+                result = document.querySelectorAll('.result p')[0],
+                clear = document.getElementsByClassName('clear')[0];
+            
+            for (var i = 0; i < buttons.length; i++) {
+                if (buttons[i].innerHTML === '=') {
+                    buttons[i].addEventListener("click", calculate(i));
+                } else {
+                    buttons[i].addEventListener("click", addValue(i));
+                }
+            }
+            
+            clear.onclick = function () {
+                result.innerHTML = '';
+            };  
+            
+            function addValue(i) {
+                return function () {
+                    if(i == 15)
+                        result.innerHTML += "*";
+                    else if(i == 11)
+                        result.innerHTML += "/";
+                    else
+                        result.innerHTML += buttons[i].innerHTML;
+                };
+            }
+            
+            function calculate(i) {
+                return function () {
+                    var final_res = result.innerHTML;                                 
+                    result.innerHTML = eval(final_res);
+                };
+            }
+        };
+
         function callClient() {
             var localComputer = globalComputer.slice(globalComputer.length - 1, globalComputer.length);
             firebase.database().ref('service/' + localComputer + 'isReady').set(false).then(function() {
@@ -367,7 +438,6 @@
                 msg.text = "buena tarde, pase el siguiente a la " + computer;
 
             //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
-            console.log(speechSynthesis.getVoices());
             msg.voice = speechSynthesis.getVoices()[1];
 			window.speechSynthesis.speak(msg);
 
@@ -610,8 +680,8 @@
                         '<input type="number" min="0" class="form-control" style= "color: ' + color + '; background-color: ' + backgroundColor + '; border-color: #555555;"></input>' +
                     '</div>' +
                     '<div class="col-sm-1 product-info">' + product.unidad + '</div>' +
-                    '<div class="col-sm-5 product-info">' + product.descripcion + '</div>' +
-                    '<div class="col-sm-4 product-notes-container">' +
+                    '<div class="col-sm-6 product-info">' + product.descripcion + '</div>' +
+                    '<div class="col-sm-3 product-notes-container">' +
                         '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + '; background-color: ' + backgroundColor + ';" class="form-control product-notes" maxlength="48" placeholder="NOTAS"> </input>' +
                     '</div>' +
                     '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button cross" style="background-color: ' + backgroundColor + '; border-color: #555555;">' +
@@ -735,6 +805,8 @@
 
                         orderTypeSection.push(orderTypeUnit);
 
+                        orderTypeUnit.push(JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].categoria);
+
                         //verificating quantity
                         if (orderTypeUnit[1] == "" || orderTypeUnit[1] == "0") {
                             alert("Un producto no tiene cantidad, ingresa todas las cantidades.");
@@ -772,16 +844,12 @@
         function updateWT() {
             var nproducts = 0;
             $("#dynamic-list").children().each(function (index) {
-                console.log("corro");
                 var type = JSON.search(products, '//*[clave="' + $(this).data("id") + '"]')[0].tipo;
                 var quantity = $(this).children().eq(0).children().val();
-                console.log(quantity);
                 if (type == "porPesarCamara" || type == "yaPesadoCamara" || type == "porPesarAfuera" || type == "yaPesadoAfuera")
                     if(quantity != "")
                         nproducts = nproducts + parseFloat(quantity);
             });
-
-            console.log(nproducts);
 
             if(nproducts == 0) 
                 $("#wtTextField").text("TIEMPO ESTIMADO: 0M");
@@ -865,6 +933,8 @@
 
                 var calculable = true;
                 var total = 0;
+                var category = 0;
+                var categories = [.05, .10, .15, .20, .25];
 
                 var firstLineYPosition = 49.8 + yOffset;
                 var lineHeight = 8.54;
@@ -887,7 +957,7 @@
 
                     //quantity and unit
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(12);
+                    doc.setFontSize(13);
                     var quantityAndUnit = order[i][1] + shortenedUnits[order[i][2]];
 
                     //enhance quantity if necessary
@@ -912,9 +982,9 @@
                     }
 
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(13 + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "center");
+                    doc.text(4 + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(13  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "center");
+                    doc.text(4  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
                     doc.setFont("Gill Sans Std Condensed");
 
                     //if product is being supplied by suppliers then draw cirlce
@@ -940,33 +1010,37 @@
 
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(12);
+                    doc.setFontSize(13);
                     product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
                     var totalProduct = roundDecimals(Math.round(product[0].costo * order[i][1] * 10) / 10);
                     if (order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'), null, null, "left");
+                        doc.text(115 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'), null, null, "left");
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'), null, null, "left");
+                        doc.text(115 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'), null, null, "left");
                     } else {
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'));
+                        doc.text(115 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'));
                         doc.setDrawColor(255, 0, 0);
                         doc.line(128 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8, 135  + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8);
                         doc.setDrawColor(0, 0, 0);
 
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(113.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'));
+                        doc.text(115 + xOffset, firstLineYPosition + (currentLine * lineHeight), totalProduct.toLocaleString('en-US'));
                         doc.setDrawColor(255, 0, 0);
                         doc.line(128 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8, 135 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8);
                         doc.setDrawColor(0, 0, 0);
                     }
                     
                     //calculating current total
+                    var productTotal;
                     if (order[i][1] < 0)
-                        total += product[0].costo * order[i][1] * (-1);
+                        productTotal = product[0].costo * order[i][1] * (-1);
                     else
-                        total += product[0].costo * order[i][1];
+                        productTotal = product[0].costo * order[i][1];
+                    
+                    total += productTotal;
+                    category += (productTotal * categories[order[i][8]]);
 
                     //notes and description
                     doc.setFont("Gill Sans MT Condensed Negrita");
@@ -986,14 +1060,14 @@
                         doc.setPage(pagesQuantity * 2);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
 
-                        doc.setFontSize(12);
+                        doc.setFontSize(13);
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                         doc.setPage(pagesQuantity * 2);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                     } else {
                         //just description
-                        doc.setFontSize(12);
+                        doc.setFontSize(13);
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]));
                         doc.setPage(pagesQuantity * 2);
@@ -1070,7 +1144,37 @@
                         doc.addImage(generateQR(productsRefID), 'JPEG', 6 + xOffset, 194  + yOffset, 15, 15);
                     }
                 }
+                
+                //category
+                doc.setPage(1);
+                doc.setFontSize(10);
+                if(category >= 100 && category < 200)
+                    doc.text(27 + xOffset, 210  + yOffset, ".", "left");
+                else if(category >= 200 && category < 300)
+                    doc.text(27 + xOffset, 210  + yOffset, "..", "left");
+                else if(category >= 300 && category < 400)
+                    doc.text(27 + xOffset, 210  + yOffset, "...", "left");
+                else if(category >= 400 && category < 500)
+                    doc.text(27 + xOffset, 210  + yOffset, "....", "left");
+                else if(category >= 500 && category < 600)
+                    doc.text(27 + xOffset, 210  + yOffset, ".....", "left");
+                else if(category >= 600 && category < 700)
+                    doc.text(27 + xOffset, 210  + yOffset, "......", "left");
+                else if(category >= 700 && category < 800)
+                    doc.text(27 + xOffset, 210  + yOffset, ".......", "left");
+                else if(category >= 800 && category < 900)
+                    doc.text(27 + xOffset, 210  + yOffset, "........", "left");
+                else if(category >= 900 && category < 1000)
+                    doc.text(27 + xOffset, 210  + yOffset, ".........", "left");
+                else if(category >= 1000 && category < 1100)
+                    doc.text(27 + xOffset, 210  + yOffset, "..........", "left");
+                else if(category >= 1100 && category < 1200)
+                    doc.text(27 + xOffset, 210  + yOffset, "...........", "left");
+                else if(category >= 1200)
+                    doc.text(27 + xOffset, 210  + yOffset, "............", "left");
 
+
+                
                 //set pending products id (the one embeded in the qr code)
                 if(withPendingProducts)
                     firebase.database().ref('pendingOrders/' + orderRefID + '/id').set(productsRefID);
@@ -1189,7 +1293,7 @@
 
         //adds date and time to the top right corner
         function addTimePDF(doc) {
-            doc.setFontSize(12);
+            doc.setFontSize(13);
             doc.setFont("Gill Sans MT Condensed Negrita");
 
             var date = new Date();
@@ -1202,16 +1306,16 @@
         }
 
         function addMethodPDF(doc, orderMethod) {
-            doc.setFontSize(12);
+            doc.setFontSize(13);
             doc.setFont("Gill Sans MT Condensed Negrita");
 
             //special mark if the order is for the next day
             if ($("#tomorrowCheckbox").is(':checked')) {
                 doc.setFontSize(29);
                 doc.text(9 + xOffset, 32.5  + yOffset, "M", "center");
-                doc.setFontSize(12);
+                doc.setFontSize(13);
                 doc.text(63 + xOffset, 195.5  + yOffset, "MANANA");
-                doc.setFontSize(12);
+                doc.setFontSize(13);
             }
 
             doc.text(84 + xOffset, 39.6  + yOffset, orderMethod, 'center');
@@ -1238,7 +1342,7 @@
             doc.setFont("Gill Sans MT Condensed Negrita");
             doc.text(68.5 + xOffset, 32.5  + yOffset, replaceAEIOUN(name), "center");
 
-            doc.setFontSize(12);
+            doc.setFontSize(13);
             doc.setFont("Gill Sans MT Condensed Negrita");
             doc.text(27 + xOffset, 196.9  + yOffset, "ANOTO: " + replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1) + " #" + length);
             doc.text(27 + xOffset, 202.95  + yOffset, "SURTIO: ");
@@ -1248,9 +1352,9 @@
         //draws circle besides the description        
         function drawCricle(doc, YCoordinate, validColor) {
             if (validColor == "blue")
-                doc.text(5 + xOffset, YCoordinate - 1.5, "+", "center");
+                doc.text(3 + xOffset, YCoordinate - 1.5, "+", "center");
             else if (validColor == "red")
-                doc.text(5 + xOffset, YCoordinate - .7, "-", "center");
+                doc.text(3 + xOffset, YCoordinate - .7, "-", "center");
 
             //doc.circle(5 + xOffset, YCoordinate - 1.7, .8, 'F');
         }
@@ -1261,7 +1365,7 @@
             else if (validColor == "red")
                 doc.setFillColor(255, 0, 0);
 
-            doc.text(5  + xOffset, YCoordinate + 1, "*", null, null, "center");
+            doc.text(3  + xOffset, YCoordinate + 1, "*", null, null, "center");
         }
 
         //replaces special characters (current jspdf doesn´t support them)
