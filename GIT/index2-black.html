@@ -957,7 +957,7 @@
 
                     //quantity and unit
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(13);
+                    doc.setFontSize(12.5);
                     var quantityAndUnit = order[i][1] + shortenedUnits[order[i][2]];
 
                     //enhance quantity if necessary
@@ -982,9 +982,9 @@
                     }
 
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(4 + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
+                    doc.text(5.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(4  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
+                    doc.text(5.5  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
                     doc.setFont("Gill Sans Std Condensed");
 
                     //if product is being supplied by suppliers then draw cirlce
@@ -1010,7 +1010,7 @@
 
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(13);
+                    doc.setFontSize(12.5);
                     product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
                     var totalProduct = roundDecimals(Math.round(product[0].costo * order[i][1] * 10) / 10);
                     if (order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
@@ -1060,14 +1060,14 @@
                         doc.setPage(pagesQuantity * 2);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
 
-                        doc.setFontSize(13);
+                        doc.setFontSize(12.5);
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                         doc.setPage(pagesQuantity * 2);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                     } else {
                         //just description
-                        doc.setFontSize(13);
+                        doc.setFontSize(12.5);
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]));
                         doc.setPage(pagesQuantity * 2);
@@ -1146,34 +1146,26 @@
                 }
                 
                 //category
+                var points = "";
                 doc.setPage(1);
                 doc.setFontSize(10);
-                if(category >= 100 && category < 200)
-                    doc.text(27 + xOffset, 210  + yOffset, ".", "left");
-                else if(category >= 200 && category < 300)
-                    doc.text(27 + xOffset, 210  + yOffset, "..", "left");
-                else if(category >= 300 && category < 400)
-                    doc.text(27 + xOffset, 210  + yOffset, "...", "left");
-                else if(category >= 400 && category < 500)
-                    doc.text(27 + xOffset, 210  + yOffset, "....", "left");
-                else if(category >= 500 && category < 600)
-                    doc.text(27 + xOffset, 210  + yOffset, ".....", "left");
-                else if(category >= 600 && category < 700)
-                    doc.text(27 + xOffset, 210  + yOffset, "......", "left");
-                else if(category >= 700 && category < 800)
-                    doc.text(27 + xOffset, 210  + yOffset, ".......", "left");
-                else if(category >= 800 && category < 900)
-                    doc.text(27 + xOffset, 210  + yOffset, "........", "left");
-                else if(category >= 900 && category < 1000)
-                    doc.text(27 + xOffset, 210  + yOffset, ".........", "left");
-                else if(category >= 1000 && category < 1100)
-                    doc.text(27 + xOffset, 210  + yOffset, "..........", "left");
-                else if(category >= 1100 && category < 1200)
-                    doc.text(27 + xOffset, 210  + yOffset, "...........", "left");
-                else if(category >= 1200)
-                    doc.text(27 + xOffset, 210  + yOffset, "............", "left");
+                if (category >= 50 && category < 100) points = ".";
+                else if(category >= 100 && category < 150) points = "..";
+                else if(category >= 150 && category < 200) points = "...";
+                else if(category >= 200 && category < 250) points = "....";
+                else if(category >= 250 && category < 300) points = ".....";
+                else if(category >= 300 && category < 350) points = "......";
+                else if(category >= 350 && category < 400) points = ".......";
+                else if(category >= 400 && category < 450) points = "........";
+                else if(category >= 450 && category < 500) points = ".........";
+                else if(category >= 550 && category < 600) points = "..........";
+                else if(category >= 600 && category < 650) points = "...........";
+                else if(category >= 650) points = "............";
 
-
+                for(var i = 1; i <= pagesQuantity * 2; i++) {
+                    doc.setPage(i);
+                    doc.text(27 + xOffset, 210  + yOffset, points, "left");
+                }
                 
                 //set pending products id (the one embeded in the qr code)
                 if(withPendingProducts)
@@ -1293,7 +1285,7 @@
 
         //adds date and time to the top right corner
         function addTimePDF(doc) {
-            doc.setFontSize(13);
+            doc.setFontSize(12.5);
             doc.setFont("Gill Sans MT Condensed Negrita");
 
             var date = new Date();
@@ -1306,16 +1298,16 @@
         }
 
         function addMethodPDF(doc, orderMethod) {
-            doc.setFontSize(13);
+            doc.setFontSize(12.5);
             doc.setFont("Gill Sans MT Condensed Negrita");
 
             //special mark if the order is for the next day
             if ($("#tomorrowCheckbox").is(':checked')) {
                 doc.setFontSize(29);
                 doc.text(9 + xOffset, 32.5  + yOffset, "M", "center");
-                doc.setFontSize(13);
+                doc.setFontSize(12.5);
                 doc.text(63 + xOffset, 195.5  + yOffset, "MANANA");
-                doc.setFontSize(13);
+                doc.setFontSize(12.5);
             }
 
             doc.text(84 + xOffset, 39.6  + yOffset, orderMethod, 'center');
@@ -1342,7 +1334,7 @@
             doc.setFont("Gill Sans MT Condensed Negrita");
             doc.text(68.5 + xOffset, 32.5  + yOffset, replaceAEIOUN(name), "center");
 
-            doc.setFontSize(13);
+            doc.setFontSize(12.5);
             doc.setFont("Gill Sans MT Condensed Negrita");
             doc.text(27 + xOffset, 196.9  + yOffset, "ANOTO: " + replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1) + " #" + length);
             doc.text(27 + xOffset, 202.95  + yOffset, "SURTIO: ");
@@ -1352,9 +1344,9 @@
         //draws circle besides the description        
         function drawCricle(doc, YCoordinate, validColor) {
             if (validColor == "blue")
-                doc.text(3 + xOffset, YCoordinate - 1.5, "+", "center");
+                doc.text(4.5 + xOffset, YCoordinate - 1.5, "+", "center");
             else if (validColor == "red")
-                doc.text(3 + xOffset, YCoordinate - .7, "-", "center");
+                doc.text(4.5 + xOffset, YCoordinate - .7, "-", "center");
 
             //doc.circle(5 + xOffset, YCoordinate - 1.7, .8, 'F');
         }
@@ -1365,7 +1357,7 @@
             else if (validColor == "red")
                 doc.setFillColor(255, 0, 0);
 
-            doc.text(3  + xOffset, YCoordinate + 1, "*", null, null, "center");
+            doc.text(4.5  + xOffset, YCoordinate + 1, "*", null, null, "center");
         }
 
         //replaces special characters (current jspdf doesn´t support them)
