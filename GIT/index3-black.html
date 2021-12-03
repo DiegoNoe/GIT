@@ -640,7 +640,8 @@
                 existencia: inputs[5],
                 tipo: inputs[6],
                 unidad: inputs[4],
-                xpcode: inputs[2]
+                xpcode: inputs[2],
+                categoria: 1
             }).then(function () {
                 $('#addProductModal').modal('toggle');
             });
@@ -755,10 +756,12 @@
             inputQuantity.focusout(function () {updateOrderProductQuantity(date, inputQuantity.val())});
             inputNotes.focusout(function () {updateOrderProductNotes(date, inputNotes.val())});
 
-            $('#dynamic-list').children().first().on("click", "button", function (e) {
+            $('#dynamic-list').children().first().on("mouseup", "button", function (e) {
                 e.preventDefault();
+                
                 removeOrderProduct($(this).parent().data("date"));
                 $(this).parent().remove();
+                
                 updateTotal();
                 updateWT();
                 productsCounter--;
@@ -1047,7 +1050,7 @@
 
                     //if no connection then sign aJamones and aCremas products
                     //FIX huge if
-                    var aJamonesSpecialProducts = ["RET", "SA", "JAI", "TOI", "JAAA", "JAAN", "JAAR", "JAI", "JAYI", "JAPF", "JAHV"];
+                    var aJamonesSpecialProducts = ["RET", "SA", "JAI", "TOI", "JAAA", "JAAN", "JAAR", "JAI", "JAYI", "JAPF", "JAHV", "JAPA", "JPA", "JAA"];
                     if (order[i][5] == "aCremas" || order[i][5] == "aJamones" || aJamonesSpecialProducts.includes(order[i][0]) && order[i][4] != "" || aJamonesSpecialProducts.includes(order[i][0]) && order[i][1] % 1 != 0)
                         if(document.getElementById("noConnectionAlert").style.display == "block")
                             order[i][4] = "-ANOTAR- " + order[i][4];
@@ -1242,6 +1245,15 @@
         function uploadCompleteOrder(name, products, total, id) {
             id = id.replace(".", "").replace(" ", "");
             total = total.replace(/\,/g,'');
+
+            console.log("INVOICE");
+            console.log(products);
+
+            for(var i = 0; i < products.length; i++)
+                products[i] = products[i].map(v => v === undefined ? '1' : v);
+            
+            console.log(products);
+
             firebase.database().ref("invoice/" + id).set({
                 nombre: name,
                 productos: products,
