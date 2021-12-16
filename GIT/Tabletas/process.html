@@ -82,8 +82,6 @@
 							localSsnapshot.ttime = localSsnapshot.ttime + (snapshot.val().thour - snapshot.val().shour);
 							localSsnapshot.lastFinished = snapshot.val().thour;
 							localSsnapshot.hasOrder = false;
-
-							console.log("se supone que aqui cambio el employee");
 							
 							firebase.database().ref('employees/' + snapshot.val().semployee).set(localSsnapshot);
 						}
@@ -108,6 +106,7 @@
 		var sWaitingTimes10 = [], spWaitingTimes10 = [];
 		var sWaitingTimes30 = [], spWaitingTimes30 = [];
 		var sWaitingTimes50 = [], spWaitingTimes50 = [];
+		
 		//default
 		var globalTPP = ["0.55", "0.45", "0.35"];
 
@@ -434,8 +433,8 @@
 			var distance = 200;
 
 			if(elementid == "dynamic-list-thirds") {
-				distance = 600;
-				speed = 2;
+				distance = 1050;
+				speed = 3;
 			}
 
 			var scrollAmount = 0;
@@ -468,7 +467,7 @@
 				$("#s-waiting-times-label").text("");
 			else
 				$("#s-waiting-times-label").text("PROMEDIO: " + parseFloat(averageTime).toFixed(1) + "N " + parseFloat(averageTimePP).toFixed(1) + "P");
-			
+
 			firebase.database().ref('process/timing/tpp10').set(parseFloat(getAverage(spWaitingTimes10)).toFixed(2));
 			firebase.database().ref('process/timing/tpp30').set(parseFloat(getAverage(spWaitingTimes30)).toFixed(2));
 			firebase.database().ref('process/timing/tpp50').set(parseFloat(getAverage(spWaitingTimes50)).toFixed(2));
@@ -825,7 +824,6 @@
 		function updateFElapsedTime(orderListItem) {
 			var etField = orderListItem.find(".elapsed-time");
 			
-			console.log(orderListItem.css("background-color"));
 			if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.8)") {
 				if(etField.text() > 4) {
 					orderListItem.css("background-color", "rgba(216, 61, 52, 70%)");

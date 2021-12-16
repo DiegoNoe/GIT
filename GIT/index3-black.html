@@ -1236,7 +1236,10 @@
             firebase.database().ref('process/timing').on('value', function (snapshot) {
                 if(snapshot.val()) {
                     globalWaitingOrders = snapshot.val().worders;
-                    globalTPP = [snapshot.val().tpp10, snapshot.val().tpp30, snapshot.val().tpp50];
+                    if(snapshot.val().tpp10 != undefined && snapshot.val().tpp30 != undefined && snapshot.val().tpp50 != undefined)
+                        globalTPP = [snapshot.val().tpp10, snapshot.val().tpp30, snapshot.val().tpp50];
+                    else
+                        globalTPP = ["0.55", "0.45", "0.35"];
                     updateWT();
                 }
             });
@@ -1246,14 +1249,9 @@
             id = id.replace(".", "").replace(" ", "");
             total = total.replace(/\,/g,'');
 
-            console.log("INVOICE");
-            console.log(products);
-
             for(var i = 0; i < products.length; i++)
                 products[i] = products[i].map(v => v === undefined ? '1' : v);
             
-            console.log(products);
-
             firebase.database().ref("invoice/" + id).set({
                 nombre: name,
                 productos: products,
