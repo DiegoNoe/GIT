@@ -160,7 +160,7 @@ input, button:not(.cross), label, span:not(.cross) {
 .first-row {
     height: 56px;
     padding-bottom: 0px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .product-row {
@@ -184,8 +184,8 @@ input, button:not(.cross), label, span:not(.cross) {
 .search-options {
     position: absolute;
     z-index: 1;
-    left: 15px;
-    right: 0px;
+    left: 10px;
+    right: -10px;
     overflow-y: scroll;
     max-height: 550px;
     padding-left: 15px;
@@ -199,21 +199,12 @@ input, button:not(.cross), label, span:not(.cross) {
 .client-options {
     position: absolute;
     z-index: 2;
-    left: 0px;
-    right: -1px;
-    top: 50px;
+    left: 5px;
+    right: -15px;
+    top: 42px;
     overflow-y: scroll;
     max-height: 550px;
     padding-left: 15px;
-}
-
-#greenCheck {
-    color: #5cb85c;
-    z-index: 1;
-    position: absolute;
-    right: 80px;
-    top: 7px;
-    visibility: hidden;
 }
 
 .client-options-item {
@@ -221,13 +212,58 @@ input, button:not(.cross), label, span:not(.cross) {
     padding-bottom: 0px;
     padding-left: 0px;
     padding-right: 0px;
+    background-color: #111111;
+    border-color: #555555;
+    color: #EEEEEE !important;
+}
+
+.client-options-item:hover {
+    background-color: #222222 !important;
+    border-color: #555555;
+}
+
+#greenCheck {
+    color: #5cb85c;
+    z-index: 1;
+    position: absolute;
+    right: 85px;
+    top: 7px;
+    visibility: hidden;
+}
+
+#greenCheckW {
+    color: #5cb85c;
+    z-index: 1;
+    position: absolute;
+    right: 62px;
+    top: 7px;
+    visibility: hidden;
+}
+
+#greenCheckWN {
+    color: white;
+    z-index: 1;
+    position: absolute;
+    right: 59px;
+    top: 7px;
+    visibility: hidden;
+}
+
+#formNumberInput::-webkit-outer-spin-button,
+#formNumberInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .product-row {
     margin-left: 0px;
     margin-right: 0px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.search-options-item:hover {
+    background-color: #222222 !important;
 }
 
 .form-control:focus {
@@ -251,7 +287,7 @@ input, button:not(.cross), label, span:not(.cross) {
     z-index: 1;
     position: absolute;
     left: 410px;
-    top: 2px;
+    top: 1px;
     visibility: visible;
     width: 250px;
     text-align: left;
@@ -261,7 +297,7 @@ input, button:not(.cross), label, span:not(.cross) {
     z-index: 1;
     position: absolute;
     left: 705px;
-    top: 2px;
+    top: 1px;
     visibility: visible;
     width: 250px;
     text-align: left;
@@ -271,7 +307,7 @@ input, button:not(.cross), label, span:not(.cross) {
     z-index: 1;
     position: absolute;
     right: 26px;
-    top: 2px;
+    top: 1px;
     visibility: visible;
     width: 100px;
     text-align: right;

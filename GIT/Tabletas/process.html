@@ -26,6 +26,8 @@
 
 		firebase.initializeApp(config);
 
+		var currentLetter = "A";
+
 		var firstsCounter = 0;
 		var databaseFirsts = firebase.database().ref('process/firsts/');
 		databaseFirsts.on('child_added', function (snapshot) {
@@ -236,19 +238,19 @@
 		}
 
 		#dynamic-list-firsts {
-			height: 500px;
+			height: 638px;
 			overflow: hidden;
 			overflow-y: scroll;
 		}
 
 		#dynamic-list-seconds {
-			height: 373px;
+			height: 471px;
 			overflow: hidden;
 			overflow-y: scroll;
 		}
 
 		#dynamic-list-thirds {
-			height: 970px;
+			height: 1208px;
 			overflow: hidden;
 			overflow-y: scroll;
 		}
@@ -314,6 +316,14 @@
 			cursor: none;
 		}
 
+		@keyframes opacityOn {
+			0% { opacity: 1; }
+			25% { opacity: .05; }
+			50% { opacity: 1; }
+			75% { opacity: .05; }
+			100% { opacity: 1; }
+		}
+
 	</style>
 </head>
 
@@ -322,9 +332,40 @@
 	<div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
 		<strong>No hay conexión.</strong> Verifica la conexión a internet.
 	</div>
-	
-	<div class="row" style="margin-top: 4px;">
-		<div class="container-fluid col-sm-9" style="background-color: #111111; padding-left: 1.5%; padding-right: .25%;">
+	<div style="position: absolute; z-index: 2; width: 55px; height: 1210px; right: 5px; top: 92px; font-family: GillSansMTCondensedBold;">
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 18px; padding-top: 10px;" onclick="showThirdABC('0')">
+			<div class="glyphicon glyphicon-asterisk"></div>
+		</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('A')">A</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('B')">B</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('C')">C</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('D')">D</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('E')">E</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('F')">F</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('G')">G</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('H')">H</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('I')">I</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('J')">J</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('K')">K</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('L')">L</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('M')">M</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('N')">N</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('O')">O</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('P')">P</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('Q')">Q</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('R')">R</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('S')">S</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('T')">T</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('U')">U</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('V')">V</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('W')">W</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('X')">X</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('Y')">Y</div>
+		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 22px;" onclick="showThirdABC('Z')">Z</div>
+	</div>
+
+	<div class="row" style="margin-top: 4px; margin-right: 25px;">
+		<div class="container-fluid col-sm-7" style="background-color: #111111; padding-left: 1.5%; padding-right: .25%;">
 			<div class="row" style="height: 52px;"> 
 				<div class="modal-title col-xs-5" style="margin-bottom: 10px; margin-top:.5px; height: 20px;">
 					<h1 class="modal-title" id="firsts-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 51px; text-align: center; background-color: #111111; color: white; border-style: solid; border-width: 2px;">0</h1>
@@ -340,15 +381,15 @@
 			</div>
 			<div class="list-group-item row order-row-title headTitle">
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
-				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">TOTAL</h2>
-				<h2 class="col-xs-2 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">PRODUCTOS</h2>
-				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">ANOTÓ</h2>
-				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">METODO</h2>
+				<h2 class="col-xs-2 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">TOTAL</h2>
+				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">PRODS</h2>
+				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 16px;">ANOTÓ</h2>
+				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 52px;">METODO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOMADO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TIEMPO</h2>
 			</div>
-			<button class="scroll-button" type="button" style="width: 1370px; height: 220px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-firsts', 'up')"></button>			
-			<button class="scroll-button" type="button" style="width: 1370px; height: 220px; left: 10px; top: 370px" onclick="scrollbPressed('dynamic-list-firsts', 'down')"></button>
+			<button class="scroll-button" type="button" style="width: 1200px; height: 270px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-firsts', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 1200px; height: 270px; left: 10px; top: 458px" onclick="scrollbPressed('dynamic-list-firsts', 'down')"></button>
 			<ul id="dynamic-list-firsts" class="list-group" style="display:block; margin-bottom: 12px;"> </ul>
 			
 			<div class="row" style="height: 52px;"> 
@@ -366,32 +407,36 @@
 			<div class="list-group-item row order-row-title headTitle">
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">TOTAL</h2>
-				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">PRODUCTOS</h2>
+				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">PRODS</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">ANOTÓ</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">METODO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOMADO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">ESPERÓ</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">SURTE</h2>
-				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">SURTIENDO</h2>
+				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TIEMPO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
 			</div>
-			<button class="scroll-button" type="button" style="width: 1370px; height: 180px; left: 10px; top: 670px;" onclick="scrollbPressed('dynamic-list-seconds', 'up')"></button>			
-			<button class="scroll-button" type="button" style="width: 1370px; height: 180px; left: 10px; top: 900px" onclick="scrollbPressed('dynamic-list-seconds', 'down')"></button>
+			<button class="scroll-button" type="button" style="width: 1200px; height: 180px; left: 10px; top: 808px;" onclick="scrollbPressed('dynamic-list-seconds', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 1200px; height: 180px; left: 10px; top: 1098px" onclick="scrollbPressed('dynamic-list-seconds', 'down')"></button>
 			<ul id="dynamic-list-seconds" class="list-group" style="display:block;"> </ul>
 		</div>
 		
-		<div class="container-fluid col-sm-3" style="background-color: #111111; height: 1280px; padding-left: .5%; padding-right: 1.6%;">
+		<div class="container-fluid col-sm-5" style="background-color: #111111; height: 1280px; padding-left: .5%; padding-right: 1.6%;">
 			<div class="modal-title" style="margin-bottom: 0%; margin-top: 0px;">
-				<h1 class="modal-title" id="thirds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px; color: white;">0</h1>
+				<h1 class="modal-title" id="thirds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 50px; text-align: center; border-style: solid; border-width: 2px; color: white;">0</h1>
 				<h1 class="modal-title" style="color: white">&nbsp;PEDIDOS POR COBRAR</h1>
 			</div>
-			<div class="list-group-item row order-row-title headTitle" style="padding-bottom: 1px;">
-				<h2 class="col-xs-9 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
-				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
+			<div class="list-group-item row order-row-title headTitle" style="padding-bottom: 1px; padding-top: 2.5px; margin-left: 0px;">
+				<h2 class="col-xs-4 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
+				<h2 class="col-xs-2 client-name" style="padding: 0px; margin: 0px; padding-left: 40px;">ANOTÓ</h2>
+				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 40px;">METODO</h2>
+				<h2 class="col-xs-2 client-name" style="padding: 0px; margin: 0px; padding-left: 60px;">HORA</h2>
+				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 45px;">PRODS</h2>
+				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 50px;">TOTAL</h2>
 			</div>
-			<button class="scroll-button" type="button" style="width: 365px; height: 400px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-thirds', 'up')"></button>			
-			<button class="scroll-button" type="button" style="width: 365px; height: 400px; left: 10px; top: 680px;" onclick="scrollbPressed('dynamic-list-thirds', 'down')"></button>
-			<ul id="dynamic-list-thirds" class="list-group" style="display:block;"> </ul>
+			<button class="scroll-button" type="button" style="width: 750px; height: 500px; left: 70px; top: 80px;" onclick="scrollbPressed('dynamic-list-thirds', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 750px; height: 500px; left: 70px; top: 820px;" onclick="scrollbPressed('dynamic-list-thirds', 'down')"></button>
+			<ul id="dynamic-list-thirds" class="list-group" style="display:block; padding-top: 1px;"> </ul>
 		</div>
 	</div>
 	
@@ -423,6 +468,22 @@
 					scrollbPressed("dynamic-list-firsts", "up");
 					scrollbPressed("dynamic-list-seconds", "up");
 				}
+			}
+		}
+
+		function showThirdABC(letter) {
+			if(letter != "0") {
+				currentLetter = letter;
+				$("#dynamic-list-thirds").children().each(function( index ) {
+					if($(this).children().eq(1).children().eq(1).text().charAt(0) == letter)
+						$(this).css("display", "block");
+					else
+						$(this).css("display", "none");
+				});
+			} else {
+				$("#dynamic-list-thirds").children().each(function( index ) {
+					$(this).css("display", "block");
+				});
 			}
 		}
 
@@ -648,48 +709,45 @@
 			var diffMinutes = Math.trunc((new Date() - orderHour) / 60000);
 			var backgroundColor = "#111111",
                 color = "white";
+			var blinkAnimation = "none";
 			
 			if(!order.ftotal)
 				order.total = order.total + "~";
 			
+			//aqui
 			if(order.ndiversity == "0") {
+				blinkAnimation = "opacityOn 5s normal forwards";
 				order.nproducts = order.nproducts + " &#10003;"
 				//verde oscuro
 				backgroundColor = "rgba(0, 183, 74, 0.8)";
                 color = "white";
 			} else if(order.ndiversity == "1" && !order.haspanela) {
 				if((order.onlyafuera && order.nproducts <= 10) || (!order.onlyafuera && order.nproducts <= 2)) {
+					blinkAnimation = "opacityOn 2.5s normal infinite";
 					order.nproducts = order.nproducts + " &#x21;"
 					//backgroundColor = "#00B74AEE";
                 	//color = "white";
 				}
 			}
 
-			if(order.ordertype == "MOSTRADOR")
-				order.ordertype = "MOST.";
-			else if (order.ordertype == "TELEFONO")
-				order.ordertype = "TEL.";
-			else if (order.ordertype == "WHATSAPP")
-				order.ordertype = "WHA.";
-
 			var returnStatement = 
-				'<li class="list-group-item row order-row" style="background-color: ' + backgroundColor + '; color: ' + color + ';">' +
-					'<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 3px;">' + order.name + '</h2>' +
-					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">$' + order.total + '</h2>' +
-					'<h2 class="col-xs-2 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + order.nproducts + '</h2>' +
-					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">' + order.femployee + '</h2>' +
-					'<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">#'+ order.ncomputer + " " + order.ordertype + '</h2>' +
-					'<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + orderHour.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}) + '</h2>' +
-					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
-						'<h2 class="order-id elapsed-time" style="width: 60px; margin: 0px 0px; float: left; clear: both;">' + diffMinutes + '</h2>' + 						
-						'<div type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px;" onclick="sendToThirds(&quot;' + id + '&quot;)">' +
+				'<li class="list-group-item row order-row" style="background-color: ' + backgroundColor + '; color: ' + color + '; padding-right: 0px; animation: ' + blinkAnimation + ';">' +
+					'<h2 class="col-sm-3 client-name" style="padding: 0px; margin: 0px; padding-left: 3px;">' + order.name + '</h2>' +
+					'<h2 class="col-sm-2 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">$' + order.total + '</h2>' +
+					'<h2 class="col-sm-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + order.nproducts + '</h2>' +
+					'<h2 class="col-sm-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">' + order.femployee + '</h2>' +
+					'<h2 class="col-sm-3 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">#'+ order.ncomputer + " " + order.ordertype + '</h2>' +
+					'<h2 class="col-sm-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + orderHour.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}) + '</h2>' +
+					'<div class="col-sm-1" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
+						'<h2 class="order-id elapsed-time" style="width: 30px; margin: 0px 0px; float: left; clear: both;">' + diffMinutes + '</h2>' + 						
+						'<div type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px; padding-top: 2px;" onclick="sendToThirds(&quot;' + id + '&quot;)">' +
 							'<h4 class="glyphicon glyphicon-remove" style="margin-top: .75px;"></h4>' +
 						'</div>' +
 					'</div>' +
 				'</li>';
 			
 			return returnStatement;
-			//'<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + getEstimatedTime(order.nproducts) + '</h2>' +
+			//'<h2 class="col-sm-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + getEstimatedTime(order.nproducts) + '</h2>' +
 		}
 
 		function sendToThirds(orderid) {
@@ -733,7 +791,7 @@
 				order.ordertype = "WHA.";
 			
 			var returnStatement = 
-				'<li class="list-group-item row order-row" style="background-color: ' + backgroundColor + '; color: ' + color + ';">' +
+				'<li class="list-group-item row order-row" style="background-color: ' + backgroundColor + '; color: ' + color + '; padding-right: 0px;">' +
 					'<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">' + order.name + '</h2>' +
 					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">$' + order.total + '</h2>' +
 					'<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + order.nproducts + '</h2>' +
@@ -744,8 +802,8 @@
 					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">' + order.semployee + '</h2>' +
 					'<h2 class="col-xs-1 order-id seconds-elapsed-time" style="padding: 0px; margin: 0px; padding-left: 5px;">' + diffMinutesSeconds + '</h2>' +
 					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
-						'<h2 class="order-id elapsed-time" style="width: 60px; margin: 0px 0px; float: left; clear: both;">' + diffMinutes + '</h2>' + 						
-						'<div type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px;" onclick="sendToThirds(&quot;' + id + '&quot;)">' +
+						'<h2 class="order-id elapsed-time" style="width: 20px; margin: 0px 0px; float: left; clear: both;">' + diffMinutes + '</h2>' + 						
+						'<div type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px; padding-top: 2px;" onclick="sendToThirds(&quot;' + id + '&quot;)">' +
 							'<h4 class="glyphicon glyphicon-remove" style="margin-top: .75px;"></h4>' +
 						'</div>' +
 					'</div>' +
@@ -777,25 +835,52 @@
 				iconVisibility = "block";
 				tomorrowIcon = "glyphicon-cloud-download";
 			}
+
+			if(order.ordertype == "MOSTRADOR")
+				order.ordertype = "MOST.";
+			else if (order.ordertype == "TELEFONO")
+				order.ordertype = "TEL.";
+			else if (order.ordertype == "WHATSAPP")
+				order.ordertype = "WHA.";
+
+			var date = new Date(parseInt(order.hour));
+			var dateString = date.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true});
+
+			var displayAttr = "none";
+			if(currentLetter == order.name.charAt(0) || currentLetter == "0")
+				displayAttr = "block";
 			
 			var returnStatement = 
-				'<li class="list-group-item row order-row" style="padding-right: 0px; background-color: ' + backgroundColor + '; color: ' + color + ';">' +
-					'<div class="col-xs-7" style="padding: 0px; margin: 0px;">' + 
+				'<li class="list-group-item row order-row" style="padding-right: 0px; padding-left: 0px; background-color: ' + backgroundColor + '; color: ' + color + '; display: ' + displayAttr + ';">' +
+					'<span type="button" class="btn btn-sm" style="float: left; margin: 0px; height: 30px; padding-top: 2px;" onclick="sendToFourths(&quot;' + id + '&quot;)">' +
+						'<h4 class="glyphicon glyphicon-remove" style="margin-top: .75px;"></h4>' +
+					'</span>' + 
+					'<div class="col-xs-4" style="padding: 0px; margin: 0px;">' + 
 						'<h3 class="glyphicon ' + tomorrowIcon + '" style="padding: 0px; margin: 0px; float: left; width:30px; display: ' + iconVisibility + '"></h3>' + 
 						'<h2 class="client-name" style="padding: 0px; margin: 0px; padding-left: 0px; float: left;">' + order.name + '</h2>' + 
 					'</div>' +
-					'<div class="col-xs-5" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
-						'<h2 class="order-id elapsed-time" style="width: 90px; margin: 0px 0px; float: left; clear: both;">' + order.total + '</h2>' +
-						'<span type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px;" onclick="sendToFourths(&quot;' + id + '&quot;)">' +
-							'<h4 class="glyphicon glyphicon-remove" style="margin-top: .75px;"></h4>' +
-						'</span>' + 						
-						'<span type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px;" onclick="getInfoFourths(&quot;' + order.ncomputer + '&quot; , &quot;' + order.hour + '&quot; , &quot;' + order.femployee + '&quot;)">' +
-							'<h4 class="glyphicon glyphicon-time" style="margin-top: .75px;"></h4>' +
-						'</span>' +
+					'<div class="col-xs-2" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
+						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">#' + order.ncomputer + ' ' + order.femployee + '</h2>' +						
+					'</div>' +
+					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
+						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">' + order.ordertype + '</h2>' +						
+					'</div>' +
+					'<div class="col-xs-2" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
+						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both; padding-left: 15px;">' + dateString + '</h2>' +						
+					'</div>' +
+					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
+						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">' + order.nproducts + '</h2>' +						
+					'</div>' +
+					'<div class="col-xs-1" style="padding: 0px; margin: 0px;">' +  
+						'<h2 class="order-id elapsed-time" style="width: 90px; margin: 0px 0px; float: left; clear: both; left: -10px;">$' + order.total + '</h2>' +						
 					'</div>' +
 				'</li>';
 			return returnStatement;
 		}
+
+		//'<span type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px;" onclick="getInfoFourths(&quot;' + order.ncomputer + '&quot; , &quot;' + order.hour + '&quot; , &quot;' + order.femployee + '&quot;)">' +
+		//	'<h4 class="glyphicon glyphicon-time" style="margin-top: .75px;"></h4>' +
+		//'</span>' +
 
 		function getInfoFourths(computer, orderHour, employee) {
 			var date = new Date(parseInt(orderHour));
@@ -862,7 +947,6 @@
 			//("et 20%" + (Math.floor(expectedTime * .34)));
 
 			//coloreada
-			//aqui
 			if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.8)") {
 				if(etField.text() > expectedTime) {
 					orderListItem.css("background-color", "rgba(216, 61, 52, 70%)");
@@ -963,8 +1047,8 @@
 					return parseInt(b.childNodes[6].textContent , 10) - 
 						parseInt(a.childNodes[6].textContent , 10);
 				} else if(ulname == "dynamic-list-thirds") {
-					return a.childNodes[0].textContent > 
-						b.childNodes[0].textContent;
+					return a.childNodes[1].textContent > 
+						b.childNodes[1].textContent;
 				}
 			});
 
