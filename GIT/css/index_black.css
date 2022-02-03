@@ -222,6 +222,14 @@ input, button:not(.cross), label, span:not(.cross) {
     border-color: #555555;
 }
 
+#dynamic-list::-webkit-scrollbar {
+    display: none;
+}
+
+#dynamic-list-2::-webkit-scrollbar {
+    display: none;
+}
+
 #greenCheck {
     color: #5cb85c;
     z-index: 1;
