@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow: hidden; padding-left: 20px;">
 
 <head>
 
@@ -120,11 +120,11 @@
         <ul class="list-group search-options" id="searchOptions"></ul>
 
         <!-- in order products list -->
-        <ul class="list-group" id="dynamic-list" style="margin-left: -5px; margin-right: -10px; margin-bottom: 0px; padding-bottom: 0px; height: 550px; overflow: scroll;"> </ul>
+        <ul class="list-group" id="dynamic-list" style="margin-left: -5px; margin-right: -10px; margin-bottom: 0px; padding-bottom: 0px; height: 620px; overflow: scroll;"> </ul>
 
         <!-- suggested products list -->
         <h3 class="modal-title" style="color: #BABABA; visibility: hidden;" id="sugerenciasLabel">SUGERENCIAS</h3>
-        <ul class="list-group" id="dynamic-list-2" style="margin-left: -5px; padding-right: 4.2px; position: absolute; top: 522px; width: 99%; height: 150px; overflow: scroll; visibility: hidden;"> </ul>
+        <ul class="list-group" id="dynamic-list-2" style="margin-left: -5px; padding-right: 4.2px; position: absolute; top: 522px; width: 99%; height: 220px; overflow: scroll; visibility: hidden;"> </ul>
     </div>
 
     <div id="calculator-div">
@@ -1065,7 +1065,7 @@
         }
 
         function hideSugList() {
-            $('#dynamic-list').css("height", "550px");
+            $('#dynamic-list').css("height", "620px");
             $('#dynamic-list').css("margin-bottom", "0px");
             $('#dynamic-list-2').css("visibility", "hidden");
             $('#sugerenciasLabel').css("visibility", "hidden");
@@ -1108,7 +1108,7 @@
             }
                 
             var productListItem =
-                '<li class="list-group-item row product-row product-total" style= "background-color: ' + backgroundColor + '; color: ' + color + '; border-color: #555555;" data-id="' + product.clave + '" data-date="' + date + '" data-total="' + round($("#quantityInput").val() * product.costo) + '">' +
+                '<li class="list-group-item row product-row product-total" style= "padding-left: 3px; background-color: ' + backgroundColor + '; color: ' + color + '; border-color: #555555;" data-id="' + product.clave + '" data-date="' + date + '" data-total="' + round($("#quantityInput").val() * product.costo) + '">' +
                     '<div class="col-sm-1 product-quantity">' +
                         '<input type="number" min="0" class="form-control" style= "color: ' + color + '; background-color: ' + backgroundColor + '; border-color: #555555; height: 30px; margin-top: 2.5px; padding-top: 1px; padding-bottom: 0px; line-height: 4px;"></input>' +
                     '</div>' +
