@@ -238,7 +238,7 @@ input, button:not(.cross), label, span:not(.cross) {
     color: #5cb85c;
     z-index: 1;
     position: absolute;
-    right: 85px;
+    right: 90px;
     top: 7px;
     visibility: hidden;
 }
@@ -247,7 +247,7 @@ input, button:not(.cross), label, span:not(.cross) {
     color: #5cb85c;
     z-index: 1;
     position: absolute;
-    right: 62px;
+    right: 67px;
     top: 7px;
     visibility: hidden;
 }
@@ -256,7 +256,7 @@ input, button:not(.cross), label, span:not(.cross) {
     color: white;
     z-index: 1;
     position: absolute;
-    right: 59px;
+    right: 64px;
     top: 7px;
     visibility: hidden;
 }
