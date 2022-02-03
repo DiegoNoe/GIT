@@ -160,7 +160,7 @@ input, button:not(.cross), label, span:not(.cross) {
 .first-row {
     height: 56px;
     padding-bottom: 0px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .product-row {
