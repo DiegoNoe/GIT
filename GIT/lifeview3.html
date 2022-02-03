@@ -36,11 +36,19 @@
         }
 
         #dynamic-list {
-            height: 900px;
-            overflow: hidden;
-            overflow-y: scroll;
+            height: 515px;
+            overflow: scroll;
             font-family: GillSansMTCondBold;
             font-size: 40px;
+            margin-bottom: 60px;
+        }
+
+        #dynamic-list-2 {
+            height: 300px;
+            overflow: scroll;
+            font-family: GillSansMTCondBold;
+            font-size: 40px;
+            margin-bottom: 0px;
         }
 
         .product-row {
@@ -65,17 +73,24 @@
         #nameLabel {
             font-family: GillSansMTCondBold;
             font-size: 50px;
+            line-height: 35px;
         }
 
         #pleaseLabel {
             font-family: GillSansMTCondBold;
             font-size: 30px;
-            margin-bottom: 3%;
+            margin-bottom: 1%;
+        }
+
+        #sugLabel {
+            font-family: GillSansMTCondBold;
+            font-size: 30px;
+            color: white;
         }
 
         #totalTitleLabel {
             position: fixed;
-            bottom: 5%;
+            bottom: 35%;
             right: 5%;
             font-family: GillSansMTCondBold;
             font-size: 50px;
@@ -151,16 +166,18 @@
 <body>
     <h1 id="thankyouMessage"></h1>
     <h1 id="welcomeMessage" style="background-color: #111111; color: white;">
-        <img src="logo_fondo_rojo.png" width="400px" style="position: absolute; top: 100px; padding-left: 25px;" alt="Logo">
-        BIENVENIDO
+        <img src="logo_fondo_rojo.png" width="400px" style="position: absolute; top: 60px; padding-left: 25px;" alt="Logo">
+            BIENVENIDO
     </h1>
     <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
         <strong>No hay conexión.</strong>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid" style="margin-top: 30px;">
         <h2 class="modal-title" id="nameLabel" style="color: white;">BIENVENIDO</h2>
         <h2 class="modal-title" id="pleaseLabel" style="color: white;">POR FAVOR REVISA TU PEDIDO</h2>
-        <ul class="list-group" id="dynamic-list" style="overflow: hidden;"> </ul>
+        <ul class="list-group" id="dynamic-list"> </ul>
+        <h2 class="modal-title" id="sugLabel">SUGERENCIAS</h2>
+        <ul class="list-group" id="dynamic-list-2"> </ul>
         <h2 class="modal-title" id="totalTitleLabel" style="color: white;"></h2>
     </div>
 
@@ -176,6 +193,74 @@
                     $('#nameLabel').text("BIENVENIDO");
                 }
             });
+        }
+
+        //loads suggested order
+        function populateSuggestedOrder()  {
+            firebase.database().ref('liveView3/sorder').on('value', function (snapshot) {
+                if(snapshot.val() != null) {
+                    $('#dynamic-list-2').empty();
+                    showSugList();
+
+                    snapshot.forEach(function (childSnapshot) {                    
+                        var description = childSnapshot.child("descripcion").val();
+                        var notes = childSnapshot.child("notas").val();
+                        var quantity = childSnapshot.child("cantidad").val();
+                        var tipo = childSnapshot.child("tipo").val();                
+                        var quantityAndUnit = quantity + shortenedUnits[childSnapshot.child("unidad").val()];
+                        var cost =  quantity * childSnapshot.child("precio").val();
+                        cost = "" + Math.round(cost * 10) / 10;
+                        
+                        //enhance quantities
+                        if (quantityAndUnit.includes(".500"))
+                            quantityAndUnit = quantityAndUnit.replace(".500", "½");
+                        if (quantityAndUnit.includes(".50"))
+                            quantityAndUnit = quantityAndUnit.replace(".50", "½");
+                        if (quantityAndUnit.includes(".5"))
+                            quantityAndUnit = quantityAndUnit.replace(".5", "½");
+    
+                        if (quantityAndUnit.includes(".250"))
+                            quantityAndUnit = quantityAndUnit.replace(".250", "¼");
+                        if (quantityAndUnit.includes(".25"))
+                            quantityAndUnit = quantityAndUnit.replace(".25", "¼");
+    
+                        if(notes == "") {
+                            var productListItem =
+                                '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: gray; border-color: #404040;" data-id="' + childSnapshot.key + '"">' +
+                                    '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
+                                    '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '</h2>' +
+                                    '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left: 20px; margin: 0px;">' + cost + '</h2>' +
+                                '</li>';
+                        } else {
+                            var productListItem =
+                                '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: gray; border-color: #404040;" data-id="' + childSnapshot.key + '"">' +
+                                    '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
+                                    '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '<br>' + notes + '</h2>' +
+                                    '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left:20px; margin: 0px;">' + cost + '</h2>' +
+                                '</li>';
+                        }
+                        //Add list element
+                        $('#dynamic-list-2').append(productListItem);
+                    });
+                } else {
+                    $('#dynamic-list-2').empty();
+                    hideSugList();
+                } 
+            });
+        }
+
+        function hideSugList() {
+            $('#dynamic-list').css("height", "830px");
+            $('#totalTitleLabel').css("bottom", "5%");
+            $('#dynamic-list-2').hide();
+            $('#sugLabel').hide();
+        }
+        
+        function showSugList() {
+            $('#dynamic-list').css("height", "515px");
+            $('#totalTitleLabel').css("bottom", "35%");
+            $('#dynamic-list-2').show();
+            $('#sugLabel').show();
         }
 
         //loads orders and remains listening
@@ -198,16 +283,9 @@
                         var cost = "";
                     } else {
                         var quantityAndUnit = quantity + shortenedUnits[childSnapshot.child("unidad").val()];
-
-                        if (description == "CAJA DE HUEVO")
-                            var cost = quantity * childSnapshot.child("precio").val() * 24;
-                        else if (description == "1/2 CAJA DE HUEVO ")
-                            var cost = quantity * childSnapshot.child("precio").val() * 12;
-                        else if (description == "QUESO PANELA IMPERIAL")
-                            var cost = quantity * childSnapshot.child("precio").val() * .6;    
-                        else if (quantity < 0)
+                        if (quantity < 0) 
                             var cost = quantity * childSnapshot.child("precio").val() * (-1);
-                        else
+                        else 
                             var cost =  quantity * childSnapshot.child("precio").val();
 
                         total += cost;
@@ -322,6 +400,7 @@
         //MAIN
         populateName();
         populateOrder();
+        populateSuggestedOrder();
         checkConnection();
         checkDoneOrder();
         reloadOnUpdate();

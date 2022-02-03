@@ -716,7 +716,7 @@
 			
 			//aqui
 			if(order.ndiversity == "0") {
-				blinkAnimation = "opacityOn 5s normal forwards";
+				blinkAnimation = "opacityOn 2.5s normal infinite";
 				order.nproducts = order.nproducts + " &#10003;"
 				//verde oscuro
 				backgroundColor = "rgba(0, 183, 74, 0.8)";
@@ -725,8 +725,8 @@
 				if((order.onlyafuera && order.nproducts <= 10) || (!order.onlyafuera && order.nproducts <= 2)) {
 					blinkAnimation = "opacityOn 2.5s normal infinite";
 					order.nproducts = order.nproducts + " &#x21;"
-					//backgroundColor = "#00B74AEE";
-                	//color = "white";
+					backgroundColor = "#00B74AEE";
+                	color = "white";
 				}
 			}
 
