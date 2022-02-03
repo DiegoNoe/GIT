@@ -222,6 +222,10 @@ input, button:not(.cross), label, span:not(.cross) {
     border-color: #555555;
 }
 
+#searchOptions::-webkit-scrollbar {
+    display: none;
+}
+
 #dynamic-list::-webkit-scrollbar {
     display: none;
 }

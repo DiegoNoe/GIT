@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="overflow: hidden; padding-left: 20px;">
+<html lang="en" style="overflow: hidden;">
 
 <head>
 
@@ -120,7 +120,7 @@
         <ul class="list-group search-options" id="searchOptions"></ul>
 
         <!-- in order products list -->
-        <ul class="list-group" id="dynamic-list" style="margin-left: -5px; margin-right: -10px; margin-bottom: 0px; padding-bottom: 0px; height: 620px; overflow: scroll;"> </ul>
+        <ul class="list-group" id="dynamic-list" style="margin-left: -5px; margin-right: -10px; margin-bottom: 0px; padding-bottom: 0px; height: 550px; overflow: scroll;"> </ul>
 
         <!-- suggested products list -->
         <h3 class="modal-title" style="color: #BABABA; visibility: hidden;" id="sugerenciasLabel">SUGERENCIAS</h3>
@@ -1065,7 +1065,7 @@
         }
 
         function hideSugList() {
-            $('#dynamic-list').css("height", "620px");
+            $('#dynamic-list').css("height", "550px");
             $('#dynamic-list').css("margin-bottom", "0px");
             $('#dynamic-list-2').css("visibility", "hidden");
             $('#sugerenciasLabel').css("visibility", "hidden");
