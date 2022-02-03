@@ -230,6 +230,10 @@ input, button:not(.cross), label, span:not(.cross) {
     display: none;
 }
 
+#clientOptions::-webkit-scrollbar {
+    display: none;
+}
+
 #greenCheck {
     color: #5cb85c;
     z-index: 1;
