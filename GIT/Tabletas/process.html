@@ -332,7 +332,7 @@
 	<div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
 		<strong>No hay conexión.</strong> Verifica la conexión a internet.
 	</div>
-	<div style="position: absolute; z-index: 2; width: 55px; height: 1205px; right: 5px; top: 92px; font-family: GillSansMTCondensedBold;">
+	<div style="position: absolute; z-index: 2; width: 55px; height: 90%; right: 5px; top: 92px; font-family: GillSansMTCondensedBold;">
 		<div type="button" class="btn btn-sm" style="background-color: #111111; width: 55px; color: white; height: 3.7%; font-size: 18px; padding-top: 10px;" onclick="showThirdABC('0')">
 			<div class="glyphicon glyphicon-asterisk"></div>
 		</div>
@@ -385,19 +385,19 @@
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">PRODS</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 16px;">ANOTÓ</h2>
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 52px;">METODO</h2>
-				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOMADO</h2>
-				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TIEMPO</h2>
+				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 10px;">TOMADO</h2>
+				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 15px;">TIEMPO</h2>
 			</div>
-			<button class="scroll-button" type="button" style="width: 1200px; height: 270px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-firsts', 'up')"></button>			
-			<button class="scroll-button" type="button" style="width: 1200px; height: 270px; left: 10px; top: 458px" onclick="scrollbPressed('dynamic-list-firsts', 'down')"></button>
+			<button class="scroll-button" type="button" style="width: 90%; height: 270px; left: 10px; top: 80px;" onclick="scrollbPressed('dynamic-list-firsts', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 90%; height: 270px; left: 10px; top: 458px" onclick="scrollbPressed('dynamic-list-firsts', 'down')"></button>
 			<ul id="dynamic-list-firsts" class="list-group" style="display:block; margin-bottom: 12px;"> </ul>
 			
 			<div class="row" style="height: 52px;"> 
 				<div class="modal-title col-xs-4" style="margin-bottom:0%; margin-top:0px; height: 20px;">
 					<h1 class="modal-title" id="seconds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px; color: white">0</h1>
-					<h1 class="modal-title" style="color: white">&nbsp;PEDIDOS SURTIENDO</h1>
+					<h1 class="modal-title" style="color: white; width: 400px;">&nbsp;PEDIDOS SURTIENDO</h1>
 				</div>
-				<div class="modal-title col-xs-5" style="margin-bottom: 0px; margin-top:0px; height: 20px; padding-left: 60px;">
+				<div class="modal-title col-xs-5" style="margin-bottom: 0px; margin-top:0px; height: 20px; padding-left: 60px; display: none;">
 					<h1 class="modal-title" id="s-waiting-times-label" style="color: white"></h1>
 				</div>
 				<div class="modal-title col-xs-3" style="margin-bottom:0%; margin-top:0px;">
@@ -416,8 +416,8 @@
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TIEMPO</h2>
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">TOTAL</h2>
 			</div>
-			<button class="scroll-button" type="button" style="width: 1200px; height: 180px; left: 10px; top: 808px;" onclick="scrollbPressed('dynamic-list-seconds', 'up')"></button>			
-			<button class="scroll-button" type="button" style="width: 1200px; height: 180px; left: 10px; top: 1098px" onclick="scrollbPressed('dynamic-list-seconds', 'down')"></button>
+			<button class="scroll-button" type="button" style="width: 90%; height: 180px; left: 10px; top: 808px;" onclick="scrollbPressed('dynamic-list-seconds', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 90%; height: 180px; left: 10px; top: 1098px" onclick="scrollbPressed('dynamic-list-seconds', 'down')"></button>
 			<ul id="dynamic-list-seconds" class="list-group" style="display:block;"> </ul>
 		</div>
 		
@@ -434,8 +434,8 @@
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 45px;">PRODS</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 50px;">TOTAL</h2>
 			</div>
-			<button class="scroll-button" type="button" style="width: 750px; height: 500px; left: 70px; top: 80px;" onclick="scrollbPressed('dynamic-list-thirds', 'up')"></button>			
-			<button class="scroll-button" type="button" style="width: 750px; height: 500px; left: 70px; top: 820px;" onclick="scrollbPressed('dynamic-list-thirds', 'down')"></button>
+			<button class="scroll-button" type="button" style="width: 80%; height: 500px; left: 70px; top: 80px;" onclick="scrollbPressed('dynamic-list-thirds', 'up')"></button>			
+			<button class="scroll-button" type="button" style="width: 80%; height: 500px; left: 70px; top: 820px;" onclick="scrollbPressed('dynamic-list-thirds', 'down')"></button>
 			<ul id="dynamic-list-thirds" class="list-group" style="display:block; padding-top: 1px;"> </ul>
 		</div>
 	</div>
@@ -737,7 +737,7 @@
 					'<h2 class="col-sm-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + order.nproducts + '</h2>' +
 					'<h2 class="col-sm-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">' + order.femployee + '</h2>' +
 					'<h2 class="col-sm-3 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">#'+ order.ncomputer + " " + order.ordertype + '</h2>' +
-					'<h2 class="col-sm-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + orderHour.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}) + '</h2>' +
+					'<h2 class="col-sm-1 order-id" style="padding: 0px; margin: 0px; padding-left: 0px;">' + orderHour.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}) + '</h2>' +
 					'<div class="col-sm-1" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
 						'<h2 class="order-id elapsed-time" style="width: 30px; margin: 0px 0px; float: left; clear: both;">' + diffMinutes + '</h2>' + 						
 						'<div type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px; padding-top: 2px;" onclick="sendToThirds(&quot;' + id + '&quot;)">' +
