@@ -282,6 +282,10 @@ input, button:not(.cross), label, span:not(.cross) {
     background-color: #222222 !important;
 }
 
+.search-options-item:focus {
+    background-color: #222222 !important;
+}
+
 .form-control:focus {
     border-color: rgb(239, 154, 154);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
