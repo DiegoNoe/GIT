@@ -732,7 +732,7 @@
                 $("#greenCheck").css("visibility", "visible");
                 if(number.charAt(0) != "0")
                     $("#greenCheckW").css("visibility", "visible");
-                else if(client.noquiere) 
+                else if(localNoquiere) 
                     $("#greenCheckWN").css("visibility", "visible");
                 $('#addClientModal').modal('toggle');
                 updateName($("#inputName").val());

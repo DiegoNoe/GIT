@@ -434,12 +434,12 @@
 						var sigmaEmployee = true;
 						pronunciations[i] = pronunciations[i].substring(1, pronunciations[i].length);
 					}
-
+					//aqui
 					var employeeListItem =
-					'<ul class="list-group-item row employee-row">' +
-						'<h2 class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 5px;">' + name + '</h2>' +
-						'<button type="button" class="col-xs-4 btn btn-secondary break-button first-break" style="background-color:#689f38;" onclick="manageFirstBreak(event)" data-name="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
-						'<button type="button" class="col-xs-4 btn btn-secondary break-button second-break" style="background-color:#689f38;" onclick="manageSecondBreak(event)" data-name="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
+					'<ul class="list-group-item row employee-row" style="padding: 5px 5px;">' + 
+						'<button class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 5px; background-color: transparent; border-width : 0; text-align: left;" onclick="speakName(&quot;' + name + '&quot;)">' + name + '</button>' +
+						'<button type="button" class="col-xs-4 btn btn-secondary break-button first-break" style="background-color:#689f38; margin-left: 10px;" onclick="manageFirstBreak(event)" data-name="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
+						'<button type="button" class="col-xs-4 btn btn-secondary break-button second-break" style="background-color:#689f38; margin-left: 0px;" onclick="manageSecondBreak(event)" data-name="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
 					'</ul>';
 												
 					$('#dynamic-list').append(employeeListItem);
@@ -466,15 +466,17 @@
 		function manageFirstBreak(event) {
 			if(event.target.style.backgroundColor == "rgb(104, 159, 56)")
 				startBreak(event.target);
-			else if (event.target.style.backgroundColor == "rgb(229, 57, 53)")
-				speakName(event.target.getAttribute("data-name"));
+			else if (event.target.style.backgroundColor == "rgb(253, 151, 66)")
+				event.target.style.backgroundColor = "rgb(229, 57, 53)";
+			//speakName(event.target.getAttribute("data-name"));
 		}
 		
 		function manageSecondBreak(event) {
-			if(event.target.previousSibling.style.backgroundColor == "rgb(229, 57, 53)" && event.target.style.backgroundColor == "rgb(104, 159, 56)")
+			if((event.target.previousSibling.style.backgroundColor == "rgb(229, 57, 53)" || event.target.previousSibling.style.backgroundColor == "rgb(253, 151, 66)") && event.target.style.backgroundColor == "rgb(104, 159, 56)")
 				startBreak(event.target);
-			else if (event.target.style.backgroundColor == "rgb(229, 57, 53)")
-				speakName(event.target.getAttribute("data-name"));
+			else if (event.target.style.backgroundColor == "rgb(253, 151, 66)")
+				event.target.style.backgroundColor = "rgb(229, 57, 53)";
+			//speakName(event.target.getAttribute("data-name"));
 		}
 		
 		function startBreak(breakButton) {
@@ -499,16 +501,18 @@
 					employeesOnBreak--;
 					document.getElementById('mediasTitle').innerText = "M: " + employeesOnBreak;
 					speakName(breakButton.getAttribute("data-name"));
-					breakButton.style.backgroundColor = "#e53935";
+					breakButton.style.backgroundColor = "#fd9742";
+					//breakButton.style.backgroundColor = "#e53935";
 					breakButton.style.color = "white";
 					breakButton.innerText = document.getElementById("time").textContent;
-					breakButton.classList.add("pulse");
+					//breakButton.classList.add("pulse");
 					clearInterval(interval);
 				}
 			}, 60 * 1000);
 		} 
 		
 		function speakName(name) {
+			console.log("speakName(" + name + ")");
 			var msg = new SpeechSynthesisUtterance();
 			msg.rate = .80;
 			//msg.lang = "es-US";

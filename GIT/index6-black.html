@@ -45,7 +45,7 @@
             defiantClients = Defiant.getSnapshot(snapshot.val());
         });
 
-        var globalComputer = "liveView6";
+        var globalComputer = "liveView0";
         var globalWaitingOrders,
             globalTPP = [];
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
@@ -732,7 +732,7 @@
                 $("#greenCheck").css("visibility", "visible");
                 if(number.charAt(0) != "0")
                     $("#greenCheckW").css("visibility", "visible");
-                else if(client.noquiere) 
+                else if(localNoquiere) 
                     $("#greenCheckWN").css("visibility", "visible");
                 $('#addClientModal').modal('toggle');
                 updateName($("#inputName").val());
