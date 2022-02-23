@@ -32,7 +32,6 @@
         var database = firebase.database().ref('productos/');
         database.on('value', function (snapshot) {
             products = Defiant.getSnapshot(snapshot.val());
-
             //new field
             //for (const [key, value] of Object.entries(snapshot.val()))
             //    firebase.database().ref('productos/' + `${key}` + '/categoria').set(4);

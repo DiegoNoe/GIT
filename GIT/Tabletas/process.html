@@ -428,9 +428,9 @@
 			</div>
 			<div class="list-group-item row order-row-title headTitle" style="padding-bottom: 1px; padding-top: 2.5px; margin-left: 0px;">
 				<h2 class="col-xs-4 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
+				<h2 class="col-xs-2 client-name" style="padding: 0px; margin: 0px; padding-left: 50px;">HORA</h2>
 				<h2 class="col-xs-2 client-name" style="padding: 0px; margin: 0px; padding-left: 40px;">ANOTÓ</h2>
-				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 40px;">METODO</h2>
-				<h2 class="col-xs-2 client-name" style="padding: 0px; margin: 0px; padding-left: 60px;">HORA</h2>
+				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 25px;">METODO</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 45px;">PRODS</h2>
 				<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 50px;">TOTAL</h2>
 			</div>
@@ -521,6 +521,7 @@
 		}
 
 		function updateSWaitingTime(sWaitingTimes10, spWaitingTimes10, sWaitingTimes30, spWaitingTimes30, sWaitingTimes50, spWaitingTimes50) {
+			console.log("actualizo");
 			var averageTime = ((parseFloat(getAverage(sWaitingTimes10)) + parseFloat(getAverage(sWaitingTimes30)) + parseFloat(getAverage(sWaitingTimes50))) / 3 ).toFixed(1);
 			var averageTimePP = ((parseFloat(getAverage(spWaitingTimes10)) + parseFloat(getAverage(spWaitingTimes30)) + parseFloat(getAverage(spWaitingTimes50))) / 3 ).toFixed(1);
 			
@@ -860,13 +861,13 @@
 						'<h2 class="client-name" style="padding: 0px; margin: 0px; padding-left: 0px; float: left;">' + order.name + '</h2>' + 
 					'</div>' +
 					'<div class="col-xs-2" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
+						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both; padding-left: 15px;">' + dateString + '</h2>' +						
+					'</div>' +
+					'<div class="col-xs-2" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
 						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">#' + order.ncomputer + ' ' + order.femployee + '</h2>' +						
 					'</div>' +
 					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
 						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">' + order.ordertype + '</h2>' +						
-					'</div>' +
-					'<div class="col-xs-2" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
-						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both; padding-left: 15px;">' + dateString + '</h2>' +						
 					'</div>' +
 					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
 						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">' + order.nproducts + '</h2>' +						
