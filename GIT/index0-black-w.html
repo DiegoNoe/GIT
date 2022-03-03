@@ -1398,6 +1398,7 @@
                 var nproducts = 0;
                 var ndiversity = 0;
                 var haspanela = false;
+                var hasChuletaN = false;
                 var onlyafuera = true;
                 var hasBidon = false;
                 for (var i = 0; i < order.length; i++) {
@@ -1448,6 +1449,7 @@
                     doc.text(5.5  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
                     doc.setFont("Gill Sans Std Condensed");
 
+                    //aqui
                     //if product is being supplied by suppliers then draw cirlce
                     if (order[i][5] == "porPesarCamara" || order[i][5] == "yaPesadoCamara") {
                         doc.setPage(pagesQuantity * 2 - 1);
@@ -1471,6 +1473,9 @@
 
                     if(order[i][0] == "ACL20")
                         hasBidon = true;
+
+                    if(order[i][0] == "CHN")
+                        hasChuletaN = true;
 
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
@@ -1658,17 +1663,23 @@
                 }
 
                 //aqui
-                if(ndiversity == "0" || (ndiversity == "1" && !haspanela)) {
-                    if((onlyafuera && nproducts <= 10) || (!onlyafuera && nproducts <= 2)) {
-                        doc.setPage(1);
-                        doc.setFontSize(29);
-                        doc.setFont("Gill Sans MT Condensed Negrita");
-                        doc.text(125 + xOffset, 32.5  + yOffset, ">", "center");
-                        doc.setPage(2);
-                        doc.setFontSize(29);
-                        doc.setFont("Gill Sans MT Condensed Negrita");
-                        doc.text(125 + xOffset, 31.5  + yOffset, ">", "center");
-                    }
+                var justNameFlag = false;
+                if(((ndiversity <= 2 && !hasChuletaN) && orderMethod == "MOSTRADOR") || ((ndiversity == 0 && !hasChuletaN) && orderMethod != "MOSTRADOR")) {
+                    doc.setPage(1);
+                    doc.setFontSize(29);
+                    doc.setFont("Gill Sans MT Condensed Negrita");
+                    doc.text(125 + xOffset, 32.5  + yOffset, ">", "center");
+                    doc.setPage(2);
+                    doc.setFontSize(29);
+                    doc.setFont("Gill Sans MT Condensed Negrita");
+                    doc.text(125 + xOffset, 31.5  + yOffset, ">", "center");
+                    justNameFlag = true;
+
+                    /* OUTDATED
+                    firebase.database().ref('process/justName/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
+                        name: replaceAEIOUN($("#inputName").val().trim())
+                    });
+                    */
                 }
 
                 if($("#sugerenciasLabel").css("visibility") == "visible")
@@ -1697,7 +1708,7 @@
                         hour: Date.now(),
                         nproducts: nproducts,
                         ndiversity: ndiversity,
-                        haspanela: haspanela,
+                        haspanela: hasChuletaN,
                         onlyafuera: onlyafuera,
                         femployee: replaceAEIOUN($("#inputEmployeeName").val()),
                         iftomorrow: iftomorrow,
@@ -1705,6 +1716,7 @@
                         ftotal: calculable,
                         ncomputer: ncomputer,
                         etime: etime,
+                        justName: justNameFlag
                     });
 
                     //whatsapp

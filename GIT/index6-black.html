@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="overflow: hidden;">
+<html lang="en">
 
 <head>
 
@@ -32,7 +32,6 @@
         var database = firebase.database().ref('productos/');
         database.on('value', function (snapshot) {
             products = Defiant.getSnapshot(snapshot.val());
-
             //new field
             //for (const [key, value] of Object.entries(snapshot.val()))
             //    firebase.database().ref('productos/' + `${key}` + '/categoria').set(4);
@@ -45,7 +44,7 @@
             defiantClients = Defiant.getSnapshot(snapshot.val());
         });
 
-        var globalComputer = "liveView0";
+        var globalComputer = "liveView6";
         var globalWaitingOrders,
             globalTPP = [];
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
@@ -120,11 +119,11 @@
         <ul class="list-group search-options" id="searchOptions"></ul>
 
         <!-- in order products list -->
-        <ul class="list-group" id="dynamic-list" style="margin-left: -5px; margin-right: -10px; margin-bottom: 0px; padding-bottom: 0px; height: 550px; overflow: scroll;"> </ul>
+        <ul class="list-group" id="dynamic-list" style="margin-left: -5px; margin-right: -10px; margin-bottom: 0px; padding-bottom: 0px; height: 620px; overflow: scroll;"> </ul>
 
         <!-- suggested products list -->
         <h3 class="modal-title" style="color: #BABABA; visibility: hidden;" id="sugerenciasLabel">SUGERENCIAS</h3>
-        <ul class="list-group" id="dynamic-list-2" style="margin-left: -5px; padding-right: 4.2px; position: absolute; top: 462px; width: 99%; height: 205px; overflow: scroll; visibility: hidden;"> </ul>
+        <ul class="list-group" id="dynamic-list-2" style="margin-left: -5px; padding-right: 4.2px; position: absolute; top: 522px; width: 99%; height: 250px; overflow: scroll; visibility: hidden;"> </ul>
     </div>
 
     <div id="calculator-div">
@@ -134,10 +133,10 @@
             </div>
             <div class="clear btn-danger">C</div>
          
-            <span class="calculator-button" style="margin-top: 27.5px; margin-left: 0;">7</span>
-            <span class="calculator-button" style="margin-top: 27.5px;">8</span>
-            <span class="calculator-button" style="margin-top: 27.5px;">9</span>
-            <span class="calculator-button" style="margin-top: 27.5px; margin-right: 0px;">+</span>
+            <span class="calculator-button" style="margin-top: 22.5px; margin-left: 0;">7</span>
+            <span class="calculator-button" style="margin-top: 22.5px;">8</span>
+            <span class="calculator-button" style="margin-top: 22.5px;">9</span>
+            <span class="calculator-button" style="margin-top: 22.5px; margin-right: 0px;">+</span>
          
             <span class="calculator-button" style="margin-left: 0px;">4</span>
             <span class="calculator-button">5</span>
@@ -732,7 +731,7 @@
                 $("#greenCheck").css("visibility", "visible");
                 if(number.charAt(0) != "0")
                     $("#greenCheckW").css("visibility", "visible");
-                else if(localNoquiere) 
+                else if(client.noquiere) 
                     $("#greenCheckWN").css("visibility", "visible");
                 $('#addClientModal').modal('toggle');
                 updateName($("#inputName").val());
@@ -1065,14 +1064,14 @@
         }
 
         function hideSugList() {
-            $('#dynamic-list').css("height", "550px");
+            $('#dynamic-list').css("height", "620px");
             $('#dynamic-list').css("margin-bottom", "0px");
             $('#dynamic-list-2').css("visibility", "hidden");
             $('#sugerenciasLabel').css("visibility", "hidden");
         }
         
         function showSugList() {
-            $('#dynamic-list').css("height", "300px");
+            $('#dynamic-list').css("height", "360px");
             $('#dynamic-list').css("margin-bottom", "8px");
             $('#dynamic-list-2').css("visibility", "visible");
             $('#sugerenciasLabel').css("visibility", "visible");
@@ -1108,7 +1107,7 @@
             }
                 
             var productListItem =
-                '<li class="list-group-item row product-row product-total" style= "padding-left: 3px; background-color: ' + backgroundColor + '; color: ' + color + '; border-color: #555555;" data-id="' + product.clave + '" data-date="' + date + '" data-total="' + round($("#quantityInput").val() * product.costo) + '">' +
+                '<li class="list-group-item row product-row product-total" style= "background-color: ' + backgroundColor + '; color: ' + color + '; border-color: #555555;" data-id="' + product.clave + '" data-date="' + date + '" data-total="' + round($("#quantityInput").val() * product.costo) + '">' +
                     '<div class="col-sm-1 product-quantity">' +
                         '<input type="number" min="0" class="form-control" style= "color: ' + color + '; background-color: ' + backgroundColor + '; border-color: #555555; height: 30px; margin-top: 2.5px; padding-top: 1px; padding-bottom: 0px; line-height: 4px;"></input>' +
                     '</div>' +
@@ -1159,7 +1158,7 @@
                 updateTotal();
                 updateWT();
                 if (e.keyCode == 13)
-                    $(this).parent().nextAll().eq(3).children().focus();
+                    $(this).parent().nextAll().eq(2).children().focus();
             });
 
             //inputNotes enter sequence with shortcuts (to outter quantity)
@@ -1399,6 +1398,7 @@
                 var nproducts = 0;
                 var ndiversity = 0;
                 var haspanela = false;
+                var hasChuletaN = false;
                 var onlyafuera = true;
                 var hasBidon = false;
                 for (var i = 0; i < order.length; i++) {
@@ -1449,6 +1449,7 @@
                     doc.text(5.5  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
                     doc.setFont("Gill Sans Std Condensed");
 
+                    //aqui
                     //if product is being supplied by suppliers then draw cirlce
                     if (order[i][5] == "porPesarCamara" || order[i][5] == "yaPesadoCamara") {
                         doc.setPage(pagesQuantity * 2 - 1);
@@ -1472,6 +1473,9 @@
 
                     if(order[i][0] == "ACL20")
                         hasBidon = true;
+
+                    if(order[i][0] == "CHN")
+                        hasChuletaN = true;
 
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
@@ -1578,10 +1582,10 @@
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(68.5 + xOffset, 184  + yOffset, "RECUERDA TRAER TUS ENVASES VACIOS DE ACEITE", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "SON $10 PESOS DE IMPORTE", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "SON $10 PESOS DE IMPROTE", "center");
                         doc.setPage(pagesQuantity * 2);
                         doc.text(68.5 + xOffset, 184  + yOffset, "RECUERDA TRAER TUS ENVASES VACIOS DE ACEITE", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "SON $10 PESOS DE IMPORTE", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "SON $10 PESOS DE IMPROTE", "center");
                     }
                 }else if(orderMethod == "MOSTRADOR") {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
@@ -1589,11 +1593,11 @@
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(68.5 + xOffset, 179  + yOffset, "RECUERDA QUE YA PUEDES HACER TU PEDIDO ANTES DE VENIR", "center");
-                        doc.text(68.5 + xOffset, 184  + yOffset, "POR WHATSAPP: 3317050598 O TELEFONO: 3336713915", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, "POR WHATSAPP: 333317050598 O TELEFONO: 3336713915", "center");
                         doc.text(68.5 + xOffset, 189  + yOffset, "Y PASAS DIRECTO A PAGAR Y RECOGER.", "center");
                         doc.setPage(pagesQuantity * 2);
                         doc.text(68.5 + xOffset, 179  + yOffset, "RECUERDA QUE YA PUEDES HACER TU PEDIDO ANTES DE VENIR", "center");
-                        doc.text(68.5 + xOffset, 184  + yOffset, "POR WHATSAPP: 3317050598 O TELEFONO: 3336713915", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, "POR WHATSAPP: 333317050598 O TELEFONO: 3336713915", "center");
                         doc.text(68.5 + xOffset, 189  + yOffset, "Y PASAS DIRECTO A PAGAR Y RECOGER.", "center");
                     }
                 }
@@ -1659,17 +1663,23 @@
                 }
 
                 //aqui
-                if(ndiversity == "0" || (ndiversity == "1" && !haspanela)) {
-                    if((onlyafuera && nproducts <= 10) || (!onlyafuera && nproducts <= 2)) {
-                        doc.setPage(1);
-                        doc.setFontSize(29);
-                        doc.setFont("Gill Sans MT Condensed Negrita");
-                        doc.text(125 + xOffset, 32.5  + yOffset, ">", "center");
-                        doc.setPage(2);
-                        doc.setFontSize(29);
-                        doc.setFont("Gill Sans MT Condensed Negrita");
-                        doc.text(125 + xOffset, 31.5  + yOffset, ">", "center");
-                    }
+                var justNameFlag = false;
+                if(((ndiversity <= 2 && !hasChuletaN) && orderMethod == "MOSTRADOR") || ((ndiversity == 0 && !hasChuletaN) && orderMethod != "MOSTRADOR")) {
+                    doc.setPage(1);
+                    doc.setFontSize(29);
+                    doc.setFont("Gill Sans MT Condensed Negrita");
+                    doc.text(125 + xOffset, 32.5  + yOffset, ">", "center");
+                    doc.setPage(2);
+                    doc.setFontSize(29);
+                    doc.setFont("Gill Sans MT Condensed Negrita");
+                    doc.text(125 + xOffset, 31.5  + yOffset, ">", "center");
+                    justNameFlag = true;
+
+                    /* OUTDATED
+                    firebase.database().ref('process/justName/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
+                        name: replaceAEIOUN($("#inputName").val().trim())
+                    });
+                    */
                 }
 
                 if($("#sugerenciasLabel").css("visibility") == "visible")
@@ -1698,7 +1708,7 @@
                         hour: Date.now(),
                         nproducts: nproducts,
                         ndiversity: ndiversity,
-                        haspanela: haspanela,
+                        haspanela: hasChuletaN,
                         onlyafuera: onlyafuera,
                         femployee: replaceAEIOUN($("#inputEmployeeName").val()),
                         iftomorrow: iftomorrow,
@@ -1706,6 +1716,7 @@
                         ftotal: calculable,
                         ncomputer: ncomputer,
                         etime: etime,
+                        justName: justNameFlag
                     });
 
                     //whatsapp
