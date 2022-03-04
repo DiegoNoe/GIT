@@ -44,7 +44,7 @@
             defiantClients = Defiant.getSnapshot(snapshot.val());
         });
 
-        var globalComputer = "liveView0";
+        var globalComputer = "liveView1";
         var globalWaitingOrders,
             globalTPP = [];
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
@@ -1996,7 +1996,7 @@
                 doc.text(9 + xOffset, 41.5  + yOffset, "M", "center");
                 doc.setFontSize(12.5);
                 //revisar
-                doc.text(66 + xOffset, 197  + yOffset, "MANANA");
+                doc.text(68 + xOffset, 196.9  + yOffset, "MANANA");
                 doc.setFontSize(12.5);
             }
 
@@ -2011,7 +2011,7 @@
             if ($("#invoiceCheckbox").is(':checked')) {
                 doc.setFontSize(29);
                 doc.setFont("Gill Sans MT Condensed Negrita");
-                doc.text(128 + xOffset, 41.5  + yOffset, "F", "center");
+                doc.text(129 + xOffset, 41.5  + yOffset, "F", "center");
             }
         }
 

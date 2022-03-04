@@ -1668,11 +1668,11 @@
                     doc.setPage(1);
                     doc.setFontSize(29);
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.text(125 + xOffset, 32.5  + yOffset, ">", "center");
+                    doc.text(123 + xOffset, 41.5  + yOffset, ">", "center");
                     doc.setPage(2);
                     doc.setFontSize(29);
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.text(125 + xOffset, 31.5  + yOffset, ">", "center");
+                    doc.text(123 + xOffset, 41.5  + yOffset, ">", "center");
                     justNameFlag = true;
 
                     /* OUTDATED
@@ -1980,10 +1980,10 @@
             var date = new Date();
             var months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
             var fullDate = date.getDate().toString() + " / " + months[date.getMonth()] + " / " + date.getFullYear().toString();
-            doc.text(19.9 + xOffset, 40 + yOffset, fullDate, 'center');
+            doc.text(19.9 + xOffset, 30 + yOffset, fullDate, 'center');
 
             var hourWithMinutes = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-            doc.text(53.5  + xOffset, 40  + yOffset, hourWithMinutes, 'center');
+            doc.text(53.5  + xOffset, 30  + yOffset, hourWithMinutes, 'center');
         }
 
         function addMethodPDF(doc, orderMethod) {
@@ -1993,13 +1993,14 @@
             //special mark if the order is for the next day
             if ($("#tomorrowCheckbox").is(':checked')) {
                 doc.setFontSize(29);
-                doc.text(9 + xOffset, 32.5  + yOffset, "M", "center");
+                doc.text(9 + xOffset, 41.5  + yOffset, "M", "center");
                 doc.setFontSize(12.5);
-                doc.text(63 + xOffset, 195.5  + yOffset, "MANANA");
+                //revisar
+                doc.text(68 + xOffset, 196.9  + yOffset, "MANANA");
                 doc.setFontSize(12.5);
             }
 
-            doc.text(84 + xOffset, 39.6  + yOffset, orderMethod, 'center');
+            doc.text(84 + xOffset, 30  + yOffset, orderMethod, 'center');
 
             //special counter if the order was made by phone
             if(event.srcElement.id == "printByPhoneButton") {
@@ -2010,7 +2011,7 @@
             if ($("#invoiceCheckbox").is(':checked')) {
                 doc.setFontSize(29);
                 doc.setFont("Gill Sans MT Condensed Negrita");
-                doc.text(130 + xOffset, 32.5  + yOffset, "F", "center");
+                doc.text(129 + xOffset, 41.5  + yOffset, "F", "center");
             }
         }
 
@@ -2020,7 +2021,7 @@
 
             doc.setFontSize(29);
             doc.setFont("Gill Sans MT Condensed Negrita");
-            doc.text(68.5 + xOffset, 32.5  + yOffset, replaceAEIOUN(name), "center");
+            doc.text(68.5 + xOffset, 41.5  + yOffset, replaceAEIOUN(name), "center");
 
             doc.setFontSize(12.5);
             doc.setFont("Gill Sans MT Condensed Negrita");
