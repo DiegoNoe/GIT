@@ -1980,10 +1980,10 @@
             var date = new Date();
             var months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
             var fullDate = date.getDate().toString() + " / " + months[date.getMonth()] + " / " + date.getFullYear().toString();
-            doc.text(19.9 + xOffset, 30 + yOffset, fullDate, 'center');
+            doc.text(19.9 + xOffset, 29 + yOffset, fullDate, 'center');
 
             var hourWithMinutes = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-            doc.text(53.5  + xOffset, 30  + yOffset, hourWithMinutes, 'center');
+            doc.text(53.5  + xOffset, 29  + yOffset, hourWithMinutes, 'center');
         }
 
         function addMethodPDF(doc, orderMethod) {
@@ -2000,7 +2000,7 @@
                 doc.setFontSize(12.5);
             }
 
-            doc.text(84 + xOffset, 30  + yOffset, orderMethod, 'center');
+            doc.text(84 + xOffset, 29  + yOffset, orderMethod, 'center');
 
             //special counter if the order was made by phone
             if(event.srcElement.id == "printByPhoneButton") {
