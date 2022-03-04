@@ -44,7 +44,7 @@
             defiantClients = Defiant.getSnapshot(snapshot.val());
         });
 
-        var globalComputer = "liveView1";
+        var globalComputer = "liveView0";
         var globalWaitingOrders,
             globalTPP = [];
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
@@ -1668,11 +1668,11 @@
                     doc.setPage(1);
                     doc.setFontSize(29);
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.text(125 + xOffset, 41.5  + yOffset, ">", "center");
+                    doc.text(123 + xOffset, 41.5  + yOffset, ">", "center");
                     doc.setPage(2);
                     doc.setFontSize(29);
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.text(125 + xOffset, 41.5  + yOffset, ">", "center");
+                    doc.text(123 + xOffset, 41.5  + yOffset, ">", "center");
                     justNameFlag = true;
 
                     /* OUTDATED
@@ -1996,7 +1996,7 @@
                 doc.text(9 + xOffset, 41.5  + yOffset, "M", "center");
                 doc.setFontSize(12.5);
                 //revisar
-                doc.text(63 + xOffset, 195.5  + yOffset, "MANANA");
+                doc.text(66 + xOffset, 197  + yOffset, "MANANA");
                 doc.setFontSize(12.5);
             }
 
@@ -2011,7 +2011,7 @@
             if ($("#invoiceCheckbox").is(':checked')) {
                 doc.setFontSize(29);
                 doc.setFont("Gill Sans MT Condensed Negrita");
-                doc.text(130 + xOffset, 41.5  + yOffset, "F", "center");
+                doc.text(128 + xOffset, 41.5  + yOffset, "F", "center");
             }
         }
 
