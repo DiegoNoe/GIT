@@ -1720,6 +1720,7 @@
                     });
 
                     //whatsapp
+                    uploadSuggestedOrder(clientNumber, sOrderProducts, total);
                     if(clientNumber != "" && clientNumber.charAt(0) != "0") {
                         firebase.database().ref('process/whatsapp/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
                             name: clientName,
@@ -1730,7 +1731,6 @@
                             etime: etime,
                             stage: 0
                         });
-                        uploadSuggestedOrder(clientNumber, sOrderProducts, total);
                     }
                     
                     //survey values

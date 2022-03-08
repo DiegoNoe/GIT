@@ -1135,6 +1135,7 @@
 				firebase.database().ref('process/thirds').remove();
 				firebase.database().ref('process/fourths').remove();
 				firebase.database().ref('process/timing').remove();
+				firebase.database().ref('process/whatsapp').remove();
 
 				firebase.database().ref('employees').once("value", function(snapshot) { 
 					if(snapshot.val()) {
