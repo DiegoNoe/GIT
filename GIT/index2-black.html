@@ -1158,7 +1158,7 @@
                 updateTotal();
                 updateWT();
                 if (e.keyCode == 13)
-                    $(this).parent().nextAll().eq(2).children().focus();
+                    $(this).parent().nextAll().eq(3).children().focus();
             });
 
             //inputNotes enter sequence with shortcuts (to outter quantity)
@@ -1188,7 +1188,7 @@
             });
 
             //upload or update order item
-            uploadOrderProduct(date, outterQuantity, product.unidad, product.descripcion, "", product.costo, product.existencia, product.tipo);
+            uploadOrderProduct(date, outterQuantity, product.unidad, product.descripcion, "", product.costo, product.existencia, product.tipo, product.clave);
             inputQuantity.focusout(function () {updateOrderProductQuantity(date, inputQuantity.val())});
             inputNotes.focusout(function () {updateOrderProductNotes(date, inputNotes.val())});
 
@@ -1770,19 +1770,6 @@
             });
         }
 
-        //uploads or updates an order product
-        function uploadOrderProduct(date, quantity, unit, description, notes, price, stock, type) {
-            firebase.database().ref(globalComputer + '/order/' + date).set({
-                cantidad: quantity,
-                unidad: unit,
-                descripcion: description,
-                notas: notes,
-                precio: price,
-                existencia: stock,
-                tipo: type
-            });
-        }
-
         function formatSuggestedOrder(sorder) {
             var sorder = Object.fromEntries(
                 Object.entries(sorder).sort(function(a, b) {
@@ -2079,7 +2066,7 @@
         }
 
         //uploads or updates an order product
-        function uploadOrderProduct(date, quantity, unit, description, notes, price, stock, type) {
+        function uploadOrderProduct(date, quantity, unit, description, notes, price, stock, type, id) {
             firebase.database().ref(globalComputer + '/order/' + date).set({
                 cantidad: quantity,
                 unidad: unit,
@@ -2087,7 +2074,8 @@
                 notas: notes,
                 precio: price,
                 existencia: stock,
-                tipo: type
+                tipo: type,
+                clave: id
             });
         }
 

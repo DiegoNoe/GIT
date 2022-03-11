@@ -44,7 +44,7 @@
         }
 
         #dynamic-list-2 {
-            height: 300px;
+            height: 540px;
             overflow: scroll;
             font-family: GillSansMTCondBold;
             font-size: 40px;
@@ -226,14 +226,14 @@
     
                         if(notes == "") {
                             var productListItem =
-                                '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: gray; border-color: #404040;" data-id="' + childSnapshot.key + '"">' +
+                                '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: lightgrey; border-color: #404040;" data-id="' + childSnapshot.key + '"">' +
                                     '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
                                     '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '</h2>' +
                                     '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left: 20px; margin: 0px;">' + cost + '</h2>' +
                                 '</li>';
                         } else {
                             var productListItem =
-                                '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: gray; border-color: #404040;" data-id="' + childSnapshot.key + '"">' +
+                                '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: lightgrey; border-color: #404040;" data-id="' + childSnapshot.key + '"">' +
                                     '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
                                     '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '<br>' + notes + '</h2>' +
                                     '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left:20px; margin: 0px;">' + cost + '</h2>' +
@@ -249,6 +249,13 @@
             });
         }
 
+        function deleteSuggestedProduct(id) {
+            console.log("borro " + id);
+            $("#dynamic-list-2").find("[data-id='" + id + "']").remove();
+            if($("#dynamic-list-2").children().length == 0)
+                hideSugList();
+        }
+
         function hideSugList() {
             $('#dynamic-list').css("height", "830px");
             $('#totalTitleLabel').css("bottom", "5%");
@@ -258,7 +265,7 @@
         
         function showSugList() {
             $('#dynamic-list').css("height", "515px");
-            $('#totalTitleLabel').css("bottom", "35%");
+            $('#totalTitleLabel').css("bottom", "45%");
             $('#dynamic-list-2').show();
             $('#sugLabel').show();
         }
@@ -323,8 +330,11 @@
                                 '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left:20px; margin: 0px;">' + cost + '</h2>' +
                             '</li>';
                     }
-                    //Add list element
+                    //add list element
                     $('#dynamic-list').append(productListItem);
+
+                    //remove sug list element
+                    deleteSuggestedProduct(childSnapshot.child("clave").val());
                 });
 
                 if(snapshot.numChildren() == 0)
@@ -359,9 +369,9 @@
                             var minutesMessage = snapshotWT.val();
                            
                             if(minutesMessage != "-")
-                                $("#thankyouMessage").html("GRACIAS POR TU VISITA<br>" + globalName + "<br><br><br><br>" + totalMessage + "<br><br>TIEMPO ESTIMADO:<br>" + minutesMessage + " MINUTOS");
+                                $("#thankyouMessage").html("GRACIAS<br>" + globalName + "<br><br><br><br>" + totalMessage + "<br><br><br>TIEMPO ESTIMADO:<br>" + minutesMessage + " MINUTOS");
                             else
-                                $("#thankyouMessage").html("GRACIAS POR TU VISITA<br>" + globalName + "<br><br><br><br>" + totalMessage);
+                                $("#thankyouMessage").html("GRACIAS<br>" + globalName + "<br><br><br><br>" + totalMessage);
 
                             $("#thankyouMessage").show();
                             firebase.database().ref('liveView1').remove();
