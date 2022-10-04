@@ -1575,7 +1575,6 @@
                     currentLine++;
                 }
                 
-                console.log(hasBidon + " has bidon");
                 if(hasBidon) {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
                         doc.setFontSize(12.5);
@@ -1697,7 +1696,8 @@
                 //autoprints PDF in a new tab
                 doc.autoPrint();
 
-                if(window.open(doc.output('bloburl'), '_blank') != null) {  
+                if(window.open(doc.output('bloburl'), '_blank') != null) { 
+                    console.log("imprimi"); 
                     var ncomputer = globalComputer.slice(-1);
                     var etime = calculateWTime(Math.ceil(nproducts));
                     
@@ -1737,7 +1737,9 @@
                     //increaseEmployeeCounter($("#inputEmployeeName").val());
                     //uploadSurvey(surveyValues);
                     
+                    console.log("voy borrar orden");
                     eraseOrder();
+                    console.log("ya borré orden");
                     
                     firebase.database().ref(globalComputer + '/wtime').set(etime);
                     finishOrderProducts(true);
