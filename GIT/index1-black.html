@@ -357,6 +357,7 @@
             $("#greenCheck").css("visibility", "hidden");
             $("#greenCheckW").css("visibility", "hidden");
             $("#greenCheckWN").css("visibility", "hidden");
+            //aqui
             firebase.database().ref(globalComputer + '/sorder').remove();
             $("#dynamic-list-2").html("");
             hideSugList();
@@ -575,8 +576,11 @@
 
             $("#dynamic-list-2").html("");
             hideSugList();
+            
+            /* FIX efficiency
             populateSuggestedOrder(client.numero);
             populateSuggestedOrderLV(client.numero);
+            */
             updateName($("#inputName").val());
         }
 
@@ -1575,7 +1579,6 @@
                     currentLine++;
                 }
                 
-                console.log(hasBidon + " has bidon");
                 if(hasBidon) {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
                         doc.setFontSize(12.5);
@@ -1682,9 +1685,11 @@
                     */
                 }
 
+                /* FIX efficiency
                 if($("#sugerenciasLabel").css("visibility") == "visible")
                     uploadSugReasons(clientName, clientNumber);
-                
+                */
+
                 //set pending products id (the one embeded in the qr code)
                 if(withPendingProducts)
                     firebase.database().ref('pendingOrders/' + orderRefID + '/id').set(productsRefID);
@@ -1697,7 +1702,8 @@
                 //autoprints PDF in a new tab
                 doc.autoPrint();
 
-                if(window.open(doc.output('bloburl'), '_blank') != null) {  
+                if(window.open(doc.output('bloburl'), '_blank') != null) { 
+                    console.log("imprimi"); 
                     var ncomputer = globalComputer.slice(-1);
                     var etime = calculateWTime(Math.ceil(nproducts));
                     
@@ -1718,7 +1724,8 @@
                         etime: etime,
                         justName: justNameFlag
                     });
-
+                    
+                    /* FIX efficiency
                     //whatsapp
                     uploadSuggestedOrder(clientNumber, sOrderProducts, total);
                     if(clientNumber != "" && clientNumber.charAt(0) != "0") {
@@ -1732,6 +1739,7 @@
                             stage: 0
                         });
                     }
+                    */
                     
                     //survey values
                     //increaseEmployeeCounter($("#inputEmployeeName").val());
@@ -1739,7 +1747,9 @@
                     
                     eraseOrder();
                     
+                    /* FIX efficiency
                     firebase.database().ref(globalComputer + '/wtime').set(etime);
+                    */
                     finishOrderProducts(true);
                 }
             }
@@ -1992,7 +2002,8 @@
             //special counter if the order was made by phone
             if(event.srcElement.id == "printByPhoneButton") {
                 //increaseEmployeeCounterPhone($("#inputEmployeeName").val());
-                firebase.database().ref(globalComputer + '/phoneOrder').set(true);
+                //FIX efficiency
+                //firebase.database().ref(globalComputer + '/phoneOrder').set(true);
             }
 
             if ($("#invoiceCheckbox").is(':checked')) {
