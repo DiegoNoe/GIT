@@ -357,6 +357,7 @@
             $("#greenCheck").css("visibility", "hidden");
             $("#greenCheckW").css("visibility", "hidden");
             $("#greenCheckWN").css("visibility", "hidden");
+            //aqui
             firebase.database().ref(globalComputer + '/sorder').remove();
             $("#dynamic-list-2").html("");
             hideSugList();
@@ -575,8 +576,11 @@
 
             $("#dynamic-list-2").html("");
             hideSugList();
+            
+            /* FIX efficiency
             populateSuggestedOrder(client.numero);
             populateSuggestedOrderLV(client.numero);
+            */
             updateName($("#inputName").val());
         }
 
@@ -1681,9 +1685,11 @@
                     */
                 }
 
+                /* FIX efficiency
                 if($("#sugerenciasLabel").css("visibility") == "visible")
                     uploadSugReasons(clientName, clientNumber);
-                
+                */
+
                 //set pending products id (the one embeded in the qr code)
                 if(withPendingProducts)
                     firebase.database().ref('pendingOrders/' + orderRefID + '/id').set(productsRefID);
@@ -1719,7 +1725,7 @@
                         justName: justNameFlag
                     });
                     
-                    /*
+                    /* FIX efficiency
                     //whatsapp
                     uploadSuggestedOrder(clientNumber, sOrderProducts, total);
                     if(clientNumber != "" && clientNumber.charAt(0) != "0") {
@@ -1739,11 +1745,11 @@
                     //increaseEmployeeCounter($("#inputEmployeeName").val());
                     //uploadSurvey(surveyValues);
                     
-                    console.log("voy borrar orden");
                     eraseOrder();
-                    console.log("ya borré orden");
                     
+                    /* FIX efficiency
                     firebase.database().ref(globalComputer + '/wtime').set(etime);
+                    */
                     finishOrderProducts(true);
                 }
             }
@@ -1996,7 +2002,8 @@
             //special counter if the order was made by phone
             if(event.srcElement.id == "printByPhoneButton") {
                 //increaseEmployeeCounterPhone($("#inputEmployeeName").val());
-                firebase.database().ref(globalComputer + '/phoneOrder').set(true);
+                //FIX efficiency
+                //firebase.database().ref(globalComputer + '/phoneOrder').set(true);
             }
 
             if ($("#invoiceCheckbox").is(':checked')) {
