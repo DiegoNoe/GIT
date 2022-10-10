@@ -1378,6 +1378,8 @@
         }
 
         function generateInvoice() {
+            console.log("generateInvoice");
+
             var order = getOrderProducts();
 
             if ($("#greenCheck").css("visibility") == "hidden") {
@@ -1421,7 +1423,17 @@
                             taxObject.Name = "IVA";
                         taxesArray.push(taxObject);
                         item.Taxes = taxesArray;
-                    }
+                    } else {
+                        var taxesArray = [];
+                        var taxObject = {};
+                        taxObject.Total = round(order[i][7] * order[i][1] * (taxes - 1)) + "";
+                        taxObject.Base = round(order[i][7] * order[i][1]) + "";
+                        taxObject.Rate = round(taxes - 1) + "";
+                        taxObject.IsRetention = false;
+                        taxObject.Name = "IVA";
+                        taxesArray.push(taxObject);
+                        item.Taxes = taxesArray;
+                    } 
 
                     if(order[i][4] != "")
                         order[i][4] = " - " + order[i][4];

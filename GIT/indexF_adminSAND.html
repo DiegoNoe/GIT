@@ -117,6 +117,8 @@
                         <option value="01" selected>EFECTIVO</option>
                         <option value="02">CHEQUE</option>
                         <option value="03">TRANSFE.</option>
+                        <option value="04">T.CREDITO</option>
+                        <option value="28">T.DEBITO</option>
                         <option value="99">P/DEFINIR</option>
 
                     </select>
@@ -135,7 +137,7 @@
             <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-plus-sign"
                 style="float: right; margin-right: 5px; font-weight: bold;"
                 onclick="addProductModal();"></button>            
-            <span id="totalTextField"></span>
+            <span id="totalTextFieldA"></span>
         </div>
 
         <div class="row" style="margin-bottom: 15px">
@@ -819,10 +821,10 @@
 
         function updateTotal() {
             var total = 0;
-            $(".product-total").each(function(index) {
+            $(".product-totalA").each(function(index) {
                 total = total + ($(this).val() * 1);
             });
-            $("#totalTextField").text("$" + round(total));
+            $("#totalTextFieldA").text("$" + round(total));
         }
 
         //adds the item to the list from a saved order
@@ -845,8 +847,8 @@
                 '<div class="col-sm-2 product-notes-container">' +
                 '<input type="input" oninput="this.value = this.value.toUpperCase()" class="form-control product-notes" maxlength="48" placeholder="NOTAS" value="' + product[4] + '"></input>' +
                 '</div>' +
-                '<div class="col-sm-2 product-total-container">' +
-                '<input type="number" class="form-control product-total" placeholder="TOTAL" value=' + round(product[7] * product[1]) + '></input>' +
+                '<div class="col-sm-2 product-totalA-container">' +
+                '<input type="number" class="form-control product-totalA" placeholder="TOTAL" value=' + round(product[7] * product[1]) + '></input>' +
                 '</div>' +
                 '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button cross">' +
                 '<span class="glyphicon glyphicon-remove cross" style="color:grey; padding-top: 3px;"></span>' +
@@ -1223,8 +1225,8 @@
                 '<div class="col-sm-2 product-notes-container">' +
                 '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + ';" class="form-control product-notes" maxlength="48" placeholder="NOTAS"> </input>' +
                 '</div>' +
-                '<div class="col-sm-2 product-total-container">' +
-                '<input type="number" class="form-control product-total" placeholder="TOTAL" value=' + round($("#quantityInput").val() * product.costo) + '></input>' +
+                '<div class="col-sm-2 product-totalA-container">' +
+                '<input type="number" class="form-control product-totalA" placeholder="TOTAL" value=' + round($("#quantityInput").val() * product.costo) + '></input>' +
                 '</div>' +
                 '<button type="button" class="btn btn-default btn-sm col-sm-1 remove-button cross">' +
                 '<span class="glyphicon glyphicon-remove cross" style="color:grey; padding-top: 3px;"></span>' +
@@ -1376,6 +1378,8 @@
         }
 
         function generateInvoice() {
+            console.log("generateInvoice");
+
             var order = getOrderProducts();
 
             if ($("#greenCheck").css("visibility") == "hidden") {
@@ -1419,7 +1423,17 @@
                             taxObject.Name = "IVA";
                         taxesArray.push(taxObject);
                         item.Taxes = taxesArray;
-                    }
+                    } else {
+                        var taxesArray = [];
+                        var taxObject = {};
+                        taxObject.Total = round(order[i][7] * order[i][1] * (taxes - 1)) + "";
+                        taxObject.Base = round(order[i][7] * order[i][1]) + "";
+                        taxObject.Rate = round(taxes - 1) + "";
+                        taxObject.IsRetention = false;
+                        taxObject.Name = "IVA";
+                        taxesArray.push(taxObject);
+                        item.Taxes = taxesArray;
+                    } 
 
                     if(order[i][4] != "")
                         order[i][4] = " - " + order[i][4];
@@ -2097,7 +2111,7 @@
             $("#greenCheck").css("visibility", "hidden");
             document.getElementById('paymentFormSelect').value = "01";
             document.getElementById('paymentMethodSelect').value = "PUE";
-            $("#totalTextField").text("");
+            $("#totalTextFieldA").text("");
             invoiceID = "";
         }
 
