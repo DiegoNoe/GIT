@@ -44,7 +44,7 @@
             defiantClients = Defiant.getSnapshot(snapshot.val());
         });
 
-        var globalComputer = "liveView2";
+        var globalComputer = "liveView7";
         var globalWaitingOrders,
             globalTPP = [];
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
@@ -303,9 +303,11 @@
 
         populateEmployees();
 
+        /*
         if(globalComputer == "liveView1" || globalComputer == "liveView0") {
             hearForCallClient();
         }
+        */
 
         //inputName on enter sequence
         $("#inputName").on('keyup', function (e) {
@@ -1702,7 +1704,6 @@
                 doc.autoPrint();
 
                 if(window.open(doc.output('bloburl'), '_blank') != null) { 
-                    console.log("imprimi"); 
                     var ncomputer = globalComputer.slice(-1);
                     var etime = calculateWTime(Math.ceil(nproducts));
                     
@@ -1746,12 +1747,10 @@
                     //increaseEmployeeCounter($("#inputEmployeeName").val());
                     //uploadSurvey(surveyValues);
                     
+                    finishOrderProducts(true);
                     eraseOrder();
                     
-                    /* ordena
                     firebase.database().ref(globalComputer + '/wtime').set(etime);
-                    */
-                    finishOrderProducts(true);
                 }
             }
         }
