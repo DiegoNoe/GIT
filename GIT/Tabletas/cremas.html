@@ -223,6 +223,7 @@
                 var description = snapshot.child("description").val();
                 var notes = snapshot.child("notes").val();
                 var hour = snapshot.child("hour").val().slice(0, -3);
+                var name = snapshot.child("name").val();
 
                 var productListItem =
                 '<button class="list-group-item row product-row btn-default" style="padding-left: 12px; padding-right: 12px;" data-id="' + snapshot.key + '"">' +
@@ -230,6 +231,7 @@
                     '<h3 class="col-xs-6 product-info" style="padding: 0px; margin: 0px;">' + description + '</h3>' +
                     '<h3 class="col-xs-3 product-info" style="padding: 0px; margin: 0px;">' + notes + '</h3>' +
                     '<h3 class="col-xs-1 product-info" style="padding: 0px; margin: 0px; text-align: center;">' + hour + '</h3>' +
+                    '<h3 class="product-info" style="padding: 0px; margin: 0px; padding-left: 88px;">' + name + '</h3>' +
                 '</button>';
 
                 $('#dynamic-list-porsurtir').append(productListItem);
