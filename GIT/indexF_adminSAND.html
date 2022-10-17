@@ -69,7 +69,17 @@
 
         Facturama.Clients.List(function(result) { 
             defiantClients = Defiant.getSnapshot(result);
+            //console.log(result);
         });
+
+        httpGet("https://api.facturama.mx/clients?start=0&length=100");
+        function httpGet(theUrl) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", theUrl, false );
+            xmlHttp.send( null );
+            console.log(xmlHttp.responseText);
+            return xmlHttp.responseText;
+        }
 
     </script>
 
