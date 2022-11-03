@@ -183,10 +183,71 @@
 										class="form-control" type="number" placeholder="CLAVE" required>
 								</div>
                                 <!-- sigma -->
-                                <div class="col-xs-2">
+                                <div class="col-xs-3">
                                     <label for="priceInput">SIGMA</label>
                                     <input class="form-control" style="width: 24px; margin-top: 0px;" type="checkbox" style="margin-top: 0px;">
 								</div>
+								<!-- break1 -->
+								<div class="col-xs-3">
+                                    <label for="priceInput">MEDIA 1 DOM-VIE</label>
+                                    <select class="form-control" id="break1">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="820">8:20AM</option>
+										<option value="900">9:00AM</option>
+										<option value="940">9:40AM</option>
+										<option value="1020">10:20AM</option>
+										<option value="1100">11:00AM</option>
+										<option value="1140">11:40AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+										<option value="1400">2:00PM</option>
+										<option value="1440">2:40PM</option>
+										<option value="1520">3:20PM</option>
+										<option value="1600">4:00PM</option>
+										<option value="1640">4:40PM</option>
+										<option value="1710">5:10PM</option>
+									</select>
+								</div>
+								<!-- break2 -->
+								<div class="col-xs-3">
+                                    <label for="priceInput">MEDIA 2  LUN-VIE</label>
+                                    <select class="form-control" id="break2">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="820">8:20AM</option>
+										<option value="900">9:00AM</option>
+										<option value="940">9:40AM</option>
+										<option value="1020">10:20AM</option>
+										<option value="1100">11:00AM</option>
+										<option value="1140">11:40AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+										<option value="1400">2:00PM</option>
+										<option value="1440">2:40PM</option>
+										<option value="1520">3:20PM</option>
+										<option value="1600">4:00PM</option>
+										<option value="1640">4:40PM</option>
+										<option value="1710">5:10PM</option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+                                <div class="col-xs-6"> </div>
+								<!-- break3 -->
+								<div class="col-xs-3">
+                                    <label for="priceInput">MEDIA 1 SAB</label>
+                                    <select class="form-control" id="break3">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="900">9:00AM</option>
+										<option value="950">9:50AM</option>
+										<option value="1040">10:40AM</option>
+										<option value="1130">11:30AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+										<option value="1400">2:00PM</option>
+									</select>
+								</div>
+								<!-- break4 -->
+								<div class="col-xs-3"> </div>
 							</div>
 						</div>
 					</form>
@@ -291,13 +352,29 @@
             form.elements[1].value = event.target.getAttribute("data-pronunciation");
             form.elements[2].value = event.target.getAttribute("data-id");
 			form.elements[3].checked = event.target.getAttribute("data-sigma") == "true";
-			
-            //sets buttons inner values
-            $('#saveButton').data("type", "editEmployee");
-			$('#saveButton').data("name", form.elements[0].value);
-			$('#saveButton').data("id", form.elements[2].value);
-			
-            $('#addEmployeeModal').modal('show');
+
+			//aqui
+			firebase.database().ref('employees/' + form.elements[0].value).once('value', function(snapshot) {
+				if(snapshot.val().break1 != null) {
+					form.elements[4].value = snapshot.val().break1;
+					form.elements[5].value = snapshot.val().break2;
+				} else {
+					form.elements[4].value = "NO";
+					form.elements[5].value = "NO";
+				}
+				if(snapshot.val().break3 != null) {
+					form.elements[6].value = snapshot.val().break3;
+				} else {
+					form.elements[6].value = "NO";
+				}
+			}).then(function() {
+				//sets buttons inner values
+				$('#saveButton').data("type", "editEmployee");
+				$('#saveButton').data("name", form.elements[0].value);
+				$('#saveButton').data("id", form.elements[2].value);
+				$('#addEmployeeModal').modal('show');
+			});
+
 		}
 		
         //sets modal to add product view
@@ -332,9 +409,9 @@
 				form.elements[2].value = "0" + form.elements[2].value;
 			
             //checks for blanks
-            var inputs = new Array(4);
+            var inputs = new Array(7);
             //{name:0, pronunciation:1, id:2, sigma:3}
-            for (var i = 0; i < inputs.length; i++) {
+            for (var i = 0; i < inputs.length -2; i++) {
 				if(i == 3)
 					inputs[i] = form.elements[i].checked;
 				else {
@@ -346,6 +423,9 @@
 					}
 				}
             }
+			inputs[5] = form.elements[5].value;
+			inputs[4] = form.elements[4].value;
+			inputs[6] = form.elements[6].value;
 
             //checks for valid id
             if (form.elements[2].value < 1 || form.elements[2].value > 99) {
@@ -384,9 +464,7 @@
 			}
 
             //if everything is checked, upload form
-            if (verificated) {
-				console.log(inputs);
-				
+            if (verificated) {				
                 addNewEmployeeDB(inputs);
                 messageLabel.innerHTML = "";
 
@@ -401,8 +479,9 @@
 
 		//adds or updates a product to firebase
         function addNewEmployeeDB(inputs) {
-			var pronunciationQuery = inputs[1] + inputs[2];
-			
+			var pronunciationQuery = inputs[1] + inputs[2];	
+
+			console.log(inputs);
 			var issigma = false;
 			firebase.database().ref('employees/' + inputs[0] + '/pronunciation').set(pronunciationQuery.substring(0, pronunciationQuery.length - 2));
 			firebase.database().ref('employees/' + inputs[0] + '/id').set(pronunciationQuery.substring(pronunciationQuery.length - 2, pronunciationQuery.length));
@@ -410,7 +489,11 @@
 			firebase.database().ref('employees/' + inputs[0] + '/nproducts').set(0);
 			firebase.database().ref('employees/' + inputs[0] + '/ttime').set(0);
 			firebase.database().ref('employees/' + inputs[0] + '/lastFinished').set(0);
-			
+			firebase.database().ref('employees/' + inputs[0] + '/break1').set(inputs[4]);
+			firebase.database().ref('employees/' + inputs[0] + '/break2').set(inputs[5]);
+			firebase.database().ref('employees/' + inputs[0] + '/break3').set(inputs[6]);
+			firebase.database().ref('employees/' + inputs[0] + '/break4').set(inputs[7]);
+
 			if(inputs[3]) {
 				issigma = true;
 				pronunciationQuery = "0" + pronunciationQuery;

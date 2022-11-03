@@ -68,12 +68,6 @@
 			font-size: 16px;
 		}
 
-		#dynamic-list {
-			height: 835px;
-			overflow: hidden;
-			overflow-y: scroll;
-		}
-
 		#addNewProductDBForm input{
 			font-size: 20px;
 		}
@@ -155,6 +149,12 @@
 			margin-top: 15px;
 		}
 
+		#main-wrapper {
+			margin: auto;
+			height: 950px;
+			overflow-y: scroll
+		}
+
 		#searchOptions, #oosProductsList {
 			padding-right: 0px;
 			position: absolute;
@@ -208,6 +208,11 @@
 			animation: pulse 1s infinite;
 		}
 
+		.highlight-list {
+			border-color: white;
+			border-width: 2px;
+		}
+
 		@-webkit-keyframes pulse {
 			0% {
 				-webkit-box-shadow: 0 0 0 0 rgba(231, 87, 84, 1);
@@ -247,7 +252,7 @@
 		<h1 class="modal-title" id="mediasTitle" style="margin-bottom:1.5%; margin-top:.5px; color: #EEEEEE;">M: 0</h1>
 		<h1 class="modal-title" id="time" style="position:absolute; left:120px; top:0px; color: #EEEEEE;"> </h1>
 		<div class='wrapper'>
-			<ul id="dynamic-list" class="list-group tabcontent" style="display:block;"> </ul>
+			<div id="main-wrapper" class='tabcontent'></div>
 			<div id="products-tap-content" class="tabcontent"> 
 				<input type="input" class="form-control" id="inputSearch" style="background-color: #111111; border-color: #555555; color: #EEEEEE;"  oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"> </input>
 				<ul class="list-group search-options" style="display:block; height:380px;" id="searchOptions"></ul>
@@ -366,7 +371,65 @@
 				$("#splashScreen").show();
 		});
 
-		loadEmployees();
+		var newDate = new Date();
+		if(newDate.getDay() != 6) {
+			//monday trough friday
+			var breaksQuery = 
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">8:20AM</h1>' +
+				'<ul id="dynamic-list-820" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">9:00AM</h1>' +
+				'<ul id="dynamic-list-900" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">9:40AM</h1>' +
+				'<ul id="dynamic-list-940" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">10:20AM</h1>' +
+				'<ul id="dynamic-list-1020" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">11:00AM</h1>' +
+				'<ul id="dynamic-list-1100" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">11:40AM</h1>' +
+				'<ul id="dynamic-list-1140" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">12:20PM</h1>' +
+				'<ul id="dynamic-list-1220" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">1:10PM</h1>' +
+				'<ul id="dynamic-list-1310" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">2:00PM</h1>' +
+				'<ul id="dynamic-list-1400" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">2:40PM</h1>' +
+				'<ul id="dynamic-list-1440" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">3:20PM</h1>' +
+				'<ul id="dynamic-list-1520" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">4:00PM</h1>' +
+				'<ul id="dynamic-list-1600" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">4:40PM</h1>' +
+				'<ul id="dynamic-list-1640" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">5:10PM</h1>' +
+				'<ul id="dynamic-list-1710" class="list-group" style="display:block;"> </ul>';
+
+			$('#main-wrapper').prepend(breaksQuery);
+		} else {
+			//saturday
+			var breaksQuery = 
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">8:20AM</h1>' +
+				'<ul id="dynamic-list-820" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">9:00AM</h1>' +
+				'<ul id="dynamic-list-900" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">9:50AM</h1>' +
+				'<ul id="dynamic-list-950" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">10:40AM</h1>' +
+				'<ul id="dynamic-list-1040" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">11:30AM</h1>' +
+				'<ul id="dynamic-list-1130" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">12:20PM</h1>' +
+				'<ul id="dynamic-list-1220" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">1:10PM</h1>' +
+				'<ul id="dynamic-list-1310" class="list-group" style="display:block;"> </ul>' +
+				'<h1 class="modal-title" style="margin-bottom:0px; margin-top:.5px; color: #EEEEEE;">2:00PM</h1>' +
+				'<ul id="dynamic-list-1400" class="list-group" style="display:block;"> </ul>';
+			$('#main-wrapper').prepend(breaksQuery);
+		}
+
+		loadEmployeesByHour();
+
+		//loadEmployees();
 		startClockTime();
 		checkConnection();
 
@@ -378,9 +441,99 @@
 		document.getElementById("primaryButton").click();
 
 		window.setInterval(checkDayChange, 60*60*1000);
+		window.setInterval(highlightCurrentTable, 1*1000);
+
+		function highlightCurrentTable() {
+			var currentTime24format = parseInt("" + newDate.getHours() + newDate.getMinutes());
+
+			if(newDate.getDay() != 6) {
+				if(currentTime24format < 900) {
+					$('#dynamic-list-820').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 940) {
+					$('#dynamic-list-820').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-900').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1020) {
+					$('#dynamic-list-900').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-940').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1100) {
+					$('#dynamic-list-940').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1020').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1140) {
+					$('#dynamic-list-1020').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1100').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1220) {
+					$('#dynamic-list-1100').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1140').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1310) {
+					$('#dynamic-list-1140').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1220').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1400) {
+					$('#dynamic-list-1220').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1310').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1440) {
+					$('#dynamic-list-1310').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1400').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1520) {
+					$('#dynamic-list-1400').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1440').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1600) {
+					$('#dynamic-list-1440').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1520').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1640) {
+					$('#dynamic-list-1520').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1600').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1710) {
+					$('#dynamic-list-1600').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1640').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1810) {
+					$('#dynamic-list-1640').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1710').find(".employee-row").addClass("highlight-list");
+				} 
+			} else if(newDate.getDay() == 6) {
+				if(currentTime24format < 950) {
+					$('#dynamic-list-900').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1040) {
+					$('#dynamic-list-900').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-950').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1130) {
+					$('#dynamic-list-950').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1040').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1220) {
+					$('#dynamic-list-1040').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1130').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1310) {
+					$('#dynamic-list-1130').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1220').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1400) {
+					$('#dynamic-list-1220').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1310').find(".employee-row").addClass("highlight-list");
+				} else if(currentTime24format < 1440) {
+					$('#dynamic-list-1310').find(".employee-row").removeClass("highlight-list");
+					$('#dynamic-list-1400').find(".employee-row").addClass("highlight-list");
+				}
+			}
+		}
 
 		function userFullscreen() {
 			document.body.requestFullscreen();
+		}
+
+		function loadEmployeesByHour() {
+			var empleadosDB;
+			firebase.database().ref("empleados").once('value', function(snapshot) {
+				empleadosDB = snapshot.val();
+			}).then(function(){
+				var employeesNames = [];
+				var employeesPronunciation = [];
+				$.each(empleadosDB, function(key, value) {
+					employeesNames.push(key);
+					employeesPronunciation.push(value.substring(0, value.length - 2));
+					firebase.database().ref("employees/" + key).once('value', function(childSnapshot) {
+						pushEmployeeByHour(key, value.substring(0, value.length - 2), childSnapshot.val());
+					});
+				});
+				//populateEmployeesList(employeesNames, employeesPronunciation);
+			});
 		}
 		
 		function loadEmployees() {
@@ -396,6 +549,37 @@
 				});
 				populateEmployeesList(employeesNames, employeesPronunciation);
 			});
+		}
+
+		function pushEmployeeByHour(name, pronunciation, breaks) {			
+			globalCounter = 30;
+			if(newDate.getDay() == 6)
+				globalCounter = 40;
+
+			var sigmaEmployee = false;
+			if(pronunciation.charAt(0) == 0) {
+				var sigmaEmployee = true;
+				pronunciation = pronunciation.substring(1, pronunciation.length);
+			}
+			
+			var employeeListItem =
+				'<ul class="list-group-item row employee-row" style="padding: 5px 5px;">' + 
+					'<button class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 5px; background-color: transparent; border-width : 0; text-align: left;" onclick="speakName(&quot;' + name + '&quot;)">' + name + '</button>' +
+					'<button type="button" class="col-xs-4 btn btn-secondary break-button first-break" style="background-color:#689f38; margin-left: 110px;" onclick="manageFirstBreak(event)" data-name="' + pronunciation + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
+				'</ul>';
+			
+			if(newDate.getDay() >= 1 && newDate.getDay() <= 5) {
+				if(breaks.break1 != undefined)
+					$('#dynamic-list-' + breaks.break1).append(employeeListItem);
+				if(breaks.break2 != undefined)
+					$('#dynamic-list-' + breaks.break2).append(employeeListItem);
+			} else if(newDate.getDay() == 0) {
+				if(breaks.break1 != undefined)
+					$('#dynamic-list-' + breaks.break1).append(employeeListItem);
+			} else if(newDate.getDay() == 6) {
+				if(breaks.break3 != undefined)
+					$('#dynamic-list-' + breaks.break3).append(employeeListItem);
+			}
 		}
 		
 		function populateEmployeesList(names, pronunciations) {
@@ -466,9 +650,23 @@
 		function manageFirstBreak(event) {
 			if(event.target.style.backgroundColor == "rgb(104, 159, 56)")
 				startBreak(event.target);
-			else if (event.target.style.backgroundColor == "rgb(253, 151, 66)")
-				event.target.style.backgroundColor = "rgb(229, 57, 53)";
-			//speakName(event.target.getAttribute("data-name"));
+			else if (event.target.style.backgroundColor == "rgb(253, 151, 66)") {
+				event.target.style.backgroundColor = "#111111";
+				event.target.style.borderColor = "#555555";
+				event.target.style.borderWidth = "1px";
+				event.target.style.color = "rgb(253, 151, 66)";
+				firebase.database().ref('employees/' + event.target.getAttribute("data-name") + '/resting').set(false);
+				employeesOnBreak--;
+				document.getElementById('mediasTitle').innerText = "M: " + employeesOnBreak;
+			} else if (event.target.style.backgroundColor == "rgb(229, 57, 53)") {
+				event.target.style.backgroundColor = "#111111";
+				event.target.style.borderColor = "#555555";
+				event.target.style.borderWidth = "1px";
+				event.target.style.color = "rgb(229, 57, 53)";
+				firebase.database().ref('employees/' + event.target.getAttribute("data-name") + '/resting').set(false);
+				employeesOnBreak--;
+				document.getElementById('mediasTitle').innerText = "M: " + employeesOnBreak;
+			}
 		}
 		
 		function manageSecondBreak(event) {
@@ -494,18 +692,22 @@
 			
 			var interval = setInterval(function() {
 				counter--;
-				if (counter > 0) {
-					breakButton.innerText = counter;
+				console.log(breakButton.style.backgroundColor);
+				if(breakButton.style.backgroundColor != "rgb(17, 17, 17)") {
+					if (counter >= 0) {
+						breakButton.innerText = counter;
+					} else if (counter > -15) {
+						speakName(breakButton.getAttribute("data-name"));
+						breakButton.innerText = "+" + (counter.toString()).slice(1);
+						breakButton.style.backgroundColor = "#fd9742";
+						breakButton.style.color = "white";
+					} else {
+						speakName(breakButton.getAttribute("data-name"));
+						breakButton.innerText = "+" + (counter.toString()).slice(1);
+						breakButton.style.backgroundColor = "#e53935";
+						breakButton.style.color = "white";
+					}
 				} else {
-					firebase.database().ref('employees/' + breakButton.getAttribute("data-name") + '/resting').set(false);
-					employeesOnBreak--;
-					document.getElementById('mediasTitle').innerText = "M: " + employeesOnBreak;
-					speakName(breakButton.getAttribute("data-name"));
-					breakButton.style.backgroundColor = "#fd9742";
-					//breakButton.style.backgroundColor = "#e53935";
-					breakButton.style.color = "white";
-					breakButton.innerText = document.getElementById("time").textContent;
-					//breakButton.classList.add("pulse");
 					clearInterval(interval);
 				}
 			}, 60 * 1000);
@@ -533,7 +735,7 @@
 		}
 
 		function showBreaks(evt) {
-			changeTab(evt, "dynamic-list");
+			changeTab(evt, "main-wrapper");
 			changeToActiveColor("primaryButton");
 			changeToDeactiveColor("secundaryButton");
 			changeToDeactiveColor("thirdButton");
