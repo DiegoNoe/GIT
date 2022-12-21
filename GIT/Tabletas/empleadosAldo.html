@@ -115,36 +115,12 @@
 		.list-group-item {
 			padding-top: 4px;
 			padding-bottom: 4px;
-			padding-left: 4px;
-			padding-right: 4px;
+			padding-left: 12px;
 			color: #444444;
 		}
 
 		.headTitle {
 			border: none;
-		}
-
-		.performance-select {
-			font-size: 24px;
-			height: 30px;
-			line-height: 24px;
-		}
-
-		.comments-box {
-			font-size: 24px;
-			height: 30px;
-			padding: 0px;
-			padding-left: 5px;
-			line-height: 12px;
-		}
-
-		select {
-			-webkit-appearance: none;
-			-moz-appearance: none;
-			text-indent: 1px;
-			text-overflow: '';
-			background: transparent;
-			-webkit-appearance: none;
 		}
 
 	</style>
@@ -158,14 +134,12 @@
 		<div class="row"> 
 			<h1 class="modal-title col-xs-8" style="margin-bottom:1.5%; margin-top:.5px"> EMPLEADOS</h1>
 			<div class="col-xs-4">
-				<button onclick="addEmployeeModal();" class="btn btn-success" style="float: right; margin-top: 8px; margin-left: 10px; padding-left: 8.4px; padding-top: 7px; height: 34px; width: 34px; font-size: 25px; line-height: 10px;">+</button>
-				<button onclick="sortEmployees(event);" class="btn btn-success" id="orderButton" style="float: right; margin-top: 8px; margin-left: 10px; padding-left: 10px; padding-top: 2.5px; height: 34px; width: 34px; font-size: 20px;">#</button>
+				<button onclick="saveCurrentState();" class="btn btn-success" style="float: right; margin-top: 8px; margin-left: 10px; padding-left: 5px; padding-top: 8px; height: 34px; width: 34px; font-size: 25px; line-height: 10px;">&#10003;</button>
 			</div>
 		</div>
 		<div class="list-group-item row employee-row headTitle">
-			<h2 class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 0px;"> NOMBRE </h2>
-			<h2 class="col-xs-2 employee-name" style="padding: 0px; margin: 0px; padding-left: 2px;"> DES.</h2>
-			<h2 class="col-xs-5 employee-id" style="padding: 0px; margin: 0px; padding-left: 12px;"> COMENTARIOS </h2>
+			<h2 class="col-xs-5 employee-name" style="padding: 0px; margin: 0px; padding-left: 0px;"> NOMBRE </h2>
+			<h2 class="col-xs-7 employee-id" style="padding: 0px; margin: 0px; padding-left: 10px;"> COMENTARIOS </h2>
 		</div>
 		<ul id="dynamic-list" class="list-group" style="display:block;"> </ul>
 	</div>
@@ -186,14 +160,14 @@
 							<label id="verificationMessage" style="color: red;"></label>
 							<div class="row" style="margin-bottom: 0px;">
 								<!-- name -->
-								<div class="col-xs-6">
+								<div class="col-xs-5">
 									<label for="nameInput">NOMBRE</label>
 									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" maxlength="9" placeholder="NOMBRE"
 										required>
 								</div>
                                 <!-- pronunciation -->
-                                <div class="col-xs-6">
-									<label for="pronunciationInput">PRONUNCIACIÓN</label>
+                                <div class="col-xs-7">
+									<label for="pronunciationInput">COMENTARIOS</label>
 									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" maxlength="9" placeholder="PRONUNCIACIÓN"
 									required>
                                 </div>
@@ -204,7 +178,7 @@
 								<div class="col-xs-3">
 									<label for="IDInput">CLAVE</label>
 									<input id="inputID" oninput="this.value = this.value.toUpperCase()"
-									class="form-control" type="number" placeholder="CLAVE" required>
+										class="form-control" type="number" placeholder="CLAVE" required>
 								</div>
                                 <!-- sigma -->
                                 <div class="col-xs-3">
@@ -258,11 +232,11 @@
                                 <div class="col-xs-6"> 
 									<label for="performanceInput">DESEMPEÑO</label>
                                     <select class="form-control" id="performance">
-										<option value="NA" selected>NO TIENE</option>
-										<option value="0">REGULAR</option>
-										<option value="1">BUENO</option>
-										<option value="2">MUY BUENO</option>
-										<option value="3">EXCELENTE</option>
+										<option value="NO" selected>NO APLICA</option>
+										<option value="0">MALO</option>
+										<option value="1">REGULAR</option>
+										<option value="2">BUENO</option>
+										<option value="3">MUY BUENO</option>
 										<option value="4">SOBRESALIENTE</option>
 									</select>
 								</div>
@@ -306,6 +280,24 @@
 
 		checkConnection();
 
+		function saveCurrentState() {
+			database.once('value', function(snapshot) {
+				if(snapshot.val() != null)
+					var employeesSnapshot = snapshot.val();
+			}).then(function() {
+				$.each(employeesSnapshot, function(key, value) {
+					firebase.database().ref("employees/" + key).once('value', function(childSnapshot) {
+						if(childSnapshot.val().comments != undefined) 
+							firebase.database().ref("employeesA/" + key + "/comments").set(childSnapshot.val().comments);
+						if(childSnapshot.val().performance != undefined)
+							firebase.database().ref("employeesA/" + key + "/performance").set(childSnapshot.val().performance);
+						firebase.database().ref("employees/" + key + "/extraTime").set(0);
+						firebase.database().ref("employees/" + key + "/extraTimeT").set(0);
+					});	
+				});
+			});
+		}
+
 		function loadEmployees() {
 			database.once('value', function(snapshot) {
 				employeesSnapshot = snapshot.val();
@@ -316,111 +308,82 @@
 				$.each(employeesSnapshot, function(key, value) {
 					employeesNames.push(key);
 					employeesPronunciation.push(value.substring(0, value.length - 2));
-					var currentID = value.substring(value.length - 2, value.length);
-					employeesID.push(currentID);
+					employeesID.push(value.substring(value.length - 2, value.length));
 				});
-				populateEmployeesList(employeesNames, employeesPronunciation, employeesID);
+
+				firebase.database().ref("employeesA").once('value', function(childSnapshot) {
+					populateEmployeesList(employeesNames, employeesPronunciation, employeesID, childSnapshot.val());
+				});
+
 			});
 		}
 		
-		function populateEmployeesList(names, pronunciations, id) {
+		function populateEmployeesList(names, pronunciations, id, oldState) {
 			$('#dynamic-list').empty();
+			names.forEach(function (name, i){
+				var sigmaEmployee = false;
+				if(pronunciations[i].charAt(0) == 0) {
+					sigmaEmployee = true;
+					pronunciations[i] = pronunciations[i].substring(1, pronunciations[i].length);
+				}
+				
+				var employeeListItem = "";
+				firebase.database().ref('employees/' + name).once('value', function(snapshot) {
+					if(snapshot.val() != null) {
+						var performance = snapshot.val().performance;
+						if(performance == undefined) 
+							performance = "NT";
+						else if(performance == "0")
+							performance = "R";
+						else if(performance == "1")
+							performance = "B";
+						else if(performance == "2")
+							performance = "MB";
+						else if(performance == "3")
+							performance = "E";
+						else if(performance == "4")
+							performance = "S";
+						var comments = snapshot.val().comments;
+						if(comments == undefined) comments = "";
 
-			var completeEmployees;
-			firebase.database().ref('employees').once('value', function(snapshot) {
-				completeEmployees = snapshot.val();
-			}).then(function() {
-				names.forEach(function (name, i){
-					var sigmaEmployee = false;
-					if(pronunciations[i].charAt(0) == 0) {
-						sigmaEmployee = true;
-						pronunciations[i] = pronunciations[i].substring(1, pronunciations[i].length);
+						var extraTime = snapshot.val().extraTime;
+						var extraTimeT = snapshot.val().extraTimeT;
+						if(extraTime == undefined)
+							extraTime = "";
+						if(extraTimeT == undefined)
+							extraTimeT = "";
+
+						employeeListItem =
+							'<li class="list-group-item row employee-row">' +
+								'<h3 class="col-xs-3" style="padding: 0px; margin: 0px; padding-left: 0px;">' + name + '</h3>' +
+								'<h3 class="col-xs-1 employee-comments" style="padding: 0px; margin: 0px; padding-left: 0px;">' + extraTime + " " + extraTimeT + '</h3>' +
+								'<h3 class="col-xs-1 employee-comments" style="padding: 0px; margin: 0px; padding-left: 0px;">' + performance + '</h3>' +
+								'<h3 class="col-xs-7 employee-comments" style="padding: 0px; margin: 0px; padding-left: 10px;">' + comments + '</h3>' +
+							'</li>';
+
+						if(oldState[name] != undefined) {
+							if(oldState[name].comments != comments)
+								employeeListItem = employeeListItem.slice(0, employeeListItem.length - 5) +
+									'<div style="position:absolute; left: 2px; top: 9px;"> * </div>' + 
+									'</li>';
+							else if(oldState[name].performance != snapshot.val().performance)
+								employeeListItem = employeeListItem.slice(0, employeeListItem.length - 5) +
+									'<div style="position:absolute; left: 2px; top: 9px;"> * </div>' + 
+									'</li>';
+						}
 					}
-	
-					var localComments = "";
-					if(completeEmployees[name].comments != undefined)
-						localComments = completeEmployees[name].comments;
-					var localPerformance = "NA";
-					if(completeEmployees[name].performance != undefined)
-						localPerformance = completeEmployees[name].performance;
-					var performanceQuery = "";
-					if(localPerformance == "NA")
-						performanceQuery = '<option value="NA" selected>NT</option>' +
-							'<option value="4">S</option>' +
-							'<option value="3">E</option>' +
-							'<option value="2">MB</option>' +
-							'<option value="1">B</option>' +
-							'<option value="0">R</option>';
-					else if(localPerformance == "0")
-						performanceQuery = '<option value="NA">NT</option>' +
-							'<option value="4">S</option>' +
-							'<option value="3">E</option>' +
-							'<option value="2">MB</option>' +
-							'<option value="1">B</option>' +
-							'<option value="0" selected>R</option>';
-					else if(localPerformance == "1")
-						performanceQuery = '<option value="NA">NT</option>' +
-							'<option value="4">S</option>' +
-							'<option value="3">E</option>' +
-							'<option value="2">MB</option>' +
-							'<option value="1" selected>B</option>' +
-							'<option value="0">R</option>';
-					else if(localPerformance == "2")
-						performanceQuery = '<option value="NA">NT</option>' +
-							'<option value="4">S</option>' +
-							'<option value="3">E</option>' +
-							'<option value="2" selected>MB</option>' +
-							'<option value="1">B</option>' +
-							'<option value="0">R</option>';
-					else if(localPerformance == "3")
-						performanceQuery = '<option value="NA">NT</option>' +
-							'<option value="4">S</option>' +
-							'<option value="3" selected>E</option>' +
-							'<option value="2">MB</option>' +
-							'<option value="1">B</option>' +
-							'<option value="0">R</option>';
-					else if(localPerformance == "4")
-						performanceQuery = '<option value="NA">NT</option>' +
-							'<option value="4" selected>S</option>' +
-							'<option value="3">E</option>' +
-							'<option value="2">MB</option>' +
-							'<option value="1">B</option>' +
-							'<option value="0">R</option>';
-							
-
-					var employeeListItem =
-						'<li class="list-group-item row employee-row">' +
-						'<h2 class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 0px;">' + name + '</h2>' +
-						'<div class="col-xs-2" style="padding: 0px; margin-right: 10px; width: 36px;">' +
-							'<select class="form-control performance-select" id="' + name + 'Performance" onchange="savePerformance(&apos;' + name + '&apos;)" style="padding: 0px;">' +
-								performanceQuery + 
-							'</select>' +
-						'</div>' +									
-						'<input id="' + name + '" oninput="this.value = this.value.toUpperCase()" class="col-xs-5 form-control comments-box" type="text" style="width: 140px;" onkeydown="uploadComment(this)" placeholder="COMENTARIOS" value="' + localComments + '">' +
-						'<button type="button" class="col-xs-1 btn glyphicon glyphicon-pencil" style="background-color:white; padding-top:2px; padding-bottom:0px;" onclick="editEmployeeModal(event)"' + 
-						'data-name="' + name + '" data-pronunciation="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '" data-id="' + id[i] + '">' + '</button>' + 
-						'</li>';
-					
+				}).then(function() {
 					$('#dynamic-list').append(employeeListItem);
-					//$("#dynamic-list").on("click", "button", function(e) {$(this).remove();});
 				});
-	
-				if($('#orderButton').text() == "A")
-					sortList(document.getElementById('dynamic-list'), "numerical");
+										
+				//$("#dynamic-list").on("click", "button", function(e) {$(this).remove();});
+				
 			});
 
+			if($('#orderButton').text() == "A")
+				sortList(document.getElementById('dynamic-list'), "numerical");
 		}
 		
-		function savePerformance(name) {
-			firebase.database().ref('employees/' + name + '/performance').set(document.getElementById(name + "Performance").value);			
-		}
-
-		function uploadComment(ele) {
-			if(event.key === 'Enter')
-				firebase.database().ref('employees/' + event.srcElement.id + '/comments').set(ele.value);
-		}
-
-
 		function sortEmployees(event) {
 			if(event.target.innerHTML == "#"){
 				sortList(document.getElementById('dynamic-list'), "numerical");
@@ -466,6 +429,7 @@
             form.elements[2].value = event.target.getAttribute("data-id");
 			form.elements[3].checked = event.target.getAttribute("data-sigma") == "true";
 
+			//aqui
 			firebase.database().ref('employees/' + form.elements[0].value).once('value', function(snapshot) {
 				if(snapshot.val().break1 != null) {
 					form.elements[4].value = snapshot.val().break1;
@@ -474,24 +438,16 @@
 					form.elements[4].value = "NO";
 					form.elements[5].value = "NO";
 				}
-				if(snapshot.val().break3 != null)
+				if(snapshot.val().break3 != null) {
 					form.elements[7].value = snapshot.val().break3;
-				else
+				} else {
 					form.elements[7].value = "NO";
-				if(snapshot.val().performance != undefined)
-					form.elements[6].value = snapshot.val().performance;
-				else
-					form.elements[6].value = "NA";
-				if(snapshot.val().comments != undefined)
-					form.elements[8].value = snapshot.val().comments;
-				else
-					form.elements[8].value = "";
+				}
 			}).then(function() {
 				//sets buttons inner values
 				$('#saveButton').data("type", "editEmployee");
 				$('#saveButton').data("name", form.elements[0].value);
 				$('#saveButton').data("id", form.elements[2].value);
-
 				$('#addEmployeeModal').modal('show');
 			});
 
@@ -517,14 +473,12 @@
 			var employeesNames = [];
 			var employeesPronunciation = [];
 			var employeesID = [];
-			var posibleIDs = Array.from({length: 99}, (_, i) => i + 1);
 			$.each(employeesSnapshot, function(key, value) {
 				employeesNames.push(key);
 				if(value.substring(0, 1) == 0)
-				employeesPronunciation.push(value.substring(1, value.length - 2));
+					employeesPronunciation.push(value.substring(1, value.length - 2));
 				employeesPronunciation.push(value.substring(0, value.length - 2));
 				employeesID.push(value.substring(value.length - 2, value.length));
-				posibleIDs.splice(posibleIDs.indexOf(parseInt(value.substring(value.length - 2, value.length))), 1);
 			});
 
 			if(form.elements[2].value < 10 && form.elements[2].value > 0 && form.elements[2].value.charAt(0) != 0)
@@ -576,13 +530,13 @@
 			//checks for existing IDs
             if (form.elements[2].value != "") {
 				if ($('#saveButton').data("type") == "newEmployee") {
-					if (!posibleIDs.includes(parseInt(form.elements[2].value))) {
-						messageLabel.innerHTML = "LA CLAVE YA EXISTE, PUEDE SER " + posibleIDs.toString();
+					if (employeesID.includes(form.elements[2].value.toString())) {
+						messageLabel.innerHTML = "LA CLAVE YA EXISTE, INTENTA UNA DIFERENTE.";
 						verificated = false;
 					}
 				} else if ($('#saveButton').data("type") == "editEmployee") {
-					if (!posibleIDs.includes(parseInt(form.elements[2].value)) && form.elements[2].value != $('#saveButton').data("id")) {
-						messageLabel.innerHTML = "LA CLAVE YA EXISTE, PUEDE SER " + posibleIDs.toString();
+					if (employeesID.includes(form.elements[2].value.toString()) && form.elements[2].value != $('#saveButton').data("id")) {
+						messageLabel.innerHTML = "LA CLAVE YA EXISTE, INTENTA UNA DIFERENTE.";
 						verificated = false;
 					}
 				}
@@ -606,6 +560,7 @@
         function addNewEmployeeDB(inputs) {
 			var pronunciationQuery = inputs[1] + inputs[2];	
 
+			console.log(inputs);
 			var issigma = false;
 			firebase.database().ref('employees/' + inputs[0] + '/pronunciation').set(pronunciationQuery.substring(0, pronunciationQuery.length - 2));
 			firebase.database().ref('employees/' + inputs[0] + '/id').set(pronunciationQuery.substring(pronunciationQuery.length - 2, pronunciationQuery.length));
@@ -618,6 +573,8 @@
 			firebase.database().ref('employees/' + inputs[0] + '/break3').set(inputs[7]);
 			firebase.database().ref('employees/' + inputs[0] + '/performance').set(inputs[6]);
 			firebase.database().ref('employees/' + inputs[0] + '/comments').set(inputs[8]);
+
+			console.log(inputs);
 
 			if(inputs[3]) {
 				issigma = true;

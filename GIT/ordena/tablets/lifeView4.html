@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Order view</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- js resources -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+
+    <style>
+        @font-face {
+            font-family: GillSansMTCondBold;
+            src: url(GillSansMTCondensedBold.ttf);
+        }
+
+        @font-face {
+            font-family: GillSansMTCond;
+            src: url(GillSansStd-Condensed.otf);
+        }
+
+        body {
+            background-color: #111111;
+        }
+
+        html, body {
+            height: 100%; 
+            overflow: hidden;
+        }
+
+
+        .container-fluid {
+            margin-top: 3%;
+            margin-left: 1%;
+            margin-right: 1%;
+            position: relative;
+            background-color: #111111;
+        }
+
+        #dynamic-list {
+            height: 485px;
+            overflow: scroll;
+            font-family: GillSansMTCondBold;
+            font-size: 40px;
+            margin-bottom: 60px;
+        }
+
+        #dynamic-list-2 {
+            height: 540px;
+            overflow: scroll;
+            font-family: GillSansMTCondBold;
+            font-size: 40px;
+            margin-bottom: 0px;
+        }
+
+        .product-row {
+            margin-left: 0px;
+            margin-right: 0px;
+            padding-bottom: 9px;
+        }
+
+        .product-quantity {
+            padding: 0px;
+        }
+
+        .product-notes {
+            border: 0;
+            box-shadow: none;
+        }
+
+        .product-notes-container {
+            padding: 0px;
+        }
+
+        #nameLabel {
+            font-family: GillSansMTCondBold;
+            font-size: 50px;
+            line-height: 35px;
+        }
+
+        #pleaseLabel {
+            font-family: GillSansMTCondBold;
+            font-size: 30px;
+            margin-bottom: 1%;
+        }
+
+        #sugLabel {
+            font-family: GillSansMTCondBold;
+            font-size: 30px;
+            color: white;
+        }
+
+        #totalTitleLabel {
+            position: fixed;
+            bottom: 35%;
+            right: 5%;
+            font-family: GillSansMTCondBold;
+            font-size: 50px;
+        }
+ 
+        #thankyouMessage {
+            background-color: #111111;
+            color: white;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            z-index: 1;
+            text-align: center;
+            padding-top: 20%;
+            display: none;
+            font-family: GillSansMTCondBold;
+            font-size: 70px;
+        }
+
+        #welcomeMessage {
+            background-color: white;
+            color: black;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            z-index: 1;
+            text-align: center;
+            padding-top: 50%;
+            font-family: GillSansMTCondBold;
+            font-size: 85px;
+        }
+
+    </style>
+
+    <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
+            authDomain: "cremeria-imperial.firebaseapp.com",
+            databaseURL: "https://cremeria-imperial.firebaseio.com",
+            projectId: "cremeria-imperial",
+            storageBucket: "cremeria-imperial.appspot.com",
+            messagingSenderId: "445465872507"
+        };
+
+        firebase.initializeApp(config);
+        var database = firebase.database().ref('liveView9/order');
+        var globalName;
+
+        var shortenedUnits = {
+            KILO: "KG",
+            PIEZA: "PZ",
+            CAJA: "CJ",
+            CUB: "CUB",
+            EXB: "EXB"
+        };
+    </script>
+
+    <!-- android interface -->
+    <script type="text/javascript">
+        function playSound() {
+            //Android.playSound();
+        }
+    </script>
+
+</head>
+
+<body>
+    <h1 id="thankyouMessage"></h1>
+    <h1 id="welcomeMessage" style="background-color: #111111; color: white;">
+        <img src="logo_fondo_rojo.png" width="400px" style="position: absolute; top: 60px; padding-left: 25px;" alt="Logo">
+            BIENVENIDO
+    </h1>
+    <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
+        <strong>No hay conexión.</strong>
+    </div>
+    <div class="container-fluid" style="margin-top: 30px;">
+        <h2 class="modal-title" id="nameLabel" style="color: white;">BIENVENIDO</h2>
+        <h2 class="modal-title" id="pleaseLabel" style="color: white;">POR FAVOR REVISA TU PEDIDO</h2>
+        <ul class="list-group" id="dynamic-list"> </ul>
+        <h2 class="modal-title" id="sugLabel">SUGERENCIAS</h2>
+        <ul class="list-group" id="dynamic-list-2"> </ul>
+        <h2 class="modal-title" id="totalTitleLabel" style="color: white;"></h2>
+    </div>
+
+    <script>
+
+        function populateName() {
+            firebase.database().ref('liveView9/name').on('value', function (snapshot) {
+                if(snapshot.val() != null) {
+                    $('#nameLabel').text("BIENVENIDO " + snapshot.val());
+                    globalName = snapshot.val();
+                    $("#welcomeMessage").hide();
+                } else {
+                    $('#nameLabel').text("BIENVENIDO");
+                }
+            });
+        }
+
+        //loads suggested order
+        function populateSuggestedOrder()  {
+            firebase.database().ref('liveView9/sorder').on('value', function (snapshot) {
+                if(snapshot.val() != null) {
+                    $('#dynamic-list-2').empty();
+                    showSugList();
+
+                    snapshot.forEach(function (childSnapshot) {                    
+                        var description = childSnapshot.child("descripcion").val();
+                        var notes = childSnapshot.child("notas").val();
+                        var quantity = childSnapshot.child("cantidad").val();
+                        var tipo = childSnapshot.child("tipo").val();                
+                        var quantityAndUnit = quantity + shortenedUnits[childSnapshot.child("unidad").val()];
+                        var cost =  quantity * childSnapshot.child("precio").val();
+                        cost = "" + Math.round(cost * 10) / 10;
+                        
+                        //enhance quantities
+                        if (quantityAndUnit.includes(".500"))
+                            quantityAndUnit = quantityAndUnit.replace(".500", "½");
+                        if (quantityAndUnit.includes(".50"))
+                            quantityAndUnit = quantityAndUnit.replace(".50", "½");
+                        if (quantityAndUnit.includes(".5"))
+                            quantityAndUnit = quantityAndUnit.replace(".5", "½");
+    
+                        if (quantityAndUnit.includes(".250"))
+                            quantityAndUnit = quantityAndUnit.replace(".250", "¼");
+                        if (quantityAndUnit.includes(".25"))
+                            quantityAndUnit = quantityAndUnit.replace(".25", "¼");
+    
+                        if(notes == "") {
+                            var productListItem =
+                                '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: lightgrey; border-color: #404040;" data-id="' + childSnapshot.key + '"">' +
+                                    '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
+                                    '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '</h2>' +
+                                    '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left: 20px; margin: 0px;">' + cost + '</h2>' +
+                                '</li>';
+                        } else {
+                            var productListItem =
+                                '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: lightgrey; border-color: #404040;" data-id="' + childSnapshot.key + '"">' +
+                                    '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
+                                    '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '<br>' + notes + '</h2>' +
+                                    '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left:20px; margin: 0px;">' + cost + '</h2>' +
+                                '</li>';
+                        }
+                        //Add list element
+                        $('#dynamic-list-2').append(productListItem);
+                    });
+                } else {
+                    $('#dynamic-list-2').empty();
+                    hideSugList();
+                } 
+            });
+        }
+
+        function deleteSuggestedProduct(id) {
+            console.log("borro " + id);
+            $("#dynamic-list-2").find("[data-id='" + id + "']").remove();
+            if($("#dynamic-list-2").children().length == 0)
+                hideSugList();
+        }
+
+        function hideSugList() {
+            $('#dynamic-list').css("height", "830px");
+            $('#totalTitleLabel').css("bottom", "5%");
+            $('#dynamic-list-2').hide();
+            $('#sugLabel').hide();
+        }
+        
+        function showSugList() {
+            $('#dynamic-list').css("height", "515px");
+            $('#totalTitleLabel').css("bottom", "45%");
+            $('#dynamic-list-2').show();
+            $('#sugLabel').show();
+        }
+
+        //loads orders and remains listening
+        function populateOrder()  {
+            database.on('value', function (snapshot) {
+                var total = 0;
+                var isExact = true;
+                var calculable = true;
+                $('#dynamic-list').empty();
+                snapshot.forEach(function (childSnapshot) {                    
+                    //get values
+                    var description = childSnapshot.child("descripcion").val();
+                    var notes = childSnapshot.child("notas").val();
+                    var quantity = childSnapshot.child("cantidad").val();
+                    var tipo = childSnapshot.child("tipo").val();
+                                        
+                    if(quantity == "") {
+                        calculable = false
+                        var quantityAndUnit = "";
+                        var cost = "";
+                    } else {
+                        var quantityAndUnit = quantity + shortenedUnits[childSnapshot.child("unidad").val()];
+                        if (quantity < 0) 
+                            var cost = quantity * childSnapshot.child("precio").val() * (-1);
+                        else 
+                            var cost =  quantity * childSnapshot.child("precio").val();
+
+                        total += cost;
+                        cost = "" + Math.round(cost * 10) / 10;
+
+                        if(tipo == "porPesarCamara" || tipo == "porPesarAfuera")
+                            isExact = false;
+                    }
+
+                    //enhance quantities
+                    if (quantityAndUnit.includes(".500"))
+                        quantityAndUnit = quantityAndUnit.replace(".500", "½");
+                    if (quantityAndUnit.includes(".50"))
+                        quantityAndUnit = quantityAndUnit.replace(".50", "½");
+                    if (quantityAndUnit.includes(".5"))
+                        quantityAndUnit = quantityAndUnit.replace(".5", "½");
+
+                    if (quantityAndUnit.includes(".250"))
+                        quantityAndUnit = quantityAndUnit.replace(".250", "¼");
+                    if (quantityAndUnit.includes(".25"))
+                        quantityAndUnit = quantityAndUnit.replace(".25", "¼");
+
+                    if(notes == "") {
+                        var productListItem =
+                            '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: white; border-color: #666666;" data-id="' + childSnapshot.key + '"">' +
+                                '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
+                                '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '</h2>' +
+                                '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left: 20px; margin: 0px;">' + cost + '</h2>' +
+                            '</li>';
+                    } else {
+                        var productListItem =
+                            '<li class="list-group-item row product-row" style="padding-left: 12px; padding-right: 12px; background-color: #111111; color: white; border-color: #666666;" data-id="' + childSnapshot.key + '"">' +
+                                '<h2 class="col-xs-1 product-info" style="padding: 0px; margin: 0px;">' + quantityAndUnit + '</h2>' +
+                                '<h2 class="col-xs-9 product-info" style="padding: 0px; padding-left: 28px; margin: 0px;">' + description + '<br>' + notes + '</h2>' +
+                                '<h2 class="col-xs-2 product-info" style="padding: 0px; padding-left:20px; margin: 0px;">' + cost + '</h2>' +
+                            '</li>';
+                    }
+                    //add list element
+                    $('#dynamic-list').append(productListItem);
+
+                    //remove sug list element
+                    deleteSuggestedProduct(childSnapshot.child("clave").val());
+                });
+
+                if(snapshot.numChildren() == 0)
+                    calculable = false;
+                else
+                    $("#welcomeMessage").hide();
+
+                
+                if(calculable) {
+                    total = Math.round(total * 10) / 10;
+                    if ((total / 1000) >= 1)
+                        total = total.toLocaleString('en-US');
+
+                    if(isExact) {
+                        $('#totalTitleLabel').html("TOTAL $" + total);
+                    }
+                    else {
+                        $('#totalTitleLabel').html("TOTAL APROX $" + total);
+                    }
+                } else {
+                    $('#totalTitleLabel').text("");
+                }
+            });
+        }
+        
+        function checkDoneOrder() {
+            firebase.database().ref('liveView9/').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('liveView9/wtime').on('value', function (snapshotWT) {
+                        if(snapshotWT.val()) {
+                            var totalMessage = $('#totalTitleLabel').text();
+                            var minutesMessage = snapshotWT.val();
+                           
+                            if(minutesMessage != "-")
+                                $("#thankyouMessage").html("GRACIAS<br>" + globalName + "<br><br><br><br>" + totalMessage + "<br><br><br>TIEMPO ESTIMADO:<br>" + minutesMessage + " MINUTOS");
+                            else
+                                $("#thankyouMessage").html("GRACIAS<br>" + globalName + "<br><br><br><br>" + totalMessage);
+
+                            $("#thankyouMessage").show();
+                            firebase.database().ref('liveView9').remove();
+                            setTimeout(function(){
+                                $("#thankyouMessage").hide();
+                                $("#thankyouMessage").html("GRACIAS POR SU VISITA");
+                                $("#welcomeMessage").show();
+                                globalName = "";
+                            }, 8000);
+                        }
+                    });
+                }
+            });
+        }
+
+        function checkConnection() {
+            var connectedRef = firebase.database().ref(".info/connected");
+            connectedRef.on("value", function (snap) {
+                if (snap.val() === true)
+                    document.getElementById("noConnectionAlert").style.display = "none";
+                else
+                    document.getElementById("noConnectionAlert").style.display = "block";
+            });
+        }
+
+        function reloadOnUpdate() {
+            firebase.database().ref("updates/liveView9").on('value', function(snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref("updates/liveView9").set(false).then(function() {
+                        location.reload();
+                    });
+                }
+            });
+        }
+
+        //MAIN
+        populateName();
+        populateOrder();
+        populateSuggestedOrder();
+        checkConnection();
+        checkDoneOrder();
+        reloadOnUpdate();
+
+    </script>
+</body>

@@ -8,21 +8,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- local style resources -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/index_black.css">
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/index_black.css">
 
     <!-- local js resources -->
-    <script language="javascript" type="text/javascript" src="js/jquery.min.js"></script>
-    <script language="javascript" type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script language="javascript" type="text/javascript" src="js/firebase.js"></script>
-    <script language="javascript" type="text/javascript" src="js/jspdf.customfonts.min.js "></script>
-    <script language="javascript" type="text/javascript" src="js/default_vfs.js"></script>
-    <script language="javascript" type="text/javascript" src="js/defiant.min.js"></script>
-    <script language="javascript" type="text/javascript" src="js/qrcode.js"></script>
-    <script language="javascript" type="text/javascript" src="js/index.js"></script>
-    <script language="javascript" type="text/javascript" src="js/aes.js"></script>
-    <script language="javascript" type="text/javascript" src="js/facturama.api.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/bootstrap.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/firebase.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/jspdf.customfonts.min.js "></script>
+    <script language="javascript" type="text/javascript" src="../../js/default_vfs.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/defiant.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/qrcode.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/index.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/aes.js"></script>
+    <script language="javascript" type="text/javascript" src="../../js/facturama.api.js"></script>
 
     <script>
         var products,
@@ -44,7 +44,7 @@
             defiantClients = Defiant.getSnapshot(snapshot.val());
         });
 
-        var globalComputer = "liveView6";
+        var globalComputer = "liveView11";
         var globalWaitingOrders,
             globalTPP = [];
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
@@ -303,9 +303,11 @@
 
         populateEmployees();
 
+        /*
         if(globalComputer == "liveView1" || globalComputer == "liveView0") {
             hearForCallClient();
         }
+        */
 
         //inputName on enter sequence
         $("#inputName").on('keyup', function (e) {
@@ -1665,7 +1667,6 @@
                     doc.text(27 + xOffset, 210  + yOffset, points, "left");
                 }
 
-                //aqui
                 var justNameFlag = false;
                 if(((ndiversity <= 1 && !hasChuletaN) && orderMethod == "MOSTRADOR") || ((ndiversity == 0 && !hasChuletaN) && orderMethod != "MOSTRADOR")) {
                     doc.setPage(1);
@@ -1703,10 +1704,10 @@
                 doc.autoPrint();
 
                 if(window.open(doc.output('bloburl'), '_blank') != null) { 
-                    console.log("imprimi"); 
                     var ncomputer = globalComputer.slice(-1);
                     var etime = calculateWTime(Math.ceil(nproducts));
                     
+                    /* ordena
                     //process
                     firebase.database().ref('process/firsts/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
                         name: replaceAEIOUN($("#inputName").val().trim()),
@@ -1724,6 +1725,7 @@
                         etime: etime,
                         justName: justNameFlag
                     });
+                    */
                     
                     /* FIX efficiency
                     //whatsapp
@@ -1745,10 +1747,10 @@
                     //increaseEmployeeCounter($("#inputEmployeeName").val());
                     //uploadSurvey(surveyValues);
                     
+                    finishOrderProducts(true);
                     eraseOrder();
                     
                     firebase.database().ref(globalComputer + '/wtime').set(etime);
-                    finishOrderProducts(true);
                 }
             }
         }
@@ -2171,8 +2173,8 @@
                 notes: productOrder[4],
                 hour: time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
             };
-            var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aCremas').push(productJSON);
-            firebase.database().ref('aCremas/pendientes/' + productRef.key ).set(productJSON);
+            var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aCremasO').push(productJSON);
+            firebase.database().ref('aCremasO/pendientes/' + productRef.key ).set(productJSON);
             return true;
         }
 
@@ -2190,8 +2192,8 @@
                 notes: productOrder[4],
                 hour: time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
             };
-            var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aJamones').push(productJSON);
-            firebase.database().ref('aJamones/pendientes/' + productRef.key ).set(productJSON);
+            var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aJamonesO').push(productJSON);
+            firebase.database().ref('aJamonesO/pendientes/' + productRef.key ).set(productJSON);
             return true;
         }
 
@@ -2209,8 +2211,8 @@
                 notes: productOrder[4],
                 hour: time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
             };
-            var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aBodega').push(productJSON);
-            firebase.database().ref('aBodega/pendientes/' + productRef.key ).set(productJSON);
+            var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aBodegaO').push(productJSON);
+            firebase.database().ref('aBodegaO/pendientes/' + productRef.key ).set(productJSON);
             return true;
         }
 
@@ -2228,8 +2230,8 @@
                 notes: productOrder[4],
                 hour: time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
             };
-            var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aBodegaAbajo').push(productJSON);
-            firebase.database().ref('aBodegaAbajo/pendientes/' + productRef.key ).set(productJSON);
+            var productRef = firebase.database().ref('pendingOrders/' + orderRefID + '/aBodegaAbajoO').push(productJSON);
+            firebase.database().ref('aBodegaAbajoO/pendientes/' + productRef.key ).set(productJSON);
             return true;
         }
 
@@ -2268,7 +2270,10 @@
 
         //starts listening to connection stauts
         checkConnection();
+
+        /* ordena
         populateWaitingTimes();
+        */
 
         //removes any products from the live view
         removeOrderProducts();

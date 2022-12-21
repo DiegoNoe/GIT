@@ -151,7 +151,7 @@
 
 		#main-wrapper {
 			margin: auto;
-			height: 950px;
+			height: 880px;
 			overflow-y: scroll
 		}
 
@@ -440,13 +440,17 @@
 			tabcontent[i].style.display = "none";
 		document.getElementById("primaryButton").click();
 
-		window.setInterval(checkDayChange, 60*60*1000);
-		window.setInterval(highlightCurrentTable, 1*1000);
+		window.setInterval(checkDayChange, 60 * 1000);
+		window.setInterval(highlightCurrentTable, 5 * 1000);
 
 		function highlightCurrentTable() {
-			var currentTime24format = parseInt("" + newDate.getHours() + newDate.getMinutes());
+			var currentDate = new Date();
+			var minutes = currentDate.getMinutes();
+			if(minutes.toString().length == 1)
+				minutes = "0" + minutes;
+			var currentTime24format = parseInt("" + currentDate.getHours() + minutes);
 
-			if(newDate.getDay() != 6) {
+			if(currentDate.getDay() != 6) {
 				if(currentTime24format < 900) {
 					$('#dynamic-list-820').find(".employee-row").addClass("highlight-list");
 				} else if(currentTime24format < 940) {
@@ -489,7 +493,7 @@
 					$('#dynamic-list-1640').find(".employee-row").removeClass("highlight-list");
 					$('#dynamic-list-1710').find(".employee-row").addClass("highlight-list");
 				} 
-			} else if(newDate.getDay() == 6) {
+			} else if(currentDate.getDay() == 6) {
 				if(currentTime24format < 950) {
 					$('#dynamic-list-900').find(".employee-row").addClass("highlight-list");
 				} else if(currentTime24format < 1040) {
@@ -650,7 +654,19 @@
 		function manageFirstBreak(event) {
 			if(event.target.style.backgroundColor == "rgb(104, 159, 56)")
 				startBreak(event.target);
+			else if(event.target.style.backgroundColor == "rgb(238, 255, 65)") {
+				uploadExtraTimeTotal(event.target.getAttribute("data-name"));
+				event.target.style.backgroundColor = "#111111";
+				event.target.style.borderColor = "#555555";
+				event.target.style.borderWidth = "1px";
+				event.target.style.color = "rgb(238, 255, 65)";
+				firebase.database().ref('employees/' + event.target.getAttribute("data-name") + '/resting').set(false);
+				employeesOnBreak--;
+				document.getElementById('mediasTitle').innerText = "M: " + employeesOnBreak;
+			}
 			else if (event.target.style.backgroundColor == "rgb(253, 151, 66)") {
+				uploadExtraTime(event.srcElement.innerHTML, event.target.getAttribute("data-name"));
+				uploadExtraTimeTotal(event.target.getAttribute("data-name"));
 				event.target.style.backgroundColor = "#111111";
 				event.target.style.borderColor = "#555555";
 				event.target.style.borderWidth = "1px";
@@ -659,6 +675,8 @@
 				employeesOnBreak--;
 				document.getElementById('mediasTitle').innerText = "M: " + employeesOnBreak;
 			} else if (event.target.style.backgroundColor == "rgb(229, 57, 53)") {
+				uploadExtraTime(event.srcElement.innerHTML, event.target.getAttribute("data-name"));
+				uploadExtraTimeTotal(event.target.getAttribute("data-name"));
 				event.target.style.backgroundColor = "#111111";
 				event.target.style.borderColor = "#555555";
 				event.target.style.borderWidth = "1px";
@@ -668,7 +686,27 @@
 				document.getElementById('mediasTitle').innerText = "M: " + employeesOnBreak;
 			}
 		}
-		
+
+		function uploadExtraTime(time, employee) {
+			time = parseInt(time.slice(1, time.length));
+			firebase.database().ref('employees/' + employee + '/extraTime').once('value', function(snapshot) {
+				if(snapshot.val() == undefined) {
+					firebase.database().ref('employees/' + employee + '/extraTime').set(time);
+				} else {
+					firebase.database().ref('employees/' + employee + '/extraTime').set(snapshot.val() + time);
+				}
+			});
+		}
+
+		function uploadExtraTimeTotal(employee) {
+			firebase.database().ref('employees/' + employee + '/extraTimeT').once('value', function(snapshot) {
+				if(snapshot.val() == undefined) {
+					firebase.database().ref('employees/' + employee + '/extraTimeT').set(1);
+				} else {
+					firebase.database().ref('employees/' + employee + '/extraTimeT').set(snapshot.val() + 1);
+				}
+			});
+		}		
 		function manageSecondBreak(event) {
 			if((event.target.previousSibling.style.backgroundColor == "rgb(229, 57, 53)" || event.target.previousSibling.style.backgroundColor == "rgb(253, 151, 66)") && event.target.style.backgroundColor == "rgb(104, 159, 56)")
 				startBreak(event.target);
@@ -692,7 +730,6 @@
 			
 			var interval = setInterval(function() {
 				counter--;
-				console.log(breakButton.style.backgroundColor);
 				if(breakButton.style.backgroundColor != "rgb(17, 17, 17)") {
 					if (counter >= 0) {
 						breakButton.innerText = counter;
@@ -714,7 +751,6 @@
 		} 
 		
 		function speakName(name) {
-			console.log("speakName(" + name + ")");
 			var msg = new SpeechSynthesisUtterance();
 			msg.rate = .80;
 			//msg.lang = "es-US";
@@ -1020,8 +1056,9 @@
 		function checkDayChange() {
             var now = new Date();
 			var millisTill5am = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 5, 0, 0, 0) - now;
-            if (millisTill5pm >= 0)
+            if (millisTill5am >= 0)
 				location.reload();
+
 		}
 
 		var idleTime = 0;
