@@ -65,6 +65,7 @@
 
 		#verificationMessage {
 			font-size: 16px;
+			margin-bottom: 0px;
 		}
 
 		#dynamic-list {
@@ -164,8 +165,8 @@
 		</div>
 		<div class="list-group-item row employee-row headTitle">
 			<h2 class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 0px;"> NOMBRE </h2>
-			<h2 class="col-xs-2 employee-name" style="padding: 0px; margin: 0px; padding-left: 2px;"> DES.</h2>
-			<h2 class="col-xs-5 employee-id" style="padding: 0px; margin: 0px; padding-left: 12px;"> COMENTARIOS </h2>
+			<h2 class="col-xs-1 employee-name" style="padding: 0px; margin: 0px; padding-left: 2px;"> D</h2>
+			<h2 class="col-xs-5 employee-id" style="padding: 0px; margin: 0px; padding-left: 16px;"> COMENTARIOS </h2>
 		</div>
 		<ul id="dynamic-list" class="list-group" style="display:block;"> </ul>
 	</div>
@@ -198,22 +199,37 @@
 									required>
                                 </div>
 							</div>
-							
 							<div class="row">
-								<!-- id -->
-								<div class="col-xs-3">
+								<div class="col-xs-3" style="padding-right: 7px;">
 									<label for="IDInput">CLAVE</label>
 									<input id="inputID" oninput="this.value = this.value.toUpperCase()"
 									class="form-control" type="number" placeholder="CLAVE" required>
 								</div>
-                                <!-- sigma -->
                                 <div class="col-xs-3">
                                     <label for="priceInput">SIGMA</label>
                                     <input class="form-control" style="width: 24px; margin-top: 0px;" type="checkbox" style="margin-top: 0px;">
 								</div>
-								<!-- break1 -->
-								<div class="col-xs-3">
-                                    <label for="priceInput">DO-VI</label>
+								<div class="col-xs-6"> 
+									<label for="performanceInput">DESEMPEÑO</label>
+                                    <select class="form-control" id="performance">
+										<option value="NA" selected>NO TIENE</option>
+										<option value="0">REGULAR</option>
+										<option value="1">BUENO</option>
+										<option value="2">MUY BUENO</option>
+										<option value="3">EXCELENTE</option>
+										<option value="4">SOBRESALIENTE</option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12"> 
+									<label for="commentsInput">COMENTARIOS</label>
+									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="COMENTARIOS">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-3" style="padding-right: 7px;">
+                                    <label for="priceInput">LU 1</label>
                                     <select class="form-control" id="break1">
 										<option value="NO" selected>NO TIENE</option>
 										<option value="820">8:20AM</option>
@@ -232,10 +248,49 @@
 										<option value="1710">5:10PM</option>
 									</select>
 								</div>
-								<!-- break2 -->
-								<div class="col-xs-3">
-                                    <label for="priceInput">LU-VI</label>
+								<div class="col-xs-3" style="padding-left: 7px;">
+                                    <label for="priceInput">LU 2</label>
                                     <select class="form-control" id="break2">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="820">8:20AM</option>
+										<option value="900">9:00AM</option>
+										<option value="940">9:40AM</option>
+										<option value="1020">10:20AM</option>
+										<option value="1100">11:00AM</option>
+										<option value="1140">11:40AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+										<option value="1400">2:00PM</option>
+										<option value="1440">2:40PM</option>
+										<option value="1520">3:20PM</option>
+										<option value="1600">4:00PM</option>
+										<option value="1640">4:40PM</option>
+										<option value="1710">5:10PM</option>
+									</select>
+								</div>
+								<div class="col-xs-3" style="padding-right: 7px;">
+                                    <label for="priceInput">MA 1</label>
+                                    <select class="form-control" id="break3">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="820">8:20AM</option>
+										<option value="900">9:00AM</option>
+										<option value="940">9:40AM</option>
+										<option value="1020">10:20AM</option>
+										<option value="1100">11:00AM</option>
+										<option value="1140">11:40AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+										<option value="1400">2:00PM</option>
+										<option value="1440">2:40PM</option>
+										<option value="1520">3:20PM</option>
+										<option value="1600">4:00PM</option>
+										<option value="1640">4:40PM</option>
+										<option value="1710">5:10PM</option>
+									</select>
+								</div>
+								<div class="col-xs-3" style="padding-left: 7px;">
+                                    <label for="priceInput">MA 2</label>
+                                    <select class="form-control" id="break4">
 										<option value="NO" selected>NO TIENE</option>
 										<option value="820">8:20AM</option>
 										<option value="900">9:00AM</option>
@@ -255,21 +310,134 @@
 								</div>
 							</div>
 							<div class="row">
-                                <div class="col-xs-6"> 
-									<label for="performanceInput">DESEMPEÑO</label>
-                                    <select class="form-control" id="performance">
-										<option value="NA" selected>NO TIENE</option>
-										<option value="0">REGULAR</option>
-										<option value="1">BUENO</option>
-										<option value="2">MUY BUENO</option>
-										<option value="3">EXCELENTE</option>
-										<option value="4">SOBRESALIENTE</option>
+								<div class="col-xs-3" style="padding-right: 7px;">
+                                    <label for="priceInput">MI 1</label>
+                                    <select class="form-control" id="break5">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="820">8:20AM</option>
+										<option value="900">9:00AM</option>
+										<option value="940">9:40AM</option>
+										<option value="1020">10:20AM</option>
+										<option value="1100">11:00AM</option>
+										<option value="1140">11:40AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+										<option value="1400">2:00PM</option>
+										<option value="1440">2:40PM</option>
+										<option value="1520">3:20PM</option>
+										<option value="1600">4:00PM</option>
+										<option value="1640">4:40PM</option>
+										<option value="1710">5:10PM</option>
 									</select>
 								</div>
-								<!-- break3 -->
-								<div class="col-xs-3">
-                                    <label for="priceInput">SA</label>
-                                    <select class="form-control" id="break3">
+								<!-- break2 -->
+								<div class="col-xs-3" style="padding-left: 7px;">
+                                    <label for="priceInput">MI 2</label>
+                                    <select class="form-control" id="break6">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="820">8:20AM</option>
+										<option value="900">9:00AM</option>
+										<option value="940">9:40AM</option>
+										<option value="1020">10:20AM</option>
+										<option value="1100">11:00AM</option>
+										<option value="1140">11:40AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+										<option value="1400">2:00PM</option>
+										<option value="1440">2:40PM</option>
+										<option value="1520">3:20PM</option>
+										<option value="1600">4:00PM</option>
+										<option value="1640">4:40PM</option>
+										<option value="1710">5:10PM</option>
+									</select>
+								</div>
+								<div class="col-xs-3" style="padding-right: 7px;">
+                                    <label for="priceInput">JU 1</label>
+                                    <select class="form-control" id="break7">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="820">8:20AM</option>
+										<option value="900">9:00AM</option>
+										<option value="940">9:40AM</option>
+										<option value="1020">10:20AM</option>
+										<option value="1100">11:00AM</option>
+										<option value="1140">11:40AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+										<option value="1400">2:00PM</option>
+										<option value="1440">2:40PM</option>
+										<option value="1520">3:20PM</option>
+										<option value="1600">4:00PM</option>
+										<option value="1640">4:40PM</option>
+										<option value="1710">5:10PM</option>
+									</select>
+								</div>
+								<!-- break2 -->
+								<div class="col-xs-3" style="padding-left: 7px;">
+                                    <label for="priceInput">JU 2</label>
+                                    <select class="form-control" id="break8">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="820">8:20AM</option>
+										<option value="900">9:00AM</option>
+										<option value="940">9:40AM</option>
+										<option value="1020">10:20AM</option>
+										<option value="1100">11:00AM</option>
+										<option value="1140">11:40AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+										<option value="1400">2:00PM</option>
+										<option value="1440">2:40PM</option>
+										<option value="1520">3:20PM</option>
+										<option value="1600">4:00PM</option>
+										<option value="1640">4:40PM</option>
+										<option value="1710">5:10PM</option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-3" style="padding-right: 7px;">
+                                    <label for="priceInput">VI 1</label>
+                                    <select class="form-control" id="break9">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="820">8:20AM</option>
+										<option value="900">9:00AM</option>
+										<option value="940">9:40AM</option>
+										<option value="1020">10:20AM</option>
+										<option value="1100">11:00AM</option>
+										<option value="1140">11:40AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+										<option value="1400">2:00PM</option>
+										<option value="1440">2:40PM</option>
+										<option value="1520">3:20PM</option>
+										<option value="1600">4:00PM</option>
+										<option value="1640">4:40PM</option>
+										<option value="1710">5:10PM</option>
+									</select>
+								</div>
+								<!-- break2 -->
+								<div class="col-xs-3" style="padding-left: 7px;">
+                                    <label for="priceInput">VI 2</label>
+                                    <select class="form-control" id="break10">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="820">8:20AM</option>
+										<option value="900">9:00AM</option>
+										<option value="940">9:40AM</option>
+										<option value="1020">10:20AM</option>
+										<option value="1100">11:00AM</option>
+										<option value="1140">11:40AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+										<option value="1400">2:00PM</option>
+										<option value="1440">2:40PM</option>
+										<option value="1520">3:20PM</option>
+										<option value="1600">4:00PM</option>
+										<option value="1640">4:40PM</option>
+										<option value="1710">5:10PM</option>
+									</select>
+								</div>
+								<div class="col-xs-3" style="padding-right: 7px;">
+                                    <label for="priceInput">SA 1</label>
+                                    <select class="form-control" id="break11">
 										<option value="NO" selected>NO TIENE</option>
 										<option value="900">9:00AM</option>
 										<option value="950">9:50AM</option>
@@ -278,15 +446,24 @@
 										<option value="1220">12:20PM</option>
 										<option value="1310">1:10PM</option>
 										<option value="1400">2:00PM</option>
+										<option value="1450">2:50PM</option>
+										<option value="1540">3:40PM</option>
 									</select>
 								</div>
-								<!-- break4 -->
-								<div class="col-xs-3"> </div>
-							</div>
-							<div class="row">
-                                <div class="col-xs-12"> 
-									<label for="commentsInput">COMENTARIOS</label>
-									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" placeholder="COMENTARIOS">
+								<!-- break2 -->
+								<div class="col-xs-3" style="padding-left: 7px;">
+                                    <label for="priceInput">DO 1</label>
+                                    <select class="form-control" id="break12">
+										<option value="NO" selected>NO TIENE</option>
+										<option value="820">8:20AM</option>
+										<option value="900">9:00AM</option>
+										<option value="940">9:40AM</option>
+										<option value="1020">10:20AM</option>
+										<option value="1100">11:00AM</option>
+										<option value="1140">11:40AM</option>
+										<option value="1220">12:20PM</option>
+										<option value="1310">1:10PM</option>
+									</select>
 								</div>
 							</div>
 						</div>
@@ -396,7 +573,7 @@
 								performanceQuery + 
 							'</select>' +
 						'</div>' +									
-						'<input id="' + name + '" oninput="this.value = this.value.toUpperCase()" class="col-xs-5 form-control comments-box" type="text" style="width: 140px;" onkeydown="uploadComment(this)" placeholder="COMENTARIOS" value="' + localComments + '">' +
+						'<input id="' + name + '" oninput="this.value = this.value.toUpperCase()" class="col-xs-5 form-control comments-box" type="text" style="width: 140px;" onkeydown="uploadComment(this)" onfocusout="uploadCommentFocusOut(this)" placeholder="COMENTARIOS" value="' + localComments + '">' +
 						'<button type="button" class="col-xs-1 btn glyphicon glyphicon-pencil" style="background-color:white; padding-top:2px; padding-bottom:0px;" onclick="editEmployeeModal(event)"' + 
 						'data-name="' + name + '" data-pronunciation="' + pronunciations[i] + '" data-sigma="' + sigmaEmployee + '" data-id="' + id[i] + '">' + '</button>' + 
 						'</li>';
@@ -418,6 +595,10 @@
 		function uploadComment(ele) {
 			if(event.key === 'Enter')
 				firebase.database().ref('employees/' + event.srcElement.id + '/comments').set(ele.value);
+		}
+
+		function uploadCommentFocusOut(ele) {
+			firebase.database().ref('employees/' + event.srcElement.id + '/comments').set(ele.value);
 		}
 
 
@@ -452,6 +633,37 @@
 				new_ul.appendChild(lis[i]);
 			ul.parentNode.replaceChild(new_ul, ul);
 		}
+
+		//setNewBreaks();
+		function setNewBreaks() {
+			//aqui
+			firebase.database().ref('employees').once('value', function(snapshot) {
+				for (const [key, value] of Object.entries(snapshot.val())) {
+					var break1 = value.break1;
+					var break2 = value.break2;
+					var break3 = value.break3;
+
+					if(break1 != undefined) {
+						firebase.database().ref('employees/' + key + '/break1').set(break1);
+						firebase.database().ref('employees/' + key + '/break3').set(break1);
+						firebase.database().ref('employees/' + key + '/break5').set(break1);
+						firebase.database().ref('employees/' + key + '/break7').set(break1);
+						firebase.database().ref('employees/' + key + '/break9').set(break1);
+						firebase.database().ref('employees/' + key + '/break12').set(break1);
+					}
+					if(break2 != undefined) {
+						firebase.database().ref('employees/' + key + '/break2').set(break2);
+						firebase.database().ref('employees/' + key + '/break4').set(break2);
+						firebase.database().ref('employees/' + key + '/break6').set(break2);
+						firebase.database().ref('employees/' + key + '/break8').set(break2);
+						firebase.database().ref('employees/' + key + '/break10').set(break2);
+					}
+					if(break3 != undefined) {
+						firebase.database().ref('employees/' + key + '/break11').set(break3);
+					}
+				}
+			});
+		}
 		
         //edit or delete product modal values
         function editEmployeeModal(event) {
@@ -467,25 +679,37 @@
 			form.elements[3].checked = event.target.getAttribute("data-sigma") == "true";
 
 			firebase.database().ref('employees/' + form.elements[0].value).once('value', function(snapshot) {
-				if(snapshot.val().break1 != null) {
-					form.elements[4].value = snapshot.val().break1;
-					form.elements[5].value = snapshot.val().break2;
-				} else {
-					form.elements[4].value = "NO";
-					form.elements[5].value = "NO";
-				}
-				if(snapshot.val().break3 != null)
-					form.elements[7].value = snapshot.val().break3;
-				else
-					form.elements[7].value = "NO";
-				if(snapshot.val().performance != undefined)
-					form.elements[6].value = snapshot.val().performance;
-				else
-					form.elements[6].value = "NA";
-				if(snapshot.val().comments != undefined)
-					form.elements[8].value = snapshot.val().comments;
-				else
-					form.elements[8].value = "";
+				if(snapshot.val().break1 != null) form.elements[6].value = snapshot.val().break1;
+				else form.elements[6].value = "NO";
+				if(snapshot.val().break2 != null) form.elements[7].value = snapshot.val().break2;
+				else form.elements[7].value = "NO";
+				if(snapshot.val().break3 != null) form.elements[8].value = snapshot.val().break3;
+				else form.elements[8].value = "NO";
+				if(snapshot.val().break4 != null) form.elements[9].value = snapshot.val().break4;
+				else form.elements[9].value = "NO";
+				if(snapshot.val().break5 != null) form.elements[10].value = snapshot.val().break5;
+				else form.elements[10].value = "NO";
+				if(snapshot.val().break6 != null) form.elements[11].value = snapshot.val().break6;
+				else form.elements[11].value = "NO";
+				if(snapshot.val().break7 != null) form.elements[12].value = snapshot.val().break7;
+				else form.elements[12].value = "NO";
+				if(snapshot.val().break8 != null) form.elements[13].value = snapshot.val().break8;
+				else form.elements[13].value = "NO";
+				if(snapshot.val().break9 != null) form.elements[14].value = snapshot.val().break9;
+				else form.elements[14].value = "NO";
+				if(snapshot.val().break10 != null) form.elements[15].value = snapshot.val().break10;
+				else form.elements[15].value = "NO";
+				if(snapshot.val().break11 != null) form.elements[16].value = snapshot.val().break11;
+				else form.elements[16].value = "NO";
+				if(snapshot.val().break12 != null) form.elements[17].value = snapshot.val().break12;
+				else form.elements[17].value = "NO";
+				
+				if(snapshot.val().performance != undefined) form.elements[4].value = snapshot.val().performance;
+				else form.elements[4].value = "NA";
+				
+				if(snapshot.val().comments != undefined) form.elements[5].value = snapshot.val().comments;
+				else form.elements[5].value = "";
+
 			}).then(function() {
 				//sets buttons inner values
 				$('#saveButton').data("type", "editEmployee");
@@ -531,11 +755,10 @@
 				form.elements[2].value = "0" + form.elements[2].value;
 			
             //checks for blanks
-            var inputs = new Array(9);
+            var inputs = new Array(18);
             //{name:0, pronunciation:1, id:2, sigma:3}
-            for (var i = 0; i < inputs.length -2; i++) {
-				if(i == 3)
-					inputs[i] = form.elements[i].checked;
+            for (var i = 0; i < 5; i++) {
+				if(i == 3) inputs[i] = form.elements[i].checked;
 				else {
 					inputs[i] = form.elements[i].value;
 					if (inputs[i] == "") {
@@ -545,16 +768,24 @@
 					}
 				}
             }
-			inputs[4] = form.elements[4].value;
 			inputs[5] = form.elements[5].value;
-			inputs[7] = form.elements[7].value;
 			
 			inputs[6] = form.elements[6].value;
+			inputs[7] = form.elements[7].value;
 			inputs[8] = form.elements[8].value;
+			inputs[9] = form.elements[9].value;
+			inputs[10] = form.elements[10].value;
+			inputs[11] = form.elements[11].value;
+			inputs[12] = form.elements[12].value;
+			inputs[13] = form.elements[13].value;
+			inputs[14] = form.elements[14].value;
+			inputs[15] = form.elements[15].value;
+			inputs[16] = form.elements[16].value;
+			inputs[17] = form.elements[17].value;
 
             //checks for valid id
             if (form.elements[2].value < 1 || form.elements[2].value > 99) {
-                messageLabel.innerHTML = "LA CLAVE DEBE DE SER ENTRE 01 - 99";
+                messageLabel.innerHTML = "LA CLAVE DEBE DE SER ENTRE 01-99";
                 verificated = false;
             }
 
@@ -613,11 +844,21 @@
 			firebase.database().ref('employees/' + inputs[0] + '/nproducts').set(0);
 			firebase.database().ref('employees/' + inputs[0] + '/ttime').set(0);
 			firebase.database().ref('employees/' + inputs[0] + '/lastFinished').set(0);
-			firebase.database().ref('employees/' + inputs[0] + '/break1').set(inputs[4]);
-			firebase.database().ref('employees/' + inputs[0] + '/break2').set(inputs[5]);
-			firebase.database().ref('employees/' + inputs[0] + '/break3').set(inputs[7]);
-			firebase.database().ref('employees/' + inputs[0] + '/performance').set(inputs[6]);
-			firebase.database().ref('employees/' + inputs[0] + '/comments').set(inputs[8]);
+			firebase.database().ref('employees/' + inputs[0] + '/performance').set(inputs[4]);
+			firebase.database().ref('employees/' + inputs[0] + '/comments').set(inputs[5]);
+
+			firebase.database().ref('employees/' + inputs[0] + '/break1').set(inputs[6]);
+			firebase.database().ref('employees/' + inputs[0] + '/break2').set(inputs[7]);
+			firebase.database().ref('employees/' + inputs[0] + '/break3').set(inputs[8]);
+			firebase.database().ref('employees/' + inputs[0] + '/break4').set(inputs[9]);
+			firebase.database().ref('employees/' + inputs[0] + '/break5').set(inputs[10]);
+			firebase.database().ref('employees/' + inputs[0] + '/break6').set(inputs[11]);
+			firebase.database().ref('employees/' + inputs[0] + '/break7').set(inputs[12]);
+			firebase.database().ref('employees/' + inputs[0] + '/break8').set(inputs[13]);
+			firebase.database().ref('employees/' + inputs[0] + '/break9').set(inputs[14]);
+			firebase.database().ref('employees/' + inputs[0] + '/break10').set(inputs[15]);
+			firebase.database().ref('employees/' + inputs[0] + '/break11').set(inputs[16]);
+			firebase.database().ref('employees/' + inputs[0] + '/break12').set(inputs[17]);
 
 			if(inputs[3]) {
 				issigma = true;

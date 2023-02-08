@@ -1524,14 +1524,15 @@
                     if (order[i][5] == "aCremas" || order[i][5] == "aJamones" || aJamonesSpecialProducts.includes(order[i][0]) && order[i][4] != "" || aJamonesSpecialProducts.includes(order[i][0]) && order[i][1] % 1 != 0)
                         if(document.getElementById("noConnectionAlert").style.display == "block")
                             order[i][4] = "-ANOTAR- " + order[i][4];
+                    
                     if (order[i][4] != "") {
                         //notes and description
                         doc.setFontSize(10);
                         doc.setPage(pagesQuantity * 2 - 1);
 
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, "$" + product[0].costo + " - " + replaceAEIOUN(order[i][4]));
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, "$" + product[0].costo + " - " + replaceAEIOUN(order[i][4]));
 
                         doc.setFontSize(12.5);
                         doc.setPage(pagesQuantity * 2 - 1);
@@ -1539,12 +1540,19 @@
                         doc.setPage(pagesQuantity * 2);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                     } else {
+                        doc.setFontSize(10);
+                        doc.setPage(pagesQuantity * 2 - 1);
+
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, "$" + product[0].costo);
+                        doc.setPage(pagesQuantity * 2);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, "$" + product[0].costo);
+
                         //just description
                         doc.setFontSize(12.5);
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]));
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]));
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                     }
 
                     //drawline if product needs to be weighted

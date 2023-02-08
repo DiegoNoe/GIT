@@ -191,6 +191,8 @@
             checkUpdatedStatus();
         }, 60000);
 
+        eraseDBAt530();
+
         ///Activates tabs
 		var i, tabcontent, tablinks;
 		tabcontent = document.getElementsByClassName("tabcontent");
@@ -200,6 +202,17 @@
         document.getElementById("thirdTab").click();
 
         checkConnection();
+
+        function eraseDBAt530() {
+            var newDate = new Date();
+            if(newDate.getHours() == 17 && newDate.getMinutes() > 30) {
+                firebase.database().ref('aJamonesO').remove();
+            }
+            
+            setTimeout(function () {
+                eraseDBAt530();
+            }, 60000);
+        }
 
         function playSound() {
             document.getElementById("linkAudio").play();
