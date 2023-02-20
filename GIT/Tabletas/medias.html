@@ -557,29 +557,26 @@
 		}
 
 		function saveCurrentState() {
-			console.log(newDate.getMinutes());
+			//mondays in the morning
 			if(newDate.getDay() == 1 && newDate.getHours() == 5 && newDate.getMinutes() > 50) {
 				firebase.database().ref('empleados/').once('value', function(snapshot) {
-					if(snapshot.val() != null)
-						var employeesSnapshot = snapshot.val();
-				}).then(function() {
-					$.each(employeesSnapshot, function(key, value) {
-						firebase.database().ref("employees/" + key).once('value', function(childSnapshot) {
-							if(childSnapshot.val().comments != undefined) 
-								firebase.database().ref("employeesA/" + key + "/comments").set(childSnapshot.val().comments);
-							if(childSnapshot.val().performance != undefined)
-								firebase.database().ref("employeesA/" + key + "/performance").set(childSnapshot.val().performance);
+					if(snapshot.val() != null) {
+						$.each(snapshot.val(), function(key, value) {
 							
-							firebase.database().ref("employees/" + key + "/extraTimeT").once('value', function(cChildsnapshot) {
-								if(cChildsnapshot.val() != undefined) 
-									firebase.database().ref("employees/" + key + "/extraTimeTT").set(cChildsnapshot.val());
-							});
+							firebase.database().ref("employees/" + key).once('value', function(childSnapshot) {
+								if(childSnapshot.val().comments != undefined) 
+									firebase.database().ref("employeesA/" + key + "/comments").set(childSnapshot.val().comments);
+								if(childSnapshot.val().performance != undefined)
+									firebase.database().ref("employeesA/" + key + "/performance").set(childSnapshot.val().performance);
+								if(childSnapshot.val().extraTimeT != undefinedchildSnapshot.val().extraTimeT != 0)
+									firebase.database().ref("employees/" + key + "/extraTimeTT").set(childSnapshot.val().extraTimeT);
 
-							firebase.database().ref("employees/" + key + "/extraTime").set(0);
-							firebase.database().ref("employees/" + key + "/extraTimeT").set(0);
-							console.log("employees/" + key + "/extraTimeT a 0")
-						});	
-					});
+								
+								firebase.database().ref("employees/" + key + "/extraTime").set(0);
+								firebase.database().ref("employees/" + key + "/extraTimeT").set(0);
+							});	
+						});
+					}
 				});
 			}
 		}

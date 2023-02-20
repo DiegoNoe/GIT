@@ -31,6 +31,7 @@
             CUB: "CUB",
             EXB: "EXB"
         };
+
     </script>
 
     <style>
@@ -205,8 +206,9 @@
 
         function eraseDBAt530() {
             var newDate = new Date();
-            if(newDate.getHours() == 17 && newDate.getMinutes() > 30) {
+            if(newDate.getHours() == 17) {
                 firebase.database().ref('aJamonesO').remove();
+                firebase.database().ref('aCremasO').remove();
             }
             
             setTimeout(function () {
