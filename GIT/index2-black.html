@@ -71,8 +71,8 @@
     <div class="container-fluid">
         <div class="form-group row first-row" style="padding: 5px 5px">
             <!-- name input -->
-            <div id="inputNameContainer" class="col-md-4" style="padding-left: 5px; padding-right: 0;">
-                <input id="inputName" type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" style="float:left; width: 84.5%; margin-top: 1px; background-color: #111111; color: #EEEEEE; border-color: #555555;" maxlength="20" placeholder="NOMBRE"> </input>
+            <div id="inputNameContainer" class="col-md-5" style="padding-left: 5px; padding-right: 0;">
+                <input id="inputName" type="input" oninput="this.value = this.value.toUpperCase()" class="form-control" style="float:left; width: 88%; margin-top: 1px; background-color: #111111; color: #EEEEEE; border-color: #555555;" maxlength="20" placeholder="NOMBRE"> </input>
                 <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-plus-sign"
                     id="addClientButton" style="float:right; font-weight: bold; height: 34px;"
                     onclick="showAddClientModal()">
@@ -98,8 +98,7 @@
             <button type="button" class="btn btn-danger interface-button glyphicon glyphicon-phone-alt" id="printByPhoneButton" style="float: right; margin-right: 5px; font-weight: bold; color: #EEEEEE;" onclick="generatePDF('TELEFONO')"></button>
             <button type="button" class="btn btn-danger interface-button" id="printByWhatsButton" style="float: right; margin-top: 1px; margin-right: 5px; font-weight: bold; -webkit-text-stroke: 1px; color: #EEEEEE;" onclick="generatePDF('WHATSAPP')"><i class="fa fa-whatsapp" style="font-size: 28px; line-height: 22.5px;" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-plus-sign" style="float: right; margin-right: 5px; font-weight: bold;" onclick="addProductModal()"></button>
-            <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-bullhorn" style="float: right; margin-right: 5px; font-weight: bold;" onclick="callClient()"></button>
-            <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-repeat" style="float: right; margin-right: 5px; font-weight: bold; font-size: 21px !important; display: none;" onclick="retrieveLastOrder()"></button>
+            <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon glyphicon-bullhorn" style="float: right; margin-right: 5px; font-weight: bold;" onclick="callClient()"></button>
         </div>
 
         <div class="row" style="margin-bottom: 15px;">
@@ -358,6 +357,7 @@
             $("#greenCheck").css("visibility", "hidden");
             $("#greenCheckW").css("visibility", "hidden");
             $("#greenCheckWN").css("visibility", "hidden");
+            //aqui
             firebase.database().ref(globalComputer + '/sorder').remove();
             $("#dynamic-list-2").html("");
             hideSugList();
@@ -1423,7 +1423,7 @@
 
                     //quantity and unit
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(11.2);
+                    doc.setFontSize(12.5);
                     var quantityAndUnit = order[i][1] + shortenedUnits[order[i][2]];
 
                     //enhance quantity if necessary
@@ -1453,6 +1453,7 @@
                     doc.text(5.5  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
                     doc.setFont("Gill Sans Std Condensed");
 
+                    //aqui
                     //if product is being supplied by suppliers then draw cirlce
                     if (order[i][5] == "porPesarCamara" || order[i][5] == "yaPesadoCamara") {
                         doc.setPage(pagesQuantity * 2 - 1);
@@ -1482,7 +1483,7 @@
 
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(11.2);
+                    doc.setFontSize(12.5);
                     product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
                     var totalProduct = roundDecimals(Math.round(product[0].costo * order[i][1] * 10) / 10);
                     if (order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
@@ -1528,22 +1529,30 @@
                         //notes and description
                         doc.setFontSize(10);
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
-                        doc.setPage(pagesQuantity * 2);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
 
-                        doc.setFontSize(11.2);
-                        doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]) + " $" + product[0].costo);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, product[0].costo + " - " + replaceAEIOUN(order[i][4]));
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]) + " $" + product[0].costo);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, product[0].costo + " - " + replaceAEIOUN(order[i][4]));
+
+                        doc.setFontSize(12.5);
+                        doc.setPage(pagesQuantity * 2 - 1);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
+                        doc.setPage(pagesQuantity * 2);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                     } else {
-                        //just description
-                        doc.setFontSize(11.2);
+                        doc.setFontSize(10);
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]) + " $" + product[0].costo);
+
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, product[0].costo);
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]) + " $" + product[0].costo);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, product[0].costo);
+
+                        //just description
+                        doc.setFontSize(12.5);
+                        doc.setPage(pagesQuantity * 2 - 1);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
+                        doc.setPage(pagesQuantity * 2);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                     }
 
                     //drawline if product needs to be weighted
@@ -1607,10 +1616,10 @@
                         doc.setFontSize(12.5);
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(68.5 + xOffset, 184  + yOffset, "", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, "CON EL PROPOSITO DE MEJORAR NUESTRO SERVICIO", "center");
                         doc.text(68.5 + xOffset, 189  + yOffset, "RECOMENDAMOS HACER TU PEDIDO HORA Y MEDIA ANTES DE VENIR", "center");
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(68.5 + xOffset, 184  + yOffset, "", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, "CON EL PROPOSITO DE MEJORAR NUESTRO SERVICIO", "center");
                         doc.text(68.5 + xOffset, 189  + yOffset, "RECOMENDAMOS HACER TU PEDIDO HORA Y MEDIA ANTES DE VENIR", "center");
                     }
                 }
@@ -1641,13 +1650,9 @@
                     }
                 } else {
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(129.5 + xOffset, 200  + yOffset, "" + total.toLocaleString('en-US'), "right");
-                    doc.text(129.5 + xOffset, 209  + yOffset, "TOTAL         ", "right");
-
+                    doc.text(129.5 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "right");
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(129.5 + xOffset, 200  + yOffset, "" + total.toLocaleString('en-US'), "right");
-                    doc.text(129.5 + xOffset, 209  + yOffset, "TOTAL         ", "right");
-
+                    doc.text(129.5 + xOffset, 200  + yOffset, "APROX  " + total.toLocaleString('en-US'), "right");
 
                     //generates QR code with total embeded in
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
@@ -1714,8 +1719,6 @@
 
                 //autoprints PDF in a new tab
                 doc.autoPrint();
-
-                uploadLastOrder($("#inputName").val(), sOrderProducts, total);
 
                 if(window.open(doc.output('bloburl'), '_blank') != null) { 
                     var ncomputer = globalComputer.slice(-1);
@@ -1848,7 +1851,7 @@
 
         function populateSuggestedProduct(product, quantity, note) {
             var color,
-                backgroundColor;
+            backgroundColor;
             if(product.existencia == "siHay") {
                 color = "#EEEEEE";
                 backgroundColor = "#111111";
@@ -1871,56 +1874,13 @@
                     '<button class="col-sm-6 product-info" onclick="addProductObjectGetterS(&#39;' + product.clave + '&#39;, &#39;' + quantity + '&#39;, &#39;' + note + '&#39;)" style="text-align: left; padding-top: 0px; height: 35px; background-color: ' + backgroundColor + '; border: none;">' + product.descripcion + '</button>' +
                     '<button class="col-sm-2 product-info" onclick="addProductObjectGetterS(&#39;' + product.clave + '&#39;, &#39;' + quantity + '&#39;, &#39;' + note + '&#39;)" style="text-align: left; padding-top: 0px; height: 35px; background-color: ' + backgroundColor + '; border: none;">' + note + '</button>' +
                     '<div class="col-sm-2 product-notes-container">' +
-                        '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + '; background-color: ' + backgroundColor + '; height: 30px; margin-top: 2.5px; padding-top: 1px; padding-right: 0px; padding-bottom: 0px; line-height: 4px;" class="form-control product-notes" maxlength="48" placeholder="NOTAS"> </input>' +
+                        '<input type="input" oninput="this.value = this.value.toUpperCase()" style= "color: ' + color + '; background-color: ' + backgroundColor + '; height: 30px; margin-top: 2.5px; padding-top: 1px; padding-right: 0px; padding-bottom: 0px; line-height: 4px;" class="form-control product-notes" maxlength="48" placeholder="MOTIVO"> </input>' +
                     '</div>' +
                 '</div>';
 
-            $('#dynamic-list').prepend(productListItem);            
+            $('#dynamic-list-2').prepend(productListItem);            
         }
-    
-        //aqui
-        function uploadLastOrder(number, sOrderProducts, total) {
-            var databaseLastOrder = firebase.database().ref('lastOrder');
-
-            databaseLastOrder.remove().then(function () {
-                databaseLastOrder.child("currentName").set(number);
-                for (const [key, value] of Object.entries(sOrderProducts)) {
-                    databaseLastOrder.child(key + "/uc").set(value.uc);
-                    if(value.n != "")
-                    databaseLastOrder.child(key + "/n").set(value.n);
-                }
-            });
-        }
-
-        function retrieveLastOrder() {
-            eraseOrder();
-
-            firebase.database().ref('lastOrder').once('value', function (snapshot) {
-                if(snapshot.val() != null) {
-                    formatLastOrder(snapshot.val());
-                }
-            });
-        }
-
-        function formatLastOrder(sorder) {
-            var sorder = Object.fromEntries(
-                Object.entries(sorder).sort(function(a, b) {
-                    return a[1].f - b[1].f;
-                })
-            );
-
-            for (const [key, value] of Object.entries(sorder)) {
-                if(key != "currentName") {
-                    var searchResult = JSON.search(products, '//*[clave="' + key + '"]');
-                    if(searchResult[0] != null) {
-                        populateSuggestedProduct(searchResult[0], value["uc"], value["n"]);
-                    }
-                } else {
-                    $("#inputName").val(value);
-                }
-            }
-        }
-
+        
         //guardo registro de los productos que lleva el cliente
         function uploadSuggestedOrder(number, sOrderProducts, total) {
             databaseClients.child(number + "/uvisita").set(Date.now());

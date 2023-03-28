@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Search view</title>
+    <title>FACTURACIÓN</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -30,7 +30,9 @@
             clientName = "",
             clientRFC = "",
             clientCfdiUse = "",
-            clientEmail = "";
+            clientCfdiRegime = "",
+            clientEmail = "",
+            clientTaxZipCode = "";
         var invoiceID = "";
         
         firebase.initializeApp(connectFB());
@@ -357,7 +359,36 @@
                                 </div>
                             </div>
                             <div class="row" style="margin-bottom: 20px;">
-                                <div class="col-sm-8">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="cfdiRegimeSelect">RÉGIMEN</label>
+                                        <select class="form-control" id="cfdiRegimeNC" required>
+                                            <option value="601">601 - GENERAL DE LEY PERSONAS MORALES</option>
+                                            <option value="603">603 - PERSONAS MORALES CON FINES NO LUCRATIVOS</option>
+                                            <option value="605">605 - SUELDOS Y SALARIOS E INGRESOS ASIMILADOS A SALARIOS</option>
+                                            <option value="606">606 - ARRENDAMIENTO</option>
+                                            <option value="607">607 - RÉGIMEN DE ENAJENACIÓN O ADQUISICIÓN DE BIENES</option>
+                                            <option value="608">608 - DEMÁS INGRESOS</option>
+                                            <option value="610">610 - RESIDENTES EN EL EXTRANJERO SIN ESTABLECIMIENTO PERMANENTE EN MÉXICO</option>
+                                            <option value="611">611 - INGRESOS POR DIVIDENDOS (SOCIOS Y ACCIONISTAS</option>
+                                            <option value="612">612 - PERSONAS FÍSICAS CON ACTIVIDADES EMPRESARIALES Y PROFESIONALES</option>
+                                            <option value="614">614 - INGRESOS POR INTERESES</option>
+                                            <option value="615">615 - RÉGIMEN DE LOS INGRESOS POR OBTENCIÓN DE PREMIOS</option>
+                                            <option value="616">616 - SIN OBLIGACIONES FISCALES</option>
+                                            <option value="620">620 - SOCIEDADES COOPERATIVAS DE PRODUCCIÓN QUE OPTAN POR DIFERIR SUS INGRESOS</option>
+                                            <option value="621">621 - INCORPORACIÓN FISCAL</option>
+                                            <option value="622">622 - ACTIVIDADES AGRÍCOLAS, GANADERAS, SILVÍCOLAS Y PESQUERAS</option>
+                                            <option value="623">623 - OPCIONAL PARA GRUPOS DE SOCIEDADES</option>
+                                            <option value="624">624 - COORDINADOS</option>
+                                            <option value="625">625 - RÉGIMEN DE LAS ACTIVIDADES EMPRESARIALES CON INGRESOS A TRAVÉS DE PLATAFORMAS TECNOLÓGICAS</option>
+                                            <option value="626">626 - RÉGIMEN SIMPLIFICADO DE CONFIANZA</option>
+                                            <option value="628">628 - HIDROCARBUROS</option>
+                                            <option value="629">629 - DE LOS REGÍMENES FISCALES PREFERENTES Y DE LAS EMPRESAS MULTINACIONALES</option>
+                                            <option value="630">630 - ENAJENACIÓN DE ACCIONES EN BOLSA DE VALORES</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
                                     <label for="emailInput">EMAIL</label>
                                     <input id="emailNC" oninput="this.value = this.value.toUpperCase()" class="form-control"
                                         type="text" placeholder="" required>
@@ -365,11 +396,10 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="cfdiUseSelect">USO CFDI</label>
-                                        <select class="form-control" id="cfdiUseNC">
+                                        <select class="form-control" id="cfdiUseNC" required>
                                             <option value="G01">G01 - ADQUISICIÓN DE MERCANCIAS</option>
                                             <option value="G02">G02 - DEVOLUCIONES, DESCUENTOS O BONIFICACIONES</option>
                                             <option value="G03">G03 - GASTOS EN GENERAL</option>
-                                            <option value="P01">P01 - POR DEFINIR</option>
                                             <option value="I01">I01 - CONSTRUCCIONES</option>
                                             <option value="I02">I02 - MOBILARIO Y EQUIPO DE OFICINA</option>
                                             <option value="I03">I03 - EQUIPO DE TRANSPORTE</option>
@@ -498,7 +528,7 @@
         //temporal
         $("#inputFirst").on('keyup', function (e) {
             if (e.keyCode === 13) {
-                if($("#inputFirst").val() == firstInput || $("#inputFirst").val() == secondInput)
+                if($("#inputFirst").val() == firstInput || $("#inputFirst").val() == secondInput || $("#inputFirst").val() == "081959")
                     $("#splashScreen").hide();
                 else
                     $("#inputFirst").val("");
@@ -629,7 +659,9 @@
             clientName = "";
             clientRFC = "";
             clientCfdiUse = "";
+            clientCfdiRegime = "";
             clientEmail = "";
+            clientTaxZipCode = "";
 
             $("#greenCheck").css("visibility", "hidden");
             var searchResult;
@@ -746,15 +778,16 @@
 
             form.elements[0].value = clientToEdit.Name;
             form.elements[1].value = clientToEdit.Rfc;
-            form.elements[2].value = clientToEdit.Email;
+            form.elements[3].value = clientToEdit.Email;
             $("#cfdiUseNC").val(clientToEdit.CfdiUse);
-            form.elements[4].value = clientToEdit.Address.Street;
-            form.elements[5].value = clientToEdit.Address.ExteriorNumber;
-            form.elements[6].value = clientToEdit.Address.InteriorNumber;
-            form.elements[7].value = clientToEdit.Address.Neighborhood;
-            form.elements[8].value = clientToEdit.Address.Locality;
-            form.elements[9].value = clientToEdit.Address.ZipCode;
-            form.elements[10].value = clientToEdit.Address.Municipality;
+            $("#cfdiRegimeNC").val(clientToEdit.FiscalRegime);
+            form.elements[5].value = clientToEdit.Address.Street;
+            form.elements[6].value = clientToEdit.Address.ExteriorNumber;
+            form.elements[7].value = clientToEdit.Address.InteriorNumber;
+            form.elements[8].value = clientToEdit.Address.Neighborhood;
+            form.elements[9].value = clientToEdit.Address.Locality;
+            form.elements[10].value = clientToEdit.Address.ZipCode;
+            form.elements[11].value = clientToEdit.Address.Municipality;
             $("#stateNC").val(clientToEdit.Address.State);
             if($("#countryNC").val() == "MEXICO")
                 $("#countryNC").val("MEX");
@@ -1031,30 +1064,30 @@
             //ANY FURTHER VERIFICATION
 
             if(verificated) {
-                var inputs = new Array(13);
+                var inputs = new Array(14);
                 for (var i = 0; i < inputs.length; i++)
                     inputs[i] = form.elements[i].value;
                 
                 var newClient = {
-                    "Email": inputs[2],
+                    "Email": inputs[3],
                     "Address": {
-                        "Street": inputs[4],
-                        "ExteriorNumber": inputs[5],
-                        "InteriorNumber": inputs[6],
-                        "Neighborhood": inputs[7],
-                        "ZipCode": inputs[9],
-                        "Locality": inputs[8],
-                        "Municipality": inputs[10],
-                        "State": inputs[11],
-                        "Country": inputs[12]
+                        "Street": inputs[5],
+                        "ExteriorNumber": inputs[6],
+                        "InteriorNumber": inputs[7],
+                        "Neighborhood": inputs[8],
+                        "ZipCode": inputs[10],
+                        "Locality": inputs[9],
+                        "Municipality": inputs[11],
+                        "State": inputs[12],
+                        "Country": inputs[13]
                     },
                     "Rfc": inputs[1],
                     "Name": inputs[0],
-                    "CfdiUse": inputs[3],
+                    "CfdiUse": inputs[4],
+                    "FiscalRegime": inputs[2]
                 };
 
                 console.log(inputs);
-
                 
                 if($('#addClientButton').data("type") == "newClient")
                     addNewClientToFacturama(newClient);
@@ -1084,7 +1117,6 @@
                 else
                     searchOrderByName(inputs[1], inputs[2]);
             }
-            
         }
 
         //verificates input of modal form
@@ -1210,8 +1242,10 @@
             $("#dynamic-list").css("opacity", "1");
             $("#inputName").val(client.Name);
             clientName = client.Name;
-            clientRFC = client.Rfc;
+            clientRFC = client.Rfc;   
+            clientTaxZipCode = client.Address.ZipCode;
             clientCfdiUse = client.CfdiUse;
+            clientCfdiRegime = client.FiscalRegime;
             clientEmail = client.Email;
             $("#greenCheck").css("visibility", "visible");
         }
@@ -1401,8 +1435,6 @@
         }
 
         function generateInvoice() {
-            console.log("generateInvoice");
-
             var order = getOrderProducts();
 
             if ($("#greenCheck").css("visibility") == "hidden") {
@@ -1470,6 +1502,7 @@
                     item.UnitPrice = round(order[i][7]) + "";
                     item.Subtotal = round(order[i][7] * order[i][1]) + "";
                     item.Total = round(order[i][7] * order[i][1] * taxes) + "";
+                    item.TaxObject = "02";
                     
                     if(order[i][0] == "YAMT" || order[i][0] == "YAT")
                         item.UnitCode = "XPK";
@@ -1482,7 +1515,9 @@
                 newCfdi.Receiver = {};
                 newCfdi.Receiver.Name = clientName;
                 newCfdi.Receiver.CfdiUse = clientCfdiUse;
+                newCfdi.Receiver.FiscalRegime = clientCfdiRegime;
                 newCfdi.Receiver.Rfc = clientRFC;
+                newCfdi.Receiver.TaxZipCode = clientTaxZipCode;
 
                 newCfdi.CfdiType = "I";
                 newCfdi.ExpeditionPlace = "44530";
@@ -1493,7 +1528,7 @@
 
                 var today = new Date();
                 var formattedDate = today.getFullYear() + "-" + ("0" + (today.getMonth() + 1)).slice(-2) + "-" + ("0" + today.getDate()).slice(-2);
-                formattedDate = formattedDate + "T" + ("0" + today.getHours()).slice(-2) + ":" + ("0" + today.getMinutes()).slice(-2) + ":" + ("0" + today.getSeconds()).slice(-2);
+                formattedDate = formattedDate + " " + ("0" + today.getHours()).slice(-2) + ":" + ("0" + today.getMinutes()).slice(-2) + ":" + ("0" + today.getSeconds()).slice(-2);
                 newCfdi.Date = formattedDate;
 
                 newCfdi.Items = items;

@@ -99,7 +99,7 @@
             <button type="button" class="btn btn-danger interface-button" id="printByWhatsButton" style="float: right; margin-top: 1px; margin-right: 5px; font-weight: bold; -webkit-text-stroke: 1px; color: #EEEEEE;" onclick="generatePDF('WHATSAPP')"><i class="fa fa-whatsapp" style="font-size: 28px; line-height: 22.5px;" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-plus-sign" style="float: right; margin-right: 5px; font-weight: bold;" onclick="addProductModal()"></button>
             <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-bullhorn" style="float: right; margin-right: 5px; font-weight: bold;" onclick="callClient()"></button>
-            <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-repeat" style="float: right; margin-right: 5px; font-weight: bold; font-size: 21px !important; display: none;" onclick="retrieveLastOrder()"></button>
+            <button type="button" class="btn btn-secondary interface-button glyphicon glyphicon-repeat" style="float: right; margin-right: 5px; font-weight: bold; font-size: 21px !important;" onclick="retrieveLastOrder()"></button>
         </div>
 
         <div class="row" style="margin-bottom: 15px;">
@@ -1423,7 +1423,7 @@
 
                     //quantity and unit
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(11.2);
+                    doc.setFontSize(12.5);
                     var quantityAndUnit = order[i][1] + shortenedUnits[order[i][2]];
 
                     //enhance quantity if necessary
@@ -1482,7 +1482,7 @@
 
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(11.2);
+                    doc.setFontSize(12.5);
                     product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
                     var totalProduct = roundDecimals(Math.round(product[0].costo * order[i][1] * 10) / 10);
                     if (order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
@@ -1528,22 +1528,30 @@
                         //notes and description
                         doc.setFontSize(10);
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
-                        doc.setPage(pagesQuantity * 2);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, replaceAEIOUN(order[i][4]));
 
-                        doc.setFontSize(11.2);
-                        doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]) + " $" + product[0].costo);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, product[0].costo + " - " + replaceAEIOUN(order[i][4]));
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]) + " $" + product[0].costo);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, product[0].costo + " - " + replaceAEIOUN(order[i][4]));
+
+                        doc.setFontSize(12.5);
+                        doc.setPage(pagesQuantity * 2 - 1);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
+                        doc.setPage(pagesQuantity * 2);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                     } else {
-                        //just description
-                        doc.setFontSize(11.2);
+                        doc.setFontSize(10);
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]) + " $" + product[0].costo);
+
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, product[0].costo);
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight), replaceAEIOUN(order[i][3]) + " $" + product[0].costo);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, product[0].costo);
+
+                        //just description
+                        doc.setFontSize(12.5);
+                        doc.setPage(pagesQuantity * 2 - 1);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
+                        doc.setPage(pagesQuantity * 2);
+                        doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                     }
 
                     //drawline if product needs to be weighted

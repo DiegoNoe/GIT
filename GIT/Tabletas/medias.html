@@ -557,23 +557,25 @@
 		}
 
 		function saveCurrentState() {
+			
 			//mondays in the morning
-			if(newDate.getDay() == 1 && newDate.getHours() == 5 && newDate.getMinutes() > 50) {
+			if(newDate.getDay() == 1 && newDate.getHours() == 8 && newDate.getMinutes() < 40) {
+				console.log("reinicio");
 				firebase.database().ref('empleados/').once('value', function(snapshot) {
 					if(snapshot.val() != null) {
 						$.each(snapshot.val(), function(key, value) {
-							
 							firebase.database().ref("employees/" + key).once('value', function(childSnapshot) {
 								if(childSnapshot.val().comments != undefined) 
 									firebase.database().ref("employeesA/" + key + "/comments").set(childSnapshot.val().comments);
 								if(childSnapshot.val().performance != undefined)
 									firebase.database().ref("employeesA/" + key + "/performance").set(childSnapshot.val().performance);
-								if(childSnapshot.val().extraTimeT != undefinedchildSnapshot.val().extraTimeT != 0)
+								if(childSnapshot.val().extraTimeT != undefined && childSnapshot.val().extraTimeT != 0) {
+									console.log("extraTimeTT = " + childSnapshot.val().extraTimeT);
 									firebase.database().ref("employees/" + key + "/extraTimeTT").set(childSnapshot.val().extraTimeT);
-
-								
-								firebase.database().ref("employees/" + key + "/extraTime").set(0);
-								firebase.database().ref("employees/" + key + "/extraTimeT").set(0);
+									console.log("extraTime y extraTimeT = 0");
+									firebase.database().ref("employees/" + key + "/extraTime").set(0);
+									firebase.database().ref("employees/" + key + "/extraTimeT").set(0);
+								}
 							});	
 						});
 					}
@@ -1221,6 +1223,17 @@
 			if (idleTime > 6)
 				document.getElementById("primaryButton").click();
 		}
+
+		reloadOnUpdate();
+		function reloadOnUpdate() {
+            firebase.database().ref("updates/medias").on('value', function(snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref("updates/medias").set(false).then(function() {
+                        location.reload();
+                    });
+                }
+            });
+        }
 
 	</script>
 </body>
