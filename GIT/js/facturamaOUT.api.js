@@ -1,8 +1,3 @@
-/*
-Soporte API Facturama
-    soporte-api@facturama.mx
-*/
-
 var valuesFacturama = {
     token: "Y3JlbWVyaWFpbXBlcmlvOnhhenRZdC1qdXpjaWMtMnhldGp5",
     url: "https://api.facturama.mx/"
@@ -12,7 +7,6 @@ $.ajaxSetup({
     beforeSend: function (xhr) {
         xhr.withCredentials = true;
         xhr.setRequestHeader("Authorization", "Basic " + valuesFacturama.token);
-        console.log(valuesFacturama);
     }
 });
 
@@ -34,11 +28,6 @@ $.ajaxSetup({
         function listWithParam(path, param, callback) {
             return jQuery.get(settings.url + path + param, undefined, callback, "json");
         }
-
-        function retrieveStatus(path, params, callback) {
-            return jQuery.get(settings.url + path + params, undefined, callback, "json");
-        }
-
 
         function postSyncWithParam(path, param, callback) {
             $.ajax({
@@ -90,9 +79,6 @@ $.ajaxSetup({
                 List: function (callback) {
                     return list('client', callback);
                 },
-                List2: function (data, callback) {
-                    return list('clients?' + data, callback);
-                },
                 Create: function (data, callback, callbackError) {
                     postSyncWithData('client', data, callback, callbackError);
                 },
@@ -109,9 +95,6 @@ $.ajaxSetup({
                 },
                 List: function (callback) {
                     return list('product', callback);
-                },
-                List2: function (data, callback) {
-                    return list('products?' + data, callback);
                 },
                 Create: function (data, callback, callbackError) {
                     postSyncWithData('product', data, callback, callbackError);
@@ -162,10 +145,7 @@ $.ajaxSetup({
                     return listWithParam('cfdi', param, callback);
                 },
                 Create: function (data, callback, callbackError) {
-                    postSyncWithData('2/cfdis', data, callback, callbackError);  
-                },
-                Create3: function (data, callback, callbackError) {
-                    postSyncWithData('3/cfdis', data, callback, callbackError);   
+                    postSyncWithData('2/cfdis', data, callback, callbackError);
                 },
                 Send: function (param, callback) {
                     postSyncWithParam('cfdi', param, callback);
@@ -178,10 +158,6 @@ $.ajaxSetup({
                 },
                 Acuse: function (format, type, id, callback) {
                     retrieve('acuse/' + format + '/' + type, id, callback);
-                },
-                Status: function(params,callback)
-                {
-                    return retrieveStatus('cfdi/status' , params , callback);
                 }
             },
             TaxEntity: {

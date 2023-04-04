@@ -1537,7 +1537,7 @@
 
                 disableUX();
                 if (event.srcElement.id == "sendInvoiceButton") {
-                    Facturama.Cfdi.Create(newCfdi, function(result){ 
+                    Facturama.Cfdi.Create3(newCfdi, function(result){ 
                         Facturama.Cfdi.Send("?cfdiType=" + "issued" + "&cfdiId=" + result.Id + "&email=" + clientEmail, function(result){ 
                             enableUX();
                             if(invoiceID != "")
@@ -1545,9 +1545,8 @@
                             eraseOrder();
                         }, function(error) { manageError(error) });
                     }, function(error) { manageError(error) });
-
                 } else if (event.srcElement.id == "printInvoiceButton") {
-                    Facturama.Cfdi.Create(newCfdi, function(result){ 
+                    Facturama.Cfdi.Create3(newCfdi, function(result){ 
                         Facturama.Cfdi.Download("pdf", "issued", result.Id, function(resultPDF){
                             blob = converBase64toBlob(resultPDF.Content, 'application/pdf');
                             var blobURL = URL.createObjectURL(blob);
@@ -1570,10 +1569,11 @@
         }
 
         function manageError(error) {
+            console.log(error);
             enableUX();
             if (error && error.responseJSON) {
-                alert(error.responseJSON.ModelState[Object.keys(error.responseJSON.ModelState)[0]][0]);	
                 console.log(error.responseJSON);
+                alert(error.responseJSON.ModelState[Object.keys(error.responseJSON.ModelState)[0]][0]);	
             }
         }
 
