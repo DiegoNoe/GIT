@@ -441,7 +441,7 @@
 			$('#main-wrapper').prepend(breaksQuery);
 		}
 
-		window.setInterval(saveCurrentState, 60 * 1000);
+		window.setInterval(saveCurrentState, 1 * 1000);
 
 		loadEmployeesByHour();
 
@@ -557,7 +557,6 @@
 		}
 
 		function saveCurrentState() {
-			
 			//mondays in the morning
 			if(newDate.getDay() == 1 && newDate.getHours() == 8 && newDate.getMinutes() < 40) {
 				console.log("reinicio");
@@ -648,6 +647,13 @@
 				var sigmaEmployee = true;
 				pronunciation = pronunciation.substring(1, pronunciation.length);
 			}
+
+			if(name == "ANGEL 2") {
+				console.log(name);
+				console.log(localEmployees[name]);
+
+				
+			}
 			
 			var employeeListItem =
 				'<ul class="list-group-item row employee-row" style="padding: 5px 5px;">' + 
@@ -709,7 +715,6 @@
 						var sigmaEmployee = true;
 						pronunciations[i] = pronunciations[i].substring(1, pronunciations[i].length);
 					}
-
 					var employeeListItem =
 					'<ul class="list-group-item row employee-row">' +
 						'<h2 class="col-xs-8 employee-name" style="padding: 0px; margin: 0px; padding-left: 5px;">' + name + '</h2>' +

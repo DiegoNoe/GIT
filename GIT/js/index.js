@@ -11,14 +11,5 @@ function connectFB() {
     return config;
 }
 
-function connectFacturama() {
-    var facturamaInstance = {
-        token: "Y3JlbWVyaWFpbXBlcmlvOnh1dnFvUy16YWpzbzUtbWlyd2Vy",
-        url: "https://apisandbox.facturama.mx/"
-    };
-
-    return valuesFacturama;
-}
-
 var firstInput = "vnG2eU";
 var secondInput = "H7AYm2";

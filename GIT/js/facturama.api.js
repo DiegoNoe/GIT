@@ -4,7 +4,7 @@ Soporte API Facturama
 */
 
 var valuesFacturama = {
-    token: "Y3JlbWVyaWFpbXBlcmlvOnhhenRZdC1qdXpjaWMtMnhldGp5",
+    token: "Y3JlbWVyaWFpbXBlcmlvOkNhcmFkZXBhcGExMjM=",
     url: "https://api.facturama.mx/"
 };
 
