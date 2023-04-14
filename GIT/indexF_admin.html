@@ -70,24 +70,12 @@
         });
 
         /* OUTDATED
+        */
         Facturama.Clients.List(function(result) { 
             defiantClients = Defiant.getSnapshot(result);
         });
-        */
 
-        Facturama.Clients.List(function(result) {
-            defiantClients = Defiant.getSnapshot(result);
-        });
-
-        var jsonClientsResponse = JSON.parse(httpGet("https://api.facturama.mx/clients?start=0&length=100"));
-        var totalClients = jsonClientsResponse.recordsTotal;
-        var jsonClientsClean = jsonClientsResponse.data;
-
-        for(var i = 100; i < totalClients; i += 100)
-            jsonClientsClean = jsonClientsClean.concat(JSON.parse(httpGet("https://api.facturama.mx/clients?start=" + i + "&length=100")).data);
-
-        defiantClients = Defiant.getSnapshot(jsonClientsClean);
-        console.log(defiantClients);
+        defiantClients = getFacturamaClients();
         
         function httpGet(theUrl) {
             var xmlHttp = new XMLHttpRequest();
@@ -95,6 +83,19 @@
             xmlHttp.setRequestHeader("Authorization", "Basic Y3JlbWVyaWFpbXBlcmlvOnhhenRZdC1qdXpjaWMtMnhldGp5");
             xmlHttp.send( null );
             return xmlHttp.responseText;
+        }
+
+        function getFacturamaClients() {
+            var jsonClientsResponse = JSON.parse(httpGet("https://api.facturama.mx/clients?start=0&length=100"));
+            var totalClients = jsonClientsResponse.recordsTotal;
+            var jsonClientsClean = jsonClientsResponse.data;
+
+            for(var i = 100; i < totalClients; i += 100)
+                jsonClientsClean = jsonClientsClean.concat(JSON.parse(httpGet("https://api.facturama.mx/clients?start=" + i + "&length=100")).data);
+
+            console.log(Defiant.getSnapshot(jsonClientsClean));
+
+            return Defiant.getSnapshot(jsonClientsClean);
         }
 
 
