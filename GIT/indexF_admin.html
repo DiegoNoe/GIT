@@ -70,17 +70,17 @@
         });
 
         /* OUTDATED
-        */
         Facturama.Clients.List(function(result) { 
             defiantClients = Defiant.getSnapshot(result);
         });
-
+        */
+        
         defiantClients = getFacturamaClients();
         
         function httpGet(theUrl) {
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.open( "GET", theUrl, false );
-            xmlHttp.setRequestHeader("Authorization", "Basic Y3JlbWVyaWFpbXBlcmlvOnhhenRZdC1qdXpjaWMtMnhldGp5");
+            xmlHttp.setRequestHeader("Authorization", "Basic Y3JlbWVyaWFpbXBlcmlvOkNhcmFkZXBhcGExMjM=");
             xmlHttp.send( null );
             return xmlHttp.responseText;
         }
