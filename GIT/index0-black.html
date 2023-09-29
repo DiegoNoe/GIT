@@ -197,8 +197,12 @@
                             <div class="row">
                                 <!-- cost -->
                                 <div class="col-sm-3">
-                                    <label for="priceInput">COSTO</label>
+                                    <label for="priceInput">COSTO X UNIDAD</label>
                                     <input class="form-control" type="number" min="0" placeholder="8.50" style="background-color: #222222; color: #BABABA; border-color: #555555;" required>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="weightInput">UNIDADES X PROD</label>
+                                    <input id="costInput" class="form-control" type="number" min="0" style="background-color: #222222; color: #BABABA; border-color: #555555;" placeholder="UNIDADES" required>
                                 </div>
                                 <!-- unit -->
                                 <div class="col-sm-2">
@@ -214,7 +218,7 @@
                                    </div>
                                </div>
                                 <!-- stock -->
-                                <div class="col-sm-3">
+                                <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="stockSelect">EXISTENCIA</label>
                                         <select class="form-control" id="stockSelect" style="background-color: #222222; color: #BABABA; border-color: #555555; -webkit-appearance:none;">
@@ -225,7 +229,7 @@
                                     </div>
                                 </div>
                                 <!-- type -->
-                                <div class="col-sm-4">
+                                <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="typeSelect">TIPO</label>
                                         <select class="form-control" id="typeSelect" style="background-color: #222222; color: #BABABA; border-color: #555555; -webkit-appearance:none;">
@@ -926,6 +930,11 @@
             form.elements[1].value = productToEdit.clave;
             form.elements[2].value = productToEdit.xpcode;
             form.elements[3].value = productToEdit.costo;
+
+            if(productToEdit.pesoN != undefined && productToEdit.pesoN != "")
+                form.elements[3].value = (productToEdit.costo / productToEdit.pesoN).toString();
+            form.elements[4].value = productToEdit.pesoN;
+
             $("#unitSelect").val(productToEdit.unidad);
             $("#stockSelect").val(productToEdit.existencia);
             $("#typeSelect").val(productToEdit.tipo);
@@ -963,14 +972,16 @@
             var verified = true;
 
             //checks for blanks
-            var inputs = new Array(7);
+            var inputs = new Array(8);
             //{description:0, id:1, SAT:2, cost:3, unit:4, stock:5, type:6}
             for (var i = 0; i < inputs.length; i++) {
                 inputs[i] = form.elements[i].value;
-                if (inputs[i] == "") {
-                    messageLabel.innerHTML = "LLENA TODOS LOS CAMPOS.";
-                    verified = false;
-                    break;
+                if(i != 4) {
+                    if (inputs[i] == "") {
+                        messageLabel.innerHTML = "LLENA TODOS LOS CAMPOS.";
+                        verified = false;
+                        break;
+                    }
                 }
             }
 
@@ -1028,6 +1039,8 @@
 
             //if everything is checked, upload form
             if (verified) {
+                console.log("inputs");
+                console.log(inputs);
                 addNewProductDB(inputs);
                 messageLabel.innerHTML = "";
 
@@ -1047,13 +1060,18 @@
 
         //adds or updates a product to firebase
         function addNewProductDB(inputs) {
+            var costoLocal = inputs[3];
+            if(inputs[4] != undefined && inputs[4] != "") costoLocal = (inputs[3] * inputs[4]).toString();
+            else inputs[4] = "";
+
             firebase.database().ref('productos/' + inputs[1]).set({
                 clave: inputs[1],
-                costo: inputs[3],
+                costo: costoLocal,
                 descripcion: inputs[0],
-                existencia: inputs[5],
-                tipo: inputs[6],
-                unidad: inputs[4],
+                existencia: inputs[6],
+                pesoN: inputs[4],
+                tipo: inputs[7],
+                unidad: inputs[5],
                 xpcode: inputs[2],
                 categoria: 1
             }).then(function () {

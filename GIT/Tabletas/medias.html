@@ -441,7 +441,7 @@
 			$('#main-wrapper').prepend(breaksQuery);
 		}
 
-		window.setInterval(saveCurrentState, 1 * 1000);
+		window.setInterval(saveCurrentState, 60 * 1000);
 
 		loadEmployeesByHour();
 
@@ -556,9 +556,11 @@
 			}
 		}
 
+		setInterval(saveCurrentState, 1000 * 60 * 60);
 		function saveCurrentState() {
 			//mondays in the morning
-			if(newDate.getDay() == 1 && newDate.getHours() == 8 && newDate.getMinutes() < 40) {
+			//if(newDate.getDay() == 1 && newDate.getHours() == 5 && newDate.getMinutes() < 40) {
+			if(newDate.getDay() == 1 && newDate.getHours() == 6) {
 				console.log("reinicio");
 				firebase.database().ref('empleados/').once('value', function(snapshot) {
 					if(snapshot.val() != null) {
@@ -570,16 +572,47 @@
 									firebase.database().ref("employeesA/" + key + "/performance").set(childSnapshot.val().performance);
 								if(childSnapshot.val().extraTimeT != undefined && childSnapshot.val().extraTimeT != 0) {
 									console.log("extraTimeTT = " + childSnapshot.val().extraTimeT);
+									firebase.database().ref("employeesA/" + key + "/extraTimeTT").set(childSnapshot.val().extraTimeT);
 									firebase.database().ref("employees/" + key + "/extraTimeTT").set(childSnapshot.val().extraTimeT);
 									console.log("extraTime y extraTimeT = 0");
-									firebase.database().ref("employees/" + key + "/extraTime").set(0);
-									firebase.database().ref("employees/" + key + "/extraTimeT").set(0);
-								}
+									//firebase.database().ref("employees/" + key + "/extraTime").set(0);
+									//firebase.database().ref("employees/" + key + "/extraTimeT").set(0);
+								} 
 							});	
 						});
 					}
+					setTimeout(reloadNow, 60000);
 				});
 			}
+		}
+		
+		function reloadNow() {
+			location.reload();
+		}
+
+		saveCurrentStateNow();
+		function saveCurrentStateNow() {
+			//mondays in the morning
+			console.log("reinicio");
+			firebase.database().ref('empleados/').once('value', function(snapshot) {
+				if(snapshot.val() != null) {
+					$.each(snapshot.val(), function(key, value) {
+						firebase.database().ref("employees/" + key).once('value', function(childSnapshot) {
+							if(childSnapshot.val().comments != undefined)
+								firebase.database().ref("employeesA/" + key + "/comments").set(childSnapshot.val().comments);
+							if(childSnapshot.val().performance != undefined)
+								firebase.database().ref("employeesA/" + key + "/performance").set(childSnapshot.val().performance);
+							if(childSnapshot.val().extraTimeT != undefined && childSnapshot.val().extraTimeT != 0) {
+								console.log("extraTimeTT = " + childSnapshot.val().extraTimeT);
+								firebase.database().ref("employees/" + key + "/extraTimeTT").set(childSnapshot.val().extraTimeT);
+								console.log("extraTime y extraTimeT = 0");
+								firebase.database().ref("employees/" + key + "/extraTime").set(0);
+								firebase.database().ref("employees/" + key + "/extraTimeT").set(0);
+							}
+						});	
+					});
+				}
+			});
 		}
 
 		function disableAllBreakButtons() {
@@ -648,18 +681,17 @@
 				pronunciation = pronunciation.substring(1, pronunciation.length);
 			}
 
-			if(name == "ANGEL 2") {
-				console.log(name);
-				console.log(localEmployees[name]);
-
-				
+			/* current fix
+			if(localEmployees[name].extraTimeT == undefined) {
+				firebase.database().ref('employees/' + name + '/extraTimeT').set(0);
 			}
-			
+			*/
+
 			var employeeListItem =
 				'<ul class="list-group-item row employee-row" style="padding: 5px 5px;">' + 
 					'<button class="col-xs-4 employee-name" style="padding: 0px; margin: 0px; padding-left: 5px; background-color: transparent; border-width : 0; text-align: left;" onclick="speakName(&quot;' + name + '&quot;)">' + name + '</button>' +
 					'<button type="button" class="col-xs-4 btn btn-secondary break-button first-break" style="background-color:#689f38; margin-left: 110px;" onclick="manageFirstBreak(event)" data-name="' + pronunciation + '" data-sigma="' + sigmaEmployee + '">' + '</button>' + 
-					'<button type="button" class="col-xs-1 btn btn-secondary exit-button first-break" style="background-color:rgb(229, 57, 53); margin-left: 10px;" onclick="manageExit(event)" data-nameow="ow' + pronunciation+ '" data-name="' + pronunciation + '">' + localEmployees[name].extraTimeT + '</button>' + 
+					'<button type="button" class="col-xs-1 btn btn-secondary exit-button first-break" style="background-color:rgb(229, 57, 53); margin-left: 10px;" onclick="manageExit(event)" data-nameid="' + name + '" data-nameow="ow' + pronunciation + '" data-name="' + pronunciation + '">' + localEmployees[name].extraTimeT + '</button>' + 
 				'</ul>';
 
 			if(newDate.getDay() == 0) { 
@@ -799,7 +831,10 @@
 			if(event.target.style.backgroundColor == "rgb(229, 57, 53)") {
 				startExit(event.target);
 			} else if(event.target.style.backgroundColor == "rgb(238, 255, 65)") {
-				uploadTimeTotal(event.target.getAttribute("data-name"), event.target.innerText);
+				console.log("detengo el tiempo");
+				console.log(event.target.getAttribute("data-name"));
+				console.log(event.target.innerText);
+				uploadTimeTotal(event.target.getAttribute("data-nameid"), event.target.innerText);
 				event.target.style.backgroundColor = "rgb(229, 57, 53)";
 				event.target.style.borderColor = "rgb(104, 159, 56)";
 				event.target.style.color = "#FFFFFF";
@@ -832,6 +867,8 @@
 
 		function uploadTimeTotal(employee, time) {
 			firebase.database().ref('employees/' + employee + '/extraTimeT').set(time);
+			console.log('employees/' + employee + '/extraTimeT');
+			console.log(time);
 		}		
 
 		function manageSecondBreak(event) {
