@@ -257,7 +257,7 @@
 		<button type="button" id="secundaryButton" class="btn btn-secondary" onclick="showProducts(event)">PRODS</button>
 		<button type="button" id="thirdButton" class="btn btn-secondary" onclick="showOOSProducts(event)">NO HAY</button>
 		<h1 class="modal-title" id="mediasTitle" style="margin-bottom:1.5%; margin-top:.5px; color: #EEEEEE;">M: 0</h1>
-		<h1 class="modal-title" id="outTitle" style="position:absolute; left: 100px;px; top:0px; color: #EEEEEE;">A: 0</h1>
+		<h1 class="modal-title" id="outTitle" style="position:absolute; left: 100px; top:0px; color: #EEEEEE;">A: 0</h1>
 		<h1 class="modal-title" id="time" style="position:absolute; left:180px; top:0px; color: #EEEEEE;"> </h1>
 		<div class='wrapper'>
 			<div id="main-wrapper" class='tabcontent'></div>
@@ -441,7 +441,7 @@
 			$('#main-wrapper').prepend(breaksQuery);
 		}
 
-		window.setInterval(saveCurrentState, 60 * 1000);
+		//window.setInterval(saveCurrentState, 60 * 1000);
 
 		loadEmployeesByHour();
 
@@ -558,6 +558,7 @@
 
 		setInterval(saveCurrentState, 1000 * 60 * 60);
 		function saveCurrentState() {
+			console.log("saveCurrentState");
 			//mondays in the morning
 			//if(newDate.getDay() == 1 && newDate.getHours() == 5 && newDate.getMinutes() < 40) {
 			if(newDate.getDay() == 1 && newDate.getHours() == 6) {
@@ -590,10 +591,10 @@
 			location.reload();
 		}
 
-		saveCurrentStateNow();
+		//saveCurrentStateNow();
 		function saveCurrentStateNow() {
 			//mondays in the morning
-			console.log("reinicio");
+			console.log("saveCurrentStateNow");
 			firebase.database().ref('empleados/').once('value', function(snapshot) {
 				if(snapshot.val() != null) {
 					$.each(snapshot.val(), function(key, value) {
@@ -681,11 +682,10 @@
 				pronunciation = pronunciation.substring(1, pronunciation.length);
 			}
 
-			/* current fix
 			if(localEmployees[name].extraTimeT == undefined) {
 				firebase.database().ref('employees/' + name + '/extraTimeT').set(0);
+				localEmployees[name].extraTimeT = 0;
 			}
-			*/
 
 			var employeeListItem =
 				'<ul class="list-group-item row employee-row" style="padding: 5px 5px;">' + 
