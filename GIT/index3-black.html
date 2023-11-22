@@ -1584,6 +1584,8 @@
                         tempProduct[1] = ((order[i][1] * 100) % 100) / 100;
                         withPendingProducts = aJamonesOrder(tempProduct, i);
                     }
+                    var hasCub = shortenedUnits[order[i][2]] == "CB";
+
                     currentLine++;
                 }
                 
@@ -1592,38 +1594,49 @@
                         doc.setFontSize(12.5);
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(68.5 + xOffset, 184  + yOffset, "RECUERDA TRAER TUS ENVASES VACIOS DE ACEITE", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "SON $10 PESOS DE IMPROTE", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, "REGRESA TUS BIDONES VACIOS", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "Y TE REEMBOLSAMOS $10 PESOS", "center");
                         doc.setPage(pagesQuantity * 2);
-                        doc.text(68.5 + xOffset, 184  + yOffset, "RECUERDA TRAER TUS ENVASES VACIOS DE ACEITE", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "SON $10 PESOS DE IMPROTE", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, "REGRESA TUS BIDONES VACIOS", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "Y TE REEMBOLSAMOS $10 PESOS", "center");
                     }
-                }else if(orderMethod == "MOSTRADOR") {
+                } else if(hasCub) {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
                         doc.setFontSize(12.5);
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(68.5 + xOffset, 184  + yOffset, "YA PUEDES HACER TU PEDIDO EN SUCURSAL IMPERIAL 2", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "CALLE 14 #1414 WHATSAPP 3335050537 TELEFONO 3336712912", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, "REGRESA TUS CUBETAS VACIAS", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "Y TE REEMBOLSAMOS $20 PESOS", "center");
+                        doc.setPage(pagesQuantity * 2);
+                        doc.text(68.5 + xOffset, 184  + yOffset, "REGRESA TUS CUBETAS VACIAS", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "Y TE REEMBOLSAMOS $20 PESOS", "center");
+                    }
+                } else if(orderMethod == "MOSTRADOR") {
+                    if((order.length % 17) != 0 && (order.length % 17) != 16) {
+                        doc.setFontSize(12.5);
+                        doc.setFont("Gill Sans MT Condensed Negrita");
+                        doc.setPage(pagesQuantity * 2 - 1);
+                        doc.text(68.5 + xOffset, 184  + yOffset, "HAZ TU PEDIDO ANTES DE VENIR", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "WHATSAPP 3317050598 TELEFONO 3336713915", "center");
                         doc.setPage(pagesQuantity * 2);
                         /*doc.text(68.5 + xOffset, 179  + yOffset, "RECUERDA QUE YA PUEDES HACER TU PEDIDO ANTES DE VENIR", "center");
                         doc.text(68.5 + xOffset, 184  + yOffset, "POR WHATSAPP: 333317050598 O TELEFONO: 3336713915", "center");
                         doc.text(68.5 + xOffset, 189  + yOffset, "Y PASAS DIRECTO A PAGAR Y RECOGER.", "center");*/
-                        doc.text(68.5 + xOffset, 184  + yOffset, "YA PUEDES HACER TU PEDIDO EN SUCURSAL IMPERIAL 2", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "CALLE 14 #1414 WHATSAPP 3335050537 TELEFONO 3336712912", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, "HAZ TU PEDIDO ANTES DE VENIR", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "WHATSAPP 3317050598 TELEFONO 3336713915", "center");
                     }
-                }else if(orderMethod == "TELEFONO" || orderMethod == "WHATSAPP") {
+                } else if(orderMethod == "TELEFONO" || orderMethod == "WHATSAPP") {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
                         doc.setFontSize(12.5);
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(68.5 + xOffset, 184  + yOffset, "YA PUEDES HACER TU PEDIDO EN SUCURSAL IMPERIAL 2", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "CALLE 14 #1414 WHATSAPP 3335050537 TELEFONO 3336712912", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, "HAZ TU PEDIDO ANTES DE VENIR", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "WHATSAPP 3317050598 TELEFONO 3336713915", "center");
                         doc.setPage(pagesQuantity * 2);
                         /*doc.text(68.5 + xOffset, 184  + yOffset, "", "center");
                         doc.text(68.5 + xOffset, 189  + yOffset, "RECOMENDAMOS HACER TU PEDIDO HORA Y MEDIA ANTES DE VENIR", "center");*/
-                        doc.text(68.5 + xOffset, 184  + yOffset, "YA PUEDES HACER TU PEDIDO EN SUCURSAL IMPERIAL 2", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "CALLE 14 #1414 WHATSAPP 3335050537 TELEFONO 3336712912", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, "HAZ TU PEDIDO ANTES DE VENIR", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "WHATSAPP 3317050598 TELEFONO 3336713915", "center");
                     }
                 }
 
