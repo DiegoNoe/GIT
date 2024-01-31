@@ -820,16 +820,12 @@
 
             var hours = (new Date()).getHours();
             var ampm = hours >= 12 ? 'pm' : 'am';
-
-            var greeting = "buenos días";
-            if(ampm = "pm")
-                greeting = "buenas tardes";
             
             var randomInt = getRandomInt(4);
             if(randomInt == 1)
-			    msg.text = "buena tarde, " + greeting + ", pase el siguiente a la " + computer;
+			    msg.text = "buen día, pase el siguiente a la " + computer;
             else
-                msg.text = "buena tarde, pase el siguiente a la " + computer;
+                msg.text = "pase el siguiente a la " + computer;
 
             //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
             msg.voice = speechSynthesis.getVoices()[1];
