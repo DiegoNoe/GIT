@@ -830,7 +830,24 @@
             //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
             msg.voice = speechSynthesis.getVoices()[1];
 			window.speechSynthesis.speak(msg);
+		}
 
+        function speakEndingOrder(name, total, estimatedTime, calculable) {
+			var msg = new SpeechSynthesisUtterance();
+			msg.rate = 1;
+
+            console.log("nombro " + name + " " +  total + " " + estimatedTime + " " + calculable);
+            
+            if(calculable)
+                msg.text = "gracias " + name + ", formate para pagar " + total;
+            else
+                msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos";
+    
+            console.log(msg.text);
+
+            //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
+            msg.voice = speechSynthesis.getVoices()[1];
+			window.speechSynthesis.speak(msg);
 		}
 
         function showAddClientModal() {
@@ -1672,7 +1689,7 @@
                         productsRefID = randomLetter1 + $("#inputName").val().trim() + " " + total.replace(/,/g, '') + randomLetter2;
                         doc.addImage(generateQR(productsRefID), 'JPEG', 6 + xOffset, 194  + yOffset, 15, 15);
                     }
-                }
+                }                
                 
                 //category
                 var points = "";
@@ -1735,6 +1752,11 @@
                 if(window.open(doc.output('bloburl'), '_blank') != null) { 
                     var ncomputer = globalComputer.slice(-1);
                     var etime = calculateWTime(Math.ceil(nproducts));
+
+                    if(calculable)
+                        speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "", true);
+                    else 
+                        speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "" + etime, false);
                     
                     //process
                     firebase.database().ref('process/firsts/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
