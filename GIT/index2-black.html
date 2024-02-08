@@ -1753,10 +1753,12 @@
                     var ncomputer = globalComputer.slice(-1);
                     var etime = calculateWTime(Math.ceil(nproducts));
 
-                    if(calculable)
-                        speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "", true);
-                    else 
-                        speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "" + etime, false);
+                    if(orderMethod == "MOSTRADOR") {
+                        if(calculable)
+                            speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "", true);
+                        else 
+                            speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "" + etime, false);
+                    }
                     
                     //process
                     firebase.database().ref('process/firsts/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
