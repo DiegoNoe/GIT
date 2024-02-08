@@ -441,6 +441,8 @@
 	</div>
 	
 	<script>
+
+		hearForCallClient();
 		
 		checkConnection();
 		idleTimer();
@@ -452,6 +454,75 @@
 			if (e.keyCode == 13 && $("#inputScanner").val() != "")
 				manageScannerInput();
 		});
+
+		function hearForCallClient() {
+            firebase.database().ref('service/0isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/0isReady').set(false);
+                    speak(0);
+                }
+            });
+            firebase.database().ref('service/1isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/1isReady').set(false);
+                    speak(1);
+                }
+            });
+            firebase.database().ref('service/2isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/2isReady').set(false);
+                    speak(2);
+                }
+            });
+            firebase.database().ref('service/3isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/3isReady').set(false);
+                    speak(3);
+                }
+            });
+            firebase.database().ref('service/4isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/4isReady').set(false);
+                    speak(4);
+                }
+            });
+            firebase.database().ref('service/5isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/5isReady').set(false);
+                    speak(5);
+                }
+            });
+            firebase.database().ref('service/6isReady').on('value', function (snapshot) {
+                if(snapshot.val()) {
+                    firebase.database().ref('service/6isReady').set(false);
+                    speak(6);
+                }
+            });
+        }
+
+		function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+
+		function speak(computer) {
+			var msg = new SpeechSynthesisUtterance();
+			msg.rate = 1;
+
+            var hours = (new Date()).getHours();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            
+            var randomInt = getRandomInt(4);
+            if(randomInt == 1)
+			    msg.text = "buen día, pase el siguiente a la " + computer;
+            else
+                msg.text = "pase el siguiente a la " + computer;
+
+            //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
+			console.log(speechSynthesis.getVoices());
+            msg.voice = speechSynthesis.getVoices()[66];
+			window.speechSynthesis.speak(msg);
+
+		}
 
 		function idleTimer() {
 			var idleTime = 0;
