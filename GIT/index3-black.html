@@ -832,19 +832,23 @@
 			window.speechSynthesis.speak(msg);
 		}
 
-        function speakEndingOrder(name, total, estimatedTime, calculable) {
+        function speakEndingOrder(name, total, estimatedTime, calculable, direct) {
 			var msg = new SpeechSynthesisUtterance();
 			msg.rate = 1;
 
-            console.log("nombro " + name + " " +  total + " " + estimatedTime + " " + calculable);
-            
-            if(calculable)
+            if(estimatedTime == "undefined")
+                estimatedTime = "10";
+
+            if(direct)
                 msg.text = "gracias " + name + ", formate para pagar " + total;
-            else
-                msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos";
+            else {
+                if(calculable)
+                    msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos, tu total exacto es " + total;
+                else
+                    msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos, tu total aproximado es " + total;
+            }
     
             console.log(msg.text);
-
             //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
             msg.voice = speechSynthesis.getVoices()[1];
 			window.speechSynthesis.speak(msg);
@@ -1714,7 +1718,7 @@
                 }
 
                 var justNameFlag = false;
-                if(((ndiversity <= 1 && !hasChuletaN) && orderMethod == "MOSTRADOR") || ((ndiversity == 0 && !hasChuletaN) && orderMethod != "MOSTRADOR")) {
+                if(((ndiversity <= 2 && !hasChuletaN) && orderMethod == "MOSTRADOR")) {
                     doc.setPage(1);
                     doc.setFontSize(29);
                     doc.setFont("Gill Sans MT Condensed Negrita");
@@ -1730,6 +1734,11 @@
                         name: replaceAEIOUN($("#inputName").val().trim())
                     });
                     */
+                    if(orderMethod == "MOSTRADOR" && !iftomorrow)
+                        speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "" + etime, calculable, true);
+                } else {
+                    if(orderMethod == "MOSTRADOR" && !iftomorrow)
+                        speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "" + etime, calculable, false);
                 }
 
                 /* FIX efficiency
@@ -1752,13 +1761,6 @@
                 if(window.open(doc.output('bloburl'), '_blank') != null) { 
                     var ncomputer = globalComputer.slice(-1);
                     var etime = calculateWTime(Math.ceil(nproducts));
-
-                    if(orderMethod == "MOSTRADOR") {
-                        if(calculable)
-                            speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "", true);
-                        else 
-                            speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "" + etime, false);
-                    }
                     
                     //process
                     firebase.database().ref('process/firsts/' + productsRefID.replace(/[^A-Z0-9]/g,'')).set({
