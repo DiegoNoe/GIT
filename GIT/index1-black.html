@@ -832,6 +832,7 @@
 			window.speechSynthesis.speak(msg);
 		}
 
+        //voceada en cada compuradora, bocinas chicas
         function speakEndingOrder(name, total, estimatedTime, calculable, direct) {
 			var msg = new SpeechSynthesisUtterance();
 			msg.rate = 1;
@@ -839,13 +840,25 @@
             if(estimatedTime == "undefined")
                 estimatedTime = "10";
 
-            if(direct)
-                msg.text = "gracias " + name + ", formate para pagar " + total;
-            else {
-                if(calculable)
-                    msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos, tu total exacto es " + total;
-                else
-                    msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos, tu total aproximado es " + total;
+            console.log(typeof total);
+            console.log(total);
+            if(direct) {
+                if(total < 1500)
+                    msg.text = "gracias " + name + ", formate para pagar " + total.toLocaleString('en-US');
+                else 
+                    msg.text = "gracias " + name + ", formate para pagar";
+            } else {
+                if(total < 1500) {
+                    if(calculable)
+                        msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos, tu total exacto es " + total.toLocaleString('en-US');
+                    else
+                        msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos, tu total aproximado es " + total.toLocaleString('en-US');
+                } else {
+                    if(calculable)
+                        msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos";
+                    else
+                        msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos";
+                }
             }
     
             console.log(msg.text);
@@ -1661,6 +1674,7 @@
                 doc.setFont("Gill Sans MT Condensed Negrita");
                 doc.setFontSize(25);
                 total = roundDecimals(Math.round(total * 10) / 10);
+                totalNumber = total;
                 if ((total / 1000) >= 1)
                     total = total.toLocaleString('en-US')
                 else
@@ -1735,10 +1749,10 @@
                     });
                     */
                     if(orderMethod == "MOSTRADOR" && !iftomorrow)
-                        speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "" + etime, calculable, true);
+                        speakEndingOrder($("#inputName").val().trim(), totalNumber, "" + etime, calculable, true);
                 } else {
                     if(orderMethod == "MOSTRADOR" && !iftomorrow)
-                        speakEndingOrder($("#inputName").val().trim(), total.toLocaleString('en-US'), "" + etime, calculable, false);
+                        speakEndingOrder($("#inputName").val().trim(), totalNumber, "" + etime, calculable, false);
                 }
 
                 /* FIX efficiency
