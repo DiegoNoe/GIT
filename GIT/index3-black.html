@@ -832,12 +832,27 @@
 			window.speechSynthesis.speak(msg);
 		}
 
-        //voceada en cada compuradora, bocinas chicas
-        function speakEndingOrder(name, total, estimatedTime, calculable, direct) {
+        function speakEndingOrder(name, total) {
 			var msg = new SpeechSynthesisUtterance();
 			msg.rate = 1;
 
-            if(estimatedTime == "undefined")
+            if(total.includes(".5"))
+                total = total.substring(0, total.length - 2) + " con 50";
+
+            msg.text = "gracias " + name + ", tu total aproximado es " + total.substring(1).toLocaleString('en-US');
+            
+            console.log(msg.text);
+            //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
+            msg.voice = speechSynthesis.getVoices()[1];
+			window.speechSynthesis.speak(msg);
+		}
+
+        //OUTDATED voceada en cada compuradora, bocinas chicas
+        function speakEndingOrder2(name, total, estimatedTime, calculable, direct) {
+			var msg = new SpeechSynthesisUtterance();
+			msg.rate = 1;
+
+            if(estimatedTime == undefined)
                 estimatedTime = "10";
 
             console.log(typeof total);
@@ -1361,6 +1376,11 @@
         
         //FUTURE FIX (HUGE FUNCTION) - generates a PDF with autoprint
         function generatePDF(orderMethod) {
+
+            //voceada en computadora
+            if(orderMethod == "MOSTRADOR" && !$("#tomorrowCheckbox").is(':checked'))
+                speakEndingOrder($("#inputName").val().trim(), $("#totalTextField").text());
+
             //set PDF defaults
             var order = getOrderProducts();
             if ($("#inputName").val() == "") {
@@ -1731,6 +1751,8 @@
                     doc.text(27 + xOffset, 210  + yOffset, points, "left");
                 }
 
+                var etime = calculateWTime(Math.ceil(nproducts));
+
                 var justNameFlag = false;
                 if(((ndiversity <= 2 && !hasChuletaN) && orderMethod == "MOSTRADOR")) {
                     doc.setPage(1);
@@ -1748,12 +1770,13 @@
                         name: replaceAEIOUN($("#inputName").val().trim())
                     });
                     */
-                    if(orderMethod == "MOSTRADOR" && !iftomorrow)
-                        speakEndingOrder($("#inputName").val().trim(), totalNumber, "" + etime, calculable, true);
-                } else {
-                    if(orderMethod == "MOSTRADOR" && !iftomorrow)
-                        speakEndingOrder($("#inputName").val().trim(), totalNumber, "" + etime, calculable, false);
-                }
+                    //if(orderMethod == "MOSTRADOR" && !iftomorrow)
+                        //speakEndingOrder2($("#inputName").val().trim(), totalNumber, etime, calculable, true);
+                } 
+                //else {
+                    //if(orderMethod == "MOSTRADOR" && !iftomorrow)
+                        //speakEndingOrder2($("#inputName").val().trim(), totalNumber, etime, calculable, false);
+                //}
 
                 /* FIX efficiency
                 if($("#sugerenciasLabel").css("visibility") == "visible")
