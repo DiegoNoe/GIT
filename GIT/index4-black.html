@@ -839,7 +839,13 @@
             if(total.includes(".5"))
                 total = total.substring(0, total.length - 2) + " con 50";
 
-            msg.text = "gracias " + name + ", tu total aproximado es " + total.substring(1).toLocaleString('en-US');
+            console.log(Number(total.substring(1)));
+            console.log(typeof Number(total.substring(1)));
+            
+            if(Number(total.substring(1)) < 1500)
+                msg.text = "gracias " + name + ", tu total aproximado es " + total.substring(1).toLocaleString('en-US');
+            else
+                msg.text = "gracias " + name;
             
             console.log(msg.text);
             //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
