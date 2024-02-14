@@ -853,27 +853,12 @@
 			msg.rate = 1;
 
             if(estimatedTime == undefined)
-                estimatedTime = "10";
+                estimatedTime = "15";
 
-            console.log(typeof total);
-            console.log(total);
             if(direct) {
-                if(total < 1500)
-                    msg.text = "gracias " + name + ", formate para pagar " + total.toLocaleString('en-US');
-                else 
-                    msg.text = "gracias " + name + ", formate para pagar";
+                msg.text = "formate para pagar";
             } else {
-                if(total < 1500) {
-                    if(calculable)
-                        msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos, tu total exacto es " + total.toLocaleString('en-US');
-                    else
-                        msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos, tu total aproximado es " + total.toLocaleString('en-US');
-                } else {
-                    if(calculable)
-                        msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos";
-                    else
-                        msg.text = "gracias " + name + ", te nombraremos en  " + estimatedTime + " minutos";
-                }
+                msg.text = "te nombraremos en  " + estimatedTime + " minutos";
             }
     
             console.log(msg.text);
@@ -1770,13 +1755,13 @@
                         name: replaceAEIOUN($("#inputName").val().trim())
                     });
                     */
-                    //if(orderMethod == "MOSTRADOR" && !iftomorrow)
-                        //speakEndingOrder2($("#inputName").val().trim(), totalNumber, etime, calculable, true);
+                    if(orderMethod == "MOSTRADOR" && !iftomorrow)
+                        speakEndingOrder2($("#inputName").val().trim(), totalNumber, etime, calculable, true);
                 } 
-                //else {
-                    //if(orderMethod == "MOSTRADOR" && !iftomorrow)
-                        //speakEndingOrder2($("#inputName").val().trim(), totalNumber, etime, calculable, false);
-                //}
+                else {
+                    if(orderMethod == "MOSTRADOR" && !iftomorrow)
+                        speakEndingOrder2($("#inputName").val().trim(), totalNumber, etime, calculable, false);
+                }
 
                 /* FIX efficiency
                 if($("#sugerenciasLabel").css("visibility") == "visible")
