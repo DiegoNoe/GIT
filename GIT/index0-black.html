@@ -848,8 +848,7 @@
                 msg.text = "gracias " + name;
             
             console.log(msg.text);
-            //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
-            console.log(speechSynthesis.getVoices());
+            msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
             msg.voice = speechSynthesis.getVoices()[1];
 			window.speechSynthesis.speak(msg);
 		}
