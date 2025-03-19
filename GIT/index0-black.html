@@ -378,7 +378,7 @@
             }
             //search just one word (posible number)
             else {
-                if ($('#inputName').val() != "")
+                if ($('#inputName').val() != "") 
                     searchResult = JSON.search(defiantClients, '//*[contains(nombre, "' + inputSearchValue + '")]' + '|//*[contains(numero, "' + inputSearchValue + '")]');
             }
 
@@ -849,6 +849,7 @@
             
             console.log(msg.text);
             //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
+            console.log(speechSynthesis.getVoices());
             msg.voice = speechSynthesis.getVoices()[1];
 			window.speechSynthesis.speak(msg);
 		}
