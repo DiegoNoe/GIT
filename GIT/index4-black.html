@@ -378,7 +378,7 @@
             }
             //search just one word (posible number)
             else {
-                if ($('#inputName').val() != "")
+                if ($('#inputName').val() != "") 
                     searchResult = JSON.search(defiantClients, '//*[contains(nombre, "' + inputSearchValue + '")]' + '|//*[contains(numero, "' + inputSearchValue + '")]');
             }
 
@@ -816,7 +816,7 @@
 
         function speak(computer) {
 			var msg = new SpeechSynthesisUtterance();
-			msg.rate = 1;
+			msg.rate = 1.2;
 
             var hours = (new Date()).getHours();
             var ampm = hours >= 12 ? 'pm' : 'am';
@@ -827,14 +827,13 @@
             else
                 msg.text = "pase el siguiente a la " + computer;
 
-            //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
-            msg.voice = speechSynthesis.getVoices()[1];
+            msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
 			window.speechSynthesis.speak(msg);
 		}
 
         function speakEndingOrder(name, total) {
 			var msg = new SpeechSynthesisUtterance();
-			msg.rate = 1;
+			msg.rate = 1.2;
 
             if(total.includes(".5"))
                 total = total.substring(0, total.length - 2) + " con 50";
@@ -848,28 +847,26 @@
                 msg.text = "gracias " + name;
             
             console.log(msg.text);
-            //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
-            msg.voice = speechSynthesis.getVoices()[1];
+            msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
 			window.speechSynthesis.speak(msg);
 		}
 
         //OUTDATED voceada en cada compuradora, bocinas chicas
         function speakEndingOrder2(name, total, estimatedTime, calculable, direct) {
 			var msg = new SpeechSynthesisUtterance();
-			msg.rate = 1;
+			msg.rate = 1.2;
 
             if(estimatedTime == undefined)
                 estimatedTime = "15";
 
             if(direct) {
-                msg.text = "formate para pagar";
+                msg.text = "fórmate para pagar";
             } else {
                 msg.text = "te nombraremos en  " + estimatedTime + " minutos";
             }
     
             console.log(msg.text);
-            //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
-            msg.voice = speechSynthesis.getVoices()[1];
+            msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Google español de Estados Unidos')];
 			window.speechSynthesis.speak(msg);
 		}
 
