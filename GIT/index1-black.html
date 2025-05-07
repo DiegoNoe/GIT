@@ -1417,12 +1417,12 @@
                 doc.setPage(1);
 
                 var shortenedUnits = {
-                    KILO: "KG",
-                    PIEZA: "PZ",
-                    CAJA: "CJ",
-                    CUB: "CB",
-                    EXB: "EX",
-                    PROMO: "PR"
+                    KILO: "KILO",
+                    PIEZA: "PIEZA",
+                    CAJA: "CAJA",
+                    CUB: "CUB",
+                    EXB: "EXHIB",
+                    PROMO: "PROM"
                 };
 
                 var sOrderProducts = {};
@@ -1461,8 +1461,8 @@
 
                     //quantity and unit
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(12.5);
-                    var quantityAndUnit = order[i][1] + shortenedUnits[order[i][2]];
+                    doc.setFontSize(12);
+                    var quantityAndUnit = order[i][1] + " " + shortenedUnits[order[i][2]];
 
                     //enhance quantity if necessary
                     if (quantityAndUnit.includes(".500"))
@@ -1486,9 +1486,9 @@
                     }
 
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(5.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
+                    doc.text(1.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(5.5  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
+                    doc.text(1.5  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
                     doc.setFont("Gill Sans Std Condensed");
 
                     //aqui
@@ -1521,7 +1521,7 @@
 
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(12.5);
+                    doc.setFontSize(12);
                     product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
                     var totalProduct = roundDecimals(Math.round(product[0].costo * order[i][1] * 10) / 10);
                     if (order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
@@ -1572,7 +1572,7 @@
                         doc.setPage(pagesQuantity * 2);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, product[0].costo + " - " + replaceAEIOUN(order[i][4]));
 
-                        doc.setFontSize(12.5);
+                        doc.setFontSize(12);
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                         doc.setPage(pagesQuantity * 2);
@@ -1586,7 +1586,7 @@
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) + 1.5, product[0].costo);
 
                         //just description
-                        doc.setFontSize(12.5);
+                        doc.setFontSize(12);
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(22 + xOffset, firstLineYPosition + (currentLine * lineHeight) - 1.5, replaceAEIOUN(order[i][3]));
                         doc.setPage(pagesQuantity * 2);
@@ -1599,10 +1599,10 @@
                         doc.setLineWidth(0.35);
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.setDrawColor(255, 0, 0);
-                        doc.line(93 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8, 110 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8);
+                        doc.line(91 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8, 108 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8);
                         doc.setPage(pagesQuantity * 2);
                         doc.setDrawColor(255, 0, 0);
-                        doc.line(93 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8, 110 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8);
+                        doc.line(91 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8, 108 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .8);
                         doc.setDrawColor(0, 0, 0);
                     }
 
@@ -1629,7 +1629,7 @@
                 
                 if(hasBidon) {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
-                        doc.setFontSize(12.5);
+                        doc.setFontSize(12);
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(68.5 + xOffset, 184  + yOffset, "REGRESA TUS BIDONES VACIOS", "center");
@@ -1640,7 +1640,7 @@
                     }
                 } else if(hasCub) {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
-                        doc.setFontSize(12.5);
+                        doc.setFontSize(12);
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(68.5 + xOffset, 184  + yOffset, "REGRESA TUS CUBETAS VACIAS", "center");
@@ -1651,7 +1651,7 @@
                     }
                 } else if(orderMethod == "MOSTRADOR") {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
-                        doc.setFontSize(12.5);
+                        doc.setFontSize(12);
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(68.5 + xOffset, 184  + yOffset, "HAZ TU PEDIDO ANTES DE VENIR", "center");
@@ -1665,7 +1665,7 @@
                     }
                 } else if(orderMethod == "TELEFONO" || orderMethod == "WHATSAPP") {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
-                        doc.setFontSize(12.5);
+                        doc.setFontSize(12);
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
                         doc.text(68.5 + xOffset, 184  + yOffset, "HAZ TU PEDIDO ANTES DE VENIR", "center");
@@ -2049,7 +2049,7 @@
 
         //adds date and time to the top right corner
         function addTimePDF(doc) {
-            doc.setFontSize(12.5);
+            doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
 
             var date = new Date();
@@ -2062,21 +2062,21 @@
         }
 
         function addMethodPDF(doc, orderMethod) {
-            doc.setFontSize(12.5);
+            doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
 
             //special mark if the order is for the next day
             if ($("#tomorrowCheckbox").is(':checked')) {
                 doc.setFontSize(29);
                 doc.text(9 + xOffset, 41.5  + yOffset, "M", "center");
-                doc.setFontSize(12.5);
+                doc.setFontSize(12);
 
                 doc.setDrawColor(0, 0, 0);
                 doc.line(xOffset, 41.5 + yOffset, 5 + xOffset, 41.5 + yOffset);
                 
                 //revisar
                 doc.text(68 + xOffset, 196.9  + yOffset, "MANANA");
-                doc.setFontSize(12.5);
+                doc.setFontSize(12);
             }
 
             doc.text(84 + xOffset, 30  + yOffset, orderMethod, 'center');
@@ -2104,7 +2104,7 @@
             var cleanName = replaceAEIOUN(name);
             doc.text(68.5 + xOffset, 41.5  + yOffset, cleanName, "center");
 
-            doc.setFontSize(12.5);
+            doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
             doc.text(27 + xOffset, 196.9  + yOffset, "ANOTO: " + replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1) + " #" + length);
             doc.text(27 + xOffset, 202.95  + yOffset, "SURTIO: ");
@@ -2116,9 +2116,9 @@
         //draws circle besides the description        
         function drawCricle(doc, YCoordinate, validColor) {
             if (validColor == "blue")
-                doc.text(4.5 + xOffset, YCoordinate - 1.5, "+", "center");
+                doc.text(.5 + xOffset, YCoordinate - 1.5, "+", "center");
             else if (validColor == "red")
-                doc.text(4.5 + xOffset, YCoordinate - .7, "-", "center");
+                doc.text(.5 + xOffset, YCoordinate - .5, "-", "center");
 
             //doc.circle(5 + xOffset, YCoordinate - 1.7, .8, 'F');
         }
@@ -2129,7 +2129,7 @@
             else if (validColor == "red")
                 doc.setFillColor(255, 0, 0);
 
-            doc.text(4.5  + xOffset, YCoordinate + 1, "*", null, null, "center");
+            doc.text(.5  + xOffset, YCoordinate + 1, "*", null, null, "center");
         }
 
         //replaces special characters (current jspdf doesn´t support them)
