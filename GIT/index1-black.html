@@ -213,7 +213,7 @@
                                    </div>
                                </div>
                                 <!-- stock -->
-                                <div class="col-sm-3">
+                                <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="stockSelect">EXISTENCIA</label>
                                         <select class="form-control" id="stockSelect" style="background-color: #222222; color: #BABABA; border-color: #555555; -webkit-appearance:none;">
@@ -224,7 +224,7 @@
                                     </div>
                                 </div>
                                 <!-- type -->
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="typeSelect">TIPO</label>
                                         <select class="form-control" id="typeSelect" style="background-color: #222222; color: #BABABA; border-color: #555555; -webkit-appearance:none;">
@@ -239,6 +239,11 @@
                                             <option value="aBodegaAbajo">AREA DE BODEGA - ABAJO</option>
                                         </select>
                                     </div>
+                                </div>
+                                <!-- kilo cost -->
+                                <div class="col-sm-2">
+                                    <label for="priceInput">P/KILO</label>
+                                    <input id="pkiloInput" class="form-control" type="number" min="0" placeholder="8.50" style="background-color: #222222; color: #BABABA; border-color: #555555;" disabled>
                                 </div>
                             </div>
                         </div>
@@ -963,11 +968,29 @@
             $("#stockSelect").val(productToEdit.existencia);
             $("#typeSelect").val(productToEdit.tipo);
 
+            if(productToEdit.tipo == "porPesarCamara" || productToEdit.tipo == "porPesarAfuera") {
+				$('#pkiloInput').prop('disabled', false);
+			} else {
+				$('#pkiloInput').prop('disabled', true);
+			}
+
+			if(productToEdit.pkilo != undefined) form.elements[7].value = productToEdit.pkilo;
+			else form.elements[7].value = "";
+
             //sets buttons inner values
             $('#saveButton').data("type", "editProduct");
             $('#saveButton').data("id", form.elements[1].value);
 
             $('#addProductModal').modal('show');
+
+            $('#typeSelect').on('change', function() {
+                var tipo = $(this).val();
+                if (tipo === 'porPesarCamara' || tipo === 'porPesarAfuera') {
+                    $('#pkiloInput').prop('disabled', false);
+                } else {
+                    $('#pkiloInput').prop('disabled', true);
+                }
+            });
         }
 
         //sets modal to add product view
@@ -996,9 +1019,9 @@
             var verified = true;
 
             //checks for blanks
-            var inputs = new Array(7);
+            var inputs = new Array(8);
             //{description:0, id:1, SAT:2, cost:3, unit:4, stock:5, type:6}
-            for (var i = 0; i < inputs.length; i++) {
+            for (var i = 0; i < inputs.length - 1; i++) {
                 inputs[i] = form.elements[i].value;
                 if (inputs[i] == "") {
                     messageLabel.innerHTML = "LLENA TODOS LOS CAMPOS.";
@@ -1006,6 +1029,13 @@
                     break;
                 }
             }
+
+            //checks for empty pkilo if the product needs to be weighed
+			inputs[7] = form.elements[7].value;
+			if ((inputs[6] == "porPesarCamara" || inputs[6] == "porPesarAfuera") && inputs[7] == "") {
+				messageLabel.innerHTML = "FALTA EL PRECIO POR KILO.";
+				verificated = false;
+			}
 
             //checks for spaces in id
             if (form.elements[1].value.indexOf(" ") >= 0) {
@@ -1080,18 +1110,32 @@
 
         //adds or updates a product to firebase
         function addNewProductDB(inputs) {
-            firebase.database().ref('productos/' + inputs[1]).set({
-                clave: inputs[1],
-                costo: inputs[3],
-                descripcion: inputs[0],
-                existencia: inputs[5],
-                tipo: inputs[6],
-                unidad: inputs[4],
-                xpcode: inputs[2],
-                categoria: 1
-            }).then(function () {
-                $('#addProductModal').modal('toggle');
-            });
+			if(inputs[6] != "porPesarCamara" && inputs[6] != "porPesarAfuera") {
+				firebase.database().ref('productos/' + inputs[1]).set({
+					clave: inputs[1],
+					costo: inputs[3],
+					descripcion: inputs[0],
+					existencia: inputs[5],
+					tipo: inputs[6],
+					unidad: inputs[4],
+					xpcode: inputs[2]
+				}).then(function () {
+					$('#addProductModal').modal('toggle');
+				});
+			} else {
+				firebase.database().ref('productos/' + inputs[1]).set({
+					clave: inputs[1],
+					costo: inputs[3],
+					descripcion: inputs[0],
+					existencia: inputs[5],
+					tipo: inputs[6],
+					unidad: inputs[4],
+					xpcode: inputs[2],
+					pkilo: inputs[7]
+				}).then(function () {
+					$('#addProductModal').modal('toggle');
+				});
+			}
         }
 
         //FUTURE FIX adds a product to the order by id (only gets the product from the DB so that it can be added in addProduct())
@@ -1742,7 +1786,7 @@
                 var etime = calculateWTime(Math.ceil(nproducts));
 
                 var justNameFlag = false;
-                if(((ndiversity <= 2 && !hasChuletaN) && orderMethod == "MOSTRADOR")) {
+                if(((ndiversity <= 3 && !hasChuletaN) && orderMethod == "MOSTRADOR")) {
                     doc.setPage(1);
                     doc.setFontSize(29);
                     doc.setFont("Gill Sans MT Condensed Negrita");
