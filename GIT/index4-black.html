@@ -84,10 +84,14 @@
             </div>
             <!-- tomorrow checkbox -->
             <div class="col-md-2" style="padding-top: 5px; padding-right: 5px;">
-                <input type="checkbox" style="vertical-align: top; margin-top: 6.5px; margin-left: 32px; color: black;" class="form-check-input" id="tomorrowCheckbox">
-                <label style="color: #BABABA; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px;" class="form-check-label" for="tomorrowCheckbox">&nbsp;M</label>
-                <input type="checkbox" style="vertical-align: top; margin-top: 6.5px; margin-left: 15px;" class="form-check-input" id="invoiceCheckbox">
-                <label style="color: #BABABA; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px;" class="form-check-label" for="invoiceCheckbox">&nbsp;F</label>
+                <input type="checkbox" style="vertical-align: top; margin-top: 6.5px; margin-left: 6px; color: black;" class="form-check-input" id="tomorrowCheckbox">
+                <label style="color: #BABABA; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px; text-align: left;" class="form-check-label" for="tomorrowCheckbox">M</label>
+                <input type="checkbox" style="vertical-align: top; margin-top: 6.5px; margin-left: 10px;" class="form-check-input" id="invoiceCheckbox">
+                <label style="color: #BABABA; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px;" class="form-check-label" for="invoiceCheckbox">F</label>
+                <input type="checkbox" style="vertical-align: top; margin-top: 6.5px; margin-left: 10px;" class="form-check-input" id="completeCheckbox">
+                <label style="color: #BABABA; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px;" class="form-check-label" for="completeCheckbox">C</label>
+                <input type="checkbox" style="vertical-align: top; margin-top: 6.5px; margin-left: 10px;" class="form-check-input" id="incorrectCheckbox">
+                <label style="color: #BABABA; margin-bottom: 0px; opacity: .4; line-height: 23px; margin-top: 2.5px;" class="form-check-label" for="incorrectCheckbox">I</label>
             </div>
             <!-- employee name input -->
             <select class="col-sm-1 form-control" style="margin-top: 1px; width: 162px; background-color: #111111; border-color: #555555; -webkit-appearance:none; padding-top:.5px;" id="inputEmployeeName">
@@ -362,7 +366,6 @@
             $("#greenCheck").css("visibility", "hidden");
             $("#greenCheckW").css("visibility", "hidden");
             $("#greenCheckWN").css("visibility", "hidden");
-            //aqui
             firebase.database().ref(globalComputer + '/sorder').remove();
             $("#dynamic-list-2").html("");
             hideSugList();
@@ -1535,7 +1538,6 @@
                     doc.text(1.5  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
                     doc.setFont("Gill Sans Std Condensed");
 
-                    //aqui
                     //if product is being supplied by suppliers then draw cirlce
                     if (order[i][5] == "porPesarCamara" || order[i][5] == "yaPesadoCamara") {
                         doc.setPage(pagesQuantity * 2 - 1);
@@ -1670,8 +1672,31 @@
 
                     currentLine++;
                 }
+
                 
-                if(hasBidon) {
+                if($("#completeCheckbox").is(':checked')) {
+                    if((order.length % 17) != 0 && (order.length % 17) != 16) {
+                        doc.setFontSize(12);
+                        doc.setFont("Gill Sans MT Condensed Negrita");
+                        doc.setPage(pagesQuantity * 2 - 1);
+                        doc.text(68.5 + xOffset, 184  + yOffset, "SURTELO COMPLETO", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "EN EL LUGAR CORRESPONDIENTE", "center");
+                        doc.setPage(pagesQuantity * 2);
+                        doc.text(68.5 + xOffset, 184  + yOffset, "SURTELO COMPLETO", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "EN EL LUGAR CORRESPONDIENTE", "center");
+                    }
+                } else if($("#incorrectCheckbox").is(':checked')) {
+                    if((order.length % 17) != 0 && (order.length % 17) != 16) {
+                        doc.setFontSize(12);
+                        doc.setFont("Gill Sans MT Condensed Negrita");
+                        doc.setPage(pagesQuantity * 2 - 1);
+                        doc.text(68.5 + xOffset, 184  + yOffset, "NOTAMOS QUE FALTO ESPECIFICAR ALGUNA CANTIDAD,", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "TAMANO O MARCA, PUEDES CORREGIR TU PEDIDO EN CAJA", "center");
+                        doc.setPage(pagesQuantity * 2);
+                        doc.text(68.5 + xOffset, 184  + yOffset, "NOTAMOS QUE FALTO ESPECIFICAR ALGUNA CANTIDAD,", "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "TAMANO O MARCA, PUEDES CORREGIR TU PEDIDO EN CAJA", "center");
+                    }
+                } else if(hasBidon) {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
                         doc.setFontSize(12);
                         doc.setFont("Gill Sans MT Condensed Negrita");
@@ -2118,8 +2143,11 @@
                 doc.setDrawColor(0, 0, 0);
                 doc.line(xOffset, 41.5 + yOffset, 5 + xOffset, 41.5 + yOffset);
                 
-                //revisar
                 doc.text(68 + xOffset, 196.9  + yOffset, "MANANA");
+                doc.setFontSize(12);
+            } else if($("#completeCheckbox").is(':checked')) {
+                doc.setFontSize(29);
+                doc.text(6 + xOffset, 41.5  + yOffset, "SC", "center");
                 doc.setFontSize(12);
             }
 
