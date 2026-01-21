@@ -191,7 +191,8 @@
         }, 60000);
 
         document.addEventListener("webkitfullscreenchange", exitHandler); 
-		function exitHandler() {
+		
+        function exitHandler() {
 			if (!document.webkitIsFullScreen) {
 				$("#splashScreen").show();
 			} else{

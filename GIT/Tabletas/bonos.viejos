@@ -1,0 +1,56 @@
+doc.setPage(pagesQuantity - 1);
+doc.setFontSize(13);
+doc.text(xOffset + 8, yOffset + yPosText, "100 OFRECES AYUDA Y ATENTO", "left");
+doc.setFontSize(7);
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 1), "- APOYAS EN EL AREA DONDE HAYA MAS NOTAS (ANOTAR, SURTIR O ENTREGAR), SIN", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 2), "QUE NADIE TE DIGA.", "left");
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 3), "- PONES ATENCION A LOS CLIENTES Y A LAS NOTAS PARA ATENDERLOS EN CUANTO", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 4), "LLEGUEN Y SIN QUE NADIE TE DIGA.", "left");
+
+yPosText =  yPosText + (smallFontHeight * 4) + 6.5;
+doc.setFontSize(13);
+doc.text(xOffset + 8, yOffset + yPosText, "100 SUPER AMABLE", "left");
+doc.setFontSize(7);
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 1), "- ERES AMIGABLE, PACIENTE, SONRIES, SALUDAS, TE DESPIDES Y LES HABLAS CON", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 2), "SUAVIDAD A LOS CLIENTES.", "left");
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 3), "- SOLUCIONAS ERRORES, ATIENDES DUDAS Y APOYAS A CLIENTES Y COMPANEROS CUANDO", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 4), "PIDEN AYUDA CON SU NOTA, AUNQUE NO LO ESTES ATENDIENDO TU.", "left");
+
+yPosText = yPosText + (smallFontHeight * 4) + 6.5;
+doc.setFontSize(13);
+doc.text(xOffset + 8, yOffset + yPosText, "100 LIMPIAS Y RECOGES", "left");
+doc.setFontSize(7);
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 1), "- SOLAMENTE CUANDO NO HAY NOTAS O CLIENTES: RECOGES BASURA, RELLENAS ANAQUELES,", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 2), "LIMPIAS MESAS, RECOGES PRODUCTOS FUERA DE LUGAR, LLEVAS CAJAS VACIAS A", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 3), "BODEGA Y LIBERAS EL PASILLO.", "left");
+
+yPosText = yPosText + (smallFontHeight * 3) + 6.5;
+doc.setFontSize(13);
+doc.text(xOffset + 8, yOffset + yPosText, "100 CELULAR Y PLATICA", "left");
+doc.setFontSize(7);
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 1), "- EVITAS PERDER EL TIEMPO O OCULTARTE EN HORARIO DE TRABAJO.", "left");
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 2), "- SACAS RAPIDO LAS NOTAS.", "left");
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 3), "- EVITAS ESPERAR EL BANO, PIDES QUE TE AVISEN Y REGRESAS DESPUES.", "left");
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 4), "- SALES MUY POCO Y SIEMPRE PIDES PERMISO.", "left");
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 5), "- EVITAS COMER FUERA DE TU HORA DE COMIDA.", "left");
+
+yPosText = yPosText + (smallFontHeight * 5) + 6.5;
+doc.setFontSize(13);
+doc.text(xOffset + 8, yOffset + yPosText, "100 UNIFORME Y REGISTRO", "left");
+doc.setFontSize(7);
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 1), "- TE PONES UNIFORME TODOS LOS DIAS ANTES DE ENTRAR A LA CREMERIA (GORRA ROJA O", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 2), "MAYA, CAMISA ROJA, SUDADERA ROJA), SIN QUE NADIE TE DIGA.", "left");
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 3), "- REGISTRAS TU HUELLA DESPUES DE DEJAR TUS PERTENENCIAS.", "left");
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 4), "- TE ANOTAS A TU MEDIA A LA HORA QUE TE TOCA.", "left");
+
+yPosText = yPosText + (smallFontHeight * 4) + 6.5;
+doc.setFontSize(13);
+doc.text(xOffset + 8, yOffset + yPosText, "100 CERO ERRORES Y ANOTACIONES", "left");
+doc.setFontSize(7);
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 1), "- REVISAS DOS VECES QUE TU PEDIDO ESTE ANOTADO, SURTIDO Y ENTREGADO", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 2), "CORRECTAMENTE.", "left");
+doc.text(xOffset + 8, yOffset + yPosText + (smallFontHeight * 3), "- HACES TUS ANOTACIONES CORRECTAMENTE:", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 4), "* ANOTADORES: NOMBRE", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 5), "* SURTIDORES: NOMBRE, CASILLERO Y RAYA EN PRODUCTOS SURTIDOS", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 6), "* CAJEROS: CUENTAS CLARAS Y NUMEROS LEGIBLES", "left");
+doc.text(xOffset + 9.7, yOffset + yPosText + (smallFontHeight * 7), "* ENTREGADORES: NOMBRE, LUGAR Y HORA", "left");

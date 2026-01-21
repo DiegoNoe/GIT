@@ -40,6 +40,19 @@
             src: url(GillSansMTCondensedBold.ttf);
         }
 
+        html, body {
+            height: 100%;
+            overflow: hidden;   /* 🚫 sin scroll global */
+            touch-action: none; /* 🚫 gestos fuera de elementos permitidos */
+        }
+
+        .list-group {
+            overflow-y: auto;               /* ✅ scroll vertical */
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch; /* ✅ scroll suave en iOS/Android */
+            touch-action: pan-y;            /* ✅ permite solo scroll vertical */
+        }
+
         .container-fluid {
             font-family: GillSansMTCondensedBold;
             margin-top: 1.5%;
@@ -241,13 +254,13 @@
                     $(this).remove();
                 });
 
-                playSound();
+                //playSound();
                 
                 if(snapshot.child("porSurtir").val()) {
                     speakOnce("siempre no");
                 }
 
-                //justSpeak(formatProductToSpeech(snapshot));
+                justSpeak(formatProductToSpeech(snapshot));
 
             });
 
@@ -331,7 +344,8 @@
                     $(this).remove();
                 });
 
-                justSpeak(formatProductToSpeech(snapshot));
+                playSound();
+                //beejustSpeak(formatProductToSpeech(snapshot));
             });
 
             database.child("porEntregar").on('child_removed', function(snapshot) {

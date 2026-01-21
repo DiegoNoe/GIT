@@ -44,7 +44,7 @@
             defiantClients = Defiant.getSnapshot(snapshot.val());
         });
 
-        var globalComputer = "liveView2";
+        var globalComputer = "liveView0";
         var globalWaitingOrders,
             globalTPP = [];
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
@@ -57,6 +57,9 @@
 </head>
 
 <body style="background-color: #111111;">
+
+    <button onclick="speakWelcome()">Play</button>
+
 
     <!-- no connection alert -->
     <div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
@@ -312,8 +315,8 @@
 
         populateEmployees();
 
-        if(globalComputer == "liveView5" || globalComputer == "liveView0") {
-            hearForCallClient();
+        if(globalComputer == "liveView1" || globalComputer == "liveView0") {
+            //hearForCallClient();
         }
 
         //inputName on enter sequence
@@ -839,6 +842,25 @@
 			window.speechSynthesis.speak(msg);
 		}
 
+        //aquiiii
+        speakWelcome();
+        setTimeout(function () {
+            speakWelcome();
+        }, 1000);
+
+        function speakWelcome(computer) {
+			var msg = new SpeechSynthesisUtterance();
+			msg.rate = 1.2;
+
+            msg.text = "bienvenido";
+            console.log("bienvenido");
+            console.log(speechSynthesis.getVoices());
+            
+            //msg.voice = speechSynthesis.getVoices()[speechSynthesis.getVoices().findIndex(item => item.name === 'Juan')];
+            msg.voice = speechSynthesis.getVoices()[119];
+			window.speechSynthesis.speak(msg);
+		}
+
         function speakEndingOrder(name, total) {
 			var msg = new SpeechSynthesisUtterance();
 			msg.rate = 1.2;
@@ -1095,7 +1117,6 @@
             //if everything is checked, upload form
             if (verified) {
                 addNewProductDB(inputs);
-                addNewProductOdoo(inputs);
                 messageLabel.innerHTML = "";
 
                 //OUTDATED if at edit product the id changes, deletes the old ids instance
@@ -1140,32 +1161,6 @@
 					$('#addProductModal').modal('toggle');
 				});
 			}
-        }
-
-        function addNewProductOdoo(inputs) {
-			console.log("addNewProductOdoo");
-            var settings = {
-                url: "https://c-imperio.odoo.com/api/producto/crear",
-                method: "POST",
-                timeout: 0,
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                data: {
-                    name: inputs[0],
-                    default_code: inputs[1],
-                    unspsc_code: inputs[2],
-                    list_price: inputs[3],
-                    uom_categ: inputs[4],
-                    x_studio_many2many_field_4sl_1iujrb31j: inputs[6]
-                }
-            };
-
-            console.log(settings);
-
-            $.ajax(settings).done(function (response) {
-                console.log("createProductOdoo:", response);
-            });
         }
 
         //FUTURE FIX adds a product to the order by id (only gets the product from the DB so that it can be added in addProduct())
@@ -1797,7 +1792,7 @@
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
                         productsRefID = randomLetter1 + $("#inputName").val().trim() + " " + total.replace(/,/g, '') + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 51 + xOffset, 194  + yOffset, 15, 15);
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 6 + xOffset, 194  + yOffset, 15, 15);
                     }
                 } else {
                     doc.setPage(pagesQuantity * 2 - 1);
@@ -1809,8 +1804,7 @@
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
                         productsRefID = randomLetter1 + $("#inputName").val().trim() + " " + total.replace(/,/g, '') + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 51 + xOffset, 194  + yOffset, 15, 15);
-
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 6 + xOffset, 194  + yOffset, 15, 15);
                     }
                 }                
                 
@@ -1833,7 +1827,7 @@
 
                 for(var i = 1; i <= pagesQuantity * 2; i++) {
                     doc.setPage(i);
-                    doc.text(6 + xOffset, 210  + yOffset, points, "left");
+                    doc.text(27 + xOffset, 210  + yOffset, points, "left");
                 }
 
                 var etime = calculateWTime(Math.ceil(nproducts));
@@ -2206,9 +2200,9 @@
 
             doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
-            doc.text(6 + xOffset, 196.9  + yOffset, "ANOTO: " + replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1) + " #" + length);
-            doc.text(6 + xOffset, 202.95  + yOffset, "SURTIO: ");
-            doc.text(6 + xOffset, 209  + yOffset, "ENTREGO: ");
+            doc.text(27 + xOffset, 196.9  + yOffset, "ANOTO: " + replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1) + " #" + length);
+            doc.text(27 + xOffset, 202.95  + yOffset, "SURTIO: ");
+            doc.text(27 + xOffset, 209  + yOffset, "ENTREGO: ");
             
             return cleanName;
         }

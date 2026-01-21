@@ -312,8 +312,8 @@
 
         populateEmployees();
 
-        if(globalComputer == "liveView1" || globalComputer == "liveView0") {
-            //hearForCallClient();
+        if(globalComputer == "liveView5" || globalComputer == "liveView0") {
+            hearForCallClient();
         }
 
         //inputName on enter sequence
@@ -1095,6 +1095,7 @@
             //if everything is checked, upload form
             if (verified) {
                 addNewProductDB(inputs);
+                addNewProductOdoo(inputs);
                 messageLabel.innerHTML = "";
 
                 //OUTDATED if at edit product the id changes, deletes the old ids instance
@@ -1139,6 +1140,32 @@
 					$('#addProductModal').modal('toggle');
 				});
 			}
+        }
+
+        function addNewProductOdoo(inputs) {
+			console.log("addNewProductOdoo");
+            var settings = {
+                url: "https://c-imperio.odoo.com/api/producto/crear",
+                method: "POST",
+                timeout: 0,
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                data: {
+                    name: inputs[0],
+                    default_code: inputs[1],
+                    unspsc_code: inputs[2],
+                    list_price: inputs[3],
+                    uom_categ: inputs[4],
+                    x_studio_many2many_field_4sl_1iujrb31j: inputs[6]
+                }
+            };
+
+            console.log(settings);
+
+            $.ajax(settings).done(function (response) {
+                console.log("createProductOdoo:", response);
+            });
         }
 
         //FUTURE FIX adds a product to the order by id (only gets the product from the DB so that it can be added in addProduct())
@@ -1770,7 +1797,7 @@
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
                         productsRefID = randomLetter1 + $("#inputName").val().trim() + " " + total.replace(/,/g, '') + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 6 + xOffset, 194  + yOffset, 15, 15);
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 51 + xOffset, 194  + yOffset, 15, 15);
                     }
                 } else {
                     doc.setPage(pagesQuantity * 2 - 1);
@@ -1782,7 +1809,8 @@
                     for(var i = 1; i <= pagesQuantity * 2; i++) {
                         doc.setPage(i);
                         productsRefID = randomLetter1 + $("#inputName").val().trim() + " " + total.replace(/,/g, '') + randomLetter2;
-                        doc.addImage(generateQR(productsRefID), 'JPEG', 6 + xOffset, 194  + yOffset, 15, 15);
+                        doc.addImage(generateQR(productsRefID), 'JPEG', 51 + xOffset, 194  + yOffset, 15, 15);
+
                     }
                 }                
                 
@@ -1805,7 +1833,7 @@
 
                 for(var i = 1; i <= pagesQuantity * 2; i++) {
                     doc.setPage(i);
-                    doc.text(27 + xOffset, 210  + yOffset, points, "left");
+                    doc.text(6 + xOffset, 210  + yOffset, points, "left");
                 }
 
                 var etime = calculateWTime(Math.ceil(nproducts));
@@ -2178,9 +2206,9 @@
 
             doc.setFontSize(12);
             doc.setFont("Gill Sans MT Condensed Negrita");
-            doc.text(27 + xOffset, 196.9  + yOffset, "ANOTO: " + replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1) + " #" + length);
-            doc.text(27 + xOffset, 202.95  + yOffset, "SURTIO: ");
-            doc.text(27 + xOffset, 209  + yOffset, "ENTREGO: ");
+            doc.text(6 + xOffset, 196.9  + yOffset, "ANOTO: " + replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1) + " #" + length);
+            doc.text(6 + xOffset, 202.95  + yOffset, "SURTIO: ");
+            doc.text(6 + xOffset, 209  + yOffset, "ENTREGO: ");
             
             return cleanName;
         }
