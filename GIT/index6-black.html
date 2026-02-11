@@ -1574,6 +1574,8 @@
                         nproducts = nproducts + Math.ceil(parseFloat(order[i][1]));
                         ndiversity++;
                         onlyafuera = false;
+                        if(parseFloat(order[i][1]) >= 20)
+                            hasChuletaN = true;
                     } else if (order[i][5] == "porPesarAfuera" || order[i][5] == "yaPesadoAfuera") {
                         doc.setPage(pagesQuantity * 2 - 1);
                         drawCricle(doc, firstLineYPosition + (currentLine * lineHeight), "red");
@@ -1581,6 +1583,9 @@
                         drawCricle(doc, firstLineYPosition + (currentLine * lineHeight), "red");
                         nproducts = nproducts + Math.ceil(parseFloat(order[i][1]));
                         ndiversity++;
+                        if(parseFloat(order[i][1]) >= 20)
+                            hasChuletaN = true;
+
                     }
 
                     if(order[i][0] == "QU")
@@ -1589,7 +1594,7 @@
                     if(order[i][0] == "ACL20")
                         hasBidon = true;
 
-                    if(order[i][0] == "CHN" || order[i][0] == "QUMI" || order[i][0] == "QUGI" || order[i][0] == "CHP")
+                    if(order[i][0] == "CHN" || order[i][0] == "QUMI" || order[i][0] == "QUGI" || order[i][0] == "CHP" || order[i][0] == "0TOIP" || order[i][0] == "0TOIPM")
                         hasChuletaN = true;
 
                     //product price * quantity
@@ -1839,7 +1844,7 @@
                 var etime = calculateWTime(Math.ceil(nproducts));
 
                 var justNameFlag = false;
-                if(((ndiversity <= 3 && !hasChuletaN) && orderMethod == "MOSTRADOR")) {
+                if(((ndiversity <= 4 && !hasChuletaN) && orderMethod == "MOSTRADOR")) {
                     doc.setPage(1);
                     doc.setFontSize(29);
                     doc.setFont("Gill Sans MT Condensed Negrita");
