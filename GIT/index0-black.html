@@ -1429,7 +1429,7 @@
 
         //FIX
         //if(globalComputer == "liveView1" || globalComputer == "liveView2" || globalComputer == "liveView3") {
-            var xOffset = 40;
+            var xOffset = 44;
             var yOffset = -2;
         //} else {
         //    var xOffset = 37;
@@ -1491,12 +1491,12 @@
                 doc.setPage(1);
 
                 var shortenedUnits = {
-                    KILO: "KILO",
-                    PIEZA: "PIEZA",
-                    CAJA: "CAJA",
-                    CUB: "CUB",
-                    EXB: "EXHIB",
-                    PROMO: "PROM"
+                    KILO: "KG",
+                    PIEZA: "PZ",
+                    CAJA: "CJ",
+                    CUB: "CB",
+                    EXB: "EX",
+                    PROMO: "PR"
                 };
 
                 var sOrderProducts = {};
@@ -1559,11 +1559,18 @@
                         quantityAndUnit = "0" + quantityAndUnit;
                     }
 
+
+                    //AQUIIIII
+
+                    doc.setFontSize(16);
+
                     doc.setPage(pagesQuantity * 2 - 1);
-                    doc.text(1.5 + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
+                    doc.text(1.5 + xOffset, firstLineYPosition + (currentLine * lineHeight) + .2, quantityAndUnit, null, null, "left");
                     doc.setPage(pagesQuantity * 2);
-                    doc.text(1.5  + xOffset, firstLineYPosition + (currentLine * lineHeight), quantityAndUnit, null, null, "left");
+                    doc.text(1.5  + xOffset, firstLineYPosition + (currentLine * lineHeight) + .2, quantityAndUnit, null, null, "left");
                     doc.setFont("Gill Sans Std Condensed");
+
+                    doc.setFontSize(12);
 
                     //if product is being supplied by suppliers then draw cirlce
                     if (order[i][5] == "porPesarCamara" || order[i][5] == "yaPesadoCamara") {
@@ -1599,7 +1606,7 @@
 
                     //product price * quantity
                     doc.setFont("Gill Sans MT Condensed Negrita");
-                    doc.setFontSize(12);
+                    doc.setFontSize(16);
                     product = JSON.search(products, '//*[clave="' + order[i][0] + '"]');
                     var totalProduct = roundDecimals(Math.round(product[0].costo * order[i][1] * 10) / 10);
                     if (order[i][5] != "porPesarCamara" && order[i][5] != "porPesarAfuera") {
@@ -1621,6 +1628,7 @@
                         doc.setDrawColor(0, 0, 0);
                     }
                     
+                    doc.setFontSize(12);
                     //calculating current total
                     var productTotal;
                     if (order[i][1] < 0)
@@ -1705,6 +1713,8 @@
                     currentLine++;
                 }
 
+                var mensajeMotivacional = mensajeMotivacionalRandom();
+
                 
                 if($("#completeCheckbox").is(':checked')) {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
@@ -1755,27 +1765,27 @@
                         doc.setFontSize(12);
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(68.5 + xOffset, 184  + yOffset, "HAZ TU PEDIDO ANTES DE VENIR", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "WHATSAPP 3317050598 TELEFONO 3336713915", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, mensajeMotivacional, "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "PIDE ANTES DE VENIR EN WHATSAPP 3317050598 O TEL 3336713915", "center");
                         doc.setPage(pagesQuantity * 2);
                         /*doc.text(68.5 + xOffset, 179  + yOffset, "RECUERDA QUE YA PUEDES HACER TU PEDIDO ANTES DE VENIR", "center");
                         doc.text(68.5 + xOffset, 184  + yOffset, "POR WHATSAPP: 333317050598 O TELEFONO: 3336713915", "center");
                         doc.text(68.5 + xOffset, 189  + yOffset, "Y PASAS DIRECTO A PAGAR Y RECOGER.", "center");*/
-                        doc.text(68.5 + xOffset, 184  + yOffset, "HAZ TU PEDIDO ANTES DE VENIR", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "WHATSAPP 3317050598 TELEFONO 3336713915", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, mensajeMotivacional, "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "PIDE ANTES DE VENIR EN WHATSAPP 3317050598 O TEL 3336713915", "center");
                     }
                 } else if(orderMethod == "TELEFONO" || orderMethod == "WHATSAPP") {
                     if((order.length % 17) != 0 && (order.length % 17) != 16) {
                         doc.setFontSize(12);
                         doc.setFont("Gill Sans MT Condensed Negrita");
                         doc.setPage(pagesQuantity * 2 - 1);
-                        doc.text(68.5 + xOffset, 184  + yOffset, "HAZ TU PEDIDO ANTES DE VENIR", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "WHATSAPP 3317050598 TELEFONO 3336713915", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, mensajeMotivacional, "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "PIDE ANTES DE VENIR EN WHATSAPP 3317050598 O TEL 3336713915", "center");
                         doc.setPage(pagesQuantity * 2);
                         /*doc.text(68.5 + xOffset, 184  + yOffset, "", "center");
                         doc.text(68.5 + xOffset, 189  + yOffset, "RECOMENDAMOS HACER TU PEDIDO HORA Y MEDIA ANTES DE VENIR", "center");*/
-                        doc.text(68.5 + xOffset, 184  + yOffset, "HAZ TU PEDIDO ANTES DE VENIR", "center");
-                        doc.text(68.5 + xOffset, 189  + yOffset, "WHATSAPP 3317050598 TELEFONO 3336713915", "center");
+                        doc.text(68.5 + xOffset, 184  + yOffset, mensajeMotivacional, "center");
+                        doc.text(68.5 + xOffset, 189  + yOffset, "PIDE ANTES DE VENIR EN WHATSAPP 3317050598 O TEL 3336713915", "center");
                     }
                 }
 
@@ -1933,6 +1943,44 @@
                     finishOrderProducts(true);
                 }
             }
+        }
+
+        function mensajeMotivacionalRandom() {
+            const mensajes = [
+                "HOY ES UN GRAN DIA, CONFIA EN TI Y DA LO MEJOR",
+                "ERES MAS FUERTE DE LO QUE CREES, SIGUE ADELANTE",
+                "SONRIE, TODO LO BUENO ESTA POR LLEGAR",
+                "CONFIA EN TI, TIENES TODO PARA LOGRARLO",
+                "NUNCA DUDES DE LO INCREIBLE QUE ERES",
+                "HOY PUEDES CON TODO, NO TE DETENGAS",
+                "TU ESFUERZO SIEMPRE VALE LA PENA",
+                "CREE EN TI, ESTAS HACIENDO LO CORRECTO",
+                "TODO CAMBIA CUANDO CONFIAS EN TI",
+                "ERES CAPAZ DE COSAS EXTRAORDINARIAS",
+                "QUE NADA APAGUE TU BRILLO HOY",
+                "SIGUE INTENTANDO, LO ESTAS HACIENDO BIEN",
+                "TU ACTITUD DEFINE TU EXITO",
+                "LO MEJOR DE TU VIDA ESTA EMPEZANDO",
+                "HOY ES TU MOMENTO, APROVECHALO",
+                "TODO EMPIEZA CUANDO DECIDES CREER",
+                "TU SUENO VALE CADA ESFUERZO",
+                "ERES MAS GRANDE QUE CUALQUIER OBSTACULO",
+                "MERECES TODO LO BUENO QUE VIENE",
+                "CONFIA EN EL PROCESO Y EN TI",
+                "PERDONAR TE HACE MAS FUERTE",
+                "SUELTA LO QUE YA NO TE DA PAZ",
+                "PERDONATE Y SIGUE ADELANTE",
+                "LA PAZ EMPIEZA EN TU CORAZON",
+                "NO CARGUES CON LO QUE YA PASO",
+                "AMAR TAMBIEN ES SABER PERDONAR",
+                "SANAR ES UN ACTO DE VALENTIA",
+                "LO QUE TE DUELE HOY TE HACE CRECER",
+                "TU VIDA MERECE TRANQUILIDAD",
+                "CADA DIA ES UNA NUEVA OPORTUNIDAD"
+            ];
+
+            const indice = Math.floor(Math.random() * mensajes.length);
+            return mensajes[indice];
         }
 
         function deleteSuggestedProduct(id) {
@@ -2222,8 +2270,12 @@
         function drawCricle(doc, YCoordinate, validColor) {
             if (validColor == "blue")
                 doc.text(.5 + xOffset, YCoordinate - 1.5, "+", "center");
-            else if (validColor == "red")
-                doc.text(.5 + xOffset, YCoordinate - .5, "-", "center");
+            else if (validColor == "red") {
+                //aquiiiii
+                //doc.text(.5 + xOffset, YCoordinate - .5, "-", "center");
+                doc.setDrawColor(0, 0, 0);
+                doc.line(2 + xOffset, YCoordinate + .8, 16 + xOffset, YCoordinate + .8);
+            }
 
             //doc.circle(5 + xOffset, YCoordinate - 1.7, .8, 'F');
         }
@@ -2234,7 +2286,11 @@
             else if (validColor == "red")
                 doc.setFillColor(255, 0, 0);
 
-            doc.text(.5  + xOffset, YCoordinate + 1, "*", null, null, "center");
+            doc.setDrawColor(0, 0, 0);
+            //doc.text(.5  + xOffset, YCoordinate + .8, "*", null, null, "center");
+            doc.line(2 + xOffset, YCoordinate + .8, 16 + xOffset, YCoordinate + .8);
+            doc.line(2 + xOffset, YCoordinate + 1.3, 16 + xOffset, YCoordinate + 1.3);
+            //aquiii
         }
 
         //replaces special characters (current jspdf doesn´t support them)
