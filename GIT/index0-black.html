@@ -310,6 +310,25 @@
 
     <script>
 
+        const WHATSAPP_FN_URL = "https://us-central1-cremeria-ordena.cloudfunctions.net/sendWhatsApp";
+
+        async function mandarWhatsApp(to, mensaje) {
+            const resp = await fetch(WHATSAPP_FN_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ to, body: mensaje }),
+            });
+
+            const data = await resp.json().catch(() => ({}));
+
+            if (!resp.ok || !data.ok) {
+                console.log("Respuesta Function:", data);
+                throw new Error(data.error || `HTTP ${resp.status}`);
+            }
+
+            return data; // { ok: true, sid: "SM..." }
+        }
+
         populateEmployees();
 
         if(globalComputer == "liveView5" || globalComputer == "liveView0") {
