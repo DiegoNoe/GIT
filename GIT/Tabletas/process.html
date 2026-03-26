@@ -478,7 +478,7 @@
 
 		window.onload = () => {
   			document.body.style.zoom = "83%"; // or 1.5
-			initializeDragScroll();
+			initializeHoverScroll();
 		};
 
 		//hearForCallClient();
@@ -622,76 +622,63 @@
 				}, speed);
 		}
 
-		function initializeDragScroll() {
-			enableDragScroll('dynamic-list-firsts');
-			enableDragScroll('dynamic-list-seconds');
-			enableDragScroll('dynamic-list-notes');
-			enableDragScroll('dynamic-list-thirds');
+		function initializeHoverScroll() {
+			enableHoverScroll('dynamic-list-firsts');
+			enableHoverScroll('dynamic-list-seconds');
+			enableHoverScroll('dynamic-list-notes');
+			enableHoverScroll('dynamic-list-thirds');
 		}
 
-		function enableDragScroll(elementId) {
+		function enableHoverScroll(elementId) {
 			var element = document.getElementById(elementId);
-			if(!element || element.dataset.dragScrollBound === "true")
+			if(!element || element.dataset.hoverScrollBound === "true")
 				return;
 
-			var isDragging = false;
-			var startY = 0;
-			var startScrollTop = 0;
-			var movedDistance = 0;
+			var scrollInterval;
+			var mouseY = 0;
+			var isHovering = false;
 
-			element.dataset.dragScrollBound = "true";
+			element.dataset.hoverScrollBound = "true";
 
-			function getClientY(event) {
-				if(event.touches && event.touches.length)
-					return event.touches[0].clientY;
-				if(event.changedTouches && event.changedTouches.length)
-					return event.changedTouches[0].clientY;
-				return event.clientY;
+			function startScroll() {
+				if (scrollInterval) return;
+				scrollInterval = setInterval(function() {
+					if (!isHovering) return;
+					var rect = element.getBoundingClientRect();
+					var relativeY = mouseY - rect.top;
+					var height = rect.height;
+					var speed = 0;
+
+					if (relativeY < height / 3) {
+						speed = - (height / 3 - relativeY) / (height / 3) * 10; // scroll up
+					} else if (relativeY > 2 * height / 3) {
+						speed = (relativeY - 2 * height / 3) / (height / 3) * 10; // scroll down
+					}
+
+					element.scrollTop += speed;
+				}, 50);
 			}
 
-			function startDrag(event) {
-				isDragging = true;
-				startY = getClientY(event);
-				startScrollTop = element.scrollTop;
-				movedDistance = 0;
-				element.classList.add('drag-scroll-active');
-				if (event.type === 'touchstart') {
-					event.preventDefault();
+			function stopScroll() {
+				if (scrollInterval) {
+					clearInterval(scrollInterval);
+					scrollInterval = null;
 				}
 			}
 
-			function moveDrag(event) {
-				if(!isDragging)
-					return;
+			element.addEventListener('mouseenter', function() {
+				isHovering = true;
+				startScroll();
+			});
 
-				var currentY = getClientY(event);
-				var deltaY = currentY - startY;
-				movedDistance = Math.max(movedDistance, Math.abs(deltaY));
-				element.scrollTop = startScrollTop - deltaY;
+			element.addEventListener('mousemove', function(event) {
+				mouseY = event.clientY;
+			});
 
-				if(event.cancelable)
-					event.preventDefault();
-			}
-
-			function endDrag(event) {
-				if(!isDragging)
-					return;
-
-				isDragging = false;
-				element.classList.remove('drag-scroll-active');
-
-				if(movedDistance > 6 && event && event.preventDefault)
-					event.preventDefault();
-			}
-
-			element.addEventListener('mousedown', startDrag);
-			element.addEventListener('touchstart', startDrag, { passive: false });
-			window.addEventListener('mousemove', moveDrag, { passive: false });
-			window.addEventListener('touchmove', moveDrag, { passive: false });
-			window.addEventListener('mouseup', endDrag);
-			window.addEventListener('mouseleave', endDrag);
-			window.addEventListener('touchend', endDrag);
-			window.addEventListener('touchcancel', endDrag);
+			element.addEventListener('mouseleave', function() {
+				isHovering = false;
+				stopScroll();
+			});
 		}
 
 		function updateWaitingTime(waitingTimes) {
