@@ -27,6 +27,9 @@
 		firebase.initializeApp(config);
 
 		var currentLetter = "0";
+		var autoScrollStep = 26;
+		var autoScrollIntervalMs = 20;
+		var autoScrollZoneRatio = 0.34;
 
 		var firstsCounter = 0;
 		var databaseFirsts = firebase.database().ref('process/firsts/');
@@ -250,8 +253,8 @@
 			overflow-x: hidden;
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
-			touch-action: none;
-			cursor: default;
+			touch-action: pan-y;
+			cursor: grab;
 		}
 
 		#dynamic-list-seconds {
@@ -259,8 +262,8 @@
 			overflow-x: hidden;
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
-			touch-action: none;
-			cursor: default;
+			touch-action: pan-y;
+			cursor: grab;
 		}
 
 		#dynamic-list-notes {
@@ -268,9 +271,11 @@
 			overflow-x: hidden;
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
-			touch-action: none;
+			touch-action: pan-y;
 			margin-bottom: 0px;
 			cursor: grab;
+			transform: translateZ(0);
+			will-change: scroll-position;
 		}
 
 		#dynamic-list-thirds {
@@ -278,8 +283,8 @@
 			overflow-x: hidden;
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
-			touch-action: none;
-			cursor: default;
+			touch-action: pan-y;
+			cursor: grab;
 		}
 
 		.drag-scroll-active {
@@ -444,9 +449,17 @@
 				<ul id="dynamic-list-seconds" class="list-group" style="display:block; margin-bottom: 18px;"> </ul>
 
 				<div class="row" style="height: 52px;"> 
-					<div class="modal-title col-xs-8" style="margin-bottom:0%; margin-top:0px; height: 20px;">
+					<div class="modal-title col-xs-10" style="margin-bottom:0%; margin-top:0px; height: 20px;">
 						<h1 class="modal-title" id="notes-fulfilled-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px; color: white">0</h1>
 						<h1 class="modal-title notes-title" style="color: white; width: 420px;">&nbsp;NOTAS SURTIDAS</h1>
+					</div>
+					<div class="modal-title col-xs-2" style="margin-bottom:0%; margin-top:0px; height: 20px; text-align: right;">
+						<div type="button" class="btn btn-sm" style="background-color: #111111; color: white; border: 1px solid #777777; margin-top: 6px; margin-right: 4px;" onclick="scrollbPressed('dynamic-list-notes', 'up')">
+							<span class="glyphicon glyphicon-chevron-up"></span>
+						</div>
+						<div type="button" class="btn btn-sm" style="background-color: #111111; color: white; border: 1px solid #777777; margin-top: 6px;" onclick="scrollbPressed('dynamic-list-notes', 'down')">
+							<span class="glyphicon glyphicon-chevron-down"></span>
+						</div>
 					</div>
 				</div>
 				<div class="list-group-item row order-row-title headTitle">
@@ -478,7 +491,7 @@
 
 		window.onload = () => {
   			document.body.style.zoom = "83%"; // or 1.5
-			initializeHoverScroll();
+			initializeDragScroll();
 		};
 
 		//hearForCallClient();
@@ -607,78 +620,186 @@
 			if(elementid == "dynamic-list-thirds") {
 				distance = 1050;
 				speed = 6;
+			} else if(elementid == "dynamic-list-notes") {
+				step = 8;
+				speed = 12;
+				distance = 140;
 			}
 
 			var scrollAmount = 0;
 			var slideTimer = setInterval(function() {
-				if(direction == 'down')
-					element.scrollBy(0, step);
-				else 
-					element.scrollBy(0, -step);
-				scrollAmount += step;
+				var currentStep = Math.min(step, distance - scrollAmount);
+
+				if(currentStep <= 0) {
+					window.clearInterval(slideTimer);
+					return;
+				}
+
+				if(elementid == "dynamic-list-notes") {
+					if(direction == 'down')
+						element.scrollTop = element.scrollTop + currentStep;
+					else
+						element.scrollTop = Math.max(0, element.scrollTop - currentStep);
+				} else {
+					if(direction == 'down')
+						element.scrollBy(0, currentStep);
+					else 
+						element.scrollBy(0, -currentStep);
+				}
+
+				if(elementid == "dynamic-list-notes")
+					forceListRepaint(element);
+
+				scrollAmount += currentStep;
 				if(scrollAmount >= distance){
 					window.clearInterval(slideTimer);
 				}
 				}, speed);
 		}
 
-		function initializeHoverScroll() {
-			enableHoverScroll('dynamic-list-firsts');
-			enableHoverScroll('dynamic-list-seconds');
-			enableHoverScroll('dynamic-list-notes');
-			enableHoverScroll('dynamic-list-thirds');
-		}
-
-		function enableHoverScroll(elementId) {
-			var element = document.getElementById(elementId);
-			if(!element || element.dataset.hoverScrollBound === "true")
+		function forceListRepaint(element) {
+			if(!element)
 				return;
 
-			var scrollInterval;
-			var mouseY = 0;
-			var isHovering = false;
+			element.style.transform = 'translateZ(0)';
+			element.offsetHeight;
+		}
 
-			element.dataset.hoverScrollBound = "true";
+		function initializeDragScroll() {
+			enableDragScroll('dynamic-list-firsts');
+			enableDragScroll('dynamic-list-seconds');
+			enableDragScroll('dynamic-list-thirds');
+		}
 
-			function startScroll() {
-				if (scrollInterval) return;
-				scrollInterval = setInterval(function() {
-					if (!isHovering) return;
-					var rect = element.getBoundingClientRect();
-					var relativeY = mouseY - rect.top;
-					var height = rect.height;
-					var speed = 0;
+		function enableDragScroll(elementId) {
+			var element = document.getElementById(elementId);
+			if(!element || element.dataset.dragScrollBound === "true")
+				return;
 
-					if (relativeY < height / 3) {
-						speed = - ((height / 3 - relativeY) / (height / 3) * 40 + 10); // scroll up faster
-					} else if (relativeY > 2 * height / 3) {
-						speed = ((relativeY - 2 * height / 3) / (height / 3) * 40 + 10); // scroll down faster
-					}
+			var isDragging = false;
+			var startY = 0;
+			var startScrollTop = 0;
+			var movedDistance = 0;
+			var autoScrollInterval = null;
+			var autoScrollDirection = 0;
+			var localAutoScrollStep = autoScrollStep;
+			var localZoneRatio = autoScrollZoneRatio;
 
-					element.scrollTop += speed;
-				}, 25);
+			if(elementId == "dynamic-list-thirds")
+				localAutoScrollStep = 32;
+
+			element.dataset.dragScrollBound = "true";
+
+			function getClientY(event) {
+				if(event.touches && event.touches.length)
+					return event.touches[0].clientY;
+				if(event.changedTouches && event.changedTouches.length)
+					return event.changedTouches[0].clientY;
+				return event.clientY;
 			}
 
-			function stopScroll() {
-				if (scrollInterval) {
-					clearInterval(scrollInterval);
-					scrollInterval = null;
+			function startDrag(event) {
+				isDragging = true;
+				startY = getClientY(event);
+				startScrollTop = element.scrollTop;
+				movedDistance = 0;
+				element.classList.add('drag-scroll-active');
+			}
+
+			function moveDrag(event) {
+				if(!isDragging)
+					return;
+
+				var currentY = getClientY(event);
+				var deltaY = currentY - startY;
+				movedDistance = Math.max(movedDistance, Math.abs(deltaY));
+				element.scrollTop = startScrollTop - deltaY;
+
+				if(event.cancelable)
+					event.preventDefault();
+			}
+
+			function endDrag(event) {
+				if(!isDragging)
+					return;
+
+				isDragging = false;
+				element.classList.remove('drag-scroll-active');
+
+				if(movedDistance > 6 && event && event.preventDefault)
+					event.preventDefault();
+			}
+
+			function stopAutoScroll() {
+				autoScrollDirection = 0;
+				if(autoScrollInterval) {
+					clearInterval(autoScrollInterval);
+					autoScrollInterval = null;
 				}
 			}
 
-			element.addEventListener('mouseenter', function() {
-				isHovering = true;
-				startScroll();
-			});
+			function startAutoScroll(direction) {
+				if(autoScrollDirection === direction && autoScrollInterval)
+					return;
 
-			element.addEventListener('mousemove', function(event) {
-				mouseY = event.clientY;
-			});
+				stopAutoScroll();
+				autoScrollDirection = direction;
+				autoScrollInterval = setInterval(function() {
+					element.scrollTop += localAutoScrollStep * autoScrollDirection;
+				}, autoScrollIntervalMs);
+			}
 
-			element.addEventListener('mouseleave', function() {
-				isHovering = false;
-				stopScroll();
-			});
+			function updateAutoScroll(event) {
+				if(isDragging)
+					return;
+
+				var rect = element.getBoundingClientRect();
+				var clientY = getClientY(event);
+				var visibleTop = Math.max(rect.top, 0);
+				var visibleBottom = Math.min(rect.bottom, window.innerHeight || document.documentElement.clientHeight);
+				var visibleHeight = Math.max(0, visibleBottom - visibleTop);
+
+				if(visibleHeight <= 0) {
+					stopAutoScroll();
+					return;
+				}
+
+				var zoneSize = visibleHeight * localZoneRatio;
+				var topZoneLimit = visibleTop + zoneSize;
+				var bottomZoneLimit = visibleBottom - zoneSize;
+
+				topZoneLimit = Math.max(visibleTop, Math.min(visibleBottom, topZoneLimit));
+				bottomZoneLimit = Math.max(visibleTop, Math.min(visibleBottom, bottomZoneLimit));
+
+				if(clientY >= visibleTop && clientY <= topZoneLimit)
+					startAutoScroll(-1);
+				else if(clientY <= visibleBottom && clientY >= bottomZoneLimit)
+					startAutoScroll(1);
+				else
+					stopAutoScroll();
+			}
+
+			element.addEventListener('mousedown', startDrag);
+			element.addEventListener('pointerdown', startDrag);
+			element.addEventListener('touchstart', startDrag, { passive: true });
+			window.addEventListener('mousemove', moveDrag, { passive: false });
+			window.addEventListener('pointermove', moveDrag, { passive: false });
+			window.addEventListener('touchmove', moveDrag, { passive: false });
+			window.addEventListener('mouseup', endDrag);
+			window.addEventListener('pointerup', endDrag);
+			window.addEventListener('pointercancel', endDrag);
+			window.addEventListener('mouseleave', endDrag);
+			window.addEventListener('touchend', endDrag);
+			window.addEventListener('touchcancel', endDrag);
+			element.addEventListener('mousemove', updateAutoScroll, { passive: true });
+			element.addEventListener('pointermove', updateAutoScroll, { passive: true });
+			element.addEventListener('touchmove', updateAutoScroll, { passive: true });
+			element.addEventListener('mouseleave', stopAutoScroll);
+			element.addEventListener('pointerleave', stopAutoScroll);
+			element.addEventListener('pointerup', stopAutoScroll);
+			element.addEventListener('pointercancel', stopAutoScroll);
+			element.addEventListener('touchend', stopAutoScroll);
+			element.addEventListener('touchcancel', stopAutoScroll);
 		}
 
 		function updateWaitingTime(waitingTimes) {
