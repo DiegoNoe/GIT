@@ -478,7 +478,7 @@
 
 		window.onload = () => {
   			document.body.style.zoom = "83%"; // or 1.5
-			initializeHoverScroll();
+			initializeHoverDrag();
 		};
 
 		//hearForCallClient();
@@ -622,63 +622,55 @@
 				}, speed);
 		}
 
-		function initializeHoverScroll() {
-			enableHoverScroll('dynamic-list-firsts');
-			enableHoverScroll('dynamic-list-seconds');
-			enableHoverScroll('dynamic-list-notes');
-			enableHoverScroll('dynamic-list-thirds');
+		function initializeHoverDrag() {
+			enableHoverDrag('dynamic-list-firsts');
+			enableHoverDrag('dynamic-list-seconds');
+			enableHoverDrag('dynamic-list-notes');
+			enableHoverDrag('dynamic-list-thirds');
 		}
 
-		function enableHoverScroll(elementId) {
+		function enableHoverDrag(elementId) {
 			var element = document.getElementById(elementId);
-			if(!element || element.dataset.hoverScrollBound === "true")
+			if(!element || element.dataset.hoverDragBound === "true")
 				return;
 
-			var scrollInterval;
-			var mouseY = 0;
-			var isHovering = false;
+			var isDragging = false;
+			var startY = 0;
+			var startScrollTop = 0;
 
-			element.dataset.hoverScrollBound = "true";
+			element.dataset.hoverDragBound = "true";
 
-			function startScroll() {
-				if (scrollInterval) return;
-				scrollInterval = setInterval(function() {
-					if (!isHovering) return;
-					var rect = element.getBoundingClientRect();
-					var relativeY = mouseY - rect.top;
-					var height = rect.height;
-					var speed = 0;
-
-					if (relativeY < height / 3) {
-						speed = - (height / 3 - relativeY) / (height / 3) * 10; // scroll up
-					} else if (relativeY > 2 * height / 3) {
-						speed = (relativeY - 2 * height / 3) / (height / 3) * 10; // scroll down
-					}
-
-					element.scrollTop += speed;
-				}, 50);
+			function getClientY(event) {
+				return event.clientY;
 			}
 
-			function stopScroll() {
-				if (scrollInterval) {
-					clearInterval(scrollInterval);
-					scrollInterval = null;
-				}
+			function startDrag(event) {
+				isDragging = true;
+				startY = getClientY(event);
+				startScrollTop = element.scrollTop;
+				element.classList.add('drag-scroll-active');
 			}
 
-			element.addEventListener('mouseenter', function() {
-				isHovering = true;
-				startScroll();
-			});
+			function moveDrag(event) {
+				if(!isDragging)
+					return;
 
-			element.addEventListener('mousemove', function(event) {
-				mouseY = event.clientY;
-			});
+				var currentY = getClientY(event);
+				var deltaY = currentY - startY;
+				element.scrollTop = startScrollTop - deltaY;
 
-			element.addEventListener('mouseleave', function() {
-				isHovering = false;
-				stopScroll();
-			});
+				if(event.cancelable)
+					event.preventDefault();
+			}
+
+			function endDrag(event) {
+				isDragging = false;
+				element.classList.remove('drag-scroll-active');
+			}
+
+			element.addEventListener('pointerenter', startDrag);
+			element.addEventListener('pointermove', moveDrag, { passive: false });
+			element.addEventListener('pointerleave', endDrag);
 		}
 
 		function updateWaitingTime(waitingTimes) {
