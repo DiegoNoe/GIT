@@ -637,6 +637,7 @@
 			var isDragging = false;
 			var startY = 0;
 			var startScrollTop = 0;
+			var hideCursorTimeout;
 
 			element.dataset.hoverDragBound = "true";
 
@@ -644,11 +645,24 @@
 				return event.clientY;
 			}
 
+			function showCursor() {
+				element.style.cursor = 'grabbing';
+				if (hideCursorTimeout) {
+					clearTimeout(hideCursorTimeout);
+				}
+			}
+
+			function hideCursor() {
+				element.style.cursor = 'default';
+			}
+
 			function startDrag(event) {
 				isDragging = true;
 				startY = getClientY(event);
 				startScrollTop = element.scrollTop;
 				element.classList.add('drag-scroll-active');
+				showCursor();
+				hideCursorTimeout = setTimeout(hideCursor, 500);
 			}
 
 			function moveDrag(event) {
@@ -659,6 +673,9 @@
 				var deltaY = currentY - startY;
 				element.scrollTop = startScrollTop - deltaY;
 
+				showCursor(); // reset timer on move
+				hideCursorTimeout = setTimeout(hideCursor, 500); // hide after 500ms of no movement
+
 				if(event.cancelable)
 					event.preventDefault();
 			}
@@ -666,6 +683,10 @@
 			function endDrag(event) {
 				isDragging = false;
 				element.classList.remove('drag-scroll-active');
+				element.style.cursor = 'grab';
+				if (hideCursorTimeout) {
+					clearTimeout(hideCursorTimeout);
+				}
 			}
 
 			element.addEventListener('pointerenter', startDrag);
