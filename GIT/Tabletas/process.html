@@ -250,7 +250,7 @@
 			overflow-x: hidden;
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
-			touch-action: pan-y;
+			touch-action: none;
 			cursor: grab;
 		}
 
@@ -259,7 +259,7 @@
 			overflow-x: hidden;
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
-			touch-action: pan-y;
+			touch-action: none;
 			cursor: grab;
 		}
 
@@ -268,7 +268,7 @@
 			overflow-x: hidden;
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
-			touch-action: pan-y;
+			touch-action: none;
 			margin-bottom: 0px;
 			cursor: grab;
 		}
@@ -278,7 +278,7 @@
 			overflow-x: hidden;
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
-			touch-action: pan-y;
+			touch-action: none;
 			cursor: grab;
 		}
 
@@ -655,6 +655,9 @@
 				startScrollTop = element.scrollTop;
 				movedDistance = 0;
 				element.classList.add('drag-scroll-active');
+				if (event.type === 'touchstart') {
+					event.preventDefault();
+				}
 			}
 
 			function moveDrag(event) {
@@ -682,7 +685,7 @@
 			}
 
 			element.addEventListener('mousedown', startDrag);
-			element.addEventListener('touchstart', startDrag, { passive: true });
+			element.addEventListener('touchstart', startDrag, { passive: false });
 			window.addEventListener('mousemove', moveDrag, { passive: false });
 			window.addEventListener('touchmove', moveDrag, { passive: false });
 			window.addEventListener('mouseup', endDrag);
