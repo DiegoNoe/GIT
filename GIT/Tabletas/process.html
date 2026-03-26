@@ -251,7 +251,7 @@
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
 			touch-action: none;
-			cursor: grab;
+			cursor: default;
 		}
 
 		#dynamic-list-seconds {
@@ -260,7 +260,7 @@
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
 			touch-action: none;
-			cursor: grab;
+			cursor: default;
 		}
 
 		#dynamic-list-notes {
@@ -279,7 +279,7 @@
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
 			touch-action: none;
-			cursor: grab;
+			cursor: default;
 		}
 
 		.drag-scroll-active {
@@ -478,7 +478,7 @@
 
 		window.onload = () => {
   			document.body.style.zoom = "83%"; // or 1.5
-			initializeHoverDrag();
+			initializeHoverScroll();
 		};
 
 		//hearForCallClient();
@@ -622,76 +622,63 @@
 				}, speed);
 		}
 
-		function initializeHoverDrag() {
-			enableHoverDrag('dynamic-list-firsts');
-			enableHoverDrag('dynamic-list-seconds');
-			enableHoverDrag('dynamic-list-notes');
-			enableHoverDrag('dynamic-list-thirds');
+		function initializeHoverScroll() {
+			enableHoverScroll('dynamic-list-firsts');
+			enableHoverScroll('dynamic-list-seconds');
+			enableHoverScroll('dynamic-list-notes');
+			enableHoverScroll('dynamic-list-thirds');
 		}
 
-		function enableHoverDrag(elementId) {
+		function enableHoverScroll(elementId) {
 			var element = document.getElementById(elementId);
-			if(!element || element.dataset.hoverDragBound === "true")
+			if(!element || element.dataset.hoverScrollBound === "true")
 				return;
 
-			var isDragging = false;
-			var startY = 0;
-			var startScrollTop = 0;
-			var hideCursorTimeout;
+			var scrollInterval;
+			var mouseY = 0;
+			var isHovering = false;
 
-			element.dataset.hoverDragBound = "true";
+			element.dataset.hoverScrollBound = "true";
 
-			function getClientY(event) {
-				return event.clientY;
+			function startScroll() {
+				if (scrollInterval) return;
+				scrollInterval = setInterval(function() {
+					if (!isHovering) return;
+					var rect = element.getBoundingClientRect();
+					var relativeY = mouseY - rect.top;
+					var height = rect.height;
+					var speed = 0;
+
+					if (relativeY < height / 3) {
+						speed = - ((height / 3 - relativeY) / (height / 3) * 40 + 10); // scroll up faster
+					} else if (relativeY > 2 * height / 3) {
+						speed = ((relativeY - 2 * height / 3) / (height / 3) * 40 + 10); // scroll down faster
+					}
+
+					element.scrollTop += speed;
+				}, 25);
 			}
 
-			function showCursor() {
-				element.style.cursor = 'grabbing';
-				if (hideCursorTimeout) {
-					clearTimeout(hideCursorTimeout);
+			function stopScroll() {
+				if (scrollInterval) {
+					clearInterval(scrollInterval);
+					scrollInterval = null;
 				}
 			}
 
-			function hideCursor() {
-				element.style.cursor = 'default';
-			}
+			element.addEventListener('mouseenter', function() {
+				isHovering = true;
+				startScroll();
+			});
 
-			function startDrag(event) {
-				isDragging = true;
-				startY = getClientY(event);
-				startScrollTop = element.scrollTop;
-				element.classList.add('drag-scroll-active');
-				showCursor();
-				hideCursorTimeout = setTimeout(hideCursor, 500);
-			}
+			element.addEventListener('mousemove', function(event) {
+				mouseY = event.clientY;
+			});
 
-			function moveDrag(event) {
-				if(!isDragging)
-					return;
-
-				var currentY = getClientY(event);
-				var deltaY = currentY - startY;
-				element.scrollTop = startScrollTop - deltaY;
-
-				showCursor(); // reset timer on move
-				hideCursorTimeout = setTimeout(hideCursor, 500); // hide after 500ms of no movement
-
-				if(event.cancelable)
-					event.preventDefault();
-			}
-
-			function endDrag(event) {
-				isDragging = false;
-				element.classList.remove('drag-scroll-active');
-				element.style.cursor = 'grab';
-				if (hideCursorTimeout) {
-					clearTimeout(hideCursorTimeout);
-				}
-			}
-
-			element.addEventListener('pointerenter', startDrag);
-			element.addEventListener('pointermove', moveDrag, { passive: false });
-			element.addEventListener('pointerleave', endDrag);
+			element.addEventListener('mouseleave', function() {
+				isHovering = false;
+				stopScroll();
+			});
 		}
 
 		function updateWaitingTime(waitingTimes) {
