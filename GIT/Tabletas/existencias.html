@@ -197,7 +197,7 @@
 	</style>
 </head>
 <body style="zoom: 100%; background-color: #111111;">
-	<div id="splashScreen">
+	<div id="splashScreen" style="display: none;">
 		<input id="logo-image" type="image" onclick="userFullscreen();" src="logo_fondo_rojo.png"/>
 		<span id="welcomeMessage" style="color: #EEEEEE;">PRESIONA PARA INICIAR</span>
 	</div>
@@ -208,7 +208,7 @@
 		<button type="button" id="thirdButton" class="btn btn-secondary" onclick="showOOSProducts(event)">NO HAY</button>
 		<button type="button" id="secundaryButton" class="btn btn-secondary" onclick="showProducts(event)">PRODS</button>
 		<h1 class="modal-title" id="mediasTitle" style="margin-bottom:1.5%; margin-top:.5px; color: #EEEEEE;">FALTANTES</h1>
-		<h1 class="modal-title" id="time" style="position:absolute; left:220px; top:0px; color: #EEEEEE;"> </h1>
+		<h1 class="modal-title" id="time" style="position:absolute; left:220px; top:0px; color: #EEEEEE; display: none;"> </h1>
 		<div class='wrapper'>
 			<div id="products-tap-content" class="tabcontent"> 
 				<input type="input" class="form-control" id="inputSearch" style="background-color: #111111; border-color: #555555; color: #EEEEEE;" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"> </input>
@@ -283,6 +283,7 @@
 												<option value="siHay">SÍ HAY</option>
 												<option value="noHay">NO HAY</option>
 												<option value="pedido">NO HAY / YA SE PIDIÓ</option>
+												<option value="recomendado">RECOMENDADO</option>
 											</select>
 										</div>
 									</div>
@@ -502,6 +503,10 @@
                     buttonColor = "#EEEEEE";
                 } else if(searchResult[i].existencia == "pedido") {
                     backgroundColor = "rgba(253, 181, 13, 85%)";
+                    color = "#EEEEEE";
+                    buttonColor = "#EEEEEE";
+                } else if(searchResult[i].existencia == "recomendado") {
+                    backgroundColor = "rgba(51, 204, 51, 80%)";
                     color = "#EEEEEE";
                     buttonColor = "#EEEEEE";
                 }

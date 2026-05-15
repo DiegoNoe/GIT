@@ -36,7 +36,7 @@
         }
 
         #dynamic-list {
-            height: 515px;
+            height: 620px;
             overflow: scroll;
             font-family: GillSansMTCondBold;
             font-size: 40px;
@@ -90,7 +90,7 @@
 
         #totalTitleLabel {
             position: fixed;
-            bottom: 35%;
+            bottom: 1% !important;
             right: 5%;
             font-family: GillSansMTCondBold;
             font-size: 50px;
@@ -150,7 +150,8 @@
             PIEZA: "PZ",
             CAJA: "CJ",
             CUB: "CUB",
-            EXB: "EXB"
+            EXB: "EXB",
+            PROMO: "PR"
         };
     </script>
 
@@ -257,7 +258,7 @@
         }
 
         function hideSugList() {
-            $('#dynamic-list').css("height", "830px");
+            $('#dynamic-list').css("height", "1050px");
             $('#totalTitleLabel').css("bottom", "5%");
             $('#dynamic-list-2').hide();
             $('#sugLabel').hide();
@@ -268,6 +269,12 @@
             $('#totalTitleLabel').css("bottom", "45%");
             $('#dynamic-list-2').show();
             $('#sugLabel').show();
+        }
+
+        function scrollOrderListToBottom() {
+            var list = document.getElementById("dynamic-list");
+            if(list)
+                list.scrollTop = list.scrollHeight;
         }
 
         //loads orders and remains listening
@@ -336,6 +343,7 @@
                     //remove sug list element
                     deleteSuggestedProduct(childSnapshot.child("clave").val());
                 });
+                setTimeout(scrollOrderListToBottom, 0);
 
                 if(snapshot.numChildren() == 0)
                     calculable = false;

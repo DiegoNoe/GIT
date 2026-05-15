@@ -223,7 +223,8 @@
                                         <select class="form-control" id="stockSelect" style="background-color: #222222; color: #BABABA; border-color: #555555; -webkit-appearance:none;">
                                             <option value="siHay">SÍ HAY</option>
                                             <option value="noHay">NO HAY</option>
-                                            <option value="pedido">RECOMENDADO</option>
+                                            <option value="pedido">NO HAY / YA SE PIDIÓ</option>
+                                            <option value="recomendado">RECOMENDADO</option>
                                         </select>
                                     </div>
                                 </div>
@@ -934,6 +935,10 @@
                     backgroundColor = "#111111";
                 } else if(searchResult[i].existencia == "pedido") {
                     buttonColor = "rgba(51, 204, 51, 80%)";
+                    color = "rgba(253, 181, 13, 85%)";
+                    backgroundColor = "#111111";
+                } else if(searchResult[i].existencia == "recomendado") {
+                    buttonColor = "rgba(51, 204, 51, 80%)";
                     color = "rgba(51, 204, 51, 80%)";
                     backgroundColor = "#111111";
                 }
@@ -1207,6 +1212,10 @@
                 backgroundColor = "#111111";
             }
             else if(product.existencia == "pedido") {
+                color = "rgba(253, 181, 13, 85%)";
+                backgroundColor = "#111111";
+            }
+            else if(product.existencia == "recomendado") {
                 color = "rgba(51, 204, 51, 80%)";
                 backgroundColor = "#111111";
             }
@@ -2072,6 +2081,9 @@
                 color = "rgba(216, 61, 52, 95%)";
                 backgroundColor = "#111111";
             } else if(product.existencia == "pedido") {
+                color = "rgba(253, 181, 13, 85%)";
+                backgroundColor = "#111111";
+            } else if(product.existencia == "recomendado") {
                 color = "rgba(51, 204, 51, 80%)";
                 backgroundColor = "#111111";
             }

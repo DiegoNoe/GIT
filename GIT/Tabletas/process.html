@@ -13,7 +13,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
 	<script language="javascript" type="text/javascript" src="defiant.min.js"></script>
-	
+
 	<script>
 		var config = {
 			apiKey: "AIzaSyDrVZ3499rhvfFpxfRbU-wqJ-ZUN0-_ez0",
@@ -33,49 +33,51 @@
 		var pendingSEmployeeName = null;
 
 		var firstsCounter = 0;
-		var databaseFirsts = firebase.database().ref('process/firsts/');
-		databaseFirsts.on('child_added', function (snapshot) {
-			$('#dynamic-list-firsts').append(formatFirstsListItem(snapshot.val(), snapshot.key));
-			$('#dynamic-list-firsts').children().last().data("hour", snapshot.val().hour);
-			updateFElapsedTime($('#dynamic-list-firsts').children().last());
-			
+			var databaseFirsts = firebase.database().ref('process/firsts/');
+			databaseFirsts.on('child_added', function (snapshot) {
+				$('#dynamic-list-firsts').append(formatFirstsListItem(snapshot.val(), snapshot.key));
+				$('#dynamic-list-firsts').children().last().data("id", snapshot.key);
+				$('#dynamic-list-firsts').children().last().data("hour", snapshot.val().hour);
+				updateFElapsedTime($('#dynamic-list-firsts').children().last());
+
 			firstsCounter++;
 			updateCounter("firsts-counter-label", firstsCounter);
 		});
-		databaseFirsts.on('child_removed', function (snapshot) {
-			var removedOrder = $('#dynamic-list-firsts').children().filter(function() {
-				return $(this).data("hour") == snapshot.val().hour;
-			});
-			removedOrder.remove();
-			
+			databaseFirsts.on('child_removed', function (snapshot) {
+				var removedOrder = $('#dynamic-list-firsts').children().filter(function() {
+					return $(this).data("id") == snapshot.key || $(this).data("hour") == snapshot.val().hour;
+				});
+				removedOrder.remove();
+
 			firstsCounter--;
 			updateCounter("firsts-counter-label", firstsCounter);
 		});
-		
+
 		var secondsCounter = 0;
-		var databaseSeconds = firebase.database().ref('process/seconds/');
-		databaseSeconds.on('child_added', function (snapshot) {
-			$('#dynamic-list-seconds').append(formatSecondsListItem(snapshot.val(), snapshot.key));
-			$('#dynamic-list-seconds').children().last().data("hour", snapshot.val().hour);
-			updateSElapsedTime($('#dynamic-list-seconds').children().last(), snapshot.val().nproducts);
+			var databaseSeconds = firebase.database().ref('process/seconds/');
+			databaseSeconds.on('child_added', function (snapshot) {
+				$('#dynamic-list-seconds').append(formatSecondsListItem(snapshot.val(), snapshot.key));
+				$('#dynamic-list-seconds').children().last().data("id", snapshot.key);
+				$('#dynamic-list-seconds').children().last().data("hour", snapshot.val().hour);
+				updateSElapsedTime($('#dynamic-list-seconds').children().last(), snapshot.val().nproducts);
 
 			if(snapshot.val().thour > 0)  {
-				var finishedOrder = $('#dynamic-list-seconds').children().filter(function() {
-					return $(this).data("hour") == snapshot.val().hour;
-				});
+					var finishedOrder = $('#dynamic-list-seconds').children().filter(function() {
+						return $(this).data("id") == snapshot.key || $(this).data("hour") == snapshot.val().hour;
+					});
 				finishedOrder.css("background-color", "#00B74AEE");
 				finishedOrder.css("color", "white");
 			}
-			
+
 			secondsCounter++;
 			updateCounter("seconds-counter-label", secondsCounter);
 		});
 
 		databaseSeconds.on('child_changed', function (snapshot) {
 			if(snapshot.val().thour > 0)  {
-				var finishedOrder = $('#dynamic-list-seconds').children().filter(function() {
-					return $(this).data("hour") == snapshot.val().hour;
-				});
+					var finishedOrder = $('#dynamic-list-seconds').children().filter(function() {
+						return $(this).data("id") == snapshot.key || $(this).data("hour") == snapshot.val().hour;
+					});
 				finishedOrder.css("background-color", "rgba(0, 183, 74, 0.8)");
 				finishedOrder.css("color", "white");
 
@@ -103,12 +105,12 @@
 			}
 		});
 
-		databaseSeconds.on('child_removed', function (snapshot) {
-			var removedOrder = $('#dynamic-list-seconds').children().filter(function() {
-				return $(this).data("hour") == snapshot.val().hour;
-			});
-			removedOrder.remove();
-			
+			databaseSeconds.on('child_removed', function (snapshot) {
+				var removedOrder = $('#dynamic-list-seconds').children().filter(function() {
+					return $(this).data("id") == snapshot.key || $(this).data("hour") == snapshot.val().hour;
+				});
+				removedOrder.remove();
+
 			secondsCounter--;
 			updateCounter("seconds-counter-label", secondsCounter);
 		});
@@ -119,37 +121,37 @@
 		var sWaitingTimes10 = [], spWaitingTimes10 = [];
 		var sWaitingTimes30 = [], spWaitingTimes30 = [];
 		var sWaitingTimes50 = [], spWaitingTimes50 = [];
-		
+
 		//default
 		var globalTPP = ["0.55", "0.45", "0.35"];
 
 		databaseThirds.on('child_added', function (snapshot) {
 			insertThirdListItem(snapshot.val(), snapshot.key);
 
-			if (snapshot.val().shour > 0 && snapshot.val().thour > 0 && snapshot.val().nproducts != 0) { 
+			if (snapshot.val().shour > 0 && snapshot.val().thour > 0 && snapshot.val().nproducts != 0) {
 				var mSinceFinished = (Date.now() - snapshot.val().thour) / (60 * 1000);
 				var minutesOfAverage = 90;
 				if (mSinceFinished <= minutesOfAverage) {
-					
+
 					var orderWT = ((snapshot.val().shour - snapshot.val().hour) / (60 * 1000)).toFixed(2);
 					var sOrderWT = ((snapshot.val().thour - snapshot.val().shour) / (60 * 1000)).toFixed(2);
 					var spOrderWT = (((snapshot.val().thour - snapshot.val().shour) / snapshot.val().nproducts) / (60 * 1000)).toFixed(2);
-	
+
 					waitingTimes.push(orderWT);
 					if(snapshot.val().nproducts <= 10) {
 						sWaitingTimes10.push(sOrderWT);
 						spWaitingTimes10.push(spOrderWT);
 					} else if(snapshot.val().nproducts <= 30) {
 						sWaitingTimes30.push(sOrderWT);
-						spWaitingTimes30.push(spOrderWT); 
+						spWaitingTimes30.push(spOrderWT);
 					} else {
 						sWaitingTimes50.push(sOrderWT);
-						spWaitingTimes50.push(spOrderWT); 
+						spWaitingTimes50.push(spOrderWT);
 					}
-					
+
 					updateWaitingTime(waitingTimes);
 					updateSWaitingTime(sWaitingTimes10, spWaitingTimes10, sWaitingTimes30, spWaitingTimes30, sWaitingTimes50, spWaitingTimes50);
-					
+
 					setTimeout(function() {
 						if (waitingTimes.indexOf(orderWT) > -1)
 							waitingTimes.splice(waitingTimes.indexOf(orderWT), 1);
@@ -187,11 +189,11 @@
 			updateCounter("thirds-counter-label", thirdsCounter);
 		});
 
-		databaseThirds.on('child_removed', function (snapshot) {
-			var removedOrder = $('#dynamic-list-thirds').children().filter(function() {
-				return $(this).data("hour") == snapshot.val().hour;
-			});
-			removedOrder.remove();
+			databaseThirds.on('child_removed', function (snapshot) {
+				var removedOrder = $('#dynamic-list-thirds').children().filter(function() {
+					return $(this).data("id") == snapshot.key || $(this).data("hour") == snapshot.val().hour;
+				});
+				removedOrder.remove();
 
 			thirdsCounter--;
 			updateCounter("thirds-counter-label", thirdsCounter);
@@ -205,11 +207,11 @@
 			updateCounter("thirds-counter-label", thirdsCounter);
 		});
 
-		databaseYesterday.on('child_removed', function (snapshot) {
-			var removedOrder = $('#dynamic-list-thirds').children().filter(function() {
-				return $(this).data("hour") == snapshot.val().hour;
-			});
-			removedOrder.remove();
+			databaseYesterday.on('child_removed', function (snapshot) {
+				var removedOrder = $('#dynamic-list-thirds').children().filter(function() {
+					return $(this).data("id") == snapshot.key || $(this).data("hour") == snapshot.val().hour;
+				});
+				removedOrder.remove();
 
 			thirdsCounter--;
 			updateCounter("thirds-counter-label", thirdsCounter);
@@ -295,14 +297,14 @@
 		.order-row {
 			margin-left: 0px;
 			margin-right: 0px;
-			padding-left: 12px; 
+			padding-left: 12px;
 			padding-right: 12px;
 		}
 
 		.order-row-title {
 			margin-left: 0px;
 			margin-right: 0px;
-			padding-left: 12px; 
+			padding-left: 12px;
 			padding-right: 12px;
 		}
 
@@ -397,7 +399,7 @@
 
 	<div class="row" style="margin-top: 4px; margin-right: 25px;">
 		<div class="container-fluid col-sm-7" style="background-color: #111111; padding-left: 1.5%; padding-right: .25%;">
-			<div class="row" style="height: 52px;"> 
+			<div class="row" style="height: 52px;">
 				<div class="modal-title col-xs-5" style="margin-bottom: 10px; margin-top:.5px; height: 20px;">
 					<h1 class="modal-title" id="firsts-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 51px; text-align: center; background-color: #111111; color: white; border-style: solid; border-width: 2px;">0</h1>
 					<h1 class="modal-title" style="color: white">&nbsp;PEDIDOS POR SURTIR</h1>
@@ -408,7 +410,7 @@
 				<div class="modal-title col-xs-3">
 					<h1 class="modal-title" id="firsts-max-label" style="float: right; text-align: right; color: white"></h1>
 				</div>
-				
+
 			</div>
 			<div class="list-group-item row order-row-title headTitle">
 				<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">CLIENTE</h2>
@@ -420,8 +422,8 @@
 				<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 15px;">TIEMPO</h2>
 			</div>
 				<ul id="dynamic-list-firsts" class="list-group" style="display:block; margin-bottom: 12px;"> </ul>
-			
-			<div class="row" style="height: 52px;"> 
+
+			<div class="row" style="height: 52px;">
 				<div class="modal-title col-xs-4" style="margin-bottom:0%; margin-top:0px; height: 20px;">
 					<h1 class="modal-title" id="seconds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px; color: white">0</h1>
 					<h1 class="modal-title" style="color: white; width: 400px;">&nbsp;PEDIDOS SURTIENDO</h1>
@@ -447,7 +449,7 @@
 				</div>
 				<ul id="dynamic-list-seconds" class="list-group" style="display:block; margin-bottom: 18px;"> </ul>
 
-				<div class="row" style="height: 52px;"> 
+				<div class="row" style="height: 52px;">
 					<div class="modal-title col-xs-10" style="margin-bottom:0%; margin-top:0px; height: 20px;">
 						<h1 class="modal-title" id="notes-fulfilled-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 52px; text-align: center; border-style: solid; border-width: 2px; color: white">0</h1>
 						<h1 class="modal-title notes-title" style="color: white; width: 420px;">&nbsp;NOTAS SURTIDAS</h1>
@@ -468,7 +470,7 @@
 				</div>
 				<ul id="dynamic-list-notes" class="list-group" style="display:block;"></ul>
 			</div>
-		
+
 		<div class="container-fluid col-sm-5" style="background-color: #111111; height: 1280px; padding-left: .5%; padding-right: 1.6%;">
 			<div class="modal-title" style="margin-bottom: 0%; margin-top: 0px;">
 				<h1 class="modal-title" id="thirds-counter-label" style="border-radius: 5px; float: left; width: 50px; height: 50px; text-align: center; border-style: solid; border-width: 2px; color: white;">0</h1>
@@ -485,7 +487,7 @@
 				<ul id="dynamic-list-thirds" class="list-group" style="display:block; padding-top: 1px;"> </ul>
 		</div>
 	</div>
-	
+
 	<script>
 
 		window.onload = () => {
@@ -494,10 +496,10 @@
 		};
 
 		//hearForCallClient();
-		
+
 		checkConnection();
 		idleTimer();
-		
+
 		checkDayChange();
 		window.setInterval(checkDayChange, 5*60*1000);
 
@@ -561,7 +563,7 @@
 
             var hours = (new Date()).getHours();
             var ampm = hours >= 12 ? 'pm' : 'am';
-            
+
             var randomInt = getRandomInt(4);
             if(randomInt == 1)
 			    msg.text = "buen día, pase el siguiente a la " + computer;
@@ -641,7 +643,7 @@
 				} else {
 					if(direction == 'down')
 						element.scrollBy(0, currentStep);
-					else 
+					else
 						element.scrollBy(0, -currentStep);
 				}
 
@@ -802,7 +804,7 @@
 
 		function updateWaitingTime(waitingTimes) {
 			var averageTime = getAverage(waitingTimes);
-			
+
 			if(averageTime == 0)
 				$("#waiting-times-label").text("");
 			else
@@ -813,7 +815,7 @@
 			console.log("actualizo");
 			var averageTime = ((parseFloat(getAverage(sWaitingTimes10)) + parseFloat(getAverage(sWaitingTimes30)) + parseFloat(getAverage(sWaitingTimes50))) / 3 ).toFixed(1);
 			var averageTimePP = ((parseFloat(getAverage(spWaitingTimes10)) + parseFloat(getAverage(spWaitingTimes30)) + parseFloat(getAverage(spWaitingTimes50))) / 3 ).toFixed(1);
-			
+
 			if(averageTime == 0)
 				$("#s-waiting-times-label").text("");
 			else
@@ -828,7 +830,7 @@
 		function getAverage(array) {
 			if(array.length == 0)
 				return 1;
-			
+
 			array.sort();
 			var tenP = Math.trunc(array.length * .1);
 
@@ -846,7 +848,7 @@
 					$("#" + id).css("background-color", "rgba(216, 61, 52, 70%)");
 					$("#" + id).css("color", "white");
 					$("#" + id).css("border-style", "hidden");
-				} 
+				}
 				else if(counter >= 3 && counter <= 4){
 					$("#" + id).css("background-color", "rgba(255, 215, 0, 80%)");
 					$("#" + id).css("color", "white");
@@ -856,7 +858,7 @@
 					$("#" + id).css("color", "white");
 					$("#" + id).css("border-style", "solid");
 				}
-				
+
 				uploadWOrders();
 			}
 			if(id == "thirds-counter-label") {
@@ -866,7 +868,7 @@
 				$("#thirds-counter-label").css("width", "50px");
 			}
 		}
-		
+
 		function uploadWOrders() {
 			var realCounter = 0;
 			$("#dynamic-list-firsts").children().each(function( index ) {
@@ -874,7 +876,7 @@
 					realCounter++;
 			});
 			firebase.database().ref('process/timing/worders').set(realCounter);
-			
+
 			var rawCouter = $("#firsts-counter-label").text();
 			firebase.database().ref('process/timing/rworders').set(rawCouter);
 		}
@@ -882,59 +884,119 @@
         function focusOnBlur() {
             setTimeout(function() { $("#inputScanner").focus(); }, 0);
 		}
-		
-		function isLetter(char) {
-			return (/[a-zA-Z]/).test(char)		
-		}
 
-        function manageScannerInput() {
-            var input = $("#inputScanner").val();
+			function isLetter(char) {
+				return (/[a-zA-Z]/).test(char)
+			}
+
+			function getLegacyOrderIds(orderid) {
+				var orderids = [orderid];
+
+				if(orderid.indexOf("NN") > -1)
+					orderids.push(orderid.replace(/NN/g, ""));
+
+				return orderids.filter(function(value, index, self) {
+					return value != "" && self.indexOf(value) === index;
+				});
+			}
+
+			function getOrderCandidateId(orderidKey, order) {
+				if(!orderidKey || !order)
+					return "";
+
+				var firstLetter = orderidKey.charAt(0);
+				var lastLetter = orderidKey.charAt(orderidKey.length - 1);
+				var total = order.total || "";
+
+				return (firstLetter + (order.name || "") + total + lastLetter).toUpperCase().replace(/[^A-Z0-9]/g,'');
+			}
+
+			function findOrderOnce(stage, orderid, onFound, onMissing) {
+				var orderids = getLegacyOrderIds(orderid);
+				var index = 0;
+
+				function findByOrderData() {
+					firebase.database().ref('process/' + stage).once("value", function(snapshot) {
+						var foundSnapshot = null;
+						var foundOrderid = null;
+
+						snapshot.forEach(function(childSnapshot) {
+							if(getOrderCandidateId(childSnapshot.key, childSnapshot.val()) == orderid) {
+								foundSnapshot = childSnapshot;
+								foundOrderid = childSnapshot.key;
+								return true;
+							}
+						});
+
+						if(foundSnapshot)
+							onFound(foundSnapshot, foundOrderid);
+						else if(onMissing)
+							onMissing();
+					});
+				}
+
+				function tryNext() {
+					if(index >= orderids.length) {
+						findByOrderData();
+						return;
+					}
+
+					var currentOrderid = orderids[index++];
+					firebase.database().ref('process/' + stage + '/' + currentOrderid).once("value", function(snapshot) {
+						if(snapshot.val())
+							onFound(snapshot, currentOrderid);
+						else
+							tryNext();
+					});
+				}
+
+				tryNext();
+			}
+
+	        function manageScannerInput() {
+	            var input = $("#inputScanner").val();
 			$("#inputScanner").val("");
-			
+
 			input = input.toUpperCase().replace(/[^A-Z0-9]/g,'');
 			if(input == "")
 				return;
 
-			if(isLetter(input.charAt(0))) {
-				//sino hubo clave, busco en seconds, si existe seteo la hora para cambiar el color.
-				var orderid = input;
-				firebase.database().ref('process/seconds/' + orderid).once("value", function(snapshot) {
-					if(snapshot.val()) {
-						var localsnapshot = snapshot.val();
-						localsnapshot.thour = Date.now();
-						
-						firebase.database().ref('process/seconds/' + orderid).set(localsnapshot);
-						//firebase.database().ref('process/seconds/' + orderid).remove();
-					} else {
-						//sino está en seconds, busco en firsts y seteo seconds. borro en firsts
-						firebase.database().ref('process/firsts/' + orderid).once("value", function(snapshot) {
-							if(snapshot.val()) {
-								var localsnapshot = snapshot.val();
-								var semployeeName = pendingSEmployeeName || "-";
-								localsnapshot.semployee = semployeeName;
+				if(isLetter(input.charAt(0))) {
+					//sino hubo clave, busco en seconds, si existe seteo la hora para cambiar el color.
+					var orderid = input;
+					findOrderOnce('seconds', orderid, function(snapshot, foundOrderid) {
+							var localsnapshot = snapshot.val();
+							localsnapshot.thour = Date.now();
+
+							firebase.database().ref('process/seconds/' + foundOrderid).set(localsnapshot);
+							//firebase.database().ref('process/seconds/' + orderid).remove();
+					}, function() {
+							//sino está en seconds, busco en firsts y seteo seconds. borro en firsts
+							findOrderOnce('firsts', orderid, function(snapshot, foundOrderid) {
+									var localsnapshot = snapshot.val();
+									var semployeeName = pendingSEmployeeName || "-";
+									localsnapshot.semployee = semployeeName;
 								localsnapshot.shour = Date.now();
 
 								if(semployeeName != "-") {
 									localsnapshot.weeklyFulfilledCounted = true;
-									firebase.database().ref('employees/' + semployeeName + "/hasOrder").set(true); 
+										firebase.database().ref('employees/' + semployeeName + "/hasOrder").set(true);
 
-									countWeeklyFulfilledOnStart(orderid, semployeeName, localsnapshot.nproducts, function() {
-										pendingSEmployeeName = null;
-										firebase.database().ref('process/seconds/' + orderid).set(localsnapshot).then(function () {
-											firebase.database().ref('process/firsts/' + orderid).remove();
+										countWeeklyFulfilledOnStart(foundOrderid, semployeeName, localsnapshot.nproducts, function() {
+											pendingSEmployeeName = null;
+											firebase.database().ref('process/seconds/' + foundOrderid).set(localsnapshot).then(function () {
+												firebase.database().ref('process/firsts/' + foundOrderid).remove();
+											});
 										});
-									});
-								} else {
-									delete localsnapshot.weeklyFulfilledCounted;
-									firebase.database().ref('process/seconds/' + orderid).set(localsnapshot).then(function () {
-										firebase.database().ref('process/firsts/' + orderid).remove();
-									});
-								}
-							}
-						});
-					}
-				});	
-			} else {
+									} else {
+										delete localsnapshot.weeklyFulfilledCounted;
+										firebase.database().ref('process/seconds/' + foundOrderid).set(localsnapshot).then(function () {
+											firebase.database().ref('process/firsts/' + foundOrderid).remove();
+										});
+									}
+							});
+					});
+				} else {
 				if(isLetter(input.charAt(1)))
 					input = "00" + input;
 				if(isLetter(input.charAt(2)))
@@ -943,81 +1005,71 @@
 					var employeeid = input.slice(0, 3);
 					console.log("employeeid " + employeeid);
 
-					var orderid = input.slice(3, input.length);	
+					var orderid = input.slice(3, input.length);
 					console.log("orderid " + orderid);
 
 
-					var semployeeName = getEmployeeNameByID(employeesSnapshot, employeeid);
-					if(semployeeName != undefined) {
-						//si el empleado existe y está en first, seteo seconds. borro en firsts
-						firebase.database().ref('process/firsts/' + orderid).once("value", function(snapshot) {
-							if(snapshot.val()) {
-								var localsnapshot = snapshot.val();
-								localsnapshot.semployee = semployeeName;
-								localsnapshot.shour = Date.now();	
+						var semployeeName = getEmployeeNameByID(employeesSnapshot, employeeid);
+						if(semployeeName != undefined) {
+							//si el empleado existe y está en first, seteo seconds. borro en firsts
+							findOrderOnce('firsts', orderid, function(snapshot, foundOrderid) {
+									var localsnapshot = snapshot.val();
+									localsnapshot.semployee = semployeeName;
+									localsnapshot.shour = Date.now();
 								localsnapshot.weeklyFulfilledCounted = true;
-								
-								firebase.database().ref('employees/' + semployeeName + "/hasOrder").set(true); 
 
-								countWeeklyFulfilledOnStart(orderid, semployeeName, localsnapshot.nproducts, function() {
-									firebase.database().ref('process/seconds/' + orderid).set(localsnapshot).then(function () {
-										firebase.database().ref('process/firsts/' + orderid).remove();
-									});
-								});
-							}
-						});	
-					} else if(employeeid == 99) {
-						//si está en firsts, seteo thirds. borro firsts
-						firebase.database().ref('process/firsts/' + orderid).once("value", function(snapshot) {
-							if(snapshot.val()) {
-								var localsnapshot = snapshot.val();
-								firebase.database().ref('process/thirds/' + orderid).set(localsnapshot).then(function () {
-									firebase.database().ref('process/firsts/' + orderid).remove();
-								});
-							} else {
-								//si está en seconds, seteo first s. borro seconds
-								firebase.database().ref('process/seconds/' + orderid).once("value", function(snapshot) {
-									if(snapshot.val()) {
-										var localsnapshot = snapshot.val();
-										delete localsnapshot.shour;
-										delete localsnapshot.thour;
-										delete localsnapshot.weeklyFulfilledCounted;
-										firebase.database().ref('process/firsts/' + orderid).set(localsnapshot).then(function () {
-											firebase.database().ref('process/seconds/' + orderid).remove();
+									firebase.database().ref('employees/' + semployeeName + "/hasOrder").set(true);
+
+									countWeeklyFulfilledOnStart(foundOrderid, semployeeName, localsnapshot.nproducts, function() {
+										firebase.database().ref('process/seconds/' + foundOrderid).set(localsnapshot).then(function () {
+											firebase.database().ref('process/firsts/' + foundOrderid).remove();
 										});
-									} else {
-										//si está en thirds, seteo first s. borro thirds
-										firebase.database().ref('process/thirds/' + orderid).once("value", function(snapshot) {
-											if(snapshot.val()) {
-												var localsnapshot = snapshot.val();
-												localsnapshot.checked = false;
-												delete localsnapshot.shour;
-												delete localsnapshot.thour;
-												delete localsnapshot.weeklyFulfilledCounted;
-												firebase.database().ref('process/firsts/' + orderid).set(localsnapshot).then(function () {
-													firebase.database().ref('process/thirds/' + orderid).remove();
-												});
-											} else {
-												//si está en fourths, seteo first s. borro fourths
-												firebase.database().ref('process/fourths/' + orderid).once("value", function(snapshot) {
-													if(snapshot.val()) {
-														var localsnapshot = snapshot.val();
-														localsnapshot.checked = false;
-														delete localsnapshot.shour;
-														delete localsnapshot.thour;
-														delete localsnapshot.weeklyFulfilledCounted;
-														firebase.database().ref('process/firsts/' + orderid).set(localsnapshot).then(function () {
-															firebase.database().ref('process/fourths/' + orderid).remove();
-														});
-													} 
-												});	
-											}
-										});	
-									}
-								});	
-							}
-						});
-					}
+									});
+							});
+						} else if(employeeid == 99) {
+							//si está en firsts, seteo thirds. borro firsts
+							findOrderOnce('firsts', orderid, function(snapshot, foundOrderid) {
+									var localsnapshot = snapshot.val();
+									firebase.database().ref('process/thirds/' + foundOrderid).set(localsnapshot).then(function () {
+										firebase.database().ref('process/firsts/' + foundOrderid).remove();
+									});
+							}, function() {
+									//si está en seconds, seteo first s. borro seconds
+									findOrderOnce('seconds', orderid, function(snapshot, foundOrderid) {
+											var localsnapshot = snapshot.val();
+											delete localsnapshot.shour;
+											delete localsnapshot.thour;
+											delete localsnapshot.weeklyFulfilledCounted;
+											firebase.database().ref('process/firsts/' + foundOrderid).set(localsnapshot).then(function () {
+												firebase.database().ref('process/seconds/' + foundOrderid).remove();
+											});
+									}, function() {
+											//si está en thirds, seteo first s. borro thirds
+											findOrderOnce('thirds', orderid, function(snapshot, foundOrderid) {
+													var localsnapshot = snapshot.val();
+													localsnapshot.checked = false;
+													delete localsnapshot.shour;
+													delete localsnapshot.thour;
+													delete localsnapshot.weeklyFulfilledCounted;
+													firebase.database().ref('process/firsts/' + foundOrderid).set(localsnapshot).then(function () {
+														firebase.database().ref('process/thirds/' + foundOrderid).remove();
+													});
+											}, function() {
+													//si está en fourths, seteo first s. borro fourths
+													findOrderOnce('fourths', orderid, function(snapshot, foundOrderid) {
+															var localsnapshot = snapshot.val();
+															localsnapshot.checked = false;
+															delete localsnapshot.shour;
+															delete localsnapshot.thour;
+															delete localsnapshot.weeklyFulfilledCounted;
+															firebase.database().ref('process/firsts/' + foundOrderid).set(localsnapshot).then(function () {
+																firebase.database().ref('process/fourths/' + foundOrderid).remove();
+															});
+													});
+											});
+									});
+							});
+						}
 				} else {
 					var pendingEmployee = getEmployeeNameByID(employeesSnapshot, input);
 					if(pendingEmployee != undefined) {
@@ -1034,10 +1086,10 @@
 			var backgroundColor = "#111111",
                 color = "white";
 			var blinkAnimation = "none";
-			
+
 			if(!order.ftotal)
 				order.total = order.total + "~";
-			
+
 			//aqui
 			if(order.ndiversity == "0") {
 				blinkAnimation = "pulseBackground 2.5s ease-in-out infinite";
@@ -1054,7 +1106,7 @@
 				}
 			}
 
-			var returnStatement = 
+			var returnStatement =
 				'<li class="list-group-item row order-row" style="background-color: ' + backgroundColor + '; color: ' + color + '; padding-right: 0px; animation: ' + blinkAnimation + ';">' +
 					'<h2 class="col-sm-3 client-name" style="padding: 0px; margin: 0px; padding-left: 3px;">' + order.name + '</h2>' +
 					'<h2 class="col-sm-2 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">$' + order.total + '</h2>' +
@@ -1062,14 +1114,14 @@
 					'<h2 class="col-sm-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">' + order.femployee + '</h2>' +
 					'<h2 class="col-sm-3 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">#'+ order.ncomputer + " " + order.ordertype + '</h2>' +
 					'<h2 class="col-sm-1 order-id" style="padding: 0px; margin: 0px; padding-left: 0px;">' + orderHour.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}) + '</h2>' +
-					'<div class="col-sm-1" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
-						'<h2 class="order-id elapsed-time" style="width: 30px; margin: 0px 0px; float: left; clear: both;">' + diffMinutes + '</h2>' + 						
+					'<div class="col-sm-1" style="padding: 0px; margin: 0px; padding-left: 5px;">' +
+						'<h2 class="order-id elapsed-time" style="width: 30px; margin: 0px 0px; float: left; clear: both;">' + diffMinutes + '</h2>' +
 						'<div type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px; padding-top: 2px;" onclick="sendToThirds(&quot;' + id + '&quot;)">' +
 							'<h4 class="glyphicon glyphicon-remove" style="margin-top: .75px;"></h4>' +
 						'</div>' +
 					'</div>' +
 				'</li>';
-			
+
 			return returnStatement;
 			//'<h2 class="col-sm-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + getEstimatedTime(order.nproducts) + '</h2>' +
 		}
@@ -1090,7 +1142,7 @@
 							firebase.database().ref('process/thirds/' + orderid).set(localsnapshot).then(function () {
 								firebase.database().ref('process/seconds/' + orderid).remove();
 							});
-						} 
+						}
 					});
 				}
 			});
@@ -1113,8 +1165,8 @@
 				order.ordertype = "TEL.";
 			else if (order.ordertype == "WHATSAPP")
 				order.ordertype = "WHA.";
-			
-			var returnStatement = 
+
+			var returnStatement =
 				'<li class="list-group-item row order-row" style="background-color: ' + backgroundColor + '; color: ' + color + '; padding-right: 0px;">' +
 					'<h2 class="col-xs-3 client-name" style="padding: 0px; margin: 0px; padding-left: 0px;">' + order.name + '</h2>' +
 					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">$' + order.total + '</h2>' +
@@ -1125,8 +1177,8 @@
 					'<h2 class="col-xs-1 order-id" style="padding: 0px; margin: 0px; padding-left: 5px;">' + (diffMinutes - diffMinutesSeconds) + '</h2>' +
 					'<h2 class="col-xs-1 client-name" style="padding: 0px; margin: 0px; padding-left: 10px;">' + order.semployee + '</h2>' +
 					'<h2 class="col-xs-1 order-id seconds-elapsed-time" style="padding: 0px; margin: 0px; padding-left: 5px;">' + diffMinutesSeconds + '</h2>' +
-					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 5px;">' +  
-						'<h2 class="order-id elapsed-time" style="width: 20px; margin: 0px 0px; float: left; clear: both;">' + diffMinutes + '</h2>' + 						
+					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 5px;">' +
+						'<h2 class="order-id elapsed-time" style="width: 20px; margin: 0px 0px; float: left; clear: both;">' + diffMinutes + '</h2>' +
 						'<div type="button" class="btn btn-sm" style="float: right; margin: 0px; height: 30px; padding-top: 2px;" onclick="sendToThirds(&quot;' + id + '&quot;)">' +
 							'<h4 class="glyphicon glyphicon-remove" style="margin-top: .75px;"></h4>' +
 						'</div>' +
@@ -1139,11 +1191,11 @@
 		function formatThirdsListItem(order, id) {
 			if(!order.ftotal)
 				order.total = order.total + "~";
-			
+
 			//rojo oscuro
 			var backgroundColor = "rgba(216, 61, 52, 88%)",
 				color = "white";
-			
+
 			if(order.checked) {
 				backgroundColor = "#111111";
 				color = "white";
@@ -1173,30 +1225,30 @@
 			var displayAttr = "none";
 			if(currentLetter == order.name.charAt(0) || currentLetter == "0")
 				displayAttr = "block";
-			
-			var returnStatement = 
+
+			var returnStatement =
 				'<li class="list-group-item row order-row" style="padding-right: 0px; padding-left: 0px; background-color: ' + backgroundColor + '; color: ' + color + '; display: ' + displayAttr + ';">' +
 					'<span type="button" class="btn btn-sm" style="float: left; margin: 0px; height: 30px; padding-top: 2px;" onclick="sendToFourths(&quot;' + id + '&quot;)">' +
 						'<h4 class="glyphicon glyphicon-remove" style="margin-top: .75px;"></h4>' +
-					'</span>' + 
-					'<div class="col-xs-4" style="padding: 0px; margin: 0px;">' + 
-						'<h3 class="glyphicon ' + tomorrowIcon + '" style="padding: 0px; margin: 0px; float: left; width:30px; display: ' + iconVisibility + '"></h3>' + 
-						'<h2 class="client-name" style="padding: 0px; margin: 0px; padding-left: 0px; float: left;">' + order.name + '</h2>' + 
+					'</span>' +
+					'<div class="col-xs-4" style="padding: 0px; margin: 0px;">' +
+						'<h3 class="glyphicon ' + tomorrowIcon + '" style="padding: 0px; margin: 0px; float: left; width:30px; display: ' + iconVisibility + '"></h3>' +
+						'<h2 class="client-name" style="padding: 0px; margin: 0px; padding-left: 0px; float: left;">' + order.name + '</h2>' +
 					'</div>' +
-					'<div class="col-xs-2" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
-						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both; padding-left: 15px;">' + dateString + '</h2>' +						
+					'<div class="col-xs-2" style="padding: 0px; margin: 0px; padding-left: 0px;">' +
+						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both; padding-left: 15px;">' + dateString + '</h2>' +
 					'</div>' +
-					'<div class="col-xs-2" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
-						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">#' + order.ncomputer + ' ' + order.femployee + '</h2>' +						
+					'<div class="col-xs-2" style="padding: 0px; margin: 0px; padding-left: 0px;">' +
+						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">#' + order.ncomputer + ' ' + order.femployee + '</h2>' +
 					'</div>' +
-					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
-						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">' + order.ordertype + '</h2>' +						
+					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 0px;">' +
+						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">' + order.ordertype + '</h2>' +
 					'</div>' +
-					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 0px;">' +  
-						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">' + order.nproducts + '</h2>' +						
+					'<div class="col-xs-1" style="padding: 0px; margin: 0px; padding-left: 0px;">' +
+						'<h2 class="order-id elapsed-time" style="margin: 0px 0px; float: left; clear: both;">' + order.nproducts + '</h2>' +
 					'</div>' +
-					'<div class="col-xs-1" style="padding: 0px; margin: 0px;">' +  
-						'<h2 class="order-id elapsed-time" style="width: 90px; margin: 0px 0px; float: left; clear: both; left: -10px;">$' + order.total + '</h2>' +						
+					'<div class="col-xs-1" style="padding: 0px; margin: 0px;">' +
+						'<h2 class="order-id elapsed-time" style="width: 90px; margin: 0px 0px; float: left; clear: both; left: -10px;">$' + order.total + '</h2>' +
 					'</div>' +
 				'</li>';
 			return returnStatement;
@@ -1209,7 +1261,7 @@
 		function getInfoFourths(computer, orderHour, employee) {
 			var date = new Date(parseInt(orderHour));
 			var dateString = date.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true});
-			
+
 			alert("ANOTÓ " + employee + "\n" + dateString + "\n#C" + computer);
 		}
 
@@ -1262,34 +1314,34 @@
 		//UPDATE combining timer and color
 		function updateFElapsedTime(orderListItem) {
 			var etField = orderListItem.find(".elapsed-time");
-			
+
 			if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.8)") {
 				if(etField.text() > 4) {
 					orderListItem.css("background-color", "rgba(216, 61, 52, 70%)");
-					orderListItem.css("color", "white");						
+					orderListItem.css("color", "white");
 				} else if(etField.text() > 2 && etField.text() <= 4) {
 					orderListItem.css("background-color", "rgba(255, 215, 0, 80%)");
-					orderListItem.css("color", "#white");				
+					orderListItem.css("color", "#white");
 				}
 			}
-				
+
 			var interval = setInterval(function() {
 				if(etField.css('display') != "block")
 					clearInterval(interval);
 				etField.text(parseInt(etField.text()) + 1);
-				
+
 				if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.8)") {
 					if(etField.text() > 4) {
 						orderListItem.css("background-color", "rgba(216, 61, 52, 70%)");
-						orderListItem.css("color", "white");						
+						orderListItem.css("color", "white");
 					} else if(etField.text() > 2 && etField.text() <= 4) {
 						orderListItem.css("background-color", "rgba(255, 215, 0, 80%)");
-						orderListItem.css("color", "#white");				
+						orderListItem.css("color", "#white");
 					}
 				}
 			}, 60000);
 		}
-		
+
 		function updateSElapsedTime(orderListItem, nproducts) {
 			var etField = orderListItem.find(".seconds-elapsed-time");
 			var etSField = orderListItem.find(".elapsed-time");
@@ -1304,36 +1356,36 @@
 			if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.8)") {
 				if(etField.text() > expectedTime) {
 					orderListItem.css("background-color", "rgba(216, 61, 52, 70%)");
-					orderListItem.css("color", "white");				
+					orderListItem.css("color", "white");
 				} else if(etField.text() > (expectedTime - oneThirdET) && etField.text() <= expectedTime) {
 					orderListItem.css("background-color", "rgba(255, 215, 0, 80%)");
-					orderListItem.css("color", "white");				
+					orderListItem.css("color", "white");
 				} else if(etField.text() >= 0 && etField.text() <= (expectedTime - oneThirdET)) {
 					orderListItem.css("background-color", "#111111");
-					orderListItem.css("color", "white");				
+					orderListItem.css("color", "white");
 				}
 			}
-				
+
 			var interval = setInterval(function() {
 				if(etField.css('display') != "block")
 					clearInterval(interval);
-				
+
 				if(orderListItem.css("background-color") != "rgba(0, 183, 74, 0.8)") {
 					etField.text(parseInt(etField.text()) + 1);
 					etSField.text(parseInt(etSField.text()) + 1);
-				
+
 					if(etField.text() > (expectedTime + oneThirdET)) {
 						orderListItem.css("background-color", "rgba(216, 61, 52, 70%)");
-						orderListItem.css("color", "white");				
+						orderListItem.css("color", "white");
 					} else if(etField.text() > expectedTime && etField.text() <= (expectedTime + oneThirdET)) {
 						orderListItem.css("background-color", "rgba(255, 140, 0, 75%)");
-						orderListItem.css("color", "white");				
+						orderListItem.css("color", "white");
 					} else if(etField.text() > (expectedTime - oneThirdET) && etField.text() <= expectedTime) {
 						orderListItem.css("background-color", "rgba(255, 215, 0, 80%)");
-						orderListItem.css("color", "white");				
+						orderListItem.css("color", "white");
 					} else if(etField.text() >= 0 && etField.text() <= (expectedTime - oneThirdET)) {
 						orderListItem.css("background-color", "#111111");
-						orderListItem.css("color", "white");				
+						orderListItem.css("color", "white");
 					}
 				}
 			}, 60000);
@@ -1353,7 +1405,7 @@
 
 		function increaseElapsedTime(orderListItem, className) {
 			var etField = orderListItem.find("." + className);
-				
+
 			var interval = setInterval(function() {
 				if(etField.css('display') != "block")
 					clearInterval(interval);
@@ -1365,19 +1417,19 @@
 			//FUTURE calculate estimated order time
 			return Math.trunc(nproducts / 2);
 		}
-		
-		function updateMaxTimeFirsts() {			
+
+		function updateMaxTimeFirsts() {
 			if($("#dynamic-list-firsts").children().first().children().eq(6).text())
 				$("#firsts-max-label").text("MÁXIMO: " + $("#dynamic-list-firsts").children().first().children().eq(6).text() + "M");
 			else
 				$("#firsts-max-label").text("");
 		}
-		
-		function updateMaxTimeSeconds() {			
+
+		function updateMaxTimeSeconds() {
 			if($("#dynamic-list-seconds").children().first().children().eq(8).text()) {
 				var employeeName = $("#dynamic-list-seconds").children().first().children().eq(7).text();
 				var elapsedTime = $("#dynamic-list-seconds").children().first().children().eq(8).text();
-				
+
 				$("#seconds-max-label").text("MÁXIMO: " + employeeName + " " + elapsedTime + "M");
 			}
 			else
@@ -1471,10 +1523,11 @@
 			var item = $(formatThirdsListItem(order, id));
 			var itemName = ((order.name || "") + "").toUpperCase();
 			var itemHour = parseInt(order.hour, 10) || 0;
-			var inserted = false;
+				var inserted = false;
 
-			item.data("hour", order.hour);
-			item.data("name", itemName);
+				item.data("id", id);
+				item.data("hour", order.hour);
+				item.data("name", itemName);
 
 			ul.children('li').each(function() {
 				var currentItem = $(this);
@@ -1491,7 +1544,7 @@
 			if(!inserted)
 				ul.append(item);
 		}
-		
+
 		function sortList(ulname){
 			var ul = document.getElementById(ulname);
 			var scrollTop = ul.scrollTop;
@@ -1504,13 +1557,13 @@
 
 			lis.sort(function(a, b){
 				if(ulname == "dynamic-list-firsts") {
-					return parseInt(b.childNodes[6].textContent , 10) - 
+					return parseInt(b.childNodes[6].textContent , 10) -
 						parseInt(a.childNodes[6].textContent , 10);
 				} else if(ulname == "dynamic-list-seconds") {
-					return parseInt(b.childNodes[6].textContent , 10) - 
+					return parseInt(b.childNodes[6].textContent , 10) -
 						parseInt(a.childNodes[6].textContent , 10);
 				} else if(ulname == "dynamic-list-thirds") {
-					return a.childNodes[1].textContent > 
+					return a.childNodes[1].textContent >
 						b.childNodes[1].textContent;
 				}
 			});
@@ -1523,7 +1576,7 @@
 		}
 
 		//global employees loop
-		firebase.database().ref('employees').once("value", function(snapshot) { 
+		firebase.database().ref('employees').once("value", function(snapshot) {
 			if(snapshot.val()) {
 				$.each(snapshot.val(), function(key, value) {
 					firebase.database().ref('employees/' + key + '/resting').set(false);
@@ -1533,12 +1586,12 @@
 						firebase.database().ref('employees/' + key + '/prodsFulfilledThisWeek').set(0);
 				});
 			}
-		}); 
-		
+		});
+
 		function saveWReport() {
-			firebase.database().ref('employees').once("value", function(snapshot) { 
+			firebase.database().ref('employees').once("value", function(snapshot) {
 				if(snapshot.val()) {
-					firebase.database().ref('employeesW').once("value", function(snapshotW) { 
+					firebase.database().ref('employeesW').once("value", function(snapshotW) {
 						$.each(snapshot.val(), function(key, value) {
 							if(typeof snapshotW.val()[key] == "undefined") {
 								createEmployee(key);
@@ -1557,7 +1610,7 @@
 		}
 
 		function deleteWReport() {
-			firebase.database().ref('employeesW').once("value", function(snapshot) { 
+			firebase.database().ref('employeesW').once("value", function(snapshot) {
 				if(snapshot.val()) {
 					$.each(snapshot.val(), function(key, value) {
 						firebase.database().ref('employeesW/' + key + '/norders').set(0);
@@ -1589,7 +1642,7 @@
 		}
 
 		function resetWeeklyFulfilledStats(reportDateKey) {
-			firebase.database().ref('employees').once("value", function(snapshot) { 
+			firebase.database().ref('employees').once("value", function(snapshot) {
 				if(snapshot.val()) {
 					var report = {
 						createdAt: Date.now(),
@@ -1637,7 +1690,7 @@
             var millisTill7pmW = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 10, 0, 0) - now;
 
 			checkWeeklyFulfilledReset(now);
-			
+
 			if (millisTill7pmW < 0) {
 				saveWReport();
 			}
@@ -1650,7 +1703,7 @@
 				firebase.database().ref('process/timing').remove();
 				firebase.database().ref('process/whatsapp').remove();
 
-				firebase.database().ref('employees').once("value", function(snapshot) { 
+				firebase.database().ref('employees').once("value", function(snapshot) {
 					if(snapshot.val()) {
 						$.each(snapshot.val(), function(key, value) {
 							firebase.database().ref('employees/' + key + '/norders').set(0);
@@ -1688,16 +1741,16 @@
 						setTimeout(function() {
 							sortList('dynamic-list-firsts');
 							sortList('dynamic-list-seconds');
-							
+
 							updateMaxTimeFirsts();
 							updateMaxTimeSeconds();
 							var interval = setInterval(function() {
 								updateMaxTimeFirsts();
 								updateMaxTimeSeconds();
-							}, 1000);	
+							}, 1000);
 						}, 500);
 					}
-				} else 
+				} else
 					document.getElementById("noConnectionAlert").style.display = "block";
 			});
 		}
