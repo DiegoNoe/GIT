@@ -1557,7 +1557,7 @@
                         currentLine = 0;
                     }
 
-                    sOrderProducts[order[i][0]] = {
+                    sOrderProducts[i.toString().padStart(3, '0') + order[i][0]] = {
                         uc: Number(order[i][1]),
                         n: order[i][4]
                     };
@@ -1569,15 +1569,15 @@
 
                     //enhance quantity if necessary
                     if (quantityAndUnit.includes(".500"))
-                        quantityAndUnit = quantityAndUnit.replace(".500", ".500");
+                        quantityAndUnit = quantityAndUnit.replace(".500", ".50");
                     else if (quantityAndUnit.includes(".50"))
-                        quantityAndUnit = quantityAndUnit.replace(".50", ".500");
+                        quantityAndUnit = quantityAndUnit.replace(".50", ".50");
                     else if (quantityAndUnit.includes(".5"))
-                        quantityAndUnit = quantityAndUnit.replace(".5", ".500");
+                        quantityAndUnit = quantityAndUnit.replace(".5", ".50");
                     else if (quantityAndUnit.includes(".250"))
-                        quantityAndUnit = quantityAndUnit.replace(".250", ".250");
+                        quantityAndUnit = quantityAndUnit.replace(".250", ".25");
                     else if (quantityAndUnit.includes(".25"))
-                        quantityAndUnit = quantityAndUnit.replace(".25", ".250");
+                        quantityAndUnit = quantityAndUnit.replace(".25", ".25");
 
                     if (quantityAndUnit.slice(0, 4) == ".500")
                         quantityAndUnit = quantityAndUnit.replace(".500", "1/2");
@@ -1918,8 +1918,25 @@
                 else
                     firebase.database().ref('pendingOrders/' + orderRefID).remove();
 
+                console.log("SUBO ORDEN");
+
+                var localDirect = false;
+                if(((ndiversity <= 4 && !hasChuletaN) && orderMethod == "MOSTRADOR"))
+                    localDirect = true;
+
+                uploadCompleteOrder(
+                    replaceAEIOUN($("#inputName").val().trim()),
+                    sOrderProducts,
+                    total,
+                    productsRefID,
+                    calculable,
+                    iftomorrow,
+                    orderMethod,
+                    ndiversity
+                );
+
                 if ($("#invoiceCheckbox").is(':checked'))
-                    uploadCompleteOrder(replaceAEIOUN($("#inputName").val().trim()), order, total, productsRefID);
+                    uploadInvoiceOrder(replaceAEIOUN($("#inputName").val().trim()), order, total, productsRefID);
 
                 //autoprints PDF in a new tab
                 doc.autoPrint();
@@ -2190,13 +2207,30 @@
             });
         }
 
-        function uploadCompleteOrder(name, products, total, id) {
-            id = id.replace(".", "").replace(" ", "");
+        function uploadCompleteOrder(name, products, total, id, calculable, tomorrow, orderMethod, direct) {
+            id = id.replace(/[\.\s]/g, "");
+            total = total.replace(/\,/g,'');
+
+            firebase.database().ref("orders/code0/" + id).set({
+                name: name,
+                qr: id,
+                takenby: replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1),
+                products: products,
+                subtotal: total,
+                hour: Date.now(),
+                calculable: calculable,
+                iftomorrow: tomorrow,
+                direct: direct
+            });
+        }
+
+        function uploadInvoiceOrder(name, products, total, id) {
+            id = id.replace(/[\.\s]/g, "");
             total = total.replace(/\,/g,'');
 
             for(var i = 0; i < products.length; i++)
                 products[i] = products[i].map(v => v === undefined ? '1' : v);
-            
+
             firebase.database().ref("invoice/" + id).set({
                 nombre: name,
                 productos: products,

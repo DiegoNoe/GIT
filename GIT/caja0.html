@@ -26,8 +26,11 @@
 
     <script>
         var products,
-            defiantClients;
+            defiantClients,
+            defiantOrders;
+        var ordersList = [];
         var orderRefID = "";
+        var globalID = "";
         firebase.initializeApp(connectFB());
         var database = firebase.database().ref('productos/');
         database.on('value', function (snapshot) {
@@ -43,8 +46,22 @@
         databaseClients.on('value', function (snapshot) {
             defiantClients = Defiant.getSnapshot(snapshot.val());
         });
+        var databaseOrders = firebase.database().ref('orders/code0/');
+        databaseOrders.on('value', function (snapshot) {
+            if(snapshot.val() != undefined) {
+                defiantOrders = Defiant.getSnapshot(snapshot.val());
+                ordersList = Object.keys(snapshot.val()).map(function(key) {
+                    var order = snapshot.val()[key];
+                    order.qr = order.qr || key;
+                    return order;
+                });
+            } else {
+                defiantOrders = Defiant.getSnapshot({});
+                ordersList = [];
+            }
+        });
 
-        var globalComputer = "liveView1";
+        var globalComputer = "liveViewCaja0";
         var globalWaitingOrders,
             globalTPP = [];
         var aesEcb = new aesjs.ModeOfOperation.ecb(aesMethod);
@@ -362,7 +379,7 @@
             }
         });
         
-        //inputName search onkeyup (live search action) SEARCH CLIENTS
+        //inputName search onkeyup (live search action) SEARCH SAVED ORDERS
         $("#inputName").on('keyup', function (e) {
             clientName = "";
             clientNumber = "";
@@ -373,38 +390,42 @@
             $("#dynamic-list-2").html("");
             hideSugList();
 
-            var searchResult;
-            var inputSearchValue = $('#inputName').val();
-            //search two or more words (imposible number)
-            if (inputSearchValue.includes(" ")) {
-                inputSearchValue = inputSearchValue.split(" ");
-                for (i = 0; i < inputSearchValue.length; i++) {
-                    if (inputSearchValue[i] != "") {
-                        if (searchResult == null)
-                            searchResult = JSON.search(defiantClients, '//*[contains(nombre, "' + inputSearchValue[i] + '")]' + '|//*[contains(numero, "' + inputSearchValue[i] + '")]');
-                        else
-                            searchResult = JSON.search(searchResult, '//*[contains(nombre, "' + inputSearchValue[i] + '")]' + '|//*[contains(numero, "' + inputSearchValue[i] + '")]');
-                    }
-                }
-            }
-            //search just one word (posible number)
-            else {
-                if ($('#inputName').val() != "") 
-                    searchResult = JSON.search(defiantClients, '//*[contains(nombre, "' + inputSearchValue + '")]' + '|//*[contains(numero, "' + inputSearchValue + '")]');
-            }
+            var searchResult = [];
+            var inputSearchValue = $('#inputName').val().trim().toUpperCase();
+            if(ordersList == undefined)
+                return;
+
+            if (inputSearchValue != "")
+                searchResult = searchOrders(inputSearchValue);
 
             //loads the results into the list
             $("#clientOptions").empty();
             if ($('#inputName').val() != "") {
+                var resultList = searchResult || [];
                 //$("#dynamic-list").css("opacity", "0.25");
-                populateLiveClientList(searchResult);
+                populateLiveOrderList(resultList);
 
                 //on enter the first search item is selected
-                if (e.keyCode == 13 && searchResult.length > 0)
-                    addClientObjectGetter(searchResult[0].Id);
+                if (e.keyCode == 13 && resultList.length > 0)
+                    searchOrderById(resultList[0].qr);
             }// else
                 //$("#dynamic-list").css("opacity", "1");
         });
+
+        function searchOrders(inputSearchValue) {
+            var terms = inputSearchValue.split(" ").filter(function(term) {
+                return term != "";
+            });
+
+            return ordersList.filter(function(order) {
+                var name = (order.name || "").toString().toUpperCase();
+                var qr = (order.qr || "").toString().toUpperCase();
+
+                return terms.every(function(term) {
+                    return name.includes(term) || qr.includes(term);
+                });
+            });
+        }
 
         //inputSearch search onkeyup (live search action)
         $("#inputSearch").on('keyup', function (e) {
@@ -506,6 +527,23 @@
         };
 
         //populates client search list after the result has been processed
+        function populateLiveOrderList(searchResult) {
+            var orderItem = "";
+            for (var i = 0; i < searchResult.length && i < 51; i++) {
+                var orderQr = searchResult[i].qr || "";
+                var orderName = searchResult[i].name || "";
+                var orderTotal = searchResult[i].subtotal || "";
+                orderItem =
+                    '<button class="list-group-item row btn-default client-options-item" onclick="searchOrderById(&#39;' + orderQr + '&#39;)">' +
+                    '<div class="col-sm-7" style="padding-left: 12px; padding-right: 0px;">' + orderName + '</div>' +
+                    '<div class="col-sm-4" style="padding-left: 0px; padding-right: 0px;">$' + orderTotal + '</div>' +
+                    '<div class="col-sm-1" style="padding-left: 0px; padding-right: 0px;">' + (searchResult[i].checked ? "✓" : "") + '</div>' +
+                    '</button>';
+
+                $("#clientOptions").append(orderItem);
+            }
+        }
+
         function populateLiveClientList(searchResult) {
             var clientItem = "";
             //up to 51 results in search bar
@@ -1193,6 +1231,76 @@
             addProduct(searchResult[0]);
         }
 
+        function searchOrderById(id) {
+            if(id == undefined || id == "")
+                return;
+
+            id = id.replace(/[\.\s]/g, "");
+            firebase.database().ref("orders/code0/" + id).once('value', function (snapshot) {
+                if(snapshot.val() != null) {
+                    populateOrder(snapshot.val(), id);
+                } else {
+                    console.log("searchOrderById: no encontre nada");
+                }
+            });
+        }
+
+        function populateOrder(order, localID) {
+            eraseOrder();
+
+            $("#quantityInput").val("");
+            $("#inputSearch").val("");
+            $("#searchOptions").empty();
+            $("#clientOptions").empty();
+
+            $("#inputName").val(order.name);
+            globalID = order.qr || localID;
+            updateName(order.name);
+
+            var productKeys = Object.keys(order.products || {});
+            if(productKeys.length == 0) {
+                $("#quantityInput").focus();
+                return;
+            }
+
+            (function iterateOverProductsWithDelay(i) {
+                setTimeout(function() {
+                    var key = productKeys[i - 1];
+                    addProductFromSavedOrder(key, order.products[key]);
+                    if(--i) iterateOverProductsWithDelay(i);
+                    else $("#quantityInput").focus();
+                }, 1);
+            })(productKeys.length);
+        }
+
+        function addProductFromSavedOrder(id, savedProduct) {
+            if(id == undefined || savedProduct == undefined)
+                return;
+
+            id = id.substring(3);
+
+            var searchResult = JSON.search(products, '//*[clave="' + id + '"]');
+            if(searchResult[0] == undefined)
+                return;
+
+            $("#quantityInput").val(savedProduct.uc);
+            addProduct(searchResult[0]);
+
+            var productRow = $('#dynamic-list').children().first();
+            var inputQuantity = productRow.find('input').first();
+            var inputNotes = productRow.find('input').eq(1);
+            var date = productRow.data("date");
+
+            inputQuantity.val(savedProduct.uc);
+            inputNotes.val(savedProduct.n || "");
+            productRow.data("total", round(savedProduct.uc * searchResult[0].costo));
+            productRow.children().eq(3).text("$" + round(savedProduct.uc * searchResult[0].costo));
+            updateOrderProductQuantity(date, savedProduct.uc);
+            updateOrderProductNotes(date, savedProduct.n || "");
+            updateTotal();
+            updateWT();
+        }
+
         function hideSugList() {
             $('#dynamic-list').css("height", "620px");
             $('#dynamic-list').css("margin-bottom", "0px");
@@ -1557,7 +1665,7 @@
                         currentLine = 0;
                     }
 
-                    sOrderProducts[i.toString().padStart(3, '0') + order[i][0]] = {
+                    sOrderProducts[order[i][0]] = {
                         uc: Number(order[i][1]),
                         n: order[i][4]
                     };
@@ -1569,15 +1677,15 @@
 
                     //enhance quantity if necessary
                     if (quantityAndUnit.includes(".500"))
-                        quantityAndUnit = quantityAndUnit.replace(".500", ".50");
+                        quantityAndUnit = quantityAndUnit.replace(".500", ".500");
                     else if (quantityAndUnit.includes(".50"))
-                        quantityAndUnit = quantityAndUnit.replace(".50", ".50");
+                        quantityAndUnit = quantityAndUnit.replace(".50", ".500");
                     else if (quantityAndUnit.includes(".5"))
-                        quantityAndUnit = quantityAndUnit.replace(".5", ".50");
+                        quantityAndUnit = quantityAndUnit.replace(".5", ".500");
                     else if (quantityAndUnit.includes(".250"))
-                        quantityAndUnit = quantityAndUnit.replace(".250", ".25");
+                        quantityAndUnit = quantityAndUnit.replace(".250", ".250");
                     else if (quantityAndUnit.includes(".25"))
-                        quantityAndUnit = quantityAndUnit.replace(".25", ".25");
+                        quantityAndUnit = quantityAndUnit.replace(".25", ".250");
 
                     if (quantityAndUnit.slice(0, 4) == ".500")
                         quantityAndUnit = quantityAndUnit.replace(".500", "1/2");
@@ -1918,25 +2026,8 @@
                 else
                     firebase.database().ref('pendingOrders/' + orderRefID).remove();
 
-                console.log("SUBO ORDEN");
-
-                var localDirect = false;
-                if(((ndiversity <= 4 && !hasChuletaN) && orderMethod == "MOSTRADOR"))
-                    localDirect = true;
-
-                uploadCompleteOrder(
-                    replaceAEIOUN($("#inputName").val().trim()),
-                    sOrderProducts,
-                    total,
-                    productsRefID,
-                    calculable,
-                    iftomorrow,
-                    orderMethod,
-                    ndiversity
-                );
-
                 if ($("#invoiceCheckbox").is(':checked'))
-                    uploadInvoiceOrder(replaceAEIOUN($("#inputName").val().trim()), order, total, productsRefID);
+                    uploadCompleteOrder(replaceAEIOUN($("#inputName").val().trim()), order, total, productsRefID);
 
                 //autoprints PDF in a new tab
                 doc.autoPrint();
@@ -2207,30 +2298,13 @@
             });
         }
 
-        function uploadCompleteOrder(name, products, total, id, calculable, tomorrow, orderMethod, direct) {
-            id = id.replace(/[\.\s]/g, "");
-            total = total.replace(/\,/g,'');
-
-            firebase.database().ref("orders/code0/" + id).set({
-                name: name,
-                qr: id,
-                takenby: replaceAEIOUN($("#inputEmployeeName").val()) + " C" + globalComputer.slice(-1),
-                products: products,
-                subtotal: total,
-                hour: Date.now(),
-                calculable: calculable,
-                iftomorrow: tomorrow,
-                direct: direct
-            });
-        }
-
-        function uploadInvoiceOrder(name, products, total, id) {
-            id = id.replace(/[\.\s]/g, "");
+        function uploadCompleteOrder(name, products, total, id) {
+            id = id.replace(".", "").replace(" ", "");
             total = total.replace(/\,/g,'');
 
             for(var i = 0; i < products.length; i++)
                 products[i] = products[i].map(v => v === undefined ? '1' : v);
-
+            
             firebase.database().ref("invoice/" + id).set({
                 nombre: name,
                 productos: products,
