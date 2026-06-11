@@ -26,7 +26,8 @@
 
     <script>
         var products,
-            defiantClients;
+            defiantClients,
+            taxesSnapshot;
         var orderRefID = "";
         firebase.initializeApp(connectFB());
         var database = firebase.database().ref('productos/');
@@ -35,6 +36,11 @@
             //new field
             //for (const [key, value] of Object.entries(snapshot.val()))
             //    firebase.database().ref('productos/' + `${key}` + '/categoria').set(4);
+        });
+
+        var dbTaxes = firebase.database().ref('impuestos/');
+        dbTaxes.on('value', function (snapshot) {
+            taxesSnapshot = snapshot.val();
         });
 
         var clientName = "",
@@ -1938,6 +1944,9 @@
                 if ($("#invoiceCheckbox").is(':checked'))
                     uploadInvoiceOrder(replaceAEIOUN($("#inputName").val().trim()), order, total, productsRefID);
 
+                var invoiceCode = generateCode(6);
+                uploadOrderToOdoo(replaceAEIOUN($("#inputName").val().trim()), order, orderMethod, invoiceCode);
+
                 //autoprints PDF in a new tab
                 doc.autoPrint();
 
@@ -2235,6 +2244,81 @@
                 nombre: name,
                 productos: products,
                 subtotal: total
+            });
+        }
+
+        function generateCode(length) {
+            const chars = "ABCDEFGHKMNPQRSTUVWXY123456789";
+            let code = "";
+            for (let i = 0; i < length; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        function getTax(id) {
+            if (!taxesSnapshot) return 0;
+            if (taxesSnapshot.ieps && taxesSnapshot.ieps.hasOwnProperty(id)) return 8;
+            if (taxesSnapshot.ieps2 && taxesSnapshot.ieps2.hasOwnProperty(id)) return 8;
+            if (taxesSnapshot.iva && taxesSnapshot.iva.hasOwnProperty(id)) return 16;
+            return 0;
+        }
+
+        function uploadOrderToOdoo(clientName, order, orderMethod, invoiceCode) {
+            console.log("uploadOrderToOdoo");
+            console.log(clientName);
+            console.log(order);
+            console.log(orderMethod);
+            console.log(invoiceCode);
+
+            const data = new URLSearchParams();
+            data.append("partner_name", "PÚBLICO EN GENERAL");
+            data.append("client_order_ref", invoiceCode);
+            data.append("company_id", "1");
+
+            const orderMethodMap = {
+                "MOSTRADOR": "mostrador",
+                "TELEFONO": "telefono",
+                "WHATSAPP": "whatsapp"
+            };
+
+            //data.append("forma_pago", orderMethodMap[orderMethod] || "orderMethod");
+            data.append("forma_pago", "EFECTIVO");
+
+            for (let i = 0; i < order.length; i++) {
+                data.append("default_code", order[i][0]);
+                data.append("quantity", order[i][1]);
+
+                if(getTax(order[i][0]) == 8) {
+                    data.append("price_unit", order[i][7] / 1.08);
+                    data.append("tax_amount", 8);
+                } else if(getTax(order[i][0]) == 16) {
+                    data.append("price_unit", order[i][7] / 1.16);
+                    data.append("tax_amount", 16);
+                } else {
+                    data.append("price_unit", order[i][7]);
+                    data.append("tax_amount", 0);
+                }
+            }
+
+            var settings = {
+                "url": "https://c-imperio.odoo.com/api/crear_venta",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Authorization": "Basic c29wb3J0ZUByYWRheGJzLmNvbS5teDoxMjM0NTY="
+                },
+                "data": data.toString()
+            };
+
+            console.log("uploadOrderToOdoo settings", settings);
+            console.log(data.toString());
+            console.log(data);
+
+            console.log("SUBO ORDEN A ODOO");
+            $.ajax(settings).done(function (response) {
+                console.log("uploadOrderToOdoo response:", response);
             });
         }
 

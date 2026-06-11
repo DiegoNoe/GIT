@@ -291,6 +291,9 @@
                                             <option value="siHay">SÍ HAY</option>
                                             <option value="noHay">NO HAY</option>
                                             <option value="pedido">NO HAY / YA SE PIDIÓ</option>
+                                            <option value="recomendado">RECOMENDADO</option>
+                                            <option value="precioFalso">PRECIO FALSO</option>
+                                            <option value="precioEspecial">PRECIO ESPECIAL</option>
                                         </select>
                                     </div>
                                 </div>
@@ -583,7 +586,9 @@
             //{description:0, id:1, SAT:2, cost:3, unit:4, stock:5, type:6}
             form.elements[0].value = productToEdit.descripcion;
             form.elements[1].value = productToEdit.clave;
-            form.elements[2].value = productToEdit.xpcode;
+            var productXpcode = productToEdit.xpcode;
+            if (productXpcode == undefined || productXpcode == "undefined") productXpcode = "";
+            form.elements[2].value = productXpcode;
             form.elements[3].value = productToEdit.costo;
             $("#unitSelect").val(productToEdit.unidad);
             $("#stockSelect").val(productToEdit.existencia);
@@ -601,6 +606,7 @@
             //sets buttons inner values
             $('#saveButton').data("type", "editProduct");
             $('#saveButton').data("id", form.elements[1].value);
+            $('#saveButton').data("xpcode", productXpcode);
 
             $('#addProductModal').modal('show');
         }
@@ -623,6 +629,7 @@
             emptyForm(document.getElementById("addNewProductDBForm"), 7);
 
             $('#saveButton').data("type", "newProduct");
+            $('#saveButton').removeData("xpcode");
             $('#addProductModal').modal('show');
         }
 
@@ -638,6 +645,10 @@
             for (var i = 0; i < inputs.length - 1; i++) {
 				console.log(i + " " + form.elements[i].value);
                 inputs[i] = form.elements[i].value;
+                if ($('#saveButton').data("type") == "editProduct" && i == 2 && (inputs[i] == "" || inputs[i] == "undefined")) {
+                    inputs[i] = $('#saveButton').data("xpcode");
+                    form.elements[i].value = inputs[i];
+                }
                 if (inputs[i] == "") {
                     messageLabel.innerHTML = "LLENA TODOS LOS CAMPOS.";
                     verificated = false;

@@ -1579,11 +1579,19 @@
 		firebase.database().ref('employees').once("value", function(snapshot) {
 			if(snapshot.val()) {
 				$.each(snapshot.val(), function(key, value) {
+					var currentNotesFulfilled = parseInt(value.notesFulfilledThisWeek, 10) || 0;
+					var currentProdsFulfilled = parseInt(value.prodsFulfilledThisWeek, 10) || 0;
 					firebase.database().ref('employees/' + key + '/resting').set(false);
 					if(typeof value.notesFulfilledThisWeek === "undefined")
 						firebase.database().ref('employees/' + key + '/notesFulfilledThisWeek').set(0);
 					if(typeof value.prodsFulfilledThisWeek === "undefined")
 						firebase.database().ref('employees/' + key + '/prodsFulfilledThisWeek').set(0);
+					if(typeof value.lastWeek === "undefined") {
+						firebase.database().ref('employees/' + key + '/lastWeek').set({
+							notesFulfilled: currentNotesFulfilled,
+							prodsFulfilled: currentProdsFulfilled
+						});
+					}
 				});
 			}
 		});
@@ -1658,6 +1666,10 @@
 
 					firebase.database().ref('employeesWeeklyFulfilledReports/' + reportDateKey).set(report).then(function () {
 						$.each(snapshot.val(), function(key, value) {
+							firebase.database().ref('employees/' + key + '/lastWeek').set({
+								notesFulfilled: parseInt(value.notesFulfilledThisWeek, 10) || 0,
+								prodsFulfilled: parseInt(value.prodsFulfilledThisWeek, 10) || 0
+							});
 							firebase.database().ref('employees/' + key + '/notesFulfilledThisWeek').set(0);
 							firebase.database().ref('employees/' + key + '/prodsFulfilledThisWeek').set(0);
 						});
