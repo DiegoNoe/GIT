@@ -593,7 +593,7 @@
 
 		//adds or updates a product to firebase
         function editProductDB(inputs) {
-            firebase.database().ref('productos/' + inputs[1]).set({
+            firebase.database().ref('productos/' + inputs[1]).update({
                 clave: inputs[1],
                 costo: inputs[3],
                 descripcion: inputs[0],
