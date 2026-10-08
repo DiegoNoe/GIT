@@ -1,0 +1,78 @@
+ENTRADAS IMPERIAL 1 — ADAPTACIÓN MÓVIL, SIN CALCULADORA
+
+INSTALACIÓN
+1. Descomprime el ZIP en tu computadora.
+2. Sube la carpeta completa entradas-imperial-1 a la carpeta pública de tu servidor.
+3. Abre https://TU-DOMINIO/entradas-imperial-1/ desde Chrome.
+   También puedes abrir /entradas-imperial-1/ins/in0-imp1.html.
+No necesita instalar Node, npm ni una base nueva. Conserva juntos index.html,
+ins/, css/, js/ y fonts/. Usa una carpeta nueva para conservar tu instalación actual.
+
+USO
+Los mismos cinco botones: Compra, De Imperial, A Imperial, Recuperar y Limpiar.
+Nombre/código, WhatsApp, cantidad, búsqueda, costo editable, notas por producto,
+eliminación de renglones y edición original de productos se conservan.
+La calculadora fue retirada por petición de Diego.
+
+PDF
+Se conserva la biblioteca y la función de generación originales, sus fuentes,
+formato, marcas REVISADO/SIN REVISAR, redondeos y paginación.
+Después de generar queda un enlace para abrir/imprimir y otro para descargar
+el último PDF. Abrirlo otra vez no vuelve a registrar la entrada.
+Ese enlace dura mientras permanezca abierta la página. Limpiar/recargar lo pierde.
+La página continúa limpiando la captura después de generar, como el original.
+Si el teléfono bloquea la nueva pestaña, usa el enlace del PDF.
+No pulses Compra otra vez solo para reimprimir: eso registra otra operación.
+
+CONEXIONES CONSERVADAS
+Fuente: ORDENA/inventory/ins/in0-imp1.html, no el archivo de GIT.
+Compra (MOSTRADOR): Odoo company_id=1.
+De Imperial (TELEFONO): el original regresa antes de enviar a Odoo; se conserva.
+A Imperial (WHATSAPP): Odoo company_id=1, como el original.
+Se conservan Firebase, destinos de compras/proveedores, inventario y relaciones.
+Aunque se llama imp1, el archivo original usa Ordena como Firebase principal e
+Imperial para el catálogo secundario. No se cambió esa asignación.
+
+ALCANCE Y PRUEBA
+Adaptación temporal del programa actual, separada de Imperial 2.0.
+Mantiene las conexiones y el mecanismo de acceso existentes; no añade login
+ni corrige la seguridad del sistema anterior. Incluye la configuración original.
+No es una demostración: al usar los botones sobre el servidor conecta a los
+servicios configurados y puede modificar registros reales.
+No se desplegó en el servidor ni se hicieron compras reales durante el desarrollo.
+
+Se ejecutó una prueba DOM con Firebase/Odoo sustituidos por dobles sin red:
+- Cinco botones y ausencia de calculadora.
+- Captura 2.5 kg a costo 120 = total 300, actualizada por evento input móvil.
+- Parámetros Odoo de compra: company_id=1, quantity=2.5, price_unit=120.
+- Generación de PDF original y enlace para reabrirlo; vaciado de captura.
+- Escritura de compra Firebase simulada.
+- TELEFONO no envía a Odoo; WHATSAPP conserva company_id=1.
+Se comprobó igualdad de ocho funciones comerciales/PDF con la fuente y recursos.
+El PDF de prueba se renderizó y se revisó visualmente.
+No se completó una prueba visual en Chrome móvil: el navegador de pruebas bloqueó
+la página local. Tampoco se verificó en un teléfono o impresora físicos.
+
+ANTES DE DEPENDER DE ESTA TERMINAL
+Comprobar desde tu dominio que carga catálogo y que una entrada legítima aparece
+en Odoo y Firebase. No se confirmó CORS desde el dominio de tu servidor.
+El original no espera la confirmación de Odoo antes de limpiar la captura:
+ver un PDF NO confirma que Odoo recibió la compra. Se conserva ese comportamiento.
+No se han corregido las reglas de stock, redondeos ni recuperación del original.
+La impresión depende del modelo/conexión de impresora y del teléfono. Subir
+la página al hosting no conecta automáticamente la impresora USB de la sucursal.
+
+CAMBIOS TÉCNICOS
+Viewport móvil; mobile.css para reorganizar la pantalla; mobile.js para títulos
+de botones, eventos input, teclado decimal y reapertura de PDF. Se retiró el HTML
+y manejador de calculadora. Se usa mobilePresentPDF(doc) en lugar de window.open
+como condición de limpieza. Se incluyeron fuentes locales disponibles.
+
+ACTUALIZACIÓN LOCAL — 1 OCTUBRE 2026
+Los textos de traslado ahora indican Imperial 2 como la otra sucursal.
+El registro de movimientos nuevos cambia de purchases a
+inventoryMovements/imperial1/{id único} en la misma base ORDENA.
+La terminal ORDENA in0 guarda su registro equivalente en inventoryMovements/imperial2.
+Se conservan cantidades/unidades y costos capturados antes de conversiones de stock.
+No se migraron los históricos ni se cambiaron Odoo, providers o las reglas de stock.
+No se ha publicado esta actualización ni comprobado permisos reales de escritura.

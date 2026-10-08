@@ -60,6 +60,7 @@
 
     </script>
 
+    <script src="js/inventory-sales.js"></script>
 </head>
 
 <body style="background-color: #111111;">
@@ -1941,6 +1942,12 @@
                     ndiversity
                 );
 
+                // INVENTORY-SALES: registra el pedido sin cambiar su generación original.
+                if(window.InventorySales) window.InventorySales.record({branch: "imperial1", terminal: globalComputer,
+                    source: "pos_order", orderReference: "", documentReference: productsRefID,
+                    name: $("#inputName").val().trim(), rows: order, pdfTotal: total, paymentMethod: orderMethod,
+                    discount: 0, tomorrow: iftomorrow,
+                    findProduct: function(code) { return JSON.search(products, '//*[clave="' + code + '"]')[0]; }});
                 if ($("#invoiceCheckbox").is(':checked'))
                     uploadInvoiceOrder(replaceAEIOUN($("#inputName").val().trim()), order, total, productsRefID);
 
@@ -2643,6 +2650,7 @@
 
         //leaves the page ready for a new order
         function eraseOrder() {
+            if(window.InventorySales) window.InventorySales.resetDraft(); // INVENTORY-SALES
             $("#inputName").val("");
             $("#dynamic-list").html("");
             $("#dynamic-list-2").html("");

@@ -33,7 +33,7 @@
 		firebase.database().ref('productos/').on('value', function (snapshot) {
 			products = Defiant.getSnapshot(snapshot.val());
 			populateOOSList();
-			document.getElementById("thirdButton").click();
+			//document.getElementById("thirdButton").click();
 		});
 
 	</script>
@@ -212,7 +212,7 @@
 		<div class='wrapper'>
 			<div id="products-tap-content" class="tabcontent"> 
 				<input type="input" class="form-control" id="inputSearch" style="background-color: #111111; border-color: #555555; color: #EEEEEE;" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"> </input>
-				<ul class="list-group search-options" style="display:block; height:380px;" id="searchOptions"></ul>
+				<ul class="list-group search-options" style="display:block; height:784px;" id="searchOptions"></ul>
 			</div>
 			<div id="oos-products-tap-content" class="tabcontent">
 				<ul class="list-group search-options" style="display:block; height:730px;" id="oosProductsList"></ul>
@@ -603,6 +603,8 @@
             }).then(function () {
                 $('#addProductModal').modal('toggle');
             });
+            console.log("cambie");
+
 		}
 		
 		//clears modal form values
@@ -636,7 +638,7 @@
 		function checkDayChange() {
             var now = new Date();
 			var millisTill5am = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 5, 0, 0, 0) - now;
-            if (millisTill5pm >= 0)
+            if (millisTill5am >= 0)
 				location.reload();
 		}
 
@@ -649,8 +651,10 @@
 
 		function timerIncrement() {
 			idleTime = idleTime + 1;
-			if (idleTime > 2)
+			if (idleTime > 5) {
 				document.getElementById("secundaryButton").click();
+				
+			}
 		}
 
 	</script>

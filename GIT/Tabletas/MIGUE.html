@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" style="background-color: white;">
+<html lang="en" style="background-color: #000000;">
 <head>
-	<title>Migue view</title>
+	<title>Precios de Migue</title>
 
 	<meta charset="utf-8">
+	<meta name="theme-color" content="#000000">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-title" content="Precios Migue">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<link rel="apple-touch-icon" href="apple-touch-icon-precios.png">
@@ -32,7 +37,9 @@
 
 		var products;
 		firebase.database().ref('productos/').on('value', function (snapshot) {
-			products = Defiant.getSnapshot(snapshot.val());
+			products = Defiant.getSnapshot(snapshot.val() || {});
+			if(document.getElementById('oosProductsList')) populateOOSList();
+			if(document.getElementById('inputSearch') && document.getElementById('inputSearch').value) searchProduct();
 		});
 
 		var database = firebase.database().ref('productos/');
@@ -48,8 +55,10 @@
         }
 		.container-fluid {
 			font-family: GillSansMTCondensedBold;
-			margin-left: 1%;
-			margin-right: 1%;
+			margin-left: 0.5%;
+			margin-right: 0.5%;
+			padding-left: 7.5px;
+			padding-right: 7.5px;
 			margin-top: 1.5%;
 			position: relative;
 		}
@@ -143,22 +152,15 @@
 			margin-right: 10px; 
 			margin-top: 9px; 
 			font-weight: bold;
-			background-color: #C0C0C0;
-			border-color: #C0C0C0;
+			background-color: #333333;
+			border-color: #333333;
 		}
 
-		#searchOptions {
-			-webkit-overflow-scrolling: touch;
-			margin-top: 15px;
-			padding-right: 0px;
-			position: absolute;
-			left: 15px;
-			right: 0px;
-			padding-left: 15px;
-			font-size: 16px;
-			line-height: 20px;
-			overflow: hidden;
-			overflow-y: scroll;
+		#searchOptions,
+		#oosProductsList {
+			margin: 12px 0 20px;
+			padding: 0;
+			list-style: none;
 		}
 
 		#inputSearch {
@@ -178,8 +180,8 @@
 		}
 
 		#splashScreen {
-            background-color: white;
-            color: black;
+            background-color: #000000;
+            color: #f2f2f2;
             position: absolute;
             top: 0px;
             bottom: 0px;
@@ -205,27 +207,247 @@
 
 		}
 
+		/* Tema oscuro para la terminal de precios y el formulario de productos. */
+		:root {
+			color-scheme: dark;
+		}
+
+		body {
+			color: #f2f2f2;
+		}
+
+		.list-group-item,
+		.modal-content {
+			background-color: #111111;
+			color: #f2f2f2;
+			border-color: #383838;
+		}
+
+		.headTitle {
+			background-color: #000000;
+		}
+
+		.modal-header,
+		.modal-footer {
+			border-color: #383838;
+		}
+
+		.form-control,
+		select option {
+			background-color: #202020;
+			color: #f2f2f2;
+			border-color: #555555;
+		}
+
+		.form-control::placeholder {
+			color: #aaaaaa;
+			opacity: 1;
+		}
+
+		.form-control:focus {
+			border-color: #74b985;
+			box-shadow: 0 0 0 2px rgba(116, 185, 133, 0.25);
+		}
+
+		.btn-success {
+			background-color: #287a3e;
+			border-color: #398c50;
+			color: #ffffff;
+		}
+
+		.btn-success:hover,
+		.btn-success:focus {
+			background-color: #216633;
+			border-color: #74b985;
+		}
+
+		.btn-danger {
+			background-color: #b73737;
+			border-color: #cc5151;
+			color: #ffffff;
+		}
+
+		.btn-danger:hover,
+		.btn-danger:focus {
+			background-color: #982d2d;
+		}
+
+		.btn-secondary {
+			background-color: #333333;
+			border-color: #555555;
+			color: #f2f2f2;
+		}
+
+		.btn-secondary:hover,
+		.btn-secondary:focus {
+			background-color: #444444;
+			color: #ffffff;
+		}
+
+		.glyphicon-pencil {
+			color: #cccccc;
+		}
+
+		.glyphicon-pencil:hover,
+		.glyphicon-pencil:focus {
+			color: #ffffff;
+		}
+
+		.alert-danger {
+			background-color: #391c1c;
+			border-color: #804040;
+			color: #ffb3b3;
+		}
+
+
+		.btn-primary {
+			background-color: #28669a;
+			border-color: #4685b8;
+			color: #ffffff;
+		}
+
+		.btn-primary:hover,
+		.btn-primary:focus,
+		.btn-primary:active {
+			background-color: #20547f;
+			border-color: #73acda;
+			color: #ffffff;
+		}
+
+		button.list-group-item.search-options-item,
+		button.list-group-item.search-options-item:hover,
+		button.list-group-item.search-options-item:focus,
+		button.list-group-item.search-options-item:active {
+			background-color: #111111;
+			border-color: #383838;
+			color: #f2f2f2;
+		}
+
+		button.list-group-item.search-options-item:hover,
+		button.list-group-item.search-options-item:focus {
+			background-color: #242424;
+		}
+
+		.form-control[disabled],
+		.form-control[readonly] {
+			background-color: #151515;
+			color: #aaaaaa;
+			opacity: 1;
+			-webkit-text-fill-color: #aaaaaa;
+		}
+
+		/* Los colores de los descansos también representan su estado. */
+		.break-button {
+			color: #111111;
+		}
+
+		.btn:focus-visible {
+			outline: 2px solid #a6d3ff;
+			outline-offset: 2px;
+		}
+
+
+		#secundaryButton, #thirdButton {
+			display: inline-block;
+			float: right;
+			width: 40px;
+			height: 36px;
+			margin: 0 0 8px 8px;
+			font-size: 22px;
+			line-height: 22px;
+			font-weight: bold;
+		}
+		#mediasTitle { min-height: 44px; }
+		#OOSModal { font-family: GillSansMTCondensedBold; }
+		#OOSModalLabel { font-size: 25px; }
+		#OOSModal .modal-footer { display: flex; flex-wrap: wrap; gap: 8px; }
+		#OOSModal .modal-footer .btn { margin: 0; }
+		#oosProductsList { margin-top: 12px; }
+		#oosProductsList .search-options-item { display: grid; grid-template-columns: minmax(0, 1fr) 50px; width: 100%; margin-left: 0; }
+		#oosProductsList .search-options-item > div { width: auto; min-width: 0; }
+		#oosProductsList .search-options-item::before,
+		#oosProductsList .search-options-item::after { display: none; }
+		#searchOptions button.search-options-item[data-stock="noHay"] { background-color: #111111; color: #ec5148; }
+		#searchOptions button.search-options-item[data-stock="pedido"] { background-color: #111111; color: #fdb50d; }
+		#searchOptions button.search-options-item[data-stock="recomendado"] { background-color: #111111; color: #33cc33; }
+		#searchOptions button.search-options-item[data-stock="precioEspecial"] { background-color: #111111; color: #c084fc; }
+		#searchOptions button.search-options-item[data-stock="precioFalso"] { background-color: #111111; color: #60a5fa; }
+		#searchOptions button.search-options-item[data-stock] .edit-button span { color: inherit !important; }
+
+
+		.product-search-bar { display: flex; gap: 8px; align-items: center; }
+		.product-search-input { flex: 1; min-width: 0; }
+		.product-search-bar > button { flex-shrink: 0; }
+		#searchOptions .search-options-item,
+		#oosProductsList .search-options-item {
+			font-size: 15.4px;
+			line-height: 22px;
+			padding-left: 6px;
+			padding-right: 7.5px;
+		}
+		#oosProductsList .search-options-item > :last-child { text-align: right; }
+		#searchOptions .search-options-item {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) 50px 26px;
+			width: 100%;
+			margin-left: 0;
+			margin-right: 0;
+		}
+		#searchOptions .search-options-item > div { width: auto; min-width: 0; }
+		#searchOptions .search-options-item > :nth-child(2) { text-align: right; }
+		#searchOptions .search-options-item .edit-button {
+			margin-right: 5px;
+			margin-left: 5px;
+			text-align: center;
+		}
+		#searchOptions .search-options-item::before,
+		#searchOptions .search-options-item::after { display: none; }
+		.modal-header, .modal-body, .modal-footer { padding-left: 7.5px; padding-right: 7.5px; }
+		.modal-dialog { margin-left: auto; margin-right: auto; }
+		@media (max-width: 767px) {
+			.modal-dialog { margin-left: 5px; margin-right: 5px; }
+		}
+
 	</style>
 </head>
-<body style="zoom: 100%; background-color: white;">
+<body style="zoom: 100%; background-color: #000000;">
 	<div class="alert alert-danger" style="display: none" id="noConnectionAlert" role="alert">
 		<strong>No hay conexión.</strong> Puede que los precios no estén actualizados.
 	</div>
-	<div class="container-fluid" style="background-color: white;">
-		<button type="button" id="secundaryButton" class="btn btn-secondary" onclick="showProducts(event)">PRODUCTOS</button>
+	<div class="container-fluid" style="background-color: #000000;">
+		<button type="button" id="thirdButton" class="btn btn-secondary" onclick="showOOSProducts(event)" aria-label="Faltantes" title="Faltantes">F</button>
+		<button type="button" id="secundaryButton" class="btn btn-secondary" onclick="showProducts(event)" aria-label="Precios" title="Precios">P</button>
 		<button type="button" id="primaryButton" class="btn btn-primary" onclick="showBreaks(event)">MEDIAS</button>
 		<h1 class="modal-title" id="mediasTitle" style="margin-bottom:1.5%; margin-top:.5px"> </h1>
 		<h1 class="modal-title" id="time" style="display: none; position:absolute; left:220px; top:0px"> </h1>
 		<div class='wrapper'>
 			<ul id="dynamic-list" class="list-group tabcontent" style="display:block;"> </ul>
 			<div id="products-tap-content" class="tabcontent"> 
-				<div class="row">
-					<div class="col-xs-9" style="padding: 0; margin-left: 15px; margin-right: 15px; padding-top: 1px;">
-						<input type="input" class="form-control" id="inputSearch" oninput="this.value = this.value.toUpperCase()" placeholder="CLAVE O DESCRIPCION"> </input>
+				<div class="product-search-bar">
+					<div class="product-search-input">
+						<input type="input" class="form-control" id="inputSearch" autofocus oninput="uppercasePreservingSelection(this)" placeholder="CLAVE O DESCRIPCION"> </input>
 					</div>
 					<button onclick="addProductModal();" class="col-xs-1 btn btn-success glyphicon glyphicon-plus" style="padding: 0; margin-left: 3px; height: 34px; width: 34px;"></button>
 				</div>
-				<ul class="list-group search-options" style="display:block; height:560px;" id="searchOptions"></ul>
+				<ul class="list-group search-options" style="display:block;" id="searchOptions"></ul>
+			</div>
+			<div id="oos-products-tap-content" class="tabcontent">
+				<ul class="list-group" id="oosProductsList"></ul>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="OOSModal" tabindex="-1" role="dialog" aria-labelledby="OOSModalLabel" aria-hidden="true" style="background-color: #111111;">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style="background-color: #222222;">
+				<div class="modal-header">
+					<h5 class="modal-title" id="OOSModalLabel" style="color: #f2f2f2;">PRODUCTO</h5>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary btn-modal" data-dismiss="modal">CANCELAR</button>
+					<button type="button" class="btn btn-danger btn-modal" onclick="changeStockStatus('noHay');" id="noHayButton">NO HAY</button>
+					<button type="button" class="btn btn-warning btn-modal" onclick="changeStockStatus('pedido');" id="pedidoButton">YA SE PIDIÓ</button>
+					<button type="button" class="btn btn-success btn-modal" onclick="changeStockStatus('siHay');" id="siHayButton">YA HAY</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -242,24 +464,24 @@
 						<!-- form -->
 						<div class="form-group">
 							<!-- error message div -->
-							<label id="verificationMessage" style="color: red;"></label>
+							<label id="verificationMessage" style="color: #ff9999;"></label>
 							<div class="row" style="margin-bottom: 0px;">
 								<!-- description -->
 								<div class="col-sm-8">
 									<label for="descriptionInput">DESCRIPCION</label>
-									<input oninput="this.value = this.value.toUpperCase()" class="form-control" type="text" maxlength="38" placeholder="DESCRIPCION"
+									<input oninput="uppercasePreservingSelection(this)" class="form-control" type="text" maxlength="38" placeholder="DESCRIPCION"
 										required>
 								</div>
 								<!-- id -->
                                 <div class="col-sm-2">
                                     <label for="IDInput">CLAVE</label>
-                                    <input id="inputID" oninput="this.value = this.value.toUpperCase()"
+                                    <input id="inputID" oninput="uppercasePreservingSelection(this)"
                                         class="form-control" type="text" placeholder="CLAVE" required>
                                 </div>
                                 <!-- SAT id -->
                                 <div class="col-sm-2">
                                     <label for="SATLabel">SAT</label>
-                                    <input id="SATInput" oninput="this.value = this.value.toUpperCase()"
+                                    <input id="SATInput" oninput="uppercasePreservingSelection(this)"
                                         class="form-control" type="text" placeholder="CODIGO" required>
                                 </div>
 							</div>
@@ -491,9 +713,80 @@
 			$("#searchOptions").empty();
 			changeTab(evt, "products-tap-content");
 			changeToActiveColor("secundaryButton");
-			changeToDeactiveColor("primaryButton");
-			$("#inputSearch").focus();
+			changeToDeactiveColor("thirdButton");
+			document.getElementById("mediasTitle").textContent = "PRECIOS";
+			document.getElementById("inputSearch").focus();
+		}
 
+		function showOOSProducts(evt) {
+			document.getElementById("inputSearch").blur();
+			document.getElementById("mediasTitle").textContent = "FALTANTES";
+			populateOOSList();
+			changeTab(evt, "oos-products-tap-content");
+			changeToActiveColor("thirdButton");
+			changeToDeactiveColor("secundaryButton");
+		}
+
+		function populateOOSList() {
+			if(!products) return;
+			var noHayProducts = JSON.search(products, '//*[contains(existencia, "' + "noHay" + '")]');
+			var pedidosProducts = JSON.search(products, '//*[contains(existencia, "' + "pedido" + '")]');
+			Array.prototype.push.apply(noHayProducts, pedidosProducts);
+			
+			//loads the results into the list
+			$("#oosProductsList").empty();
+			populateOOSProductsList(noHayProducts)
+		}
+
+		function populateOOSProductsList(noHayProducts) {
+			var OOSItem = "";
+			var backgroundColor,
+                color,
+				buttonColor;
+			for (var i = 0; i < noHayProducts.length; i++) {
+                if(noHayProducts[i].existencia == "noHay") {
+                    backgroundColor = "#111111";
+                    color = "rgba(236, 81, 72, 93%)";
+                    buttonColor = "#EEEEEE";
+                } else if(noHayProducts[i].existencia == "pedido") {
+                    backgroundColor = "#111111";
+                    color = "rgba(253, 181, 13, 85%)";
+                    buttonColor = "#EEEEEE";
+                }
+
+				OOSItem =
+					'<button onclick="changeStockPopUp(&#39;' + noHayProducts[i].clave + '&#39;)" class="list-group-item row btn-default search-options-item" style="font-weight:bold; background-color: ' + backgroundColor + '; color: ' + color + '; border-color: #555555;">' +
+						'<div style="padding: 0px">' + noHayProducts[i].unidad + '<br>' + noHayProducts[i].descripcion + '</div>' +
+						'<div class="col-xs-1" style="padding: 0px">' + noHayProducts[i].costo + '</div>' +
+					'</button>';
+				$("#oosProductsList").append(OOSItem);
+			}
+		}
+
+		function changeStockPopUp(id) {
+			var productToEdit = JSON.search(products, '//*[clave="' + id + '"]')[0];
+
+            if(!productToEdit) return;
+            document.getElementById("OOSModalLabel").textContent = productToEdit.descripcion;
+            $('#OOSModal').data("id", productToEdit.clave);
+
+			if(productToEdit.existencia == "noHay") {
+				$('#noHayButton').hide();
+				$('#pedidoButton').show();
+			} else if(productToEdit.existencia == "pedido") {
+				$('#pedidoButton').hide();
+				$('#noHayButton').show();
+			}
+
+            $('#OOSModal').modal('show');
+		}
+ 
+		function changeStockStatus(newStatus) {
+			var id = $('#OOSModal').data("id");
+			firebase.database().ref('productos/' + id + '/existencia').set(newStatus)
+			.then(function () {
+                $('#OOSModal').modal('hide');
+            });
 		}
 
 		function changeToActiveColor(buttonID) {
@@ -505,9 +798,9 @@
 
 		function changeToDeactiveColor(buttonID) {
 			var button = document.getElementById(buttonID);
-			button.style.backgroundColor = "#C0C0C0";
-			button.style.borderColor = "#C0C0C0";
-			button.style.color = "#000000";
+			button.style.backgroundColor = "#333333";
+			button.style.borderColor = "#333333";
+			button.style.color = "#f2f2f2";
 		}
 
 		function changeTab(evt, listID) {
@@ -516,15 +809,38 @@
 			for (i = 0; i < tabcontent.length; i++)
 				tabcontent[i].style.display = "none";
 			document.getElementById(listID).style.display = "block";
-			evt.currentTarget.className += " active";
+			['secundaryButton', 'thirdButton', 'primaryButton'].forEach(function(id) {
+				document.getElementById(id).classList.remove('active');
+			});
+			evt.currentTarget.classList.add('active');
 		}
 		
-		$("#inputSearch").on('keyup', function (e) {
+		$("#inputSearch").on('input', function (e) {
 			searchProduct();
 		});
 
 
+		// Convierte a mayúsculas sin mover el cursor ni perder la selección.
+		function uppercasePreservingSelection(input) {
+			var value = input.value;
+			var uppercaseValue = value.toUpperCase();
+			if (value === uppercaseValue) return;
+
+			var start = input.selectionStart;
+			var end = input.selectionEnd;
+			var direction = input.selectionDirection;
+			input.value = uppercaseValue;
+			if (start !== null && end !== null) {
+				input.setSelectionRange(
+					value.slice(0, start).toUpperCase().length,
+					value.slice(0, end).toUpperCase().length,
+					direction
+				);
+			}
+		}
+
 		function searchProduct() {
+			if(!products) return;
 			var searchResult;
 			var inputSearchValue = $('#inputSearch').val();
 			//search two or more words (imposible id)
@@ -567,10 +883,12 @@
 						'<div class="col-xs-10" style="padding: 0px">' + searchResult[i].unidad + "<br>" +  searchResult[i].descripcion + '</div>' +
 						'<div class="col-xs-1" style="padding: 0px;">' + searchResult[i].costo + '</div>' +
 						'<div type="button" class="btn btn-sm col-xs-1 edit-button" style="height:20px; padding:0px" onclick="editProductModal(&#39;' + searchResult[i].clave + '&#39;)">' +
-							'<span style="color:grey;font-size:20px; line-height:96%;">&nbsp;&nbsp;&#9998;</span>' +
+							'<span style="color:#cccccc;font-size:20px; line-height:96%;">&#9998;</span>' +
 						'</div>' +
 					'</button>';
-				$("#searchOptions").append(searchItem);
+				var row = $(searchItem);
+				row.attr('data-stock', searchResult[i].existencia || 'siHay');
+				$("#searchOptions").append(row);
 			}
 		}
 
